@@ -13,10 +13,6 @@ extension Bool: LeafNode {
         return nil
     }
     
-    public func simplify() -> Node {
-        return self
-    }
-    
     var description: String {
         return "\(self)"
     }

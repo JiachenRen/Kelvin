@@ -8,7 +8,7 @@
 
 import Foundation
 
-typealias Bin = (Node?, Node?) -> Node?
+typealias Bin = (Double, Double) -> Double
 
 /**
  Binary operators such as +, -, *, /, etc.
@@ -22,10 +22,10 @@ class BinOperator: CustomStringConvertible {
         "-": .init("-", .third, -),
         "*": .init("*", .second, *),
         "/": .init("/", .second, /),
-        "^": .init("^", .first, ^),
-        ">": .init(">", .first, >),
-        "<": .init("<", .first, <),
-        "%": .init("%", .second, %),
+        "^": .init("^", .first, pow),
+        ">": .init(">", .first){$0 > $1 ? 1 : 0},
+        "<": .init("<", .first){$0 < $1 ? 1 : 0},
+        "%": .init("%", .second){$0.truncatingRemainder(dividingBy: $1)}
         ]
     
     
@@ -50,9 +50,9 @@ class BinOperator: CustomStringConvertible {
 }
 
 enum Priority: Int, Comparable {
-    case first = 0
-    case second = 1
-    case third = 2
+    case first = 1
+    case second = 2
+    case third = 3
     
     static func < (lhs: Priority, rhs: Priority) -> Bool {
         return lhs.rawValue < rhs.rawValue

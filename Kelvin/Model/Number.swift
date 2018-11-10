@@ -12,8 +12,4 @@ extension Double: LeafNode {
     public var numericVal: Double? {
         return self
     }
-    
-    public func simplify() -> Node {
-        return self
-    }
 }

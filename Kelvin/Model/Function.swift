@@ -38,18 +38,13 @@ struct Function: Node {
     }
     
     private mutating func findDefinition() {
-        if let bin = BinOperator.registered[name] {
+        if let b = BinOperator.registered[name] {
             def = {nodes in
-                var nodes = nodes
-                var result: Node = nodes.removeFirst()
-                for node in nodes {
-                    if let partial = bin.bin(result, node) {
-                        result = partial
-                    } else {
-                        return nil
-                    }
-                }
-                return result
+                let values = nodes.map{$0.numericVal}
+                if values.contains(nil) {return nil}
+                var u = values.map{$0!}
+                let r: Double = u.removeFirst()
+                return u.reduce(r){b.bin($0,$1)}
             }
         }
     }

@@ -17,55 +17,8 @@ public protocol LeafNode: Node {
 }
 
 extension LeafNode {
-    func simplify() -> Node {
+    public func simplify() -> Node {
         return self
     }
-}
-
-typealias NumericBin = (Double, Double) -> Double
-
-func unwrap(_ lhs: Node?, _ rhs: Node?, _ compute: NumericBin) -> Double? {
-    if let a = lhs?.numericVal, let b = rhs?.numericVal {
-        return compute(a, b)
-    }
-    return nil
-}
-
-func +(lhs: Node?, rhs: Node?) -> Node? {
-    return unwrap(lhs, rhs, +)
-}
-
-func -(lhs: Node?, rhs: Node?) -> Node? {
-    return unwrap(lhs, rhs, -)
-}
-
-func *(lhs: Node?, rhs: Node?) -> Node? {
-    return unwrap(lhs, rhs, *)
-}
-
-func /(lhs: Node?, rhs: Node?) -> Node? {
-    return unwrap(lhs, rhs, /)
-}
-
-func ^(lhs: Node?, rhs: Node?) -> Node? {
-    return unwrap(lhs, rhs, pow)
-}
-
-func %(lhs: Node?, rhs: Node?) -> Node? {
-    return unwrap(lhs, rhs){$0.truncatingRemainder(dividingBy: $1)}
-}
-
-func >(lhs: Node?, rhs: Node?) -> Node? {
-    if let a = lhs?.numericVal, let b = rhs?.numericVal {
-        return a > b
-    }
-    return nil
-}
-
-func <(lhs: Node?, rhs: Node?) -> Node? {
-    if let a = lhs?.numericVal, let b = rhs?.numericVal {
-        return a < b
-    }
-    return nil
 }
 
