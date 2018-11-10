@@ -25,7 +25,7 @@ class BinOperator: CustomStringConvertible {
         "^": .init("^", .first, pow),
         ">": .init(">", .first){$0 > $1 ? 1 : 0},
         "<": .init("<", .first){$0 < $1 ? 1 : 0},
-        "%": .init("%", .second){$0.truncatingRemainder(dividingBy: $1)}
+        "%": .init("%", .second){$0.truncatingRemainder(dividingBy: $1)},
         ]
     
     
@@ -57,4 +57,18 @@ enum Priority: Int, Comparable {
     static func < (lhs: Priority, rhs: Priority) -> Bool {
         return lhs.rawValue < rhs.rawValue
     }
+}
+
+typealias Unary = (Double) -> Double
+class UnaryOperator {
+    static var registered: Dictionary<String, Unary> = [
+        "log": log10,
+        "log2": log2,
+        "ln": log,
+        "int": {Double(Int($0))}
+    ]
+}
+
+func log10(_ a: Double) -> Double {
+    return log(a) / log(10)
 }

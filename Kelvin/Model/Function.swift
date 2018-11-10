@@ -46,6 +46,15 @@ struct Function: Node {
                 let r: Double = u.removeFirst()
                 return u.reduce(r){b.bin($0,$1)}
             }
+        } else if let u = UnaryOperator.registered[name] {
+            def = {nodes in
+                if nodes.count != 1 {
+                    fatalError() // Replace with RuntimeError.arguments
+                } else if let n = nodes[0].numericVal {
+                    return u(n)
+                }
+                return nil
+            }
         }
     }
     
