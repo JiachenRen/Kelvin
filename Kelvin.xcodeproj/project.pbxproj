@@ -7,6 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F2E82AC21966FC5005C3353 /* Operator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AB21966FC5005C3353 /* Operator.swift */; };
+		1F2E82AE2197331F005C3353 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AD2197331F005C3353 /* Function.swift */; };
+		1F2E82B02197338B005C3353 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AF2197338B005C3353 /* Node.swift */; };
+		1F2E82B221973FF7005C3353 /* Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82B121973FF7005C3353 /* Number.swift */; };
+		1F2E82B42197416D005C3353 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82B32197416D005C3353 /* List.swift */; };
+		1F2E82B621974368005C3353 /* Var.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82B521974368005C3353 /* Var.swift */; };
+		1F2E82C32197591F005C3353 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82BD219757FC005C3353 /* main.swift */; };
+		1F2E82D021975A94005C3353 /* Compiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD8CD4218F52430004ECEB /* Compiler.swift */; };
+		1F2E82D121975A94005C3353 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82B32197416D005C3353 /* List.swift */; };
+		1F2E82D221975A94005C3353 /* Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82B121973FF7005C3353 /* Number.swift */; };
+		1F2E82D321975A94005C3353 /* Operator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AB21966FC5005C3353 /* Operator.swift */; };
+		1F2E82D421975A94005C3353 /* Var.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82B521974368005C3353 /* Var.swift */; };
+		1F2E82D521975A94005C3353 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AD2197331F005C3353 /* Function.swift */; };
+		1F2E82D621975A94005C3353 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AF2197338B005C3353 /* Node.swift */; };
+		1F2E82DA21977CDF005C3353 /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82D921977CDF005C3353 /* Bool.swift */; };
+		1F2E82DB21977CE3005C3353 /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82D921977CDF005C3353 /* Bool.swift */; };
 		1FFD8CA3218F50850004ECEB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD8CA2218F50850004ECEB /* AppDelegate.swift */; };
 		1FFD8CA5218F50850004ECEB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD8CA4218F50850004ECEB /* ViewController.swift */; };
 		1FFD8CA8218F50850004ECEB /* Kelvin.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD8CA6218F50850004ECEB /* Kelvin.xcdatamodeld */; };
@@ -14,6 +30,7 @@
 		1FFD8CAD218F50870004ECEB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1FFD8CAB218F50870004ECEB /* Main.storyboard */; };
 		1FFD8CB9218F50870004ECEB /* KelvinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD8CB8218F50870004ECEB /* KelvinTests.swift */; };
 		1FFD8CC4218F50870004ECEB /* KelvinUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD8CC3218F50870004ECEB /* KelvinUITests.swift */; };
+		1FFD8CD5218F52430004ECEB /* Compiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD8CD4218F52430004ECEB /* Compiler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,7 +50,28 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		1F2E82B9219757FC005C3353 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		1F2E82AB21966FC5005C3353 /* Operator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operator.swift; sourceTree = "<group>"; };
+		1F2E82AD2197331F005C3353 /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
+		1F2E82AF2197338B005C3353 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
+		1F2E82B121973FF7005C3353 /* Number.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Number.swift; sourceTree = "<group>"; };
+		1F2E82B32197416D005C3353 /* List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
+		1F2E82B521974368005C3353 /* Var.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Var.swift; sourceTree = "<group>"; };
+		1F2E82BB219757FC005C3353 /* KelvinCommandLine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = KelvinCommandLine; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F2E82BD219757FC005C3353 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		1F2E82D921977CDF005C3353 /* Bool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bool.swift; sourceTree = "<group>"; };
 		1FFD8C9F218F50850004ECEB /* Kelvin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kelvin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FFD8CA2218F50850004ECEB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1FFD8CA4218F50850004ECEB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -48,9 +86,17 @@
 		1FFD8CBF218F50870004ECEB /* KelvinUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KelvinUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FFD8CC3218F50870004ECEB /* KelvinUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KelvinUITests.swift; sourceTree = "<group>"; };
 		1FFD8CC5218F50870004ECEB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1FFD8CD4218F52430004ECEB /* Compiler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Compiler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		1F2E82B8219757FC005C3353 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1FFD8C9C218F50850004ECEB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -75,12 +121,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1F2E82BC219757FC005C3353 /* KelvinCommandLine */ = {
+			isa = PBXGroup;
+			children = (
+				1F2E82BD219757FC005C3353 /* main.swift */,
+			);
+			path = KelvinCommandLine;
+			sourceTree = "<group>";
+		};
 		1FFD8C96218F50850004ECEB = {
 			isa = PBXGroup;
 			children = (
 				1FFD8CA1218F50850004ECEB /* Kelvin */,
 				1FFD8CB7218F50870004ECEB /* KelvinTests */,
 				1FFD8CC2218F50870004ECEB /* KelvinUITests */,
+				1F2E82BC219757FC005C3353 /* KelvinCommandLine */,
 				1FFD8CA0218F50850004ECEB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -91,6 +146,7 @@
 				1FFD8C9F218F50850004ECEB /* Kelvin.app */,
 				1FFD8CB4218F50870004ECEB /* KelvinTests.xctest */,
 				1FFD8CBF218F50870004ECEB /* KelvinUITests.xctest */,
+				1F2E82BB219757FC005C3353 /* KelvinCommandLine */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -99,12 +155,10 @@
 			isa = PBXGroup;
 			children = (
 				1FFD8CA2218F50850004ECEB /* AppDelegate.swift */,
-				1FFD8CA4218F50850004ECEB /* ViewController.swift */,
-				1FFD8CA9218F50870004ECEB /* Assets.xcassets */,
-				1FFD8CAB218F50870004ECEB /* Main.storyboard */,
-				1FFD8CAE218F50870004ECEB /* Info.plist */,
+				1FFD8CD2218F51850004ECEB /* Interface */,
+				1FFD8CD3218F522E0004ECEB /* Model */,
+				1FFD8CD1218F51330004ECEB /* Resources */,
 				1FFD8CAF218F50870004ECEB /* Kelvin.entitlements */,
-				1FFD8CA6218F50850004ECEB /* Kelvin.xcdatamodeld */,
 			);
 			path = Kelvin;
 			sourceTree = "<group>";
@@ -127,9 +181,60 @@
 			path = KelvinUITests;
 			sourceTree = "<group>";
 		};
+		1FFD8CD1218F51330004ECEB /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				1FFD8CA9218F50870004ECEB /* Assets.xcassets */,
+				1FFD8CAE218F50870004ECEB /* Info.plist */,
+				1FFD8CA6218F50850004ECEB /* Kelvin.xcdatamodeld */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		1FFD8CD2218F51850004ECEB /* Interface */ = {
+			isa = PBXGroup;
+			children = (
+				1FFD8CA4218F50850004ECEB /* ViewController.swift */,
+				1FFD8CAB218F50870004ECEB /* Main.storyboard */,
+			);
+			path = Interface;
+			sourceTree = "<group>";
+		};
+		1FFD8CD3218F522E0004ECEB /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				1F2E82D921977CDF005C3353 /* Bool.swift */,
+				1FFD8CD4218F52430004ECEB /* Compiler.swift */,
+				1F2E82B32197416D005C3353 /* List.swift */,
+				1F2E82B121973FF7005C3353 /* Number.swift */,
+				1F2E82AB21966FC5005C3353 /* Operator.swift */,
+				1F2E82B521974368005C3353 /* Var.swift */,
+				1F2E82AD2197331F005C3353 /* Function.swift */,
+				1F2E82AF2197338B005C3353 /* Node.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		1F2E82BA219757FC005C3353 /* KelvinCommandLine */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1F2E82C1219757FC005C3353 /* Build configuration list for PBXNativeTarget "KelvinCommandLine" */;
+			buildPhases = (
+				1F2E82B7219757FC005C3353 /* Sources */,
+				1F2E82B8219757FC005C3353 /* Frameworks */,
+				1F2E82B9219757FC005C3353 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KelvinCommandLine;
+			productName = KelvinCommandLine;
+			productReference = 1F2E82BB219757FC005C3353 /* KelvinCommandLine */;
+			productType = "com.apple.product-type.tool";
+		};
 		1FFD8C9E218F50850004ECEB /* Kelvin */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1FFD8CC8218F50870004ECEB /* Build configuration list for PBXNativeTarget "Kelvin" */;
@@ -193,6 +298,9 @@
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = "Jiachen Ren";
 				TargetAttributes = {
+					1F2E82BA219757FC005C3353 = {
+						CreatedOnToolsVersion = 10.1;
+					};
 					1FFD8C9E218F50850004ECEB = {
 						CreatedOnToolsVersion = 10.1;
 					};
@@ -222,6 +330,7 @@
 				1FFD8C9E218F50850004ECEB /* Kelvin */,
 				1FFD8CB3218F50870004ECEB /* KelvinTests */,
 				1FFD8CBE218F50870004ECEB /* KelvinUITests */,
+				1F2E82BA219757FC005C3353 /* KelvinCommandLine */,
 			);
 		};
 /* End PBXProject section */
@@ -253,13 +362,37 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		1F2E82B7219757FC005C3353 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1F2E82D021975A94005C3353 /* Compiler.swift in Sources */,
+				1F2E82D121975A94005C3353 /* List.swift in Sources */,
+				1F2E82D221975A94005C3353 /* Number.swift in Sources */,
+				1F2E82D321975A94005C3353 /* Operator.swift in Sources */,
+				1F2E82D421975A94005C3353 /* Var.swift in Sources */,
+				1F2E82D521975A94005C3353 /* Function.swift in Sources */,
+				1F2E82DB21977CE3005C3353 /* Bool.swift in Sources */,
+				1F2E82D621975A94005C3353 /* Node.swift in Sources */,
+				1F2E82C32197591F005C3353 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1FFD8C9B218F50850004ECEB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F2E82B221973FF7005C3353 /* Number.swift in Sources */,
+				1F2E82B621974368005C3353 /* Var.swift in Sources */,
+				1FFD8CD5218F52430004ECEB /* Compiler.swift in Sources */,
+				1F2E82DA21977CDF005C3353 /* Bool.swift in Sources */,
 				1FFD8CA8218F50850004ECEB /* Kelvin.xcdatamodeld in Sources */,
+				1F2E82AC21966FC5005C3353 /* Operator.swift in Sources */,
+				1F2E82AE2197331F005C3353 /* Function.swift in Sources */,
 				1FFD8CA5218F50850004ECEB /* ViewController.swift in Sources */,
 				1FFD8CA3218F50850004ECEB /* AppDelegate.swift in Sources */,
+				1F2E82B02197338B005C3353 /* Node.swift in Sources */,
+				1F2E82B42197416D005C3353 /* List.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -306,6 +439,26 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		1F2E82BF219757FC005C3353 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Debug;
+		};
+		1F2E82C0219757FC005C3353 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Release;
+		};
 		1FFD8CC6218F50870004ECEB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -429,7 +582,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;
-				INFOPLIST_FILE = Kelvin/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Kelvin/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -448,7 +601,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;
-				INFOPLIST_FILE = Kelvin/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Kelvin/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -544,6 +697,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1F2E82C1219757FC005C3353 /* Build configuration list for PBXNativeTarget "KelvinCommandLine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1F2E82BF219757FC005C3353 /* Debug */,
+				1F2E82C0219757FC005C3353 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		1FFD8C9A218F50850004ECEB /* Build configuration list for PBXProject "Kelvin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

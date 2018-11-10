@@ -23,6 +23,19 @@ class KelvinTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
+    
+    func testCompiler() {
+        do {
+            let compiled = try Compiler.compile("(3-a)*(c+b)/5+log(c)")
+            print(compiled)
+        } catch let err {
+            print(err)
+        }
+    }
+    
+    func testNumericOperations() {
+        
+    }
 
     func testPerformanceExample() {
         // This is an example of a performance test case.
