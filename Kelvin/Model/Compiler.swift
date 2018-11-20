@@ -75,7 +75,8 @@ public class Compiler {
             let idx2 = expr.index(before: r.upperBound)
             
             // Range inside parenthesis
-            let ir = idx1...idx2
+            // A range isn't use here to avoid error caused by upperBound < lowerBound
+            let ir = [idx1,idx2]
             
             var node: Node? = nil
             if hasPrefix {
@@ -85,21 +86,21 @@ public class Compiler {
                     name = bin.name
                 }
                 
-                if ir.lowerBound == r.upperBound {
-                    node = Function(name, [Node]())
+                if ir[0] == r.upperBound {
+                    node = try Function(name, [Node]())
                 } else {
-                    let nested = try resolve(String(expr[ir]), &dict, binOps)
+                    let nested = try resolve(String(expr[ir[0]...ir[1]]), &dict, binOps)
                     if let list = nested as? List {
-                        node = Function(name, list.nodes)
+                        node = try Function(name, list.nodes)
                     } else {
-                        node = Function(name, [nested])
+                        node = try Function(name, [nested])
                     }
                 }
             } else {
-                if ir.lowerBound == r.upperBound {
+                if ir[0] == r.upperBound {
                     throw CompilerError.syntax(errMsg: "undefined operation '()'")
                 }
-                node = try resolve(String(expr[ir]), &dict, binOps)
+                node = try resolve(String(expr[ir[0]...ir[1]]), &dict, binOps)
             }
             
             let id = "#\(dict.count)"

@@ -15,10 +15,6 @@ struct List: Node {
     
     let nodes: [Node]
     
-    func simplify() -> Node {
-        return List(nodes.map{$0.simplify()})
-    }
-    
     var description: String {
         var pars = nodes.map{$0.description}
             .reduce(""){"\($0),\($1)"}
@@ -32,5 +28,9 @@ struct List: Node {
     
     init(_ nodes: Node...) {
         self.init(nodes)
+    }
+    
+    func simplify() -> Node {
+        return List(nodes.map{$0.simplify()})
     }
 }
