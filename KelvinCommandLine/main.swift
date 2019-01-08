@@ -9,16 +9,17 @@
 import Foundation
 
 print("Kelvin Algebra System. Copyright (c) 2018, Jiachen Ren.")
-print("\t: ", terminator: "")
-while let expr = readLine() {
+while true {
     do {
-        let parent = try Compiler.compile(expr)
-        print("\t: \(parent)")
-        print("\t: \(parent.numericVal ?? .nan)")
-        print("\t: \(parent.simplify())")
+        print("INPUT: ", terminator: "")
+        let input = readLine() ?? ""
+        let parent = try Compiler.compile(input)
+        print("     ~ \(parent.numericalVal ?? .nan)")
+        print("     = \(parent.simplify())")
+        print("     + \(parent.toAdditionOnlyForm())")
+        print("     f \(parent.toAdditionOnlyForm().flatten())")
     } catch let err {
         print(err)
     }
-    print("\t: ", terminator: "")
 }
 

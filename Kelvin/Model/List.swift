@@ -8,29 +8,43 @@
 
 import Foundation
 
-struct List: Node {
-    var numericVal: Double? {
-        return nil
-    }
+struct List: Node, NaN {
     
-    let nodes: [Node]
+    var elements: [Node]
     
     var description: String {
-        var pars = nodes.map{$0.description}
+        var pars = elements.map{$0.description}
             .reduce(""){"\($0),\($1)"}
         pars.removeFirst()
         return pars
     }
     
-    init(_ nodes: [Node]) {
-        self.nodes = nodes
+    init(_ elements: [Node]) {
+        self.elements = elements
     }
     
-    init(_ nodes: Node...) {
-        self.init(nodes)
+    init(_ elements: Node...) {
+        self.init(elements)
     }
     
+    /**
+     Simplify each element in the list.
+     
+     - Returns: A copy of the list with each element simplified.
+     */
     func simplify() -> Node {
-        return List(nodes.map{$0.simplify()})
+        return List(elements.map{$0.simplify()})
+    }
+    
+    func toAdditionOnlyForm() -> Node {
+        return List(elements.map{$0.toAdditionOnlyForm()})
+    }
+    
+    func toExponentialForm() -> Node {
+        return List(elements.map{$0.toExponentialForm()})
+    }
+    
+    func flatten() -> Node {
+        return List(elements.map{$0.flatten()})
     }
 }

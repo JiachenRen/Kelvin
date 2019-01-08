@@ -8,10 +8,7 @@
 
 import Foundation
 
-extension Bool: LeafNode {
-    public var numericVal: Double? {
-        return nil
-    }
+extension Bool: Leaf, NaN {
     
     var description: String {
         return "\(self)"

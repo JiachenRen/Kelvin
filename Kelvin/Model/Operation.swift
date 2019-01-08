@@ -11,13 +11,13 @@ import Foundation
 typealias Bin = (Double, Double) -> Double
 
 /**
- Binary operators such as +, -, *, /, etc.
- Supports definition of custom binary operators.
+ Binary operations such as +, -, *, /, etc.
+ Supports definition of custom binary operations.
  */
-class BinOperator: CustomStringConvertible {
+class BinOperation: CustomStringConvertible {
     
-    // Standard & custom binary operators
-    static var registered: Dictionary<String, BinOperator> = [
+    // Standard & custom binary operations
+    static var registered: Dictionary<String, BinOperation> = [
         "+": .init("+", .third, +),
         "-": .init("-", .third, -),
         "*": .init("*", .second, *),
@@ -44,7 +44,7 @@ class BinOperator: CustomStringConvertible {
     }
     
     static func define(_ name: String, priority: Priority, bin: @escaping Bin) {
-        let op = BinOperator(name, priority, bin)
+        let op = BinOperation(name, priority, bin)
         registered.updateValue(op, forKey: name)
     }
 }
@@ -60,12 +60,13 @@ enum Priority: Int, Comparable {
 }
 
 typealias Unary = (Double) -> Double
-class UnaryOperator {
+class UnaryOperation {
     static var registered: Dictionary<String, Unary> = [
         "log": log10,
         "log2": log2,
         "ln": log,
-        "int": {Double(Int($0))}
+        "int": {Double(Int($0))},
+        "negate": {-$0}
     ]
 }
 

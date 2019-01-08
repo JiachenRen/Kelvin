@@ -8,24 +8,23 @@
 
 import Foundation
 
-struct Var: LeafNode {
-    var numericVal: Double? {
-        return nil
-    }
+struct Variable: Leaf, NaN {
     
+    /// The characters that are allowed in the variable
     static let legalChars = "abcdfghjklmnopqrstuvwxyz_"
+    
+    /// The name of the variable
     var name: String
     
     var description: String {
         return name
     }
     
-    init?(_ name: String) {
-        if Var.isValid(name) {
-            self.name = name
-        } else {
-            return nil
+    init(_ name: String) throws {
+        if !Variable.isValid(name) {
+            throw CompilerError.syntax(errMsg: "\"\(name)\" is not a valid variable name.")
         }
+        self.name = name
     }
     
     private static func isValid(_ name: String) -> Bool {

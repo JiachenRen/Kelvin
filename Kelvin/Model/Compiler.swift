@@ -17,13 +17,13 @@ public class Compiler {
     private static let brackets = ["{","}"]
     
     private static var symbols: String {
-        let operators = BinOperator.registered
+        let operators = BinOperation.registered
             .keys.reduce(""){$0 + $1}
         return ",(){}'\(operators)"
     }
     
     // &? -> +, - , *, /, ^, etc.
-    typealias BinRef = Dictionary<String, BinOperator>
+    typealias BinRef = Dictionary<String, BinOperation>
     
     // #? -> node
     typealias NodeRef = Dictionary<String, Node>
@@ -91,7 +91,7 @@ public class Compiler {
                 } else {
                     let nested = try resolve(String(expr[ir[0]...ir[1]]), &dict, binOps)
                     if let list = nested as? List {
-                        node = try Function(name, list.nodes)
+                        node = try Function(name, list.elements)
                     } else {
                         node = try Function(name, [nested])
                     }
@@ -115,25 +115,25 @@ public class Compiler {
                 .map{String($0)}
                 .map{try resolve($0, &dict, binOps)}
             return List(nodes)
-        } else if let node = dict[expr] ?? Double(expr) ?? Var(expr) {
+        } else if let node = dict[expr] ?? Double(expr) {
             return node
         } else {
-            throw CompilerError.illegalArgument(errMsg: expr)
+            return try Variable(expr)
         }
     }
     
     private static func compartmentalize(_ expr: inout String) -> BinRef {
-        let operators = BinOperator.registered.values
+        let operators = BinOperation.registered.values
         let prioritized = operators.sorted{$0.priority < $1.priority}
         
-        var segregated = [[BinOperator]]()
+        var segregated = [[BinOperation]]()
         var cur = prioritized[0].priority
-        var buf = [BinOperator]()
+        var buf = [BinOperation]()
         prioritized.forEach {
             if $0.priority != cur {
                 cur = $0.priority
                 segregated.append(buf)
-                buf = [BinOperator]()
+                buf = [BinOperation]()
             }
             buf.append($0)
         }
@@ -230,7 +230,7 @@ public class Compiler {
         
         // Formats 9x to 9*x, 5var to 5*var
         (0...9).map{String($0)}.forEach { digit in
-            Var.legalChars.forEach { variable in
+            Variable.legalChars.forEach { variable in
                 let target = "\(digit)\(variable)"
                 let rp = "\(digit)*\(variable)"
                 replace(&expr, of: target, with: rp)
@@ -261,12 +261,12 @@ public class Compiler {
         
         symbols.forEach { symbol in
             if let idx = left.lastIndex(of: symbol) {
-                if idx > beginIdx {
+                if idx >= beginIdx {
                     beginIdx = left.index(after: idx)
                 }
             }
             if let idx = right.firstIndex(of: symbol) {
-                if idx < endIdx {
+                if idx <= endIdx {
                     endIdx = idx
                 }
             }
@@ -398,7 +398,3 @@ public class Compiler {
     }
 }
 
-enum CompilerError: Error {
-    case illegalArgument(errMsg: String)
-    case syntax(errMsg: String)
-}

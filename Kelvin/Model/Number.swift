@@ -8,8 +8,8 @@
 
 import Foundation
 
-extension Double: LeafNode {
-    public var numericVal: Double? {
+extension Double: Leaf {
+    public var numericalVal: Double? {
         return self
     }
 }
