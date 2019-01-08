@@ -87,13 +87,13 @@ public class Compiler {
                 }
                 
                 if ir[0] == r.upperBound {
-                    node = try Function(name, [Node]())
+                    node = Function(name, [Node]())
                 } else {
                     let nested = try resolve(String(expr[ir[0]...ir[1]]), &dict, binOps)
                     if let list = nested as? List {
-                        node = try Function(name, list.elements)
+                        node = Function(name, list.elements)
                     } else {
-                        node = try Function(name, [nested])
+                        node = Function(name, [nested])
                     }
                 }
             } else {

@@ -11,15 +11,17 @@ import Foundation
 print("Kelvin Algebra System. Copyright (c) 2018, Jiachen Ren.")
 while true {
     do {
-        print("INPUT: ", terminator: "")
+        print("    >>> ", terminator: "")
         let input = readLine() ?? ""
         let parent = try Compiler.compile(input)
-        print("     ~ \(parent.numericalVal ?? .nan)")
-        print("     = \(parent.simplify())")
-        print("     + \(parent.toAdditionOnlyForm())")
-        print("     f \(parent.toAdditionOnlyForm().flatten())")
+        print("     ~: \(parent.numericalVal ?? .nan)")
+        print("     =: \(parent.simplify())")
+        print("- -> +: \(parent.toAdditionOnlyForm())")
+        print("/ -> *: \(parent.toExponentialForm())")
+        print("   [\\]: \(parent.format())")
+        print("  [\\]~: \(parent.format().numericalVal ?? .nan)")
+        print()
     } catch let err {
         print(err)
     }
 }
-

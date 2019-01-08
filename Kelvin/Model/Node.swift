@@ -25,7 +25,7 @@ public protocol Node: CustomStringConvertible {
     /// Convert all subtractions to additions
     func toAdditionOnlyForm() -> Node
     
-    /// Convert all divisions to multiplifications and exponentiations
+    /// Convert all divisions to multiplications and exponentiations
     func toExponentialForm() -> Node
     
     /// Flatten binary operation trees
