@@ -21,18 +21,18 @@ struct Variable: Leaf, NaN {
     }
     
     init(_ name: String) throws {
-        if !Variable.isValid(name) {
-            throw CompilerError.syntax(errMsg: "\"\(name)\" is not a valid variable name.")
+        
+        // Check if the variable name is valid
+        if !name.contains{Variable.legalChars.contains($0)} {
+            let msg = "\"\(name)\" is not a valid variable name."
+            throw CompilerError.syntax(errMsg: msg)
         }
+
         self.name = name
     }
     
     private static func isValid(_ name: String) -> Bool {
-        for char in name {
-            if !legalChars.contains(char) {
-                return false
-            }
-        }
+        
         return true
     }
     

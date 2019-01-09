@@ -114,7 +114,7 @@ struct Function: Node {
      - Parameter action: The action to be performed on the argument list.
      - Returns: A new function with action performed on each argument
      */
-    func arguments(do action: (Node) -> Node) -> Function {
+    func arguments(do action: Unary) -> Function {
         var copy = self
         copy.args = action(copy.args) as! List
         return copy
@@ -200,7 +200,7 @@ struct Function: Node {
     /// Functions are equal to each other if their name and arguments are the same
     func equals(_ node: Node) -> Bool {
         if let fun = node as? Function {
-            return fun.name == name && fun.args == args
+            return fun.name == name && fun.args.equals(args)
         }
         return false
     }
@@ -212,7 +212,7 @@ struct Function: Node {
      - Parameter replace:   A function that takes the old node as input (and perhaps
                             ignores it) and returns a node as replacement.
      */
-    func replacing(with replace: (Node) -> Node, where condition: (Node) -> Bool) -> Node {
+    func replacing(with replace: Unary, where condition: (Node) -> Bool) -> Node {
         if condition(self) {
             return replace(self)
         } else {

@@ -27,7 +27,6 @@ extension Value {
 }
 
 extension Double: Value {
-    
     var isInteger: Bool {
         return floor(self) == self
     }
@@ -36,11 +35,13 @@ extension Double: Value {
         return self
     }
 }
+
 extension Int: Value {
     public func doubleValue() -> Double {
         return Double(self)
     }
 }
+
 extension Bool: Value {
     public func doubleValue() -> Double {
         return Double(self ? 1 : 0)

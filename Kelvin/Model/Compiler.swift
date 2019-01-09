@@ -34,9 +34,6 @@ public class Compiler {
         // Validate the expression
         try validate(expr)
         
-        // Remove empty space for ease of processing
-        expr.removeAll{$0 == " "}
-        
         // Format lists
         while expr.contains("{") {
             expr = replace(expr, "{", "}", "list(", ")")
@@ -51,14 +48,32 @@ public class Compiler {
         
         // Convert all binary operations to functions with parameters.
         // i.e. a+b becomes #?(a,b)
-        let binOps = compartmentalize(&expr)
+        let binOps = functionalize(&expr)
         var dict = Dictionary<String, Node>()
         let parent = try resolve(expr, &dict, binOps)
         
-        // Restore list() to {}
+        // Restore list() to {}, =(a,b) to a=b
+        return restoreDataType(parent)
+    }
+    
+    /**
+     During compilation, all data types are functionalized.
+     This restores the functions back to their original data type.
+     e.g. list(a,b,c) -> {a,b,c}
+          =(a+b, c+x) -> a+b=c+x
+     
+     - Parameter parent: The parent node to have DTs restored.
+     - Returns: The parent node with DTs restored.
+     */
+    private static func restoreDataType(_ parent: Node) -> Node {
         return parent.replacing(with: {($0 as! Function).args}){
-            $0 is Function && ($0 as! Function).name == "list"
-        }
+            ($0 as? Function)?.name == "list"
+            }.replacing(with: { (old) -> Node in
+                let fun = old as! Function
+                let n1 = fun.args.elements[0]
+                let n2 = fun.args.elements[1]
+                return Equation(lhs: n1, rhs: n2)
+            }){($0 as? Function)?.name == "="}
     }
     
     private static func resolve(_ expr: String, _ dict: inout NodeRef, _ binOps: BinRef) throws -> Node {
@@ -119,14 +134,33 @@ public class Compiler {
                 .map{String($0)}
                 .map{try resolve($0, &dict, binOps)}
             return List(nodes)
-        } else if let node = dict[expr] ?? Int(expr) ?? Double(expr) ?? Bool(expr) {
-            return node
         } else {
-            return try Variable(expr)
+            expr = removeWhiteSpace(expr)
+            if let node = dict[expr] ?? Int(expr) ?? Double(expr) ?? Bool(expr) {
+                return node
+            } else {
+                return try Variable(expr)
+            }
         }
     }
     
-    private static func compartmentalize(_ expr: inout String) -> BinRef {
+    /// Remove trailing and padding white space.
+    private static func removeWhiteSpace(_ expr: String) -> String {
+        var expr = expr
+        // Remove padding white space
+        while expr.starts(with: " ") {
+            expr.removeFirst()
+        }
+        
+        // Remove trailing white space
+        while expr.reversed().first == " " {
+            expr.removeLast()
+        }
+        
+        return expr
+    }
+    
+    private static func functionalize(_ expr: inout String) -> BinRef {
         let operators = BinOperation.registered.values
         let prioritized = operators.sorted{$0.priority < $1.priority}
         

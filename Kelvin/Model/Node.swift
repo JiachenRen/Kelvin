@@ -8,12 +8,16 @@
 
 import Foundation
 
+// Unary operation
+public typealias Unary = (Node) -> Node
+
 public protocol Node: CustomStringConvertible {
     
     /// Computes the numerical value that the node represents.
     var evaluated: Value? {get}
     
     /// Simplify the node.
+    /// TODO: Implement Log
     func simplify() -> Node
     
     /// Formats the expression for ease of computation
@@ -38,30 +42,23 @@ public protocol Node: CustomStringConvertible {
      - Parameter replace:   A function that takes the old node as input (and perhaps
                             ignores it) and returns a node as replacement.
      */
-    func replacing(with replace: (Node) -> Node, where condition: (Node) -> Bool) -> Node
+    func replacing(with replace: Unary, where condition: (Node) -> Bool) -> Node
     
     /// - Returns: Whether the provided node is identical with self.
     func equals(_ node: Node) -> Bool
 }
 
 extension Node {
+    
+    /// TODO: Implement order
     public func format() -> Node {
         return self.toAdditionOnlyForm()
             .toExponentialForm()
             .flatten()
     }
     
-    public func replacing(with replace: (Node) -> Node, where condition: (Node) -> Bool) -> Node {
+    public func replacing(with replace: Unary, where condition: (Node) -> Bool) -> Node {
         return condition(self) ? replace(self) : self
     }
     
 }
-
-func ==(_ lhs: Node, _ rhs: Node) -> Bool {
-    return lhs.equals(rhs)
-}
-
-func !=(_ lhs: Node, _ rhs: Node) -> Bool {
-    return !(lhs == rhs)
-}
-

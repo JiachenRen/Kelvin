@@ -8,7 +8,8 @@
 
 import Foundation
 
-typealias Bin = (Double, Double) throws -> Double
+/// Numeric binary operation
+typealias NBinary = (Double, Double) throws -> Double
 
 /**
  Binary operations such as +, -, *, /, etc.
@@ -23,8 +24,9 @@ class BinOperation: CustomStringConvertible {
         "*": .init("*", .second, *),
         "/": .init("/", .second, /),
         "^": .init("^", .first, pow),
-        ">": .init(">", .first){$0 > $1 ? 1 : 0},
-        "<": .init("<", .first){$0 < $1 ? 1 : 0},
+        ">": .init(">", .lowest){$0 > $1 ? 1 : 0},
+        "<": .init("<", .lowest){$0 < $1 ? 1 : 0},
+        "=": .init("=", .lowest){$0 == $1 ? 1 : 0}, // Will be replaced by compiler with an eq.
         "%": .init("%", .second){$0.truncatingRemainder(dividingBy: $1)},
         ]
     
@@ -34,10 +36,10 @@ class BinOperation: CustomStringConvertible {
     }
     
     var name: String
-    var bin: Bin
+    var bin: NBinary
     var priority: Priority
     
-    private init(_ name: String, _ priority: Priority, _ bin: @escaping Bin) {
+    private init(_ name: String, _ priority: Priority, _ bin: @escaping NBinary) {
         self.priority = priority
         self.name = name;
         self.bin = bin
@@ -49,25 +51,31 @@ class BinOperation: CustomStringConvertible {
      - Parameter name: The name of the binary operation.
      - Parameter unary: A binary operation that takes in 2 Doubles and returns a Double.
      */
-    static func define(_ name: String, priority: Priority, bin: @escaping Bin) {
+    static func define(_ name: String, priority: Priority, bin: @escaping NBinary) {
         let op = BinOperation(name, priority, bin)
         registered.updateValue(op, forKey: name)
     }
 }
 
 enum Priority: Int, Comparable {
+    case highest = 0
     case first = 1
     case second = 2
     case third = 3
+    case lowest = 10
     
     static func < (lhs: Priority, rhs: Priority) -> Bool {
         return lhs.rawValue < rhs.rawValue
     }
 }
 
-typealias Unary = (Double) throws -> Double
+/// Numeric unary operation
+typealias NUnary = (Double) throws -> Double
+
 class UnaryOperation {
-    static var registered: [String: Unary] = [
+    
+    /// Registered unary operations
+    static var registered: [String: NUnary] = [
         "log": log10,
         "log2": log2,
         "ln": log,
@@ -81,7 +89,7 @@ class UnaryOperation {
      - Parameter name: The name of the unary operation.
      - Parameter unary: A unary operation taking a single Double argument
      */
-    static func define(_ name: String, unary: @escaping Unary) {
+    static func define(_ name: String, unary: @escaping NUnary) {
         registered.updateValue(unary, forKey: name)
     }
 }
@@ -104,6 +112,7 @@ class ParametricOperation {
         case bool
         case list
         case any
+        case equation
     }
 
     
@@ -112,27 +121,33 @@ class ParametricOperation {
      to function definitions during compilation.
      */
     static var registered: [ParametricOperation] = [
-        .init("and", signature: [.bool, .bool]) {nodes in
+        .init("and", [.bool, .bool]) {nodes in
             return nodes.map{$0 as! Bool}
                 .reduce(true){$0 && $1}
         },
-        .init("or", signature: [.bool, .bool]) {nodes in
+        .init("or", [.bool, .bool]) {nodes in
             return nodes.map{$0 as! Bool}
                 .reduce(false){$0 || $1}
         },
-        .init("sum", signature: [.list]) {nodes in
+        .init("sum", [.list]) {nodes in
             return Function("+", (nodes[0] as! List).elements)
+        },
+        .init("define",[.equation], useCmdSyntax: true) {nodes in
+            // TODO: Implement
+            return nil
         }
     ]
     
     let def: Definition
     let name: String
     let signature: [ArgumentType]
+    let useCmdSyntax: Bool
     
-    init(_ name: String, signature: [ArgumentType], definition: @escaping Definition) {
+    init(_ name: String, _ signature: [ArgumentType], useCmdSyntax: Bool = false, definition: @escaping Definition) {
         self.name = name
         self.def = definition
         self.signature = signature
+        self.useCmdSyntax = useCmdSyntax
     }
     
     /// Register the parametric operation.

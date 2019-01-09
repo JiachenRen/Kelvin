@@ -57,7 +57,7 @@ struct List: Node, NaN {
     func equals(_ node: Node) -> Bool {
         if let list = node as? List, list.elements.count == elements.count {
             for i in 0..<elements.count {
-                if elements[i] != list.elements[i] {
+                if !elements[i].equals(list.elements[i]) {
                     return false
                 }
             }
@@ -73,7 +73,7 @@ struct List: Node, NaN {
      - Parameter replace:   A function that takes the old node as input (and perhaps
                             ignores it) and returns a node as replacement.
      */
-    func replacing(with replace: (Node) -> Node, where condition: (Node) -> Bool) -> Node {
+    func replacing(with replace: Unary, where condition: (Node) -> Bool) -> Node {
         if condition(self) {
             return replace(self)
         } else {
