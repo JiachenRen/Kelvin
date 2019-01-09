@@ -13,7 +13,7 @@ public protocol Node: CustomStringConvertible {
     /// Computes the numerical value that the node represents.
     var evaluated: Value? {get}
     
-    /// Simplifies the node.
+    /// Simplify the node.
     func simplify() -> Node
     
     /// Formats the expression for ease of computation
@@ -30,6 +30,18 @@ public protocol Node: CustomStringConvertible {
     
     /// Flatten binary operation trees
     func flatten() -> Node
+    
+    /**
+     Replace the designated nodes identical to the node provided with the replacement
+     
+     - Parameter condition: The condition that needs to be met for a node to be replaced
+     - Parameter replace:   A function that takes the old node as input (and perhaps
+                            ignores it) and returns a node as replacement.
+     */
+    func replacing(with replace: (Node) -> Node, where condition: (Node) -> Bool) -> Node
+    
+    /// - Returns: Whether the provided node is identical with self.
+    func equals(_ node: Node) -> Bool
 }
 
 extension Node {
@@ -38,6 +50,18 @@ extension Node {
             .toExponentialForm()
             .flatten()
     }
+    
+    public func replacing(with replace: (Node) -> Node, where condition: (Node) -> Bool) -> Node {
+        return condition(self) ? replace(self) : self
+    }
+    
 }
 
+func ==(_ lhs: Node, _ rhs: Node) -> Bool {
+    return lhs.equals(rhs)
+}
+
+func !=(_ lhs: Node, _ rhs: Node) -> Bool {
+    return !(lhs == rhs)
+}
 

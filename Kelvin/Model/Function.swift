@@ -30,7 +30,12 @@ struct Function: Node {
     var def: Definition?
     
     var description: String {
-        return "\(name)(\(List(args)))"
+        var argList = args.elements.map{$0.description}
+            .reduce(""){"\($0),\($1)"}
+        if argList.count > 0 {
+            argList.removeFirst()
+        }
+        return "\(name)(\(argList))"
     }
     
     init(_ name: String, _ args: List) {
@@ -69,6 +74,11 @@ struct Function: Node {
                     return (try? u(n.doubleValue())) ?? .nan
                 }
                 return nil
+            }
+        } else {
+            // Resolve registered parametric operations
+            if let parOp = ParametricOperation.resolve(name, args: args.elements) {
+                def = parOp.def
             }
         }
     }
@@ -185,5 +195,31 @@ struct Function: Node {
         default: break
         }
         return copy
+    }
+    
+    /// Functions are equal to each other if their name and arguments are the same
+    func equals(_ node: Node) -> Bool {
+        if let fun = node as? Function {
+            return fun.name == name && fun.args == args
+        }
+        return false
+    }
+    
+    /**
+     Replace the designated nodes identical to the node provided with the replacement
+     
+     - Parameter condition: The condition that needs to be met for a node to be replaced
+     - Parameter replace:   A function that takes the old node as input (and perhaps
+                            ignores it) and returns a node as replacement.
+     */
+    func replacing(with replace: (Node) -> Node, where condition: (Node) -> Bool) -> Node {
+        if condition(self) {
+            return replace(self)
+        } else {
+            var copy = self
+            copy.args.elements = copy.args.elements
+                .map{$0.replacing(with: replace, where: condition)}
+            return copy
+        }
     }
 }

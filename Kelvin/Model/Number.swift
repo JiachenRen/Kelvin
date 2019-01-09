@@ -17,6 +17,13 @@ extension Value {
     public var evaluated: Value? {
         return self
     }
+    
+    public func equals(_ node: Node) -> Bool {
+        if let d = node as? Value {
+            return d.doubleValue() == doubleValue()
+        }
+        return false
+    }
 }
 
 extension Double: Value {

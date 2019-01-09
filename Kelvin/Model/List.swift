@@ -15,8 +15,10 @@ struct List: Node, NaN {
     var description: String {
         var pars = elements.map{$0.description}
             .reduce(""){"\($0),\($1)"}
-        pars.removeFirst()
-        return pars
+        if pars.count > 0 {
+            pars.removeFirst()
+        }
+        return "{\(pars)}"
     }
     
     init(_ elements: [Node]) {
@@ -36,15 +38,50 @@ struct List: Node, NaN {
         return List(elements.map{$0.simplify()})
     }
     
+    /// Convert all subtractions to additions
     func toAdditionOnlyForm() -> Node {
         return List(elements.map{$0.toAdditionOnlyForm()})
     }
     
+    /// Convert all divisions to multiplications and exponentiations
     func toExponentialForm() -> Node {
         return List(elements.map{$0.toExponentialForm()})
     }
     
+    /// Flatten binary operation trees
     func flatten() -> Node {
         return List(elements.map{$0.flatten()})
+    }
+    
+    /// - Returns: Whether the provided node is identical with self.
+    func equals(_ node: Node) -> Bool {
+        if let list = node as? List, list.elements.count == elements.count {
+            for i in 0..<elements.count {
+                if elements[i] != list.elements[i] {
+                    return false
+                }
+            }
+            return true
+        }
+        return false
+    }
+    
+    /**
+     Replace the designated nodes identical to the node provided with the replacement
+     
+     - Parameter condition: The condition that needs to be met for a node to be replaced
+     - Parameter replace:   A function that takes the old node as input (and perhaps
+                            ignores it) and returns a node as replacement.
+     */
+    func replacing(with replace: (Node) -> Node, where condition: (Node) -> Bool) -> Node {
+        if condition(self) {
+            return replace(self)
+        } else {
+            var copy = self
+            copy.elements = copy.elements.map{ element in
+                return element.replacing(with: replace, where: condition)
+            }
+            return copy
+        }
     }
 }

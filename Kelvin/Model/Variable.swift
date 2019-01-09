@@ -35,4 +35,11 @@ struct Variable: Leaf, NaN {
         }
         return true
     }
+    
+    func equals(_ node: Node) -> Bool {
+        if let v = node as? Variable {
+            return v.name == name
+        }
+        return false
+    }
 }

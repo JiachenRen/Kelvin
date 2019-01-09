@@ -54,7 +54,11 @@ public class Compiler {
         let binOps = compartmentalize(&expr)
         var dict = Dictionary<String, Node>()
         let parent = try resolve(expr, &dict, binOps)
-        return parent
+        
+        // Restore list() to {}
+        return parent.replacing(with: {($0 as! Function).args}){
+            $0 is Function && ($0 as! Function).name == "list"
+        }
     }
     
     private static func resolve(_ expr: String, _ dict: inout NodeRef, _ binOps: BinRef) throws -> Node {
@@ -301,6 +305,8 @@ public class Compiler {
             throw CompilerError.syntax(errMsg: "'{}' mismatch in \(expr)")
         } else if expr.contains("&") || expr.contains("#") {
             throw CompilerError.illegalArgument(errMsg: "Illegal character(s) & and #")
+        } else if expr == "" {
+            throw CompilerError.illegalArgument(errMsg: "Give me some juice!")
         } else if num(expr, char: "'") % 2 != 0 {
             throw CompilerError.syntax(errMsg: "'' mismatch in \(expr)")
         }
