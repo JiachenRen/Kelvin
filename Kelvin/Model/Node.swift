@@ -11,7 +11,7 @@ import Foundation
 public protocol Node: CustomStringConvertible {
     
     /// Computes the numerical value that the node represents.
-    var numericalVal: Double? {get}
+    var evaluated: Value? {get}
     
     /// Simplifies the node.
     func simplify() -> Node

@@ -115,7 +115,7 @@ public class Compiler {
                 .map{String($0)}
                 .map{try resolve($0, &dict, binOps)}
             return List(nodes)
-        } else if let node = dict[expr] ?? Double(expr) {
+        } else if let node = dict[expr] ?? Int(expr) ?? Double(expr) ?? Bool(expr) {
             return node
         } else {
             return try Variable(expr)

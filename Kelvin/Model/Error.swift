@@ -14,3 +14,7 @@ public enum CompilerError: Error {
     case illegalArgument(errMsg: String)
     case syntax(errMsg: String)
 }
+
+public enum ArithmeticError: Error {
+    case overflow
+}

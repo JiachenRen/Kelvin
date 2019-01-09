@@ -11,8 +11,8 @@ import Foundation
 typealias Definition = ([Node]) -> Node?
 
 struct Function: Node {
-    var numericalVal: Double? {
-        return invoke()?.numericalVal
+    var evaluated: Value? {
+        return invoke()?.evaluated
     }
     
     /// The name of the function
@@ -53,17 +53,20 @@ struct Function: Node {
         if let b = BinOperation.registered[name] {
             // Resolve registered binary operations
             def = {nodes in
-                let values = nodes.map{$0.numericalVal}
-                if values.contains(nil) {return nil}
+                let values = nodes.map{$0.evaluated}
+                if values.contains(where: {$0 == nil}) {return nil}
                 var u = values.map{$0!}
                 let r: Double = u.removeFirst()
-                return u.reduce(r){b.bin($0,$1)}
+                    .doubleValue()
+                return u.reduce(r){
+                    (try? b.bin($0.doubleValue(),$1.doubleValue())) ?? .nan
+                }
             }
         } else if let u = UnaryOperation.registered[name], args.elements.count == 1 {
             // Resolve registered unary operations
             def = {nodes in
-                if let n = nodes[0].numericalVal {
-                    return u(n)
+                if let n = nodes[0].evaluated {
+                    return (try? u(n.doubleValue())) ?? .nan
                 }
                 return nil
             }
@@ -142,7 +145,7 @@ struct Function: Node {
             // Change division to multiplication
             copy.name = "*"
             let rhs = copy.args.elements[1]
-            copy.args.elements[1] = Function("^", [rhs, -1.0])
+            copy.args.elements[1] = Function("^", [rhs, -1])
         }
         return copy
     }
@@ -152,6 +155,7 @@ struct Function: Node {
      e.g. +(d,+(+(a,b),c)) becomes +(a,b,c,d)
      
      - Warning: Before invoking this function, the expression should be in addtion only form.
+                Under normal circumstances, don't use this function.
      */
     func flatten() -> Node {
         var copy = arguments{$0.flatten()} // Initial recursive call

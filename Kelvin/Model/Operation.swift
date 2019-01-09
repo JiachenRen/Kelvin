@@ -8,7 +8,7 @@
 
 import Foundation
 
-typealias Bin = (Double, Double) -> Double
+typealias Bin = (Double, Double) throws -> Double
 
 /**
  Binary operations such as +, -, *, /, etc.
@@ -59,7 +59,7 @@ enum Priority: Int, Comparable {
     }
 }
 
-typealias Unary = (Double) -> Double
+typealias Unary = (Double) throws -> Double
 class UnaryOperation {
     static var registered: Dictionary<String, Unary> = [
         "log": log10,

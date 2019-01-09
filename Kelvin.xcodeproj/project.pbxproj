@@ -21,8 +21,6 @@
 		1F2E82D421975A94005C3353 /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82B521974368005C3353 /* Variable.swift */; };
 		1F2E82D521975A94005C3353 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AD2197331F005C3353 /* Function.swift */; };
 		1F2E82D621975A94005C3353 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AF2197338B005C3353 /* Node.swift */; };
-		1F2E82DA21977CDF005C3353 /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82D921977CDF005C3353 /* Bool.swift */; };
-		1F2E82DB21977CE3005C3353 /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82D921977CDF005C3353 /* Bool.swift */; };
 		1F3974BC21E3970F006D6DC2 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974BB21E3970F006D6DC2 /* Error.swift */; };
 		1F3974BD21E39A7A006D6DC2 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974BB21E3970F006D6DC2 /* Error.swift */; };
 		1F3974BF21E3B741006D6DC2 /* Leaf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974BE21E3B741006D6DC2 /* Leaf.swift */; };
@@ -77,7 +75,6 @@
 		1F2E82B521974368005C3353 /* Variable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Variable.swift; sourceTree = "<group>"; };
 		1F2E82BB219757FC005C3353 /* KelvinCommandLine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = KelvinCommandLine; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F2E82BD219757FC005C3353 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		1F2E82D921977CDF005C3353 /* Bool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bool.swift; sourceTree = "<group>"; };
 		1F3974BB21E3970F006D6DC2 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		1F3974BE21E3B741006D6DC2 /* Leaf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Leaf.swift; sourceTree = "<group>"; };
 		1F3974C021E3B761006D6DC2 /* NaN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaN.swift; sourceTree = "<group>"; };
@@ -212,7 +209,6 @@
 		1FFD8CD3218F522E0004ECEB /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				1F2E82D921977CDF005C3353 /* Bool.swift */,
 				1FFD8CD4218F52430004ECEB /* Compiler.swift */,
 				1F2E82B32197416D005C3353 /* List.swift */,
 				1F2E82B121973FF7005C3353 /* Number.swift */,
@@ -387,7 +383,6 @@
 				1F2E82D321975A94005C3353 /* Operation.swift in Sources */,
 				1F2E82D421975A94005C3353 /* Variable.swift in Sources */,
 				1F2E82D521975A94005C3353 /* Function.swift in Sources */,
-				1F2E82DB21977CE3005C3353 /* Bool.swift in Sources */,
 				1F2E82D621975A94005C3353 /* Node.swift in Sources */,
 				1F2E82C32197591F005C3353 /* main.swift in Sources */,
 			);
@@ -401,7 +396,6 @@
 				1F2E82B221973FF7005C3353 /* Number.swift in Sources */,
 				1F2E82B621974368005C3353 /* Variable.swift in Sources */,
 				1FFD8CD5218F52430004ECEB /* Compiler.swift in Sources */,
-				1F2E82DA21977CDF005C3353 /* Bool.swift in Sources */,
 				1F3974C121E3B761006D6DC2 /* NaN.swift in Sources */,
 				1F3974BC21E3970F006D6DC2 /* Error.swift in Sources */,
 				1FFD8CA8218F50850004ECEB /* Kelvin.xcdatamodeld in Sources */,

@@ -15,7 +15,7 @@ extension NaN {
     
     /// Returns NaN because non-numerical classes such as variable
     /// conforms to this protocol.
-    public var numericalVal: Double? {
+    public var evaluated: Value? {
         return nil
     }
     

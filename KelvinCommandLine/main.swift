@@ -14,12 +14,12 @@ while true {
         print("    >>> ", terminator: "")
         let input = readLine() ?? ""
         let parent = try Compiler.compile(input)
-        print("     ~: \(parent.numericalVal ?? .nan)")
+        print("     ~: \(parent.evaluated ?? Double.nan)")
         print("     =: \(parent.simplify())")
         print("- -> +: \(parent.toAdditionOnlyForm())")
         print("/ -> *: \(parent.toExponentialForm())")
         print("   [\\]: \(parent.format())")
-        print("  [\\]~: \(parent.format().numericalVal ?? .nan)")
+        print("  [\\]~: \(parent.format().evaluated ?? Double.nan)")
         print()
     } catch let err {
         print(err)
