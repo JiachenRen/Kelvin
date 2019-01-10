@@ -21,7 +21,9 @@ while true {
         print("   [\\]: \(parent.format())")
         print("  [\\]~: \(parent.format().evaluated ?? Double.nan)")
         print()
-    } catch let err {
-        print(err)
+    } catch CompilerError.illegalArgument(let msg) {
+        print("ERR >>> illegal argument: \(msg)")
+    } catch CompilerError.syntax(let msg) {
+        print("ERR >>> syntax: \(msg)")
     }
 }

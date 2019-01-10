@@ -74,6 +74,10 @@ public class Compiler {
                 let n2 = fun.args.elements[1]
                 return Equation(lhs: n1, rhs: n2)
             }){($0 as? Function)?.name == "="}
+            .replacing(with: {old in // Force update function definition
+                let fun = old as! Function
+                return Function(fun.name, fun.args)
+            }){$0 is Function}
     }
     
     private static func resolve(_ expr: String, _ dict: inout NodeRef, _ binOps: BinRef) throws -> Node {

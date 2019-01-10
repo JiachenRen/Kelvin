@@ -98,7 +98,7 @@ func log10(_ a: Double) -> Double {
     return log(a) / log(10)
 }
 
-class ParametricOperation {
+class ParametricOperation: Equatable {
     
     /**
      This enum is used to represent the type of the arguments.
@@ -109,10 +109,26 @@ class ParametricOperation {
     enum ArgumentType {
         case number
         case `var`
+        case `func`
         case bool
         case list
         case any
         case equation
+    }
+    
+    /**
+     This defines the syntax that the operation uses.
+     For the function with signature "define(f(x)=x^2)",
+     the prefix syntax is "define f(x)=x^2".
+     
+     The infix syntax, on the other hand, only applies to
+     functions that take in two arguments.
+     e.g. the function "and(a,b)" can be invoked with "a and b"
+     */
+    enum Syntax {
+        case normal
+        case prefix
+        case infix
     }
 
     
@@ -121,38 +137,65 @@ class ParametricOperation {
      to function definitions during compilation.
      */
     static var registered: [ParametricOperation] = [
-        .init("and", [.bool, .bool]) {nodes in
+        .init("and", [.bool, .bool], syntax: .infix) {nodes in
             return nodes.map{$0 as! Bool}
                 .reduce(true){$0 && $1}
         },
-        .init("or", [.bool, .bool]) {nodes in
+        .init("or", [.bool, .bool], syntax: .infix) {nodes in
             return nodes.map{$0 as! Bool}
                 .reduce(false){$0 || $1}
         },
         .init("sum", [.list]) {nodes in
             return Function("+", (nodes[0] as! List).elements)
         },
-        .init("define",[.equation], useCmdSyntax: true) {nodes in
-            // TODO: Implement
+        .init("define", [.equation], syntax: .prefix) {nodes in
+            if let err = (nodes[0] as? Equation)?.define() {
+                return err
+            }
             return nil
-        }
+        },
+        .init("del", [.var], syntax: .prefix) {nodes in
+            if let v = nodes[0] as? Variable {
+                Variable.delete(v.name)
+                ParametricOperation.remove(v.name)
+            }
+            return nil
+        },
     ]
     
     let def: Definition
     let name: String
     let signature: [ArgumentType]
-    let useCmdSyntax: Bool
+    let syntax: Syntax
     
-    init(_ name: String, _ signature: [ArgumentType], useCmdSyntax: Bool = false, definition: @escaping Definition) {
+    init(_ name: String, _ signature: [ArgumentType], syntax: Syntax = .normal, definition: @escaping Definition) {
         self.name = name
         self.def = definition
         self.signature = signature
-        self.useCmdSyntax = useCmdSyntax
+        self.syntax = syntax
     }
     
     /// Register the parametric operation.
     static func register(_ parOp: ParametricOperation) {
         registered.append(parOp)
+    }
+    
+    /**
+     Remove a parametric operation from registration.
+     
+     - Parameters:
+     - name: The name of the operation to be removed.
+     - signature: The signature of the operation to be removed.
+     */
+    static func remove(_ name: String, _ signature: [ArgumentType]) {
+        let parOp = ParametricOperation(name, signature) {_ in nil}
+        registered.removeAll{$0 == parOp}
+    }
+    
+    /// Remove the parametric operations with the given name.
+    /// - Parameter name: The name of the operations to be removed.
+    static func remove(_ name: String) {
+        registered.removeAll{$0.name == name}
     }
     
     /**
@@ -164,7 +207,7 @@ class ParametricOperation {
      */
     static func resolve(_ name: String, args: [Node]) -> ParametricOperation? {
         let candidates = registered.filter{$0.name == name}
-        for cand in candidates {
+        candLoop: for cand in candidates {
             if cand.signature.count != args.count {
                 continue
             }
@@ -172,16 +215,33 @@ class ParametricOperation {
                 let argType = cand.signature[i]
                 let arg = args[i]
                 switch argType {
-                case .any: return cand
-                case .var where arg is Variable: return cand
-                case .bool where arg is Bool: return cand
-                case .list where arg is List || (arg as? Function)?.name == "list": return cand
-                case .number where arg is Double || arg is Int: return cand
-                default: break
+                case .any:
+                    continue
+                case .var where !(arg is Variable):
+                    continue candLoop
+                case .bool where !(arg is Bool):
+                    continue candLoop
+                case .list where !(arg is List):
+                    continue candLoop
+                case .number where !(arg is Double || arg is Int):
+                    continue candLoop
+                case .equation where !(arg is Equation):
+                    continue candLoop
+                case .func where !(arg is Function):
+                    continue candLoop
+                default: continue
                 }
             }
             return cand
         }
         return nil
+    }
+    
+    /**
+     Two parametric operations are equal to each other if they have the same name
+     and the same signature
+     */
+    static func == (lhs: ParametricOperation, rhs: ParametricOperation) -> Bool {
+        return lhs.name == rhs.name && lhs.signature == rhs.signature
     }
 }
