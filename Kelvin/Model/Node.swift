@@ -62,3 +62,14 @@ extension Node {
     }
     
 }
+
+/// Infix shorthand for lhs.equals(rhs)
+public func ===(_ lhs: Node, _ rhs: Node) -> Bool {
+    return lhs.equals(rhs)
+}
+
+/// Infix shorthand for !lhs.equals(rhs)
+public func !==(_ lhs: Node, _ rhs: Node) -> Bool {
+    return !(lhs === rhs)
+}
+

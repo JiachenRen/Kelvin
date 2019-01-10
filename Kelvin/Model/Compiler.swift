@@ -65,9 +65,7 @@ public class Compiler {
             ($0 as? Function)?.name == "list"
             }.replacing(by: { (old) -> Node in
                 let fun = old as! Function
-                let n1 = fun.args.elements[0]
-                let n2 = fun.args.elements[1]
-                return Equation(lhs: n1, rhs: n2)
+                return Equation(lhs: fun.args[0], rhs: fun.args[1])
             }){($0 as? Function)?.name == "="}
             .replacing(by: {old in // Force update function definition
                 let fun = old as! Function
@@ -308,8 +306,9 @@ public class Compiler {
         }
         
         // Handle negative signs (as opposed to 'minus')
-        replace(&expr, of: "(-", with: "(0-")
-        replace(&expr, of: ",-", with: ",0-")
+        "(,=".forEach {
+            replace(&expr, of: "\($0)-", with: "\($0)0-")
+        }
         expr = expr.first! == "-" ? "0\(expr)" : expr
     }
     

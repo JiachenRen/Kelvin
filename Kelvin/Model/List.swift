@@ -29,6 +29,15 @@ struct List: Node, NaN {
         self.init(elements)
     }
     
+    subscript(_ idx: Int) -> Node {
+        get {
+            return elements[idx]
+        }
+        set(newValue) {
+            elements[idx] = newValue
+        }
+    }
+    
     /**
      Simplify each element in the list.
      
@@ -53,17 +62,50 @@ struct List: Node, NaN {
         return List(elements.map{$0.flatten()})
     }
     
-    /// - Returns: Whether the provided node is identical with self.
+    /// The ordering of the list does not matter, i.e. {1,2,3} is considered
+    /// the same as {3,2,1}.
+    /// - Returns: Whether the provided node is loosely identical to self.
     func equals(_ node: Node) -> Bool {
+        
+        func comparator(_ lhs: Node, _ rhs: Node) -> Bool {
+            return "\(lhs)" > "\(rhs)"
+        }
+        
         if let list = node as? List, list.elements.count == elements.count {
-            for i in 0..<elements.count {
-                if !elements[i].equals(list.elements[i]) {
-                    return false
-                }
-            }
-            return true
+            let l1 = sorted(by: comparator)
+            let l2 = list.sorted(by: comparator)
+            return List.strictlyEquals(l1, l2)
         }
         return false
+    }
+    
+    /**
+     Sort the list by using the provided comparator.
+     
+     - Parameter comparator: A binary function that compares two nodes.
+     - Returns: A new list containing the original elements in sorted order
+     */
+    func sorted(by comparator: (Node, Node) -> Bool) -> List {
+        return List(elements.sorted(by: comparator))
+    }
+    
+    /**
+     Check if the two lists are strictly equivalent, i.e. order does matter.
+     
+     - Parameter lhs: A list
+     - Parameter rhs: Another list to be compared to.
+     - Returns: Whether lhs and rhs are strictly equivalent.
+     */
+    static func strictlyEquals(_ lhs: List, _ rhs: List) -> Bool {
+        if lhs.elements.count != rhs.elements.count {
+            return false
+        }
+        for i in 0..<lhs.elements.count {
+            if lhs[i] !== rhs[i] {
+                return false
+            }
+        }
+        return true
     }
     
     /**

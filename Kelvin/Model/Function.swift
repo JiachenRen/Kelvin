@@ -198,9 +198,9 @@ struct Function: Node {
             assert(copy.args.elements.count == 2)
             // Change subtraction to addition
             copy.name = "+"
-            let rhs = copy.args.elements[1]
+            let rhs = copy.args[1]
             let negated = Function("negate", [rhs])
-            copy.args.elements[1] = negated
+            copy.args[1] = negated
             return copy
         }
         return copy
@@ -218,8 +218,8 @@ struct Function: Node {
             assert(copy.args.elements.count == 2)
             // Change division to multiplication
             copy.name = "*"
-            let rhs = copy.args.elements[1]
-            copy.args.elements[1] = Function("^", [rhs, -1])
+            let rhs = copy.args[1]
+            copy.args[1] = Function("^", [rhs, -1])
         }
         return copy
     }
@@ -236,10 +236,10 @@ struct Function: Node {
         switch copy.name {
         case "negate":
             assert(copy.args.elements.count == 1)
-            let nested = copy.args.elements[0]
+            let nested = copy.args[0]
             if var fun = nested as? Function {
                 if fun.name == "negate" {
-                    return fun.args.elements[0]
+                    return fun.args[0]
                 } else if fun.name == "+" {
                     fun.args.elements = fun.args.elements
                         .map{Function("negate", [$0])}
@@ -264,7 +264,7 @@ struct Function: Node {
     /// Functions are equal to each other if their name and arguments are the same
     func equals(_ node: Node) -> Bool {
         if let fun = node as? Function {
-            return fun.name == name && fun.args.equals(args)
+            return fun.name == name && List.strictlyEquals(args, fun.args)
         }
         return false
     }

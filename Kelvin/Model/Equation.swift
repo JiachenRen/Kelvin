@@ -30,14 +30,14 @@ struct Equation: Node, NaN {
         eq.rhs = rhs.simplify()
         
         // After simplification, lhs = rhs, equation is always true.
-        if eq.lhs.equals(eq.rhs) {
+        if eq.lhs === eq.rhs {
             return true
         }
         
         // If lhs and rhs comes down to a number, compare their numerical values.
         if let v1 = eq.lhs.evaluated, let v2 = eq.rhs.evaluated {
             // TODO: Implement tolerance?
-            return v1.equals(v2)
+            return v1 === v2
         }
         
         // If nothing could be done, then return a copy of self
@@ -150,9 +150,23 @@ struct Equation: Node, NaN {
         return perform{$0.flatten()}
     }
     
+    /**
+     Swap left hand side and right and side of the equation
+     e.g. a+b=c -> c=a+b
+     
+     - Returns: The equation with lhs and rhs swapped.
+     */
+    func reversed() -> Node {
+        return Equation(lhs: rhs, rhs: lhs)
+    }
+    
+    /// Two equations are considered as identical if their operands are identical
+    /// either in the forward direction or backward directino
     func equals(_ node: Node) -> Bool {
         if let eq = node as? Equation {
-            return lhs.equals(eq.lhs) && rhs.equals(eq.rhs)
+            let forwardEquals = lhs === eq.lhs && rhs === eq.rhs
+            let backwardEquals = lhs === eq.rhs && rhs === eq.lhs
+            return forwardEquals || backwardEquals
         }
         return false
     }
