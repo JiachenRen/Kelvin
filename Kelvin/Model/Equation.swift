@@ -95,7 +95,7 @@ struct Equation: Node, NaN {
         // replace the variables in template with arguments as input
         // to create the definition
         let def: Definition = { args in
-            var template = self.rhs.replacing(with: {
+            var template = self.rhs.replacing(by: {
                 var rpl = $0 as! Variable
                 
                 // This is for dealing with the following bug:
@@ -108,13 +108,13 @@ struct Equation: Node, NaN {
             
             dict.forEach{(pair) in
                 let (key, value) = pair
-                template = template.replacing(with: {_ in args[value]}){
+                template = template.replacing(by: {_ in args[value]}){
                     ($0 as? Variable)?.name == "#\(key)"
                 }
             }
             
             // Revert changes made to the variable names
-            return template.replacing(with: {
+            return template.replacing(by: {
                 var mod = $0 as! Variable
                 mod.name.removeFirst()
                 return mod

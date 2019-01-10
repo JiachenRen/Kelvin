@@ -15,10 +15,10 @@ typealias NBinary = (Double, Double) throws -> Double
  Binary operations such as +, -, *, /, etc.
  Supports definition of custom binary operations.
  */
-class BinOperation: CustomStringConvertible {
+class BinaryOperation: CustomStringConvertible {
     
     // Standard & custom binary operations
-    static var registered: [String: BinOperation] = [
+    static var registered: [String: BinaryOperation] = [
         "+": .init("+", .third, +),
         "-": .init("-", .third, -),
         "*": .init("*", .second, *),
@@ -52,7 +52,7 @@ class BinOperation: CustomStringConvertible {
      - Parameter unary: A binary operation that takes in 2 Doubles and returns a Double.
      */
     static func define(_ name: String, priority: Priority, bin: @escaping NBinary) {
-        let op = BinOperation(name, priority, bin)
+        let op = BinaryOperation(name, priority, bin)
         registered.updateValue(op, forKey: name)
     }
 }

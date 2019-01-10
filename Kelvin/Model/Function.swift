@@ -11,6 +11,16 @@ import Foundation
 typealias Definition = ([Node]) -> Node?
 
 struct Function: Node {
+    
+    /// The format of the function when represented as text
+    enum Format {
+        case binary
+        case unary
+        case function
+        case prefix
+        case infix
+    }
+    
     var evaluated: Value? {
         return invoke()?.evaluated
     }
@@ -36,18 +46,42 @@ struct Function: Node {
     /// The definition of the function.
     var def: Definition?
     
+    /// The format of the function when represented as text
+    var format: Format
+    
     var description: String {
-        var argList = args.elements.map{$0.description}
-            .reduce(""){"\($0),\($1)"}
-        if argList.count > 0 {
-            argList.removeFirst()
+        let r = args.elements
+        let n = name
+        switch format {
+        case .binary:
+            var a = r.map{$0.description}
+                .reduce(""){"\($0)\(n)\($1)"}
+            if a.count > 0 {
+                a.removeFirst()
+            }
+            return "(\(a))"
+        case .infix:
+            return "(\(r[0]) \(n) \(r[1]))"
+        case .prefix:
+            return "\(n) \(r[0])"
+        case .unary where n == "negate":
+            return "(-\(r[0]))"
+        case .function:
+            fallthrough
+        default:
+            var l = r.map{$0.description}
+                .reduce(""){"\($0),\($1)"}
+            if l.count > 0 {
+                l.removeFirst()
+            }
+            return "\(name)(\(l))"
         }
-        return "\(name)(\(argList))"
     }
     
     init(_ name: String, _ args: List) {
         self.name = name
         self.args = args
+        self.format = .function
         resolveDefinition()
     }
     
@@ -62,7 +96,7 @@ struct Function: Node {
      - custom: user defined operations, such as a function f(x)
      */
     private mutating func resolveDefinition() {
-        if let b = BinOperation.registered[name] {
+        if let b = BinaryOperation.registered[name] {
             // Resolve registered binary operations
             def = {nodes in
                 let values = nodes.map{$0.evaluated}
@@ -74,6 +108,7 @@ struct Function: Node {
                     (try? b.bin($0.doubleValue(),$1.doubleValue())) ?? .nan
                 }
             }
+            
         } else if let u = UnaryOperation.registered[name], args.elements.count == 1 {
             // Resolve registered unary operations
             def = {nodes in
@@ -82,11 +117,33 @@ struct Function: Node {
                 }
                 return nil
             }
+            
         } else {
             // Resolve registered parametric operations
             if let parOp = ParametricOperation.resolve(name, args: args.elements) {
                 def = parOp.def
             }
+        }
+        
+        func extract(_ syntax: ParametricOperation.Syntax) -> [String] {
+            return ParametricOperation.registered
+                .filter{$0.syntax == syntax}
+                .map{$0.name}
+        }
+        
+        let infixes = extract(.infix)
+        let prefixes = extract(.prefix)
+        let unary = UnaryOperation.registered.keys
+        let binary = BinaryOperation.registered.keys
+        
+        if infixes.contains(name) {
+            format = .infix
+        } else if prefixes.contains(name) {
+            format = .prefix
+        } else if unary.contains(name) {
+            format = .unary
+        } else if binary.contains(name) {
+            format = .binary
         }
     }
     
@@ -215,14 +272,15 @@ struct Function: Node {
     /**
      Replace the designated nodes identical to the node provided with the replacement
      
-     - Parameter condition: The condition that needs to be met for a node to be replaced
+     - Parameter predicament: The condition that needs to be met for a node to be replaced
      - Parameter replace:   A function that takes the old node as input (and perhaps
                             ignores it) and returns a node as replacement.
      */
-    func replacing(with replace: Unary, where condition: (Node) -> Bool) -> Node {
+    func replacing(by replace: Unary, where predicament: (Node) -> Bool) -> Node {
         var copy = self
-        copy.args.elements = copy.args.elements
-            .map{$0.replacing(with: replace, where: condition)}
-        return condition(copy) ? replace(copy) : copy
+        copy.args.elements = copy.args.elements.map{
+            $0.replacing(by: replace, where: predicament)
+        }
+        return predicament(copy) ? replace(copy) : copy
     }
 }

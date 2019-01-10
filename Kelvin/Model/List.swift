@@ -69,15 +69,15 @@ struct List: Node, NaN {
     /**
      Replace the designated nodes identical to the node provided with the replacement
      
-     - Parameter condition: The condition that needs to be met for a node to be replaced
+     - Parameter predicament: The condition that needs to be met for a node to be replaced
      - Parameter replace:   A function that takes the old node as input (and perhaps
                             ignores it) and returns a node as replacement.
      */
-    func replacing(with replace: Unary, where condition: (Node) -> Bool) -> Node {
+    func replacing(by replace: Unary, where predicament: (Node) -> Bool) -> Node {
         var copy = self
         copy.elements = copy.elements.map{ element in
-            return element.replacing(with: replace, where: condition)
+            return element.replacing(by: replace, where: predicament)
         }
-        return condition(copy) ? replace(copy) : copy
+        return predicament(copy) ? replace(copy) : copy
     }
 }

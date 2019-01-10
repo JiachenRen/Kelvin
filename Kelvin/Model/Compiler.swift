@@ -17,13 +17,13 @@ public class Compiler {
     private static let brackets = ["{","}"]
     
     private static var symbols: String {
-        let operators = BinOperation.registered
+        let operators = BinaryOperation.registered
             .keys.reduce(""){$0 + $1}
         return ",(){}'\(operators)"
     }
     
     // &? -> +, - , *, /, ^, etc.
-    typealias BinRef = Dictionary<String, BinOperation>
+    typealias BinRef = Dictionary<String, BinaryOperation>
     
     // #? -> node
     typealias NodeRef = Dictionary<String, Node>
@@ -66,15 +66,15 @@ public class Compiler {
      - Returns: The parent node with DTs restored.
      */
     private static func restoreDataType(_ parent: Node) -> Node {
-        return parent.replacing(with: {($0 as! Function).args}){
+        return parent.replacing(by: {($0 as! Function).args}){
             ($0 as? Function)?.name == "list"
-            }.replacing(with: { (old) -> Node in
+            }.replacing(by: { (old) -> Node in
                 let fun = old as! Function
                 let n1 = fun.args.elements[0]
                 let n2 = fun.args.elements[1]
                 return Equation(lhs: n1, rhs: n2)
             }){($0 as? Function)?.name == "="}
-            .replacing(with: {old in // Force update function definition
+            .replacing(by: {old in // Force update function definition
                 let fun = old as! Function
                 return Function(fun.name, fun.args)
             }){$0 is Function}
@@ -108,6 +108,8 @@ public class Compiler {
                 if let bin = binOps[name] {
                     name = bin.name
                 }
+                
+                name = removeWhiteSpace(name)
                 
                 if ir[0] == r.upperBound {
                     node = Function(name, [Node]())
@@ -144,14 +146,28 @@ public class Compiler {
                     $0.syntax == .infix
                 }.sorted{$0.priority > $1.priority}
             
-            // Change infix operations into binary functions by recursive call to resolve
-            for operation in infixOps {
-                if let r = expr.range(of: " \(operation.name) ") {
-                    let left = expr[..<r.lowerBound]
-                    let right = expr[r.upperBound...]
-                    let o = "\(operation.name)(\(left),\(right))"
-                    return try resolve(o, &dict, binOps)
+            var hasInfixOperations = false
+            
+            // Change infix operations into binary functions
+            func infixToBinary(_ infix: String) -> String {
+                for operation in infixOps {
+                    if let r = infix.range(of: " \(operation.name) ") {
+                        var left = String(infix[..<r.lowerBound])
+                        var right = String(infix[r.upperBound...])
+                        left = infixToBinary(left)
+                        right = infixToBinary(right)
+                        hasInfixOperations = true
+                        return "\(operation.name)(\(left),\(right))"
+                    }
                 }
+                return infix
+            }
+            
+            let infix = infixToBinary(expr)
+            
+            // Recursively resolve infix operations
+            if hasInfixOperations {
+                return try resolve(infix, &dict, binOps)
             }
             
             expr = removeWhiteSpace(expr)
@@ -180,17 +196,17 @@ public class Compiler {
     }
     
     private static func functionalize(_ expr: inout String) -> BinRef {
-        let operators = BinOperation.registered.values
+        let operators = BinaryOperation.registered.values
         let prioritized = operators.sorted{$0.priority < $1.priority}
         
-        var segregated = [[BinOperation]]()
+        var segregated = [[BinaryOperation]]()
         var cur = prioritized[0].priority
-        var buf = [BinOperation]()
+        var buf = [BinaryOperation]()
         prioritized.forEach {
             if $0.priority != cur {
                 cur = $0.priority
                 segregated.append(buf)
-                buf = [BinOperation]()
+                buf = [BinaryOperation]()
             }
             buf.append($0)
         }
