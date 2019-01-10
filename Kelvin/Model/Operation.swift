@@ -175,7 +175,20 @@ class ParametricOperation: Equatable {
             var elements = [Node]()
             (0..<times).forEach{_ in elements.append(nodes[1])}
             return List(elements)
+        },
+        .init("get", [.list, .number]) {nodes in
+            let list = nodes[0] as! List
+            let idx = Int(nodes[1].evaluated!.doubleValue())
+            if idx >= list.elements.count {
+                return KelvinError(msg: "index out of bounds")
+            } else {
+                return list[idx]
+            }
+        },
+        .init("size", [.list]) {nodes in
+            return (nodes[0] as! List).elements.count
         }
+        
     ]
     
     let def: Definition

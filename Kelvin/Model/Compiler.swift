@@ -13,13 +13,14 @@ import Foundation
  * Interprets mathematical expressions into nested operations
  */
 public class Compiler {
-    private static let parentheses = ["(",")"]
-    private static let brackets = ["{","}"]
+    private static let squareBrackets = ["[", "]"]
+    private static let parentheses = ["(", ")"]
+    private static let brackets = ["{", "}"]
     
     private static var symbols: String {
         let operators = BinaryOperation.registered
             .keys.reduce(""){$0 + $1}
-        return ",(){}'\(operators)"
+        return ",(){}[]'\(operators)"
     }
     
     // &? -> +, - , *, /, ^, etc.
@@ -37,6 +38,11 @@ public class Compiler {
         // Format lists
         while expr.contains("{") {
             expr = replace(expr, "{", "}", "list(", ")")
+        }
+        
+        // Format vectors
+        while expr.contains("[") {
+            expr = replace(expr, "[", "]", "vector(", ")")
         }
         
         format(&expr)
@@ -399,9 +405,11 @@ public class Compiler {
             return true
         }
         if !matches(expr, parentheses) {
-            throw CompilerError.syntax(errMsg: "'()' mismatch in \(expr)")
+            throw CompilerError.syntax(errMsg: "() mismatch in \(expr)")
         } else if !matches(expr, brackets) {
-            throw CompilerError.syntax(errMsg: "'{}' mismatch in \(expr)")
+            throw CompilerError.syntax(errMsg: "{} mismatch in \(expr)")
+        } else if !matches(expr, squareBrackets) {
+            throw CompilerError.syntax(errMsg: "[] mismatch in \(expr)")
         } else if expr.contains(where: {"#&@".contains($0)}) {
             throw CompilerError.illegalArgument(errMsg: "Illegal character(s) &, #, or @")
         } else if expr == "" {
