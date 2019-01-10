@@ -80,6 +80,7 @@ class UnaryOperation {
         "log2": log2,
         "ln": log,
         "int": {Double(Int($0))},
+        "round": {round($0)},
         "negate": {-$0}
     ]
     
@@ -161,6 +162,20 @@ class ParametricOperation: Equatable {
             }
             return nil
         },
+        .init("random", []) {nodes in
+            return Double.random(in: 0...1)
+        },
+        .init("random", [.number, .number]) {nodes in
+            let lb = nodes[0].evaluated!.doubleValue()
+            let ub = nodes[1].evaluated!.doubleValue()
+            return Double.random(in: lb...ub)
+        },
+        .init("repeat", [.number, .any]) {nodes in
+            let times = Int(nodes[0].evaluated!.doubleValue())
+            var elements = [Node]()
+            (0..<times).forEach{_ in elements.append(nodes[1])}
+            return List(elements)
+        }
     ]
     
     let def: Definition

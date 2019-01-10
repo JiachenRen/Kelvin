@@ -319,8 +319,6 @@ public class Compiler {
             $0.syntax == .infix
             }.sorted{$0.priority > $1.priority}
         
-        var hasInfixOperations = false
-        
         // Change infix operations into binary functions
         func infixToBinary(_ infix: String) -> String {
             for operation in infixOps {
@@ -329,7 +327,6 @@ public class Compiler {
                     var right = String(infix[r.upperBound...])
                     left = infixToBinary(left)
                     right = infixToBinary(right)
-                    hasInfixOperations = true
                     return "\(operation.name)(\(left),\(right))"
                 }
             }
@@ -342,6 +339,12 @@ public class Compiler {
                 let r = innermost(input, "(", ")")
                 let l = expr.index(after: r.lowerBound)
                 let u = expr.index(before: r.upperBound)
+                
+                if input[l] == ")" {
+                    // Handle functions that take in no arguments.
+                    return infixToBinary(input)
+                }
+                
                 let m = String(input[l...u])
                 return infixToBinary(input.replacingOccurrences(of: m, with: format(m)))
             } else {
