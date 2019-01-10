@@ -119,6 +119,8 @@ struct Equation: Node, NaN {
                 mod.name.removeFirst()
                 return mod
             }, where: {($0 as? Variable)?.name.starts(with: "#") ?? false})
+                // Say f(x) = g(x), this ensures that g(x) is evaluated
+                .simplify()
         }
         
         // Create parametric operation
