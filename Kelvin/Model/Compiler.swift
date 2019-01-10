@@ -39,11 +39,6 @@ public class Compiler {
             expr = replace(expr, "{", "}", "list(", ")")
         }
         
-        // Handle negative signs (as opposed to 'minus')
-        replace(&expr, of: "(-", with: "(0-")
-        replace(&expr, of: ",-", with: ",0-")
-        expr = expr.first! == "-" ? "0\(expr)" : expr
-        
         format(&expr)
         
         // Convert all binary operations to functions with parameters.
@@ -99,7 +94,7 @@ public class Compiler {
             
             // Range inside parenthesis
             // A range isn't use here to avoid error caused by upperBound < lowerBound
-            let ir = [idx1,idx2]
+            let ir = [idx1, idx2]
             
             var node: Node? = nil
             if hasPrefix {
@@ -141,35 +136,6 @@ public class Compiler {
                 .map{try resolve($0, &dict, binOps)}
             return List(nodes)
         } else {
-            // Find all infix operations and order them by priority
-            let infixOps = ParametricOperation.registered.filter{
-                    $0.syntax == .infix
-                }.sorted{$0.priority > $1.priority}
-            
-            var hasInfixOperations = false
-            
-            // Change infix operations into binary functions
-            func infixToBinary(_ infix: String) -> String {
-                for operation in infixOps {
-                    if let r = infix.range(of: " \(operation.name) ") {
-                        var left = String(infix[..<r.lowerBound])
-                        var right = String(infix[r.upperBound...])
-                        left = infixToBinary(left)
-                        right = infixToBinary(right)
-                        hasInfixOperations = true
-                        return "\(operation.name)(\(left),\(right))"
-                    }
-                }
-                return infix
-            }
-            
-            let infix = infixToBinary(expr)
-            
-            // Recursively resolve infix operations
-            if hasInfixOperations {
-                return try resolve(infix, &dict, binOps)
-            }
-            
             expr = removeWhiteSpace(expr)
             if let node = dict[expr] ?? Int(expr) ?? Double(expr) ?? Bool(expr) {
                 return node
@@ -301,15 +267,6 @@ public class Compiler {
      */
     private static func format(_ expr: inout String) {
         
-        // Formats 9x to 9*x, 5var to 5*var
-        (0...9).map{String($0)}.forEach { digit in
-            Variable.legalChars.forEach { variable in
-                let target = "\(digit)\(variable)"
-                let rp = "\(digit)*\(variable)"
-                replace(&expr, of: target, with: rp)
-            }
-        }
-        
         // When naturally writing mathematic expressions, we tend to write
         // 3*-x instead of 3*(-x), etc.
         // This corrects the format to make it consistent.
@@ -324,7 +281,7 @@ public class Compiler {
             }
         }
         
-        // Format prefix parametric operations
+        // Format prefix parametric operations. This has to happen before spaces are removed.
         let prefixOps = ParametricOperation.registered.filter{$0.syntax == .prefix}
         for operation in prefixOps {
             if expr.starts(with: "\(operation.name) ") {
@@ -335,6 +292,65 @@ public class Compiler {
             }
         }
         
+        // Format infix operations. This has to happen before spaces are removed.
+        expr = formatInfixOperations(expr)
+        
+        // Remove spaces for ease of processing
+        expr.removeAll{$0 == " "}
+        
+        // Format 9x to 9*x, 5var to 5*var, 8( to 8*(
+        (0...9).map{String($0)}.forEach { n in
+            "\(Variable.legalChars)(".forEach { v in
+                let target = "\(n)\(v)"
+                let rp = "\(n)*\(v)"
+                replace(&expr, of: target, with: rp)
+            }
+        }
+        
+        // Handle negative signs (as opposed to 'minus')
+        replace(&expr, of: "(-", with: "(0-")
+        replace(&expr, of: ",-", with: ",0-")
+        expr = expr.first! == "-" ? "0\(expr)" : expr
+    }
+    
+    private static func formatInfixOperations(_ expr: String) -> String {
+        
+        // Find all infix operations and order them by priority
+        let infixOps = ParametricOperation.registered.filter{
+            $0.syntax == .infix
+            }.sorted{$0.priority > $1.priority}
+        
+        var hasInfixOperations = false
+        
+        // Change infix operations into binary functions
+        func infixToBinary(_ infix: String) -> String {
+            for operation in infixOps {
+                if let r = infix.range(of: " \(operation.name) ") {
+                    var left = String(infix[..<r.lowerBound])
+                    var right = String(infix[r.upperBound...])
+                    left = infixToBinary(left)
+                    right = infixToBinary(right)
+                    hasInfixOperations = true
+                    return "\(operation.name)(\(left),\(right))"
+                }
+            }
+            return infix
+        }
+        
+        // Work recursively from inside out
+        func format(_ input: String) -> String {
+            if input.contains("(") {
+                let r = innermost(input, "(", ")")
+                let l = expr.index(after: r.lowerBound)
+                let u = expr.index(before: r.upperBound)
+                let m = String(input[l...u])
+                return infixToBinary(input.replacingOccurrences(of: m, with: format(m)))
+            } else {
+                return infixToBinary(input)
+            }
+        }
+        
+        return format(expr)
     }
     
     private static func binRange(_ segment: String, _ binIdx: String.Index) -> ClosedRange<String.Index> {
