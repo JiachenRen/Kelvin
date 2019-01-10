@@ -125,7 +125,7 @@ class ParametricOperation: Equatable {
      functions that take in two arguments.
      e.g. the function "and(a,b)" can be invoked with "a and b"
      */
-    enum Syntax {
+    enum Syntax: Equatable {
         case normal
         case prefix
         case infix
@@ -137,7 +137,7 @@ class ParametricOperation: Equatable {
      to function definitions during compilation.
      */
     static var registered: [ParametricOperation] = [
-        .init("and", [.bool, .bool], syntax: .infix) {nodes in
+        .init("and", [.bool, .bool], syntax: .infix, priority: .highest) {nodes in
             return nodes.map{$0 as! Bool}
                 .reduce(true){$0 && $1}
         },
@@ -168,11 +168,15 @@ class ParametricOperation: Equatable {
     let signature: [ArgumentType]
     let syntax: Syntax
     
-    init(_ name: String, _ signature: [ArgumentType], syntax: Syntax = .normal, definition: @escaping Definition) {
+    /// - Note: Priority only applies to infix syntax.
+    let priority: Priority
+    
+    init(_ name: String, _ signature: [ArgumentType], syntax: Syntax = .normal, priority: Priority = .lowest, definition: @escaping Definition) {
         self.name = name
         self.def = definition
         self.signature = signature
         self.syntax = syntax
+        self.priority = priority
     }
     
     /// Register the parametric operation.

@@ -139,6 +139,21 @@ public class Compiler {
                 .map{try resolve($0, &dict, binOps)}
             return List(nodes)
         } else {
+            // Find all infix operations and order them by priority
+            let infixOps = ParametricOperation.registered.filter{
+                    $0.syntax == .infix
+                }.sorted{$0.priority > $1.priority}
+            
+            // Change infix operations into binary functions by recursive call to resolve
+            for operation in infixOps {
+                if let r = expr.range(of: " \(operation.name) ") {
+                    let left = expr[..<r.lowerBound]
+                    let right = expr[r.upperBound...]
+                    let o = "\(operation.name)(\(left),\(right))"
+                    return try resolve(o, &dict, binOps)
+                }
+            }
+            
             expr = removeWhiteSpace(expr)
             if let node = dict[expr] ?? Int(expr) ?? Double(expr) ?? Bool(expr) {
                 return node
@@ -292,6 +307,18 @@ public class Compiler {
                 replace(&expr, of: "\(cand)\(extracted)", with: "\(cand)(0\(extracted))")
             }
         }
+        
+        // Format prefix parametric operations
+        let prefixOps = ParametricOperation.registered.filter{$0.syntax == .prefix}
+        for operation in prefixOps {
+            if expr.starts(with: "\(operation.name) ") {
+                let idx = expr.firstIndex(of: " ")!
+                let left = String(expr[..<idx])
+                let right = expr[expr.index(after: idx)...]
+                expr = "\(left)(\(right))"
+            }
+        }
+        
     }
     
     private static func binRange(_ segment: String, _ binIdx: String.Index) -> ClosedRange<String.Index> {
@@ -341,8 +368,8 @@ public class Compiler {
             throw CompilerError.syntax(errMsg: "'()' mismatch in \(expr)")
         } else if !matches(expr, brackets) {
             throw CompilerError.syntax(errMsg: "'{}' mismatch in \(expr)")
-        } else if expr.contains("&") || expr.contains("#") {
-            throw CompilerError.illegalArgument(errMsg: "Illegal character(s) & and #")
+        } else if expr.contains(where: {"#&@".contains($0)}) {
+            throw CompilerError.illegalArgument(errMsg: "Illegal character(s) &, #, or @")
         } else if expr == "" {
             throw CompilerError.illegalArgument(errMsg: "Give me some juice!")
         } else if num(expr, char: "'") % 2 != 0 {

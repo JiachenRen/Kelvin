@@ -74,14 +74,10 @@ struct List: Node, NaN {
                             ignores it) and returns a node as replacement.
      */
     func replacing(with replace: Unary, where condition: (Node) -> Bool) -> Node {
-        if condition(self) {
-            return replace(self)
-        } else {
-            var copy = self
-            copy.elements = copy.elements.map{ element in
-                return element.replacing(with: replace, where: condition)
-            }
-            return copy
+        var copy = self
+        copy.elements = copy.elements.map{ element in
+            return element.replacing(with: replace, where: condition)
         }
+        return condition(copy) ? replace(copy) : copy
     }
 }

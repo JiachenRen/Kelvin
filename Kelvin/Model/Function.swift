@@ -23,8 +23,15 @@ struct Function: Node {
         }
     }
     
-    /// List of arguments that the function takes in
-    var args: List
+    /// List of arguments that the function takes in.
+    /// - Note: When the arguments change, the signature of the function
+    /// also changes, potentially resulting in a different definition!
+    var args: List {
+        didSet {
+            // Update the definition of the function because the signature changed!
+            resolveDefinition()
+        }
+    }
     
     /// The definition of the function.
     var def: Definition?
@@ -213,13 +220,9 @@ struct Function: Node {
                             ignores it) and returns a node as replacement.
      */
     func replacing(with replace: Unary, where condition: (Node) -> Bool) -> Node {
-        if condition(self) {
-            return replace(self)
-        } else {
-            var copy = self
-            copy.args.elements = copy.args.elements
-                .map{$0.replacing(with: replace, where: condition)}
-            return copy
-        }
+        var copy = self
+        copy.args.elements = copy.args.elements
+            .map{$0.replacing(with: replace, where: condition)}
+        return condition(copy) ? replace(copy) : copy
     }
 }
