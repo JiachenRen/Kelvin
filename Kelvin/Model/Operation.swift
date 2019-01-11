@@ -149,16 +149,18 @@ class ParametricOperation: Equatable {
         },
         .init("sum", [.list]) {nodes in
             return Function("+", (nodes[0] as! List).elements)
-                .simplify()
         },
         .init("sum", [.universal]) {nodes in
-            return Function("+", nodes).simplify()
+            return Function("+", nodes)
         },
         .init("define", [.equation], syntax: .prefix) {nodes in
             if let err = (nodes[0] as? Equation)?.define() {
                 return err
             }
             return nil
+        },
+        .init("define", [.any, .any], syntax: .prefix) {nodes in
+            return Function("define", [Equation(lhs: nodes[0], rhs: nodes[1])])
         },
         .init("del", [.var], syntax: .prefix) {nodes in
             if let v = nodes[0] as? Variable {
@@ -179,7 +181,7 @@ class ParametricOperation: Equatable {
             let times = Int(nodes[1].evaluated!.doubleValue())
             var elements = [Node]()
             (0..<times).forEach{_ in elements.append(nodes[0])}
-            return List(elements).simplify()
+            return List(elements)
         },
         .init("get", [.list, .number], syntax: .infix) {nodes in
             let list = nodes[0] as! List
@@ -197,22 +199,18 @@ class ParametricOperation: Equatable {
             let l = (nodes[0] as! List).elements
             return Function("/", [Function("+", l), l.count])
                 .format()
-                .simplify()
         },
         .init("avg", [.universal]) {nodes in
             return Function("/", [Function("+", nodes), nodes.count])
                 .format()
-                .simplify()
         },
         .init("mod", [.number, .number], syntax: .infix) {nodes in
-            return Function("%", nodes).simplify()
+            return Function("%", nodes)
         },
         .init("exec", [.universal], syntax: .prefix) {nodes in
-            return List(nodes.map{$0.simplify()})
+            // This is for consecutive execution of statements
+            return nodes.last
         },
-        .init("$", [.func]) {nodes in
-            return nodes[0]
-        }
     ]
     
     let def: Definition

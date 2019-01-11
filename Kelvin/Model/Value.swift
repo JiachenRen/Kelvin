@@ -34,6 +34,11 @@ extension Double: Value {
     public func doubleValue() -> Double {
         return self
     }
+    
+    /// If the double is an integer, convert it to an integer.
+    public func simplify() -> Node {
+        return isInteger ? Int(self) : self
+    }
 }
 
 extension Int: Value {

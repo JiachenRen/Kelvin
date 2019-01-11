@@ -29,32 +29,60 @@ public class Compiler {
     // #? -> node
     typealias NodeRef = Dictionary<String, Node>
     
+    /// Syntactic sugars
+    /// The priority is assigned in decreasing order, unless otherwise indicated.
+    static let syntacticSugars: [SyntacticSugar] = [
+        (.lowest, shorthand: ":=", repl: "⇠", op: "define"),
+        (.lowest, shorthand: ";", repl: ";", op: "exec")
+    ]
+    
+    // Syntactic sugar - replaces shorthand with corresponding operation
+    typealias SyntacticSugar = (priority: Priority, shorthand: String, repl: String, op: String)
+    
     public static func compile(_ expr: String) throws -> Node {
         var expr = expr
+        
+        // Register syntactic sugars as binary operators
+        syntacticSugars.forEach {
+            BinaryOperation.define($0.repl, priority: .lowest, bin: {_, _ in .nan})
+        }
         
         // Validate the expression
         try validate(expr)
         
-        // Format lists
-        while expr.contains("{") {
-            expr = replace(expr, "{", "}", "list(", ")")
-        }
+        // Apply syntactic sugars before compilation
+        applySyntacticSugars(&expr)
         
-        // Format vectors
-        while expr.contains("[") {
-            expr = replace(expr, "[", "]", "vector(", ")")
-        }
-        
+        // Format the expression for compilation
         format(&expr)
         
         // Convert all binary operations to functions with parameters.
-        // i.e. a+b becomes #?(a,b)
-        let binOps = functionalize(&expr)
+        // i.e. a+b becomes &?(a,b)
+        let binOps = binaryToFunction(&expr)
+        
+        // The symbol "#" is reserved
         var dict = Dictionary<String, Node>()
         let parent = try resolve(expr, &dict, binOps)
         
         // Restore list() to {}, =(a,b) to a=b
         return restoreDataType(parent)
+    }
+    
+    private static func applySyntacticSugars(_ expr: inout String) {
+        
+        // Format lists and vectors
+        while expr.contains("{") {
+            expr = replace(expr, "{", "}", "list(", ")")
+        }
+        
+        while expr.contains("[") {
+            expr = replace(expr, "[", "]", "vector(", ")")
+        }
+        
+        // Apply syntactic sugars
+        syntacticSugars.forEach {
+            expr = expr.replacingOccurrences(of: $0.shorthand, with: $0.repl)
+        }
     }
     
     /**
@@ -67,16 +95,38 @@ public class Compiler {
      - Returns: The parent node with DTs restored.
      */
     private static func restoreDataType(_ parent: Node) -> Node {
-        return parent.replacing(by: {($0 as! Function).args}){
-            ($0 as? Function)?.name == "list"
-            }.replacing(by: { (old) -> Node in
-                let fun = old as! Function
-                return Equation(lhs: fun.args[0], rhs: fun.args[1])
-            }){($0 as? Function)?.name == "="}
-            .replacing(by: {old in // Force update function definition
-                let fun = old as! Function
-                return Function(fun.name, fun.args)
-            }){$0 is Function}
+        var parent = parent
+        
+        func name(_ node: Node) -> String? {
+            return (node as? Function)?.name
+        }
+        
+        func args(_ node: Node) -> List {
+            return (node as! Function).args
+        }
+        
+        // Replace functions generated from syntactic sugars with their
+        // corrected names.
+        syntacticSugars.forEach {sugar in
+            parent = parent.replacing(by: {Function(sugar.op, args($0))}) {
+                name($0) == sugar.repl
+            }
+        }
+        
+        // Restore list() to {}
+        parent = parent.replacing(by: {args($0)}){
+            name($0) == "list"
+        }
+        
+        // Restore equations
+        parent = parent.replacing(by: {Equation(lhs: args($0)[0], rhs: args($0)[1])}) {
+            name($0) == "="
+        }
+        
+        // Force update function definition
+        return parent.replacing(by: {Function(name($0)!, args($0))}){
+            $0 is Function
+        }
     }
     
     private static func resolve(_ expr: String, _ dict: inout NodeRef, _ binOps: BinRef) throws -> Node {
@@ -165,7 +215,7 @@ public class Compiler {
         return expr
     }
     
-    private static func functionalize(_ expr: inout String) -> BinRef {
+    private static func binaryToFunction(_ expr: inout String) -> BinRef {
         let operators = BinaryOperation.registered.values
         let prioritized = operators.sorted{$0.priority < $1.priority}
         

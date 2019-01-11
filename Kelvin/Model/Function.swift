@@ -60,7 +60,7 @@ struct Function: Node {
                 a.removeFirst()
             }
             return "(\(a))"
-        case .infix:
+        case .infix where r.count == 2:
             return "(\(r[0]) \(n) \(r[1]))"
         case .prefix:
             return "\(n) \(r[0])"
@@ -164,15 +164,25 @@ struct Function: Node {
         // Make a copy of self.
         var copy = self
         
-        // First simplify each argument, if possible.
-        // If the function's name begins with "$", the compiler to preserve its arguments
-        if !name.starts(with: "$") {
-            copy.args = copy.args.simplify() as! List
+        // If the function's name begins with "$", the compiler to preserves it once
+        // This enables functions to be used as an input type.
+        // Suppose we have "repeat(random(), 5)", it only execute random 1 once
+        // and copy the value 5 times to create the list, say {0.1, 0.1, 0.1, 0.1, 0.1};
+        // Now if we change it to "repeat($random(),5), it will behave as what you would expect:
+        // a list of 5 random numbers.
+        if name.starts(with: "$") {
+            var name = self.name
+            name.removeFirst()
+            return Function(name, args)
         }
         
-        // If the operation can be performed on the given arguments, then perform the operation,
+        // First simplify each argument, if possible.
+        copy.args = copy.args.simplify() as! List
+        
+        // If the operation can be performed on the given arguments, perform the operation.
+        // Then, the result of the operation is simplified;
         // otherwise returns a copy of the original function with each argument simplified.
-        return copy.invoke() ?? copy
+        return copy.invoke()?.simplify() ?? copy
     }
     
     /**
