@@ -115,6 +115,7 @@ class ParametricOperation: Equatable {
         case list
         case any
         case equation
+        case universal // Takes in any # of args.
     }
     
     /**
@@ -148,6 +149,10 @@ class ParametricOperation: Equatable {
         },
         .init("sum", [.list]) {nodes in
             return Function("+", (nodes[0] as! List).elements)
+                .simplify()
+        },
+        .init("sum", [.universal]) {nodes in
+            return Function("+", nodes).simplify()
         },
         .init("define", [.equation], syntax: .prefix) {nodes in
             if let err = (nodes[0] as? Equation)?.define() {
@@ -170,13 +175,13 @@ class ParametricOperation: Equatable {
             let ub = nodes[1].evaluated!.doubleValue()
             return Double.random(in: lb...ub)
         },
-        .init("repeat", [.number, .any]) {nodes in
-            let times = Int(nodes[0].evaluated!.doubleValue())
+        .init("repeat", [.any, .number], syntax: .infix) {nodes in
+            let times = Int(nodes[1].evaluated!.doubleValue())
             var elements = [Node]()
-            (0..<times).forEach{_ in elements.append(nodes[1])}
+            (0..<times).forEach{_ in elements.append(nodes[0])}
             return List(elements)
         },
-        .init("get", [.list, .number]) {nodes in
+        .init("get", [.list, .number], syntax: .infix) {nodes in
             let list = nodes[0] as! List
             let idx = Int(nodes[1].evaluated!.doubleValue())
             if idx >= list.elements.count {
@@ -185,9 +190,23 @@ class ParametricOperation: Equatable {
                 return list[idx]
             }
         },
-        .init("size", [.list]) {nodes in
+        .init("size", [.list], syntax: .prefix) {nodes in
             return (nodes[0] as! List).elements.count
-        }
+        },
+        .init("avg", [.list]) {nodes in
+            let l = (nodes[0] as! List).elements
+            return Function("/", [Function("+", l), l.count])
+                .format()
+                .simplify()
+        },
+        .init("avg", [.universal]) {nodes in
+            return Function("/", [Function("+", nodes), nodes.count])
+                .format()
+                .simplify()
+        },
+        .init("mod", [.number, .number], syntax: .infix) {nodes in
+            return Function("%", nodes).simplify()
+        },
         
     ]
     
@@ -249,16 +268,18 @@ class ParametricOperation: Equatable {
                 switch argType {
                 case .any:
                     continue
+                case .universal:
+                    fallthrough
                 case .var where !(arg is Variable):
-                    continue candLoop
+                    fallthrough
                 case .bool where !(arg is Bool):
-                    continue candLoop
+                    fallthrough
                 case .list where !(arg is List):
-                    continue candLoop
+                    fallthrough
                 case .number where !(arg is Double || arg is Int):
-                    continue candLoop
+                    fallthrough
                 case .equation where !(arg is Equation):
-                    continue candLoop
+                    fallthrough
                 case .func where !(arg is Function):
                     continue candLoop
                 default: continue
@@ -266,6 +287,16 @@ class ParametricOperation: Equatable {
             }
             return cand
         }
+        
+        // Match candididates with universal signature type
+        for cand in candidates {
+            if cand.signature.first == .universal {
+                if cand.name == name {
+                    return cand
+                }
+            }
+        }
+        
         return nil
     }
     
