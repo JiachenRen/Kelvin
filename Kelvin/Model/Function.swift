@@ -165,7 +165,10 @@ struct Function: Node {
         var copy = self
         
         // First simplify each argument, if possible.
-        copy.args = copy.args.simplify() as! List
+        // If the function's name begins with "$", the compiler to preserve its arguments
+        if !name.starts(with: "$") {
+            copy.args = copy.args.simplify() as! List
+        }
         
         // If the operation can be performed on the given arguments, then perform the operation,
         // otherwise returns a copy of the original function with each argument simplified.

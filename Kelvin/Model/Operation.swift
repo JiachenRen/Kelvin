@@ -179,7 +179,7 @@ class ParametricOperation: Equatable {
             let times = Int(nodes[1].evaluated!.doubleValue())
             var elements = [Node]()
             (0..<times).forEach{_ in elements.append(nodes[0])}
-            return List(elements)
+            return List(elements).simplify()
         },
         .init("get", [.list, .number], syntax: .infix) {nodes in
             let list = nodes[0] as! List
@@ -207,7 +207,12 @@ class ParametricOperation: Equatable {
         .init("mod", [.number, .number], syntax: .infix) {nodes in
             return Function("%", nodes).simplify()
         },
-        
+        .init("exec", [.universal], syntax: .prefix) {nodes in
+            return List(nodes.map{$0.simplify()})
+        },
+        .init("$", [.func]) {nodes in
+            return nodes[0]
+        }
     ]
     
     let def: Definition

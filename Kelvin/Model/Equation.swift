@@ -61,7 +61,11 @@ struct Equation: Node, NaN {
             
             // If lhs is a var, then rhs is assigned as its definition.
             if let v = lhs as? Variable {
-                Variable.define(v.name, rhs)
+                
+                // By calling rhs.simplify(), the following behavior is ensured:
+                // Suppose the statement "define a = f(x)".
+                // When the statement is executed, the value of "f(x)" instead of "f(x) is returned.
+                Variable.define(v.name, rhs.simplify())
             }
             
             return nil
