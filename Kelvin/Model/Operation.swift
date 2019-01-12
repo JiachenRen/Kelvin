@@ -24,6 +24,7 @@ public class Operation: Equatable {
         case list = 4
         case equation = 5
         case any = 100
+        case numbers = 1000
         case universal = 10000 // Takes in any # of args.
     }
     
@@ -34,17 +35,17 @@ public class Operation: Equatable {
     static var registered: [Operation] = [
         
         // Basic binary arithmetic
-        .init("+", [.number, .number], syntax:
+        .init("+", [.numbers], syntax:
         .init(.infix, priority: .addition, operator: "+")) {bin($0, +)},
-        .init("-", [.number, .number], syntax:
+        .init("-", [.numbers], syntax:
         .init(.infix, priority: .addition, operator: "-")) {bin($0, -)},
-        .init("*", [.number, .number], syntax:
+        .init("*", [.numbers], syntax:
         .init(.infix, priority: .product, operator: "*")) {bin($0, *)},
-        .init("/", [.number, .number], syntax:
+        .init("/", [.numbers], syntax:
         .init(.infix, priority: .product, operator: "/")) {bin($0, /)},
-        .init("mod", [.number, .number], syntax:
+        .init("mod", [.numbers], syntax:
         .init(.infix, priority: .product, operator: "%")) {bin($0, %)},
-        .init("^", [.number, .number], syntax:
+        .init("^", [.numbers], syntax:
         .init(.infix, priority: .exponent, operator: "^")) {bin($0, pow)},
         
         // Basic unary transcendental functions
@@ -236,14 +237,29 @@ public class Operation: Equatable {
         let candidates = registered.filter{$0.name == name}
             // Operations with the smaller scope should be prioritized.
             .sorted{$0.scope < $1.scope}
+        
         candLoop: for cand in candidates {
-            if cand.signature.first == .universal {
-                return cand
-            } else if cand.signature.count != args.count {
+            var signature = cand.signature
+            
+            // Deal w/ function signature types that allow any # of args.
+            if let first = signature.first {
+                switch first {
+                case .universal:
+                    signature = [ArgumentType](repeating: .any, count: args.count)
+                case .numbers:
+                    signature = [ArgumentType](repeating: .number, count: args.count)
+                default: break
+                }
+            }
+            
+            // Bail out if # of parameters does not match # of args.
+            if signature.count != args.count {
                 continue
             }
-            for i in 0..<cand.signature.count {
-                let argType = cand.signature[i]
+            
+            // Make sure that each parameter is the required type
+            for i in 0..<signature.count {
+                let argType = signature[i]
                 let arg = args[i]
                 switch argType {
                 case .any:
