@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Variable: Leaf, NaN {
+public struct Variable: Leaf, NaN {
     
     /// The characters that are allowed in the variable
     static let legalChars = "$abcdefghijklmnopqrstuvwxyz_"
@@ -21,7 +21,7 @@ struct Variable: Leaf, NaN {
     /// The name of the variable
     var name: String
     
-    var description: String {
+    public var description: String {
         return name
     }
     
@@ -39,7 +39,7 @@ struct Variable: Leaf, NaN {
         return false
     }
     
-    var evaluated: Value? {
+    public var evaluated: Value? {
         return definition?.evaluated
     }
     
@@ -84,7 +84,7 @@ struct Variable: Leaf, NaN {
     }
     
     /// Two variables are equal to each other if they have the same name.
-    func equals(_ node: Node) -> Bool {
+    public func equals(_ node: Node) -> Bool {
         if let v = node as? Variable {
             return v.name == name
         }
@@ -100,7 +100,7 @@ struct Variable: Leaf, NaN {
      
      - Returns: The simplified variable.
      */
-    func simplify() -> Node {
+    public func simplify() -> Node {
         if let def = definition {
             // If the definition is not a constant, return the definition
             return isConstant && Mode.shared.rounding == .exact ? self : def

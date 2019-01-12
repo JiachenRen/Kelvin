@@ -8,108 +8,7 @@
 
 import Foundation
 
-/// Numeric binary operation
-typealias NBinary = (Double, Double) throws -> Double
-
-/**
- Binary operations such as +, -, *, /, etc.
- Supports definition of custom binary operations.
- */
-class BinaryOperation: CustomStringConvertible {
-    
-    // Built in binary operations
-    static let builtIn: [BinaryOperation] = [
-        .init("+", .addition, +),
-        .init("-", .addition, -),
-        .init("*", .product, *),
-        .init("/", .product, /),
-        .init("^", .exponent, pow),
-        .init(">", .equality){$0 > $1 ? 1 : 0},
-        .init("<", .equality){$0 < $1 ? 1 : 0},
-        .init("=", .equation){$0 == $1 ? 1 : 0}, // Will be replaced by compiler with an eq.
-        .init("%", .product){$0.truncatingRemainder(dividingBy: $1)},
-    ]
-    
-    /// Custom binary operations are added here.
-    /// Built-in operations are preloaded.
-    static var registered: [String: BinaryOperation] = {
-        return builtIn.reduce(into: [:]){$0[$1.name] = $1}
-    }()
-    
-    
-    var description: String {
-        return name
-    }
-    
-    var name: String
-    var bin: NBinary
-    var priority: Priority
-    
-    private init(_ name: String, _ priority: Priority, _ bin: @escaping NBinary) {
-        self.priority = priority
-        self.name = name;
-        self.bin = bin
-    }
-    
-    /**
-     Define a custom binary operation.
-     
-     - Parameter name: The name of the binary operation.
-     - Parameter unary: A binary operation that takes in 2 Doubles and returns a Double.
-     */
-    static func define(_ name: String, priority: Priority, bin: @escaping NBinary) {
-        let op = BinaryOperation(name, priority, bin)
-        registered.updateValue(op, forKey: name)
-    }
-}
-
-enum Priority: Int, Comparable {
-    case execution = 1  // ;, >>
-    case definition     // :=
-    case equation       // =
-    case or             // ||
-    case and            // &&
-    case equality       // ==, <, >, <=, >=
-    case addition       // +,-
-    case product        // *,/
-    case exponent       // ^
-    
-    static func < (lhs: Priority, rhs: Priority) -> Bool {
-        return lhs.rawValue < rhs.rawValue
-    }
-}
-
-/// Numeric unary operation
-typealias NUnary = (Double) throws -> Double
-
-class UnaryOperation {
-    
-    /// Registered unary operations
-    static var registered: [String: NUnary] = [
-        "log": log10,
-        "log2": log2,
-        "ln": log,
-        "int": {Double(Int($0))},
-        "round": {round($0)},
-        "negate": {-$0}
-    ]
-    
-    /**
-     Define a custom unary operation.
-     
-     - Parameter name: The name of the unary operation.
-     - Parameter unary: A unary operation taking a single Double argument
-     */
-    static func define(_ name: String, unary: @escaping NUnary) {
-        registered.updateValue(unary, forKey: name)
-    }
-}
-
-func log10(_ a: Double) -> Double {
-    return log(a) / log(10)
-}
-
-class ParametricOperation: Equatable {
+public class Operation: Equatable {
     
     /**
      This enum is used to represent the type of the arguments.
@@ -129,133 +28,132 @@ class ParametricOperation: Equatable {
     }
     
     /**
-     This defines the syntax that the operation uses.
-     For the function with signature "define(f(x)=x^2)",
-     the prefix syntax is "define f(x)=x^2".
-     
-     The infix syntax, on the other hand, only applies to
-     functions that take in two arguments.
-     e.g. the function "and(a,b)" can be invoked with "a and b"
-     */
-    struct SyntacticSugar {
-        
-        enum Position {
-            case prefix
-            case infix
-        }
-        
-        /// The syntactic position of the operation, either prefix or infix.
-        var position: Position
-        
-        /// The priority of the operation
-        var priority: Priority
-        
-        /// The shorthand for the operation.
-        /// e.g. && for "and", and || for "or"
-        var shorthand: String?
-        
-        /// A single character is used to represent the operation;
-        /// By doing so, the compiler can treat the operation like +,-,*,/, and so on.
-        var code: String
-        
-        /// A unicode scalar value that would never interfere with input
-        /// In this case, the scalar value (and the ones after)
-        /// does not have any unicode counterparts
-        static var scalar = 60000
-        
-        init(_ position: Position, priority: Priority = .execution, shorthand: String? = nil) {
-            
-            self.position = position
-            self.priority = priority
-            self.shorthand = shorthand
-            
-            // Assign a unique code to the operation consisting of
-            // a single character that does not exist in any language.
-            code = "\(UnicodeScalar(SyntacticSugar.scalar)!)"
-            
-            // Ensure that a valid code is generated.
-            assert(code.count == 1)
-            
-            // Increment the scalar so that each code is unique.
-            SyntacticSugar.scalar += 1
-        }
-    }
-
-    
-    /**
      Pre-defined operations with signatures that are resolved and assigned
      to function definitions during compilation.
      */
-    static var registered: [ParametricOperation] = [
-        .init("and", [.bool, .bool], syntacticSugar:
+    static var registered: [Operation] = [
+        
+        // Basic binary arithmetic
+        .init("+", [.number, .number], syntax:
+        .init(.infix, priority: .addition, operator: "+")) {bin($0, +)},
+        .init("-", [.number, .number], syntax:
+        .init(.infix, priority: .addition, operator: "-")) {bin($0, -)},
+        .init("*", [.number, .number], syntax:
+        .init(.infix, priority: .product, operator: "*")) {bin($0, *)},
+        .init("/", [.number, .number], syntax:
+        .init(.infix, priority: .product, operator: "/")) {bin($0, /)},
+        .init("mod", [.number, .number], syntax:
+        .init(.infix, priority: .product, operator: "%")) {bin($0, %)},
+        .init("^", [.number, .number], syntax:
+        .init(.infix, priority: .exponent, operator: "^")) {bin($0, pow)},
+        
+        // Basic unary transcendental functions
+        .init("log", [.number]) {u($0, log10)},
+        .init("log2", [.number]) {u($0, log2)},
+        .init("ln", [.number]) {u($0, log)},
+        .init("cos", [.number]) {u($0, cos)},
+        .init("sin", [.number]) {u($0, sin)},
+        .init("tan", [.number]) {u($0, tan)},
+        .init("int", [.number]) {u($0, floor)},
+        .init("round", [.number]) {u($0, round)},
+        .init("negate", [.number]) {u($0, -)},
+        .init("sqrt", [.number]) {u($0, sqrt)},
+        
+        // Equality, inequality, and equations
+        .init("=", [.any, .any], syntax:
+        .init(.infix, priority: .equation, operator: "=")) {
+            return Equation(lhs: $0[0], rhs: $0[1])
+        },
+        .init("<", [.any, .any], syntax:
+        .init(.infix, priority: .equality, operator: "<")) {
+            return Equation(lhs: $0[0], rhs: $0[1], mode: .lessThan)
+        },
+        .init(">", [.any, .any], syntax:
+        .init(.infix, priority: .equality, operator: ">")) {
+            return Equation(lhs: $0[0], rhs: $0[1], mode: .greaterThan)
+        },
+        .init(">=", [.any, .any], syntax:
+        .init(.infix, priority: .equality, shorthand: ">=", operator: "≥")) {
+            return Equation(lhs: $0[0], rhs: $0[1], mode: .greaterThanOrEquals)
+        },
+        .init("<=", [.any, .any], syntax:
+        .init(.infix, priority: .equality, shorthand: "<=", operator: "≤")) {
+            return Equation(lhs: $0[0], rhs: $0[1], mode: .lessThanOrEquals)
+        },
+        .init("equals", [.any, .any], syntax:
+        .init(.infix, priority: .equality, shorthand: "==")) {nodes in
+            return nodes[0] === nodes[1]
+        },
+        
+        // Boolean logic and, or
+        .init("and", [.bool, .bool], syntax:
         .init(.infix, priority: .and, shorthand: "&&")) {nodes in
             return nodes.map{$0 as! Bool}
                 .reduce(true){$0 && $1}
         },
-        .init("or", [.bool, .bool], syntacticSugar:
+        .init("or", [.bool, .bool], syntax:
         .init(.infix, priority: .or, shorthand: "||")) {nodes in
             return nodes.map{$0 as! Bool}
                 .reduce(false){$0 || $1}
         },
-        .init("equals", [.any, .any], syntacticSugar:
-        .init(.infix, priority: .equality, shorthand: "==")) {nodes in
-            return nodes[0] === nodes[1]
-        },
-        .init("sum", [.list]) {nodes in
-            return Function("+", (nodes[0] as! List).elements)
-        },
-        .init("sum", [.universal]) {nodes in
-            return Function("+", nodes)
-        },
-        .init("define", [.equation], syntacticSugar:
+        
+        // Variable/function definition and deletion
+        .init("define", [.equation], syntax:
         .init(.prefix, priority: .definition, shorthand: ":=")) {nodes in
             if let err = (nodes[0] as? Equation)?.define() {
                 return err
             }
             return "done"
         },
-        .init("define", [.any, .any], syntacticSugar:
+        .init("define", [.any, .any], syntax:
         .init(.prefix)) {nodes in
             return Function("define", [Equation(lhs: nodes[0], rhs: nodes[1])])
         },
-        .init("del", [.var], syntacticSugar:
+        .init("del", [.var], syntax:
         .init(.prefix)) {nodes in
             if let v = nodes[0] as? Variable {
                 Variable.delete(v.name)
-                ParametricOperation.remove(v.name)
+                Operation.remove(v.name)
                 return "deleted '\(v.name)'"
             }
             return nil
         },
+        
+        // Summation
+        .init("sum", [.list]) {nodes in
+            return Function("+", (nodes[0] as! List).elements)
+        },
+        .init("sum", [.universal]) {nodes in
+            return Function("+", nodes)
+        },
+        
+        // Random number generation
         .init("random", []) {nodes in
             return Double.random(in: 0...1)
         },
         .init("random", [.number, .number]) {nodes in
-            let lb = nodes[0].evaluated!.doubleValue()
-            let ub = nodes[1].evaluated!.doubleValue()
+            let lb = nodes[0].evaluated!.doubleValue
+            let ub = nodes[1].evaluated!.doubleValue
             return Double.random(in: lb...ub)
         },
-        .init("repeat", [.any, .number], syntacticSugar:
-        .init(.infix)) {nodes in
-            let times = Int(nodes[1].evaluated!.doubleValue())
-            var elements = [Node]()
-            (0..<times).forEach{_ in elements.append(nodes[0])}
-            return List(elements)
-        },
-        .init("get", [.list, .number], syntacticSugar:
+        
+        // List related operations
+        .init("get", [.list, .number], syntax:
         .init(.infix)) {nodes in
             let list = nodes[0] as! List
-            let idx = Int(nodes[1].evaluated!.doubleValue())
+            let idx = Int(nodes[1].evaluated!.doubleValue)
             if idx >= list.elements.count {
                 return "error: index out of bounds"
             } else {
                 return list[idx]
             }
         },
-        .init("size", [.list], syntacticSugar:
+        .init("size", [.list], syntax:
         .init(.prefix)) {nodes in
             return (nodes[0] as! List).elements.count
         },
+        
+        // Average
         .init("avg", [.list]) {nodes in
             let l = (nodes[0] as! List).elements
             return Function("/", [Function("+", l), l.count])
@@ -265,27 +163,31 @@ class ParametricOperation: Equatable {
             return Function("/", [Function("+", nodes), nodes.count])
                 .format()
         },
-        .init("mod", [.number, .number], syntacticSugar:
-        .init(.infix, priority: .product)) {nodes in
-            return Function("%", nodes)
-        },
-        .init("exec", [.universal], syntacticSugar:
+
+        // Consecutive execution, feed forward, flow control
+        .init("exec", [.universal], syntax:
         .init(.prefix, shorthand: ";")) {nodes in
-            // This is for consecutive execution of statements
             return nodes.last
         },
-        .init("feed", [.any, .any], syntacticSugar:
+        .init("feed", [.any, .any], syntax:
         .init(.infix, shorthand: ">>")) {nodes in
             return nodes.last!.replacing(by: {_ in nodes[0]}) {
                 ($0 as? Variable)?.name == "$"
             }
+        },
+        .init("repeat", [.any, .number], syntax:
+        .init(.infix)) {nodes in
+            let times = Int(nodes[1].evaluated!.doubleValue)
+            var elements = [Node]()
+            (0..<times).forEach{_ in elements.append(nodes[0])}
+            return List(elements)
         },
     ]
     
     let def: Definition
     let name: String
     let signature: [ArgumentType]
-    let syntacticSugar: SyntacticSugar?
+    let syntax: Syntax?
     
     /// A value that represents the scope of the signature
     /// The larger the scope, the more universally applicable the function.
@@ -293,15 +195,15 @@ class ParametricOperation: Equatable {
         return signature.reduce(0) {$0 + $1.rawValue}
     }
     
-    init(_ name: String, _ signature: [ArgumentType], syntacticSugar: SyntacticSugar? = nil, definition: @escaping Definition) {
+    init(_ name: String, _ signature: [ArgumentType], syntax: Syntax? = nil, definition: @escaping Definition) {
         self.name = name
         self.def = definition
         self.signature = signature
-        self.syntacticSugar = syntacticSugar
+        self.syntax = syntax
     }
     
     /// Register the parametric operation.
-    static func register(_ parOp: ParametricOperation) {
+    static func register(_ parOp: Operation) {
         registered.append(parOp)
     }
     
@@ -313,7 +215,7 @@ class ParametricOperation: Equatable {
      - signature: The signature of the operation to be removed.
      */
     static func remove(_ name: String, _ signature: [ArgumentType]) {
-        let parOp = ParametricOperation(name, signature) {_ in nil}
+        let parOp = Operation(name, signature) {_ in nil}
         registered.removeAll{$0 == parOp}
     }
     
@@ -330,7 +232,7 @@ class ParametricOperation: Equatable {
      - Parameter args: The arguments supplied to the operation
      - Returns: The parametric operation with matching signature, if found.
      */
-    static func resolve(_ name: String, args: [Node]) -> ParametricOperation? {
+    static func resolve(_ name: String, args: [Node]) -> Operation? {
         let candidates = registered.filter{$0.name == name}
             // Operations with the smaller scope should be prioritized.
             .sorted{$0.scope < $1.scope}
@@ -371,7 +273,122 @@ class ParametricOperation: Equatable {
      Two parametric operations are equal to each other if they have the same name
      and the same signature
      */
-    static func == (lhs: ParametricOperation, rhs: ParametricOperation) -> Bool {
+    public static func == (lhs: Operation, rhs: Operation) -> Bool {
         return lhs.name == rhs.name && lhs.signature == rhs.signature
+    }
+}
+
+public enum Priority: Int, Comparable {
+    case execution = 1  // ;, >>
+    case definition     // :=
+    case equation       // =
+    case or             // ||
+    case and            // &&
+    case equality       // ==, <, >, <=, >=
+    case addition       // +,-
+    case product        // *,/
+    case exponent       // ^
+    
+    public static func < (lhs: Priority, rhs: Priority) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+}
+
+/// Numerical unary operation
+typealias NUnary = (Double) -> Double
+
+/// Numerical binary operation
+typealias NBinary = (Double, Double) -> Double
+
+fileprivate func bin(_ nodes: [Node], _ binary: NBinary) -> Double {
+    return nodes.map{$0.evaluated?.doubleValue ?? .nan}
+        .reduce(nil) {$0 == nil ? $1 : binary($0!, $1)}!
+}
+
+fileprivate func u(_ nodes: [Node], _ unary: NUnary) -> Double {
+    return unary(nodes[0].evaluated?.doubleValue ?? .nan)
+}
+
+fileprivate func log10(_ a: Double) -> Double {
+    return log(a) / log(10)
+}
+
+fileprivate func %(_ a: Double, _ b: Double) -> Double {
+    return a.truncatingRemainder(dividingBy: b)
+}
+
+/**
+ This defines the syntax that the operation uses.
+ For the function with signature "define(f(x)=x^2)",
+ the prefix syntax is "define f(x)=x^2".
+ 
+ The infix syntax, on the other hand, only applies to
+ functions that take in two arguments.
+ e.g. the function "and(a,b)" can be invoked with "a and b"
+ */
+public struct Syntax {
+    
+    enum Position {
+        case prefix
+        case infix
+        case postfix
+    }
+    
+    /// The shorthand for the operation.
+    /// e.g. && for "and", and || for "or"
+    var shorthand: String?
+    
+    /// A single character that represents the operation.
+    var `operator`: Operator
+    
+    struct Operator: CustomStringConvertible {
+        
+        /// The syntactic position of the operator, either prefix, postfic, or infix
+        var position: Position
+        
+        /// The priority of the operator
+        var priority: Priority
+        
+        /// A single character is used to represent the operation;
+        /// By doing so, the compiler can treat the operation like +,-,*,/, and so on.
+        var code: Character
+        
+        var description: String {
+            return "\(code)"
+        }
+        
+        init(_ position: Position, _ priority: Priority, _ code: Character) {
+            self.position = position
+            self.priority = priority
+            self.code = code
+        }
+    }
+    
+    /// A unicode scalar value that would never interfere with input
+    /// In this case, the scalar value (and the ones after)
+    /// does not have any unicode counterparts
+    static var scalar = 60000
+    
+    /// A dictionary that automatically keeps track of operators.
+    static var operators = [Character: Operator]()
+    
+    init(_ position: Position, priority: Priority = .execution, shorthand: String? = nil, operator: Character? = nil) {
+        
+        self.shorthand = shorthand
+        
+        // Assign a unique operator to the operation consisting of
+        // a single character that does not exist in any language.
+        let code = `operator` ?? Character(UnicodeScalar(Syntax.scalar)!)
+        self.operator = Operator(position, priority, code)
+        
+        
+        // Make sure the operator is currently undefined
+        assert(Syntax.operators[code] == nil)
+        
+        // Register the operator
+        Syntax.operators[code] = self.operator
+        
+        // Increment the scalar so that each operator is unique.
+        Syntax.scalar += 1
     }
 }

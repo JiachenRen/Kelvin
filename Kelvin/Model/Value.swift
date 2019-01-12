@@ -10,7 +10,7 @@ import Foundation
 
 
 public protocol Value: Leaf {
-    func doubleValue() -> Double
+    var doubleValue: Double {get}
 }
 
 extension Value {
@@ -20,7 +20,7 @@ extension Value {
     
     public func equals(_ node: Node) -> Bool {
         if let d = node as? Value {
-            return d.doubleValue() == doubleValue()
+            return d.doubleValue == doubleValue
         }
         return false
     }
@@ -31,7 +31,7 @@ extension Double: Value {
         return floor(self) == self
     }
     
-    public func doubleValue() -> Double {
+    public var doubleValue: Double {
         return self
     }
     
@@ -42,13 +42,13 @@ extension Double: Value {
 }
 
 extension Int: Value {
-    public func doubleValue() -> Double {
+    public var doubleValue: Double {
         return Double(self)
     }
 }
 
 extension Bool: Value {
-    public func doubleValue() -> Double {
+    public var doubleValue: Double {
         return Double(self ? 1 : 0)
     }
 }

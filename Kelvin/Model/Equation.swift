@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Equation: Node, NaN {
+public struct Equation: Node, NaN {
     
     /// The left hand side of the equation
     var lhs: Node
@@ -16,13 +16,25 @@ struct Equation: Node, NaN {
     /// The right hand side of the equation
     var rhs: Node
     
+    enum Mode: String {
+        case greaterThan = ">"
+        case greaterThanOrEquals = ">="
+        case lessThan = "<"
+        case lessThanOrEquals = "<="
+        case equals = "="
+    }
+    
+    /// The mode of the equation
+    var mode: Mode
+    
     /// TODO: Implement inequality
-    init(lhs: Node, rhs: Node) {
+    init(lhs: Node, rhs: Node, mode: Mode = .equals) {
+        self.mode = mode
         self.lhs = lhs
         self.rhs = rhs
     }
     
-    func simplify() -> Node {
+    public func simplify() -> Node {
         var eq = self
         
         // Simplify left and right side.
@@ -30,14 +42,30 @@ struct Equation: Node, NaN {
         eq.rhs = rhs.simplify()
         
         // After simplification, lhs = rhs, equation is always true.
-        if eq.lhs === eq.rhs {
+        if mode.rawValue.contains("=") && eq.lhs === eq.rhs {
             return true
         }
         
         // If lhs and rhs comes down to a number, compare their numerical values.
         if let v1 = eq.lhs.evaluated, let v2 = eq.rhs.evaluated {
             // TODO: Implement tolerance?
-            return v1 === v2
+            let d1 = v1.doubleValue
+            let d2 = v2.doubleValue
+            
+            if d1 != .nan && d2 != .nan {
+                switch mode {
+                case .equals:
+                    return d1 == d2
+                case .greaterThanOrEquals:
+                    return d1 >= d2
+                case .lessThanOrEquals:
+                    return d1 <= d2
+                case .lessThan:
+                    return d1 < d2
+                case .greaterThan:
+                    return d1 > d2
+                }
+            }
         }
         
         // If nothing could be done, then return a copy of self
@@ -50,13 +78,18 @@ struct Equation: Node, NaN {
     }
     
     /**
-     Assign the value of rhs to lhs. If lhs is a function, a new ParametricOperation is defined
+     Assign the value of rhs to lhs. If lhs is a function, a new Operation is defined
      using lhs as signature and rhs as definition. On the other hand; if lhs is a variable,
      then rhs is assigned to the variable as definition.
      
      - Returns: An error if the definition is unsuccessful.
      */
     func define() -> Node? {
+        if mode != .equals {
+            // Only an equality can be used for definition.
+            return "inequality '\(mode)' cannot be used for definition"
+        }
+        
         guard let fun = lhs as? Function else {
             
             // If lhs is a var, then rhs is assigned as its definition.
@@ -84,7 +117,7 @@ struct Equation: Node, NaN {
         let vars = args.map{$0 as! Variable}
         
         // Create function signature
-        let signature = [ParametricOperation.ArgumentType](repeating: .any, count: vars.count)
+        let signature = [Operation.ArgumentType](repeating: .any, count: vars.count)
         var dict = [String: Int]()
         vars.enumerated().forEach{(args) in
             let (idx, v) = args
@@ -92,7 +125,7 @@ struct Equation: Node, NaN {
         }
         
         // Make sure the old definition is removed from registry
-        ParametricOperation.remove(fun.name, signature)
+        Operation.remove(fun.name, signature)
         
         // Create a definition template from right hand side, then
         // replace the variables in template with arguments as input
@@ -127,10 +160,10 @@ struct Equation: Node, NaN {
         }
         
         // Create parametric operation
-        let op = ParametricOperation(fun.name, signature, definition: def)
+        let op = Operation(fun.name, signature, definition: def)
         
         // Register parametric operation
-        ParametricOperation.register(op)
+        Operation.register(op)
         
         return nil
     }
@@ -143,15 +176,15 @@ struct Equation: Node, NaN {
         return eq
     }
     
-    func toAdditionOnlyForm() -> Node {
+    public func toAdditionOnlyForm() -> Node {
         return perform{$0.toAdditionOnlyForm()}
     }
     
-    func toExponentialForm() -> Node {
+    public func toExponentialForm() -> Node {
         return perform{$0.toExponentialForm()}
     }
     
-    func flatten() -> Node {
+    public func flatten() -> Node {
         return perform{$0.flatten()}
     }
     
@@ -167,7 +200,7 @@ struct Equation: Node, NaN {
     
     /// Two equations are considered as identical if their operands are identical
     /// either in the forward direction or backward directino
-    func equals(_ node: Node) -> Bool {
+    public func equals(_ node: Node) -> Bool {
         if let eq = node as? Equation {
             let forwardEquals = lhs === eq.lhs && rhs === eq.rhs
             let backwardEquals = lhs === eq.rhs && rhs === eq.lhs
@@ -176,7 +209,7 @@ struct Equation: Node, NaN {
         return false
     }
     
-    var description: String {
+    public var description: String {
         return "\(lhs)=\(rhs)"
     }
     

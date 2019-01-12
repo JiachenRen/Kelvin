@@ -10,18 +10,16 @@ import Foundation
 
 typealias Definition = ([Node]) -> Node?
 
-struct Function: Node {
+public struct Function: Node {
     
     /// The format of the function when represented as text
     enum Format {
-        case binary
-        case unary
         case function
         case prefix
         case infix
     }
     
-    var evaluated: Value? {
+    public var evaluated: Value? {
         return invoke()?.evaluated
     }
     
@@ -49,32 +47,28 @@ struct Function: Node {
     /// The format of the function when represented as text
     var format: Format
     
-    var description: String {
+    public var description: String {
         let r = args.elements
         let n = name
         switch format {
-        case .binary:
-            var a = r.map{$0.description}
-                .reduce(""){"\($0)\(n)\($1)"}
-            if a.count > 0 {
-                a.removeFirst()
+        case .infix:
+            if let s = r.reduce(nil, {
+                $0 == nil ? "\($1)" : "\($0!) \(n) \($1)"
+            }) {
+                return "(\(s))"
+            } else {
+                return ""
             }
-            return "(\(a))"
-        case .infix where r.count == 2:
-            return "(\(r[0]) \(n) \(r[1]))"
         case .prefix where r.count == 1:
             return "\(n) \(r[0])"
-        case .unary where n == "negate":
-            return "(-\(r[0]))"
         case .function:
             fallthrough
         default:
-            var l = r.map{$0.description}
-                .reduce(""){"\($0),\($1)"}
-            if l.count > 0 {
-                l.removeFirst()
+            let l = r.map{$0.description}.reduce(nil){
+                $0 == nil ? "\($1)": "\($0!), \($1)"
             }
-            return "\(name)(\(l))"
+            
+            return "\(name)(\(l ?? ""))"
         }
     }
     
@@ -96,55 +90,26 @@ struct Function: Node {
      - custom: user defined operations, such as a function f(x)
      */
     private mutating func resolveDefinition() {
-        if let b = BinaryOperation.registered[name] {
-            // Resolve registered binary operations
-            def = {nodes in
-                let values = nodes.map{$0.evaluated}
-                if values.contains(where: {$0 == nil}) {return nil}
-                var u = values.map{$0!}
-                let r: Double = u.removeFirst()
-                    .doubleValue()
-                return u.reduce(r){
-                    (try? b.bin($0.doubleValue(),$1.doubleValue())) ?? .nan
-                }
-            }
-            
-        } else if let u = UnaryOperation.registered[name], args.elements.count == 1 {
-            // Resolve registered unary operations
-            def = {nodes in
-                if let n = nodes[0].evaluated {
-                    return (try? u(n.doubleValue())) ?? .nan
-                }
-                return nil
-            }
-            
-        } else {
-            // Resolve registered parametric operations
-            if let parOp = ParametricOperation.resolve(name, args: args.elements) {
-                def = parOp.def
-            }
+        
+        // Resolve registered parametric operations
+        if let parOp = Operation.resolve(name, args: args.elements) {
+            def = parOp.def
         }
         
         // Extract parametric operations with the matching syntax requirements
-        func extract(_ position: ParametricOperation.SyntacticSugar.Position) -> [String] {
-            return ParametricOperation.registered
-                .filter{$0.syntacticSugar?.position == position}
+        func extract(_ position: Syntax.Position) -> [String] {
+            return Operation.registered
+                .filter{$0.syntax?.operator.position == position}
                 .map{$0.name}
         }
         
         let infixes = extract(.infix)
         let prefixes = extract(.prefix)
-        let unary = UnaryOperation.registered.keys
-        let binary = BinaryOperation.registered.keys
         
         if infixes.contains(name) {
             format = .infix
         } else if prefixes.contains(name) {
             format = .prefix
-        } else if unary.contains(name) {
-            format = .unary
-        } else if binary.contains(name) {
-            format = .binary
         }
     }
     
@@ -160,7 +125,7 @@ struct Function: Node {
      
      - Returns: a node representing the simplified(computed) value of the function.
      */
-    func simplify() -> Node {
+    public func simplify() -> Node {
         
         // Make a copy of self.
         var copy = self
@@ -206,7 +171,7 @@ struct Function: Node {
      
      - Returns: The additional form of the original expression
      */
-    func toAdditionOnlyForm() -> Node {
+    public func toAdditionOnlyForm() -> Node {
         var copy = arguments{$0.toAdditionOnlyForm()}
         if copy.name == "-" {
             if args.elements.count == 2 {
@@ -229,7 +194,7 @@ struct Function: Node {
      
      - Returns: The exponential form of the original expression
      */
-    func toExponentialForm() -> Node {
+    public func toExponentialForm() -> Node {
         var copy = arguments{$0.toExponentialForm()}
         if copy.name == "/" {
             assert(copy.args.elements.count == 2)
@@ -248,7 +213,7 @@ struct Function: Node {
      - Warning: Before invoking this function, the expression should be in addtion only form.
                 Under normal circumstances, don't use this function.
      */
-    func flatten() -> Node {
+    public func flatten() -> Node {
         var copy = arguments{$0.flatten()} // Initial recursive call
         switch copy.name {
         case "negate":
@@ -279,7 +244,7 @@ struct Function: Node {
     }
     
     /// Functions are equal to each other if their name and arguments are the same
-    func equals(_ node: Node) -> Bool {
+    public func equals(_ node: Node) -> Bool {
         if let fun = node as? Function {
             return fun.name == name && List.strictlyEquals(args, fun.args)
         }
@@ -293,7 +258,7 @@ struct Function: Node {
      - Parameter replace:   A function that takes the old node as input (and perhaps
                             ignores it) and returns a node as replacement.
      */
-    func replacing(by replace: Unary, where predicament: (Node) -> Bool) -> Node {
+    public func replacing(by replace: Unary, where predicament: (Node) -> Bool) -> Node {
         var copy = self
         copy.args.elements = copy.args.elements.map{
             $0.replacing(by: replace, where: predicament)

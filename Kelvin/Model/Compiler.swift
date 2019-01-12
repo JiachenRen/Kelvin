@@ -19,8 +19,8 @@ public class Compiler {
     
     // Symbols from binary operators, shorthands, and syntactic sugars.
     private static var symbols: String {
-        let operators = BinaryOperation.registered
-            .keys.reduce(""){$0 + $1}
+        let operators = Syntax.operators
+            .keys.reduce(""){"\($0)\($1)"}
         return ",(){}[]'\(operators)"
     }
     
@@ -28,28 +28,25 @@ public class Compiler {
     private static var digits = (0...9).reduce(""){"\($0)\($1)"}
     
     // &? -> +, - , *, /, ^, etc.
-    typealias BinRef = Dictionary<String, BinaryOperation>
+    typealias OperatorReference = Dictionary<String, Operator>
     
     // #? -> node
-    typealias NodeRef = Dictionary<String, Node>
+    typealias NodeReference = Dictionary<String, Node>
     
-    private static let specialSyntaxOperations = ParametricOperation.registered
-        .filter {$0.syntacticSugar != nil}
-        .map {($0, $0.syntacticSugar!)}
+    typealias Operator = Syntax.Operator
+    
+    private static let specialSyntaxOperations = Operation.registered
+        .filter {$0.syntax != nil}
+        .map {($0, $0.syntax!)}
     
     public static func compile(_ expr: String) throws -> Node {
         var expr = expr
         
-        // Register syntactic sugars as binary operators
-        specialSyntaxOperations.forEach {
-            BinaryOperation.define($0.1.code, priority: $0.1.priority, bin: {_, _ in .nan})
-        }
-        
         // Validate the expression
         try validate(expr)
         
-        // Apply syntactic sugars before compilation
-        applySyntacticSugars(&expr)
+        // Apply shorthands before compilation
+        applyShorthands(&expr)
         
         // Format the expression for compilation
         format(&expr)
@@ -66,7 +63,7 @@ public class Compiler {
         return restoreDataType(parent)
     }
     
-    private static func applySyntacticSugars(_ expr: inout String) {
+    private static func applyShorthands(_ expr: inout String) {
         
         // Format lists and vectors
         while expr.contains("{") {
@@ -77,18 +74,18 @@ public class Compiler {
             expr = replace(expr, "[", "]", "vector(", ")")
         }
         
-        // Apply syntactic sugars
+        // Apply syntactic shorthands
         specialSyntaxOperations.forEach {
-            let c = $0.1.code
+            let c = "\($0.1.operator)"
             let n = $0.0.name
             
-            // Replace shorthand w/ code
+            // Replace shorthand w/ operator
             if let shorthand = $0.1.shorthand {
                 expr = expr.replacingOccurrences(of: shorthand, with: c)
             }
             
-            // Replace infix function names with code
-            switch $0.1.position {
+            // Replace infix function names with operator
+            switch $0.1.operator.position {
             case .prefix:
                 // "define a=b" becomes _𑅰a=b
                 // Force prefix unary operations into binary infix operations by
@@ -97,6 +94,8 @@ public class Compiler {
             case .infix:
                 // "a and b" becomes "a𑅰b";
                 expr = expr.replacingOccurrences(of: " \(n) ", with: "\(c)")
+            case .postfix:
+                break
             }
         }
     }
@@ -126,12 +125,12 @@ public class Compiler {
         specialSyntaxOperations.forEach {tuple in
             let (op, syntax) = tuple
             parent = parent.replacing(by: {Function(op.name, args($0))}) {
-                name($0) == syntax.code
+                return name($0) == "\(syntax.operator)"
             }
             
             // During compilation, prefix unary operations are converted to binary operations;
             // This converts them back to unary operations
-            if syntax.position == .prefix {
+            if syntax.operator.position == .prefix {
                 parent = parent.replacing(by: {node in
                     var fun = node as! Function
                     fun.args.elements.removeFirst()
@@ -141,8 +140,6 @@ public class Compiler {
                 })
             }
         }
-        
-        
         
         // Restore list() to {}
         parent = parent.replacing(by: {args($0)}){
@@ -154,13 +151,14 @@ public class Compiler {
             name($0) == "="
         }
         
+        
         // Force update function definition
         return parent.replacing(by: {Function(name($0)!, args($0))}){
             $0 is Function
         }
     }
     
-    private static func resolve(_ expr: String, _ dict: inout NodeRef, _ binOps: BinRef) throws -> Node {
+    private static func resolve(_ expr: String, _ dict: inout NodeReference, _ binOps: OperatorReference) throws -> Node {
         var expr = expr
         
         while expr.contains("(") {
@@ -186,7 +184,7 @@ public class Compiler {
                 // In case of definitions like random()
                 var name = String(expr[prefixIdx..<r.lowerBound])
                 if let bin = binOps[name] {
-                    name = bin.name
+                    name = bin.description
                 }
                 
                 name = removeWhiteSpace(name)
@@ -246,32 +244,32 @@ public class Compiler {
         return expr
     }
     
-    private static func binaryToFunction(_ expr: inout String) -> BinRef {
-        let operators = BinaryOperation.registered.values
+    private static func binaryToFunction(_ expr: inout String) -> OperatorReference {
+        let operators = Syntax.operators.values
         let prioritized = operators.sorted{$0.priority > $1.priority}
         
-        var segregated = [[BinaryOperation]]()
+        var segregated = [[Operator]]()
         var cur = prioritized[0].priority
-        var buf = [BinaryOperation]()
+        var buf = [Operator]()
         prioritized.forEach {
             if $0.priority != cur {
                 cur = $0.priority
                 segregated.append(buf)
-                buf = [BinaryOperation]()
+                buf = [Operator]()
             }
             buf.append($0)
         }
         segregated.append(buf)
         
-        var dict = BinRef()
+        var dict = OperatorReference()
         for operators in segregated {
             var d = Dictionary<Character, String>()
             operators.forEach {
                 let id = "&\(dict.count)"
                 dict[id] = $0
-                d[Character($0.name)] = id
+                d[$0.code] = id
             }
-            parenthesize(&expr, operators.map{Character($0.name)}, d)
+            parenthesize(&expr, operators.map{$0.code}, d)
         }
         return dict
     }
