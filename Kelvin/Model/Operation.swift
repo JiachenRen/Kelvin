@@ -19,15 +19,15 @@ class BinaryOperation: CustomStringConvertible {
     
     // Built in binary operations
     static let builtIn: [BinaryOperation] = [
-        .init("+", .fourth, +),
-        .init("-", .fourth, -),
-        .init("*", .third, *),
-        .init("/", .third, /),
-        .init("^", .second, pow),
-        .init(">", .fifth){$0 > $1 ? 1 : 0},
-        .init("<", .fifth){$0 < $1 ? 1 : 0},
-        .init("=", .eighth){$0 == $1 ? 1 : 0}, // Will be replaced by compiler with an eq.
-        .init("%", .third){$0.truncatingRemainder(dividingBy: $1)},
+        .init("+", .addition, +),
+        .init("-", .addition, -),
+        .init("*", .product, *),
+        .init("/", .product, /),
+        .init("^", .exponent, pow),
+        .init(">", .equality){$0 > $1 ? 1 : 0},
+        .init("<", .equality){$0 < $1 ? 1 : 0},
+        .init("=", .equation){$0 == $1 ? 1 : 0}, // Will be replaced by compiler with an eq.
+        .init("%", .product){$0.truncatingRemainder(dividingBy: $1)},
     ]
     
     /// Custom binary operations are added here.
@@ -64,16 +64,15 @@ class BinaryOperation: CustomStringConvertible {
 }
 
 enum Priority: Int, Comparable {
-    case first = 1
-    case second
-    case third
-    case fourth
-    case fifth
-    case sixth
-    case seventh
-    case eighth
-    case ninth
-    case last
+    case exponent = 1
+    case product
+    case addition
+    case equality
+    case and
+    case or
+    case equation
+    case definition
+    case execution
     
     static func < (lhs: Priority, rhs: Priority) -> Bool {
         return lhs.rawValue < rhs.rawValue
@@ -164,7 +163,7 @@ class ParametricOperation: Equatable {
         /// does not have any unicode counterparts
         static var scalar = 60000
         
-        init(_ position: Position, priority: Priority = .last, shorthand: String? = nil) {
+        init(_ position: Position, priority: Priority = .execution, shorthand: String? = nil) {
             
             self.position = position
             self.priority = priority
@@ -189,12 +188,12 @@ class ParametricOperation: Equatable {
      */
     static var registered: [ParametricOperation] = [
         .init("and", [.bool, .bool], syntacticSugar:
-        .init(.infix, priority: .sixth, shorthand: "&&")) {nodes in
+        .init(.infix, priority: .and, shorthand: "&&")) {nodes in
             return nodes.map{$0 as! Bool}
                 .reduce(true){$0 && $1}
         },
         .init("or", [.bool, .bool], syntacticSugar:
-        .init(.infix, priority: .seventh, shorthand: "||")) {nodes in
+        .init(.infix, priority: .or, shorthand: "||")) {nodes in
             return nodes.map{$0 as! Bool}
                 .reduce(false){$0 || $1}
         },
@@ -205,7 +204,7 @@ class ParametricOperation: Equatable {
             return Function("+", nodes)
         },
         .init("define", [.equation], syntacticSugar:
-        .init(.prefix, priority: .ninth, shorthand: ":=")) {nodes in
+        .init(.prefix, priority: .definition, shorthand: ":=")) {nodes in
             if let err = (nodes[0] as? Equation)?.define() {
                 return err
             }
@@ -262,7 +261,7 @@ class ParametricOperation: Equatable {
                 .format()
         },
         .init("mod", [.number, .number], syntacticSugar:
-        .init(.infix, priority: .third)) {nodes in
+        .init(.infix, priority: .product)) {nodes in
             return Function("%", nodes)
         },
         .init("exec", [.universal], syntacticSugar:

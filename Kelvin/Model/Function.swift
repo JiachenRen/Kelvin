@@ -62,7 +62,7 @@ struct Function: Node {
             return "(\(a))"
         case .infix where r.count == 2:
             return "(\(r[0]) \(n) \(r[1]))"
-        case .prefix:
+        case .prefix where r.count == 1:
             return "\(n) \(r[0])"
         case .unary where n == "negate":
             return "(-\(r[0]))"
