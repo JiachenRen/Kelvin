@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F0CF2C421EA420400E40086 /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* Text.swift */; };
+		1F0CF2C521EA428000E40086 /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* Text.swift */; };
 		1F2E82AC21966FC5005C3353 /* Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AB21966FC5005C3353 /* Operation.swift */; };
 		1F2E82AE2197331F005C3353 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AD2197331F005C3353 /* Function.swift */; };
 		1F2E82B02197338B005C3353 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AF2197338B005C3353 /* Node.swift */; };
@@ -71,6 +73,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1F0CF2C321EA420400E40086 /* Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
 		1F2E82AB21966FC5005C3353 /* Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operation.swift; sourceTree = "<group>"; };
 		1F2E82AD2197331F005C3353 /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
 		1F2E82AF2197338B005C3353 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
@@ -218,6 +221,7 @@
 				1FFD8CD4218F52430004ECEB /* Compiler.swift */,
 				1F2E82B32197416D005C3353 /* List.swift */,
 				1F2E82B121973FF7005C3353 /* Value.swift */,
+				1F0CF2C321EA420400E40086 /* Text.swift */,
 				1F2E82AB21966FC5005C3353 /* Operation.swift */,
 				1F3974C421E633FD006D6DC2 /* Equation.swift */,
 				1F2E82B521974368005C3353 /* Variable.swift */,
@@ -382,6 +386,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F0CF2C521EA428000E40086 /* Text.swift in Sources */,
 				1F3974C921E6765A006D6DC2 /* Mode.swift in Sources */,
 				1F3974C621E6341C006D6DC2 /* Equation.swift in Sources */,
 				1F3974C221E3B8A3006D6DC2 /* NaN.swift in Sources */,
@@ -412,6 +417,7 @@
 				1FFD8CA8218F50850004ECEB /* Kelvin.xcdatamodeld in Sources */,
 				1F2E82AC21966FC5005C3353 /* Operation.swift in Sources */,
 				1F2E82AE2197331F005C3353 /* Function.swift in Sources */,
+				1F0CF2C421EA420400E40086 /* Text.swift in Sources */,
 				1FFD8CA5218F50850004ECEB /* ViewController.swift in Sources */,
 				1F3974C821E67627006D6DC2 /* Mode.swift in Sources */,
 				1FFD8CA3218F50850004ECEB /* AppDelegate.swift in Sources */,

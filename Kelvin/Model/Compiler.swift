@@ -248,7 +248,7 @@ public class Compiler {
     
     private static func binaryToFunction(_ expr: inout String) -> BinRef {
         let operators = BinaryOperation.registered.values
-        let prioritized = operators.sorted{$0.priority < $1.priority}
+        let prioritized = operators.sorted{$0.priority > $1.priority}
         
         var segregated = [[BinaryOperation]]()
         var cur = prioritized[0].priority

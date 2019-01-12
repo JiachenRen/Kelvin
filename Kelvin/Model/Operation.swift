@@ -64,15 +64,15 @@ class BinaryOperation: CustomStringConvertible {
 }
 
 enum Priority: Int, Comparable {
-    case exponent = 1
-    case product
-    case addition
-    case equality
-    case and
-    case or
-    case equation
-    case definition
-    case execution
+    case execution = 1  // ;, >>
+    case definition     // :=
+    case equation       // =
+    case or             // ||
+    case and            // &&
+    case equality       // ==, <, >, <=, >=
+    case addition       // +,-
+    case product        // *,/
+    case exponent       // ^
     
     static func < (lhs: Priority, rhs: Priority) -> Bool {
         return lhs.rawValue < rhs.rawValue
@@ -197,6 +197,10 @@ class ParametricOperation: Equatable {
             return nodes.map{$0 as! Bool}
                 .reduce(false){$0 || $1}
         },
+        .init("equals", [.any, .any], syntacticSugar:
+        .init(.infix, priority: .equality, shorthand: "==")) {nodes in
+            return nodes[0] === nodes[1]
+        },
         .init("sum", [.list]) {nodes in
             return Function("+", (nodes[0] as! List).elements)
         },
@@ -208,7 +212,7 @@ class ParametricOperation: Equatable {
             if let err = (nodes[0] as? Equation)?.define() {
                 return err
             }
-            return nil
+            return "done"
         },
         .init("define", [.any, .any], syntacticSugar:
         .init(.prefix)) {nodes in
@@ -219,6 +223,7 @@ class ParametricOperation: Equatable {
             if let v = nodes[0] as? Variable {
                 Variable.delete(v.name)
                 ParametricOperation.remove(v.name)
+                return "deleted '\(v.name)'"
             }
             return nil
         },
@@ -242,7 +247,7 @@ class ParametricOperation: Equatable {
             let list = nodes[0] as! List
             let idx = Int(nodes[1].evaluated!.doubleValue())
             if idx >= list.elements.count {
-                return KelvinError(msg: "index out of bounds")
+                return "error: index out of bounds"
             } else {
                 return list[idx]
             }

@@ -56,7 +56,7 @@ struct Equation: Node, NaN {
      
      - Returns: An error if the definition is unsuccessful.
      */
-    func define() -> KelvinError? {
+    func define() -> Node? {
         guard let fun = lhs as? Function else {
             
             // If lhs is a var, then rhs is assigned as its definition.
@@ -76,8 +76,7 @@ struct Equation: Node, NaN {
         // Check to make sure that every argument is a variable
         for arg in args {
             if !(arg is Variable) {
-                let err = "function signature should only contain variables"
-                return KelvinError(msg: err)
+                return "error: function signature should only contain variables"
             }
         }
         
