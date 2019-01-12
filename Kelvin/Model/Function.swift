@@ -209,12 +209,15 @@ struct Function: Node {
     func toAdditionOnlyForm() -> Node {
         var copy = arguments{$0.toAdditionOnlyForm()}
         if copy.name == "-" {
-            assert(copy.args.elements.count == 2)
-            // Change subtraction to addition
-            copy.name = "+"
-            let rhs = copy.args[1]
-            let negated = Function("negate", [rhs])
-            copy.args[1] = negated
+            if args.elements.count == 2 {
+                // Change subtraction to addition
+                copy.name = "+"
+                let rhs = copy.args[1]
+                let negated = Function("negate", [rhs])
+                copy.args[1] = negated
+            } else {
+                copy.name = "negate"
+            }
             return copy
         }
         return copy

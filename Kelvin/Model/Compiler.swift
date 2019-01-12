@@ -292,7 +292,7 @@ public class Compiler {
         while let idx = firstIndex() {
             let idx_ = expr.index(after: idx)
             let _idx = expr.index(before: idx)
-            var left = "", right = ""
+            var left: String?, right: String?
             var begin = expr.startIndex, end = expr.endIndex
             let r = binRange(expr, idx)
             
@@ -308,8 +308,10 @@ public class Compiler {
                 end = find(expr, start: p, close: ")")!
                 right = String(expr[idx_...end])
             } else {
-                let rop = String(expr[idx_...r.upperBound])
-                right = rop
+                if idx_ <= r.upperBound {
+                    let rop = String(expr[idx_...r.upperBound])
+                    right = rop
+                }
                 end = r.upperBound
             }
             
@@ -327,15 +329,27 @@ public class Compiler {
                 begin = find(expr, end: _idx, open: "{")!
                 left = String(expr[begin..._idx])
             } else {
-                let lop = String(expr[r.lowerBound..._idx])
-                left = lop
+                if r.lowerBound <= _idx {
+                    let lop = String(expr[r.lowerBound..._idx])
+                    left = lop
+                }
                 begin = r.lowerBound
             }
             
             let rLeft = String(expr[..<begin])
             let rRight = String(expr[expr.index(after: end)...])
             let id = rp[expr[idx]]!
-            expr = rLeft + "\(id)(\(left),\(right))" + rRight
+            
+            var args = ""
+            if let l = left, let r = right  {
+                args = "\(l),\(r)"
+            } else if let r = right {
+                args = "\(r)"
+            } else if let l = left {
+                args = "\(l)"
+            }
+            
+            expr = rLeft + "\(id)(\(args))" + rRight
         }
     }
     
@@ -352,10 +366,13 @@ public class Compiler {
      */
     private static func format(_ expr: inout String) {
         
+        // Remove spaces for ease of processing
+        expr.removeAll{$0 == " "}
+        
         // When naturally writing mathematic expressions, we tend to write
         // 3*-x instead of 3*(-x), etc.
         // This corrects the format to make it consistent.
-        symbols.forEach { cand in
+        "([*/^<>".forEach { cand in
             let target = "\(cand)-"
             while expr.contains(target) {
                 let r = expr.range(of: target)!
@@ -366,11 +383,10 @@ public class Compiler {
             }
         }
         
-        // Remove spaces for ease of processing
-        expr.removeAll{$0 == " "}
+        // Add another layer of parenthesis to prevent an error
+        expr = "(\(expr))"
         
         func fixCoefficientShorthand(_ symbol: Character, _ digit: Character) {
-            expr = "(\(expr))" // Add another layer of parenthesis to prevent an error
             let indices = findIndices(of: "\(symbol)\(digit)", in: expr)
             for i in indices {
                 var a = expr.index(after: i)
@@ -395,11 +411,6 @@ public class Compiler {
         // "3a*4x" should be converted to "3*a*4*x"
         symbols.forEach{s in digits.forEach{fixCoefficientShorthand(s, $0)}}
         
-        // Handle negative signs (as opposed to 'minus')
-        "(,=".forEach {
-            replace(&expr, of: "\($0)-", with: "\($0)0-")
-        }
-        expr = expr.first! == "-" ? "0\(expr)" : expr
     }
     
     /**
