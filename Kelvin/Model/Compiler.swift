@@ -17,11 +17,15 @@ public class Compiler {
     private static let parentheses = ["(", ")"]
     private static let brackets = ["{", "}"]
     
+    // Symbols from binary operators, shorthands, and syntactic sugars.
     private static var symbols: String {
         let operators = BinaryOperation.registered
             .keys.reduce(""){$0 + $1}
         return ",(){}[]'\(operators)"
     }
+    
+    // Digits from 0 to 9
+    private static var digits = (0...9).reduce(""){"\($0)\($1)"}
     
     // &? -> +, - , *, /, ^, etc.
     typealias BinRef = Dictionary<String, BinaryOperation>
@@ -29,22 +33,16 @@ public class Compiler {
     // #? -> node
     typealias NodeRef = Dictionary<String, Node>
     
-    /// Syntactic sugars
-    /// The priority is assigned in decreasing order, unless otherwise indicated.
-    static let syntacticSugars: [SyntacticSugar] = [
-        (.lowest, shorthand: ":=", repl: "⇠", op: "define"),
-        (.lowest, shorthand: ";", repl: ";", op: "exec")
-    ]
-    
-    // Syntactic sugar - replaces shorthand with corresponding operation
-    typealias SyntacticSugar = (priority: Priority, shorthand: String, repl: String, op: String)
+    private static let specialSyntaxOperations = ParametricOperation.registered
+        .filter {$0.syntacticSugar != nil}
+        .map {($0, $0.syntacticSugar!)}
     
     public static func compile(_ expr: String) throws -> Node {
         var expr = expr
         
         // Register syntactic sugars as binary operators
-        syntacticSugars.forEach {
-            BinaryOperation.define($0.repl, priority: .lowest, bin: {_, _ in .nan})
+        specialSyntaxOperations.forEach {
+            BinaryOperation.define($0.1.code, priority: $0.1.priority, bin: {_, _ in .nan})
         }
         
         // Validate the expression
@@ -80,8 +78,26 @@ public class Compiler {
         }
         
         // Apply syntactic sugars
-        syntacticSugars.forEach {
-            expr = expr.replacingOccurrences(of: $0.shorthand, with: $0.repl)
+        specialSyntaxOperations.forEach {
+            let c = $0.1.code
+            let n = $0.0.name
+            
+            // Replace shorthand w/ code
+            if let shorthand = $0.1.shorthand {
+                expr = expr.replacingOccurrences(of: shorthand, with: c)
+            }
+            
+            // Replace infix function names with code
+            switch $0.1.position {
+            case .prefix:
+                // "define a=b" becomes _𑅰a=b
+                // Force prefix unary operations into binary infix operations by
+                // giving it a left hand side operand. This lowers compilation overhead.
+                expr = expr.replacingOccurrences(of: "\(n) ", with: "_\(c)")
+            case .infix:
+                // "a and b" becomes "a𑅰b";
+                expr = expr.replacingOccurrences(of: " \(n) ", with: "\(c)")
+            }
         }
     }
     
@@ -107,11 +123,26 @@ public class Compiler {
         
         // Replace functions generated from syntactic sugars with their
         // corrected names.
-        syntacticSugars.forEach {sugar in
-            parent = parent.replacing(by: {Function(sugar.op, args($0))}) {
-                name($0) == sugar.repl
+        specialSyntaxOperations.forEach {tuple in
+            let (op, syntax) = tuple
+            parent = parent.replacing(by: {Function(op.name, args($0))}) {
+                name($0) == syntax.code
+            }
+            
+            // During compilation, prefix unary operations are converted to binary operations;
+            // This converts them back to unary operations
+            if syntax.position == .prefix {
+                parent = parent.replacing(by: {node in
+                    var fun = node as! Function
+                    fun.args.elements.removeFirst()
+                    return fun
+                }, where: {
+                    name($0) == op.name && (args($0)[0] as? Variable)?.name == "_"
+                })
             }
         }
+        
+        
         
         // Restore list() to {}
         parent = parent.replacing(by: {args($0)}){
@@ -324,7 +355,7 @@ public class Compiler {
         // When naturally writing mathematic expressions, we tend to write
         // 3*-x instead of 3*(-x), etc.
         // This corrects the format to make it consistent.
-        "(*/^<>".forEach { cand in
+        symbols.forEach { cand in
             let target = "\(cand)-"
             while expr.contains(target) {
                 let r = expr.range(of: target)!
@@ -335,31 +366,34 @@ public class Compiler {
             }
         }
         
-        // Format prefix parametric operations. This has to happen before spaces are removed.
-        let prefixOps = ParametricOperation.registered.filter{$0.syntax == .prefix}
-        for operation in prefixOps {
-            if expr.starts(with: "\(operation.name) ") {
-                let idx = expr.firstIndex(of: " ")!
-                let left = String(expr[..<idx])
-                let right = expr[expr.index(after: idx)...]
-                expr = "\(left)(\(right))"
-            }
-        }
-        
-        // Format infix operations. This has to happen before spaces are removed.
-        expr = formatInfixOperations(expr)
-        
         // Remove spaces for ease of processing
         expr.removeAll{$0 == " "}
         
-        // Format 9x to 9*x, 5var to 5*var, 8( to 8*(
-        (0...9).map{String($0)}.forEach { n in
-            "\(Variable.legalChars)(".forEach { v in
-                let target = "\(n)\(v)"
-                let rp = "\(n)*\(v)"
-                replace(&expr, of: target, with: rp)
+        func fixCoefficientShorthand(_ symbol: Character, _ digit: Character) {
+            expr = "(\(expr))" // Add another layer of parenthesis to prevent an error
+            let indices = findIndices(of: "\(symbol)\(digit)", in: expr)
+            for i in indices {
+                var a = expr.index(after: i)
+                let limit = expr.index(before: expr.endIndex)
+                while let b = expr.index(a, offsetBy: 1, limitedBy: limit) {
+                    a = b
+                    let ch = String(expr[a])
+                    if "\(Variable.legalChars)(".contains(ch) {
+                        expr.insert("*", at: a)
+                        break
+                    } else if !"\(digits).".contains(ch) {
+                        break
+                    }
+                }
             }
         }
+        
+        // Fix shorthand syntax of variable coefficients.
+        // This can be really tricky:
+        // "f1()" should be seen as a function whereas "3(x)" should be seen as "3*x"
+        // "arg3er" should be seen as "arg3*er"
+        // "3a*4x" should be converted to "3*a*4*x"
+        symbols.forEach{s in digits.forEach{fixCoefficientShorthand(s, $0)}}
         
         // Handle negative signs (as opposed to 'minus')
         "(,=".forEach {
@@ -368,47 +402,23 @@ public class Compiler {
         expr = expr.first! == "-" ? "0\(expr)" : expr
     }
     
-    private static func formatInfixOperations(_ expr: String) -> String {
-        
-        // Find all infix operations and order them by priority
-        let infixOps = ParametricOperation.registered.filter{
-            $0.syntax == .infix
-            }.sorted{$0.priority > $1.priority}
-        
-        // Change infix operations into binary functions
-        func infixToBinary(_ infix: String) -> String {
-            for operation in infixOps {
-                if let r = infix.range(of: " \(operation.name) ") {
-                    var left = String(infix[..<r.lowerBound])
-                    var right = String(infix[r.upperBound...])
-                    left = infixToBinary(left)
-                    right = infixToBinary(right)
-                    return "\(operation.name)(\(left),\(right))"
-                }
-            }
-            return infix
+    /**
+     Find all indices in which the substring occurs in the given string
+     
+     - Parameter substr: A string to look for in str
+     - Parameter str: A string containing multiple (or none) occurences of substr
+     - Returns: The indices at which substr occurs in str.
+     */
+    private static func findIndices(of substr: String, in str: String) -> [String.Index] {
+        var indices = [String.Index]()
+        if let r = str.range(of: substr) {
+            indices.append(r.lowerBound)
+            let left = str[...r.lowerBound]
+            let right = String(str[str.index(after: r.lowerBound)...])
+            let subIndices = findIndices(of: substr, in: right)
+            indices.append(contentsOf: subIndices.map{str.index($0, offsetBy: left.count)})
         }
-        
-        // Work recursively from inside out
-        func format(_ input: String) -> String {
-            if input.contains("(") {
-                let r = innermost(input, "(", ")")
-                let l = expr.index(after: r.lowerBound)
-                let u = expr.index(before: r.upperBound)
-                
-                if input[l] == ")" {
-                    // Handle functions that take in no arguments.
-                    return infixToBinary(input)
-                }
-                
-                let m = String(input[l...u])
-                return infixToBinary(input.replacingOccurrences(of: m, with: format(m)))
-            } else {
-                return infixToBinary(input)
-            }
-        }
-        
-        return format(expr)
+        return indices
     }
     
     private static func binRange(_ segment: String, _ binIdx: String.Index) -> ClosedRange<String.Index> {
@@ -460,7 +470,7 @@ public class Compiler {
             throw CompilerError.syntax(errMsg: "{} mismatch in \(expr)")
         } else if !matches(expr, squareBrackets) {
             throw CompilerError.syntax(errMsg: "[] mismatch in \(expr)")
-        } else if expr.contains(where: {"#&@".contains($0)}) {
+        } else if expr.contains(where: {"#@".contains($0)}) {
             throw CompilerError.illegalArgument(errMsg: "Illegal character(s) &, #, or @")
         } else if expr == "" {
             throw CompilerError.illegalArgument(errMsg: "Give me some juice!")

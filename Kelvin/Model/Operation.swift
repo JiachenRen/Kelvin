@@ -17,18 +17,24 @@ typealias NBinary = (Double, Double) throws -> Double
  */
 class BinaryOperation: CustomStringConvertible {
     
-    // Standard & custom binary operations
-    static var registered: [String: BinaryOperation] = [
-        "+": .init("+", .third, +),
-        "-": .init("-", .third, -),
-        "*": .init("*", .second, *),
-        "/": .init("/", .second, /),
-        "^": .init("^", .first, pow),
-        ">": .init(">", .lowest){$0 > $1 ? 1 : 0},
-        "<": .init("<", .lowest){$0 < $1 ? 1 : 0},
-        "=": .init("=", .lowest){$0 == $1 ? 1 : 0}, // Will be replaced by compiler with an eq.
-        "%": .init("%", .second){$0.truncatingRemainder(dividingBy: $1)},
-        ]
+    // Built in binary operations
+    static let builtIn: [BinaryOperation] = [
+        .init("+", .fourth, +),
+        .init("-", .fourth, -),
+        .init("*", .third, *),
+        .init("/", .third, /),
+        .init("^", .second, pow),
+        .init(">", .fifth){$0 > $1 ? 1 : 0},
+        .init("<", .fifth){$0 < $1 ? 1 : 0},
+        .init("=", .eighth){$0 == $1 ? 1 : 0}, // Will be replaced by compiler with an eq.
+        .init("%", .third){$0.truncatingRemainder(dividingBy: $1)},
+    ]
+    
+    /// Custom binary operations are added here.
+    /// Built-in operations are preloaded.
+    static var registered: [String: BinaryOperation] = {
+        return builtIn.reduce(into: [:]){$0[$1.name] = $1}
+    }()
     
     
     var description: String {
@@ -58,11 +64,16 @@ class BinaryOperation: CustomStringConvertible {
 }
 
 enum Priority: Int, Comparable {
-    case highest = 0
     case first = 1
-    case second = 2
-    case third = 3
-    case lowest = 10
+    case second
+    case third
+    case fourth
+    case fifth
+    case sixth
+    case seventh
+    case eighth
+    case ninth
+    case last
     
     static func < (lhs: Priority, rhs: Priority) -> Bool {
         return lhs.rawValue < rhs.rawValue
@@ -127,10 +138,48 @@ class ParametricOperation: Equatable {
      functions that take in two arguments.
      e.g. the function "and(a,b)" can be invoked with "a and b"
      */
-    enum Syntax: Equatable {
-        case normal
-        case prefix
-        case infix
+    struct SyntacticSugar {
+        
+        enum Position {
+            case prefix
+            case infix
+        }
+        
+        /// The syntactic position of the operation, either prefix or infix.
+        var position: Position
+        
+        /// The priority of the operation
+        var priority: Priority
+        
+        /// The shorthand for the operation.
+        /// e.g. && for "and", and || for "or"
+        var shorthand: String?
+        
+        /// A single character is used to represent the operation;
+        /// By doing so, the compiler can treat the operation like +,-,*,/, and so on.
+        var code: String
+        
+        /// A unicode scalar value that would never interfere with input
+        /// In this case, the scalar value (and the ones after)
+        /// does not have any unicode counterparts
+        static var scalar = 60000
+        
+        init(_ position: Position, priority: Priority = .last, shorthand: String? = nil) {
+            
+            self.position = position
+            self.priority = priority
+            self.shorthand = shorthand
+            
+            // Assign a unique code to the operation consisting of
+            // a single character that does not exist in any language.
+            code = "\(UnicodeScalar(SyntacticSugar.scalar)!)"
+            
+            // Ensure that a valid code is generated.
+            assert(code.count == 1)
+            
+            // Increment the scalar so that each code is unique.
+            SyntacticSugar.scalar += 1
+        }
     }
 
     
@@ -139,11 +188,13 @@ class ParametricOperation: Equatable {
      to function definitions during compilation.
      */
     static var registered: [ParametricOperation] = [
-        .init("and", [.bool, .bool], syntax: .infix, priority: .highest) {nodes in
+        .init("and", [.bool, .bool], syntacticSugar:
+        .init(.infix, priority: .sixth, shorthand: "&&")) {nodes in
             return nodes.map{$0 as! Bool}
                 .reduce(true){$0 && $1}
         },
-        .init("or", [.bool, .bool], syntax: .infix) {nodes in
+        .init("or", [.bool, .bool], syntacticSugar:
+        .init(.infix, priority: .seventh, shorthand: "||")) {nodes in
             return nodes.map{$0 as! Bool}
                 .reduce(false){$0 || $1}
         },
@@ -153,16 +204,19 @@ class ParametricOperation: Equatable {
         .init("sum", [.universal]) {nodes in
             return Function("+", nodes)
         },
-        .init("define", [.equation], syntax: .prefix) {nodes in
+        .init("define", [.equation], syntacticSugar:
+        .init(.prefix, priority: .ninth, shorthand: ":=")) {nodes in
             if let err = (nodes[0] as? Equation)?.define() {
                 return err
             }
             return nil
         },
-        .init("define", [.any, .any], syntax: .prefix) {nodes in
+        .init("define", [.any, .any], syntacticSugar:
+        .init(.prefix)) {nodes in
             return Function("define", [Equation(lhs: nodes[0], rhs: nodes[1])])
         },
-        .init("del", [.var], syntax: .prefix) {nodes in
+        .init("del", [.var], syntacticSugar:
+        .init(.prefix)) {nodes in
             if let v = nodes[0] as? Variable {
                 Variable.delete(v.name)
                 ParametricOperation.remove(v.name)
@@ -177,13 +231,15 @@ class ParametricOperation: Equatable {
             let ub = nodes[1].evaluated!.doubleValue()
             return Double.random(in: lb...ub)
         },
-        .init("repeat", [.any, .number], syntax: .infix) {nodes in
+        .init("repeat", [.any, .number], syntacticSugar:
+        .init(.infix)) {nodes in
             let times = Int(nodes[1].evaluated!.doubleValue())
             var elements = [Node]()
             (0..<times).forEach{_ in elements.append(nodes[0])}
             return List(elements)
         },
-        .init("get", [.list, .number], syntax: .infix) {nodes in
+        .init("get", [.list, .number], syntacticSugar:
+        .init(.infix)) {nodes in
             let list = nodes[0] as! List
             let idx = Int(nodes[1].evaluated!.doubleValue())
             if idx >= list.elements.count {
@@ -192,7 +248,8 @@ class ParametricOperation: Equatable {
                 return list[idx]
             }
         },
-        .init("size", [.list], syntax: .prefix) {nodes in
+        .init("size", [.list], syntacticSugar:
+        .init(.prefix)) {nodes in
             return (nodes[0] as! List).elements.count
         },
         .init("avg", [.list]) {nodes in
@@ -204,29 +261,34 @@ class ParametricOperation: Equatable {
             return Function("/", [Function("+", nodes), nodes.count])
                 .format()
         },
-        .init("mod", [.number, .number], syntax: .infix) {nodes in
+        .init("mod", [.number, .number], syntacticSugar:
+        .init(.infix, priority: .third)) {nodes in
             return Function("%", nodes)
         },
-        .init("exec", [.universal], syntax: .prefix) {nodes in
+        .init("exec", [.universal], syntacticSugar:
+        .init(.prefix, shorthand: ";")) {nodes in
             // This is for consecutive execution of statements
             return nodes.last
         },
+        .init("feed", [.any, .any], syntacticSugar:
+        .init(.infix, shorthand: ">>")) {nodes in
+            return nodes.last!.replacing(by: {_ in nodes[0]}) {
+                ($0 as? Variable)?.name == "$"
+            }
+        }
+        
     ]
     
     let def: Definition
     let name: String
     let signature: [ArgumentType]
-    let syntax: Syntax
+    let syntacticSugar: SyntacticSugar?
     
-    /// - Note: Priority only applies to infix syntax.
-    let priority: Priority
-    
-    init(_ name: String, _ signature: [ArgumentType], syntax: Syntax = .normal, priority: Priority = .lowest, definition: @escaping Definition) {
+    init(_ name: String, _ signature: [ArgumentType], syntacticSugar: SyntacticSugar? = nil, definition: @escaping Definition) {
         self.name = name
         self.def = definition
         self.signature = signature
-        self.syntax = syntax
-        self.priority = priority
+        self.syntacticSugar = syntacticSugar
     }
     
     /// Register the parametric operation.

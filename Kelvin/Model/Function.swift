@@ -125,9 +125,10 @@ struct Function: Node {
             }
         }
         
-        func extract(_ syntax: ParametricOperation.Syntax) -> [String] {
+        // Extract parametric operations with the matching syntax requirements
+        func extract(_ position: ParametricOperation.SyntacticSugar.Position) -> [String] {
             return ParametricOperation.registered
-                .filter{$0.syntax == syntax}
+                .filter{$0.syntacticSugar?.position == position}
                 .map{$0.name}
         }
         

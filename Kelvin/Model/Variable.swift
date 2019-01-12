@@ -11,7 +11,7 @@ import Foundation
 struct Variable: Leaf, NaN {
     
     /// The characters that are allowed in the variable
-    static let legalChars = "abcdefghijklmnopqrstuvwxyz_"
+    static let legalChars = "$abcdefghijklmnopqrstuvwxyz_"
     
     static var definitions: [String: Node] = [
         "e": M_E,
@@ -47,8 +47,14 @@ struct Variable: Leaf, NaN {
         
         // Check if the variable name is valid
         for ch in name {
-            if !Variable.legalChars.contains(ch) {
-                let msg = "\"\(name)\" is not a valid variable name."
+            let isDigit = Int("\(ch)") != nil
+            if !Variable.legalChars.contains(ch) && !isDigit  {
+                // Check if the variable contains illegal characters
+                let msg = "illegal variable name '\(name)'; character '\(ch)' is not allowed."
+                throw CompilerError.syntax(errMsg: msg)
+            } else if Int("\(name.first!)") != nil {
+                // Check if the variable starts with a number
+                let msg = "illegal variable name '\(name)'; cannot begin with a number"
                 throw CompilerError.syntax(errMsg: msg)
             }
         }
@@ -97,7 +103,7 @@ struct Variable: Leaf, NaN {
     func simplify() -> Node {
         if let def = definition {
             // If the definition is not a constant, return the definition
-            return isConstant && Mode.shared == .exact ? self : def
+            return isConstant && Mode.shared.rounding == .exact ? self : def
         }
         return self
     }

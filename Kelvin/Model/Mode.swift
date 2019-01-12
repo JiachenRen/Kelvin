@@ -8,9 +8,18 @@
 
 import Foundation
 
-public enum Mode {
-    static var shared: Mode = .exact
+public struct Mode {
+    static var shared: Mode = Mode()
+
+    // The rounding mode.
+    var rounding: Rounding = .exact
+}
+
+public enum Rounding {
     
+    /// Constants are left as-is, and decimals are converted to fractions
     case exact
+    
+    /// Constants are unwrapped into their numerical values
     case approximate
 }
