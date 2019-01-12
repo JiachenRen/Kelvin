@@ -118,15 +118,15 @@ class ParametricOperation: Equatable {
      and the types of arguments, we can generate a unique signature
      that is used later to find definitions.
      */
-    enum ArgumentType {
-        case number
-        case `var`
-        case `func`
-        case bool
-        case list
-        case any
-        case equation
-        case universal // Takes in any # of args.
+    enum ArgumentType: Int, Equatable {
+        case number = 0
+        case `var` = 1
+        case `func` = 2
+        case bool = 3
+        case list = 4
+        case equation = 5
+        case any = 100
+        case universal = 10000 // Takes in any # of args.
     }
     
     /**
@@ -275,14 +275,19 @@ class ParametricOperation: Equatable {
             return nodes.last!.replacing(by: {_ in nodes[0]}) {
                 ($0 as? Variable)?.name == "$"
             }
-        }
-        
+        },
     ]
     
     let def: Definition
     let name: String
     let signature: [ArgumentType]
     let syntacticSugar: SyntacticSugar?
+    
+    /// A value that represents the scope of the signature
+    /// The larger the scope, the more universally applicable the function.
+    var scope: Int {
+        return signature.reduce(0) {$0 + $1.rawValue}
+    }
     
     init(_ name: String, _ signature: [ArgumentType], syntacticSugar: SyntacticSugar? = nil, definition: @escaping Definition) {
         self.name = name
@@ -323,8 +328,12 @@ class ParametricOperation: Equatable {
      */
     static func resolve(_ name: String, args: [Node]) -> ParametricOperation? {
         let candidates = registered.filter{$0.name == name}
+            // Operations with the smaller scope should be prioritized.
+            .sorted{$0.scope < $1.scope}
         candLoop: for cand in candidates {
-            if cand.signature.count != args.count {
+            if cand.signature.first == .universal {
+                return cand
+            } else if cand.signature.count != args.count {
                 continue
             }
             for i in 0..<cand.signature.count {
@@ -333,8 +342,6 @@ class ParametricOperation: Equatable {
                 switch argType {
                 case .any:
                     continue
-                case .universal:
-                    fallthrough
                 case .var where !(arg is Variable):
                     fallthrough
                 case .bool where !(arg is Bool):
@@ -351,15 +358,6 @@ class ParametricOperation: Equatable {
                 }
             }
             return cand
-        }
-        
-        // Match candididates with universal signature type
-        for cand in candidates {
-            if cand.signature.first == .universal {
-                if cand.name == name {
-                    return cand
-                }
-            }
         }
         
         return nil
