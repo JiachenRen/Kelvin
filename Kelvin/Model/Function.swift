@@ -12,13 +12,6 @@ typealias Definition = ([Node]) -> Node?
 
 public struct Function: Node {
     
-    /// The format of the function when represented as text
-    enum Format {
-        case function
-        case prefix
-        case infix
-    }
-    
     public var evaluated: Value? {
         return invoke()?.evaluated
     }
@@ -37,50 +30,59 @@ public struct Function: Node {
     var args: List {
         didSet {
             // Update the definition of the function because the signature changed!
-            // Rebuild parent-child connections.
-            self = Function(name, args)
+            resolveDefinition()
         }
     }
     
     /// The operation that contains the definition of the function
+    /// - Note: An operation only exists when the arguments match the requirements
     var operation: Operation?
     
-    /// The format of the function when represented as text
-    var format: Format
+    /// The syntax of the function (derived from just the name)
+    var syntax: Syntax? {
+        return Operation.getSyntax(for: name)
+    }
     
     public var description: String {
         let r = args.elements
         let n = name
         
-        switch format {
-        case .infix:
-            if let s = r.reduce(nil, {(a, b) -> String in
-                let p = usesParenthesis(for: b)
-                let b1 = p ? "(\(b))" : "\(b)"
-                return a == nil ? "\(b1)" : "\(a!) \(n) \(b1)"
-            }) {
-                return "\(s)"
-            } else {
-                return ""
-            }
-        case .prefix where r.count == 1:
-            let p = usesParenthesis(for: r[0])
-            return p ? "\(n) (\(r[0]))" : "\(n) \(r[0])"
-        default:
-            let l = r.map{$0.description}.reduce(nil){
+        func formatted() -> String  {
+            let l = r.map{$0.description}.reduce(nil) {
                 $0 == nil ? "\($1)": "\($0!), \($1)"
             }
-            
             return "\(name)(\(l ?? ""))"
         }
+        
+        if let position = self.syntax?.operator.position {
+            switch position {
+            case .infix:
+                if let s = r.reduce(nil, {(a, b) -> String in
+                    let p = usesParenthesis(for: b)
+                    let b1 = p ? "(\(b))" : "\(b)"
+                    return a == nil ? "\(b1)" : "\(a!) \(n) \(b1)"
+                }) {
+                    return "\(s)"
+                } else {
+                    return ""
+                }
+            case .prefix where r.count == 1:
+                let p = usesParenthesis(for: r[0])
+                return p ? "\(n) (\(r[0]))" : "\(n) \(r[0])"
+            default:
+                break
+            }
+        }
+        
+        return formatted()
     }
     
     /// Whether the target node should be enveloped in parenthesis when printing.
     private func usesParenthesis(for node: Node) -> Bool {
         if let fun = node as? Function {
-            if let s1 = Operation.getSyntax(for: fun.name) {
-                if let s2 = Operation.getSyntax(for: name) {
-                    if s1.operator.priority < s2.operator.priority {
+            if let p1 = fun.syntax?.operator.priority {
+                if let p2 = syntax?.operator.priority {
+                    if p1 < p2 {
                         return true
                     }
                 }
@@ -92,7 +94,6 @@ public struct Function: Node {
     init(_ name: String, _ args: List) {
         self.name = name
         self.args = args
-        self.format = .function
         
         resolveDefinition()
     }
@@ -109,26 +110,11 @@ public struct Function: Node {
      */
     private mutating func resolveDefinition() {
         
-        // Resolve registered parametric operations
+        // Match function with registered operations
         if let op = Operation.resolve(name, args: args.elements) {
             self.operation = op
         }
         
-        // Extract parametric operations with the matching syntax requirements
-        func extract(_ position: Syntax.Position) -> [String] {
-            return Operation.registered
-                .filter{$0.syntax?.operator.position == position}
-                .map{$0.name}
-        }
-        
-        let infixes = extract(.infix)
-        let prefixes = extract(.prefix)
-        
-        if infixes.contains(name) {
-            format = .infix
-        } else if prefixes.contains(name) {
-            format = .prefix
-        }
     }
     
     /// Performs the operation defined by the function on the arguments.

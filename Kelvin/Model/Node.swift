@@ -50,15 +50,10 @@ public protocol Node: CustomStringConvertible {
 
 extension Node {
     
-    /// TODO: Implement order
     public func format() -> Node {
         return self.toAdditionOnlyForm()
             .toExponentialForm()
             .flatten()
-    }
-    
-    public func replacing(by replace: Unary, where predicament: (Node) -> Bool) -> Node {
-        return predicament(self) ? replace(self) : self
     }
     
 }

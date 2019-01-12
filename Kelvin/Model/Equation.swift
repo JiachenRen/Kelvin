@@ -210,7 +210,21 @@ public struct Equation: Node, NaN {
     }
     
     public var description: String {
-        return "\(lhs)=\(rhs)"
+        return "\(lhs) \(mode.rawValue) \(rhs)"
+    }
+    
+    /**
+     Replace the designated nodes identical to the node provided with the replacement
+     
+     - Parameter predicament: The condition that needs to be met for a node to be replaced
+     - Parameter replace:   A function that takes the old node as input (and perhaps
+     ignores it) and returns a node as replacement.
+     */
+    public func replacing(by replace: Unary, where predicament: (Node) -> Bool) -> Node {
+        var copy = self
+        copy.lhs = lhs.replacing(by: replace, where: predicament)
+        copy.rhs = rhs.replacing(by: replace, where: predicament)
+        return predicament(copy) ? replace(copy) : copy
     }
     
 }
