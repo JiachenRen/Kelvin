@@ -37,12 +37,13 @@ public struct Function: Node {
     var args: List {
         didSet {
             // Update the definition of the function because the signature changed!
-            resolveDefinition()
+            // Rebuild parent-child connections.
+            self = Function(name, args)
         }
     }
     
-    /// The definition of the function.
-    var def: Definition?
+    /// The operation that contains the definition of the function
+    var operation: Operation?
     
     /// The format of the function when represented as text
     var format: Format
@@ -50,19 +51,21 @@ public struct Function: Node {
     public var description: String {
         let r = args.elements
         let n = name
+        
         switch format {
         case .infix:
-            if let s = r.reduce(nil, {
-                $0 == nil ? "\($1)" : "\($0!) \(n) \($1)"
+            if let s = r.reduce(nil, {(a, b) -> String in
+                let p = usesParenthesis(for: b)
+                let b1 = p ? "(\(b))" : "\(b)"
+                return a == nil ? "\(b1)" : "\(a!) \(n) \(b1)"
             }) {
-                return "(\(s))"
+                return "\(s)"
             } else {
                 return ""
             }
         case .prefix where r.count == 1:
-            return "\(n) \(r[0])"
-        case .function:
-            fallthrough
+            let p = usesParenthesis(for: r[0])
+            return p ? "\(n) (\(r[0]))" : "\(n) \(r[0])"
         default:
             let l = r.map{$0.description}.reduce(nil){
                 $0 == nil ? "\($1)": "\($0!), \($1)"
@@ -72,10 +75,25 @@ public struct Function: Node {
         }
     }
     
+    /// Whether the target node should be enveloped in parenthesis when printing.
+    private func usesParenthesis(for node: Node) -> Bool {
+        if let fun = node as? Function {
+            if let s1 = Operation.getSyntax(for: fun.name) {
+                if let s2 = Operation.getSyntax(for: name) {
+                    if s1.operator.priority < s2.operator.priority {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
+    
     init(_ name: String, _ args: List) {
         self.name = name
         self.args = args
         self.format = .function
+        
         resolveDefinition()
     }
     
@@ -92,8 +110,8 @@ public struct Function: Node {
     private mutating func resolveDefinition() {
         
         // Resolve registered parametric operations
-        if let parOp = Operation.resolve(name, args: args.elements) {
-            def = parOp.def
+        if let op = Operation.resolve(name, args: args.elements) {
+            self.operation = op
         }
         
         // Extract parametric operations with the matching syntax requirements
@@ -115,7 +133,7 @@ public struct Function: Node {
     
     /// Performs the operation defined by the function on the arguments.
     func invoke() -> Node? {
-        return def?(args.elements)
+        return operation?.def(args.elements)
     }
     
     /**

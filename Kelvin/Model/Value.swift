@@ -37,7 +37,7 @@ extension Double: Value {
     
     /// If the double is an integer, convert it to an integer.
     public func simplify() -> Node {
-        return isInteger ? Int(self) : self
+        return Int(exactly: self) ?? self
     }
 }
 

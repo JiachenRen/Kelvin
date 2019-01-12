@@ -233,7 +233,7 @@ public class Operation: Equatable {
      - Parameter args: The arguments supplied to the operation
      - Returns: The parametric operation with matching signature, if found.
      */
-    static func resolve(_ name: String, args: [Node]) -> Operation? {
+    public static func resolve(_ name: String, args: [Node]) -> Operation? {
         let candidates = registered.filter{$0.name == name}
             // Operations with the smaller scope should be prioritized.
             .sorted{$0.scope < $1.scope}
@@ -283,6 +283,18 @@ public class Operation: Equatable {
         }
         
         return nil
+    }
+    
+    /**
+     Find the syntax for the operation w/ the speficied name.
+     The first operation that has syntax requirement w/ the given name is returned.
+     
+     - Parameter name: The name of the operation
+     - Returns: The syntax of the operation w/ the given name. 
+     */
+    public static func getSyntax(for name: String) -> Syntax? {
+        return registered.filter{$0.name == name && $0.syntax != nil}
+            .map{$0.syntax!}.first
     }
     
     /**
