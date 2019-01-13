@@ -35,7 +35,7 @@ public class Compiler {
     
     typealias Operator = Syntax.Operator
     
-    private static let specialSyntaxOperations = Operation.registered
+    private static let operationsWithSyntax = Operation.registered
         .filter {$0.syntax != nil}
         .map {($0, $0.syntax!)}
     
@@ -75,7 +75,7 @@ public class Compiler {
         }
         
         // Apply syntactic shorthands
-        specialSyntaxOperations.forEach {
+        operationsWithSyntax.forEach {
             let c = "\($0.1.operator)"
             let n = $0.0.name
             
@@ -95,8 +95,10 @@ public class Compiler {
                 // "a and b" becomes "a𑅰b";
                 expr = expr.replacingOccurrences(of: " \(n) ", with: "\(c)")
             case .postfix:
-                // TODO: Implement
-                break
+                // "5 degrees" becomes "5𑅰_"
+                // "a!" becomes "a!_"
+                expr = expr.replacingOccurrences(of: "\(c)", with: "\(c)_")
+                    .replacingOccurrences(of: " \(n)", with: "\(c)_")
             }
         }
     }
@@ -123,22 +125,36 @@ public class Compiler {
         
         // Replace functions generated from syntactic sugars with their
         // corrected names.
-        specialSyntaxOperations.forEach {tuple in
+        operationsWithSyntax.forEach {tuple in
             let (op, syntax) = tuple
             parent = parent.replacing(by: {Function(op.name, args($0))}) {
                 return name($0) == "\(syntax.operator)"
             }
             
-            // During compilation, prefix unary operations are converted to binary operations;
+            // During compilation, prefix and postfix unary operations are converted to binary operations;
             // This converts them back to unary operations
-            if syntax.operator.position == .prefix {
+            switch syntax.operator.position {
+            case .prefix:
                 parent = parent.replacing(by: {node in
                     var fun = node as! Function
+                    
+                    // Remove fist argument of prefix operation b/c it is a dummy
                     fun.args.elements.removeFirst()
                     return fun
                 }, where: {
                     name($0) == op.name && (args($0)[0] as? Variable)?.name == "_"
                 })
+            case .postfix:
+                parent = parent.replacing(by: {node in
+                    var fun = node as! Function
+                    
+                    // Remove second argument of postfix operation
+                    fun.args.elements.removeLast()
+                    return fun
+                }, where: {
+                    name($0) == op.name && (args($0)[1] as? Variable)?.name == "_"
+                })
+            default: break
             }
         }
         
@@ -152,11 +168,7 @@ public class Compiler {
             name($0) == "="
         }
         
-        
-        // Force update function definition
-        return parent.replacing(by: {Function(name($0)!, args($0))}){
-            $0 is Function
-        }
+        return parent
     }
     
     private static func resolve(_ expr: String, _ dict: inout NodeReference, _ binOps: OperatorReference) throws -> Node {

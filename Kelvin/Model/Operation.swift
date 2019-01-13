@@ -60,6 +60,23 @@ public class Operation: Equatable {
         .init("negate", [.number]) {u($0, -)},
         .init("sqrt", [.number]) {u($0, sqrt)},
         
+        // Postfix operations
+        .init("degrees", [.any], syntax:
+        .init(.postfix, priority: .exponent, operator: "°")) {
+            return Function("*", [Function("/", [$0[0], 180]), try! Variable("pi")]).format()
+        },
+        .init("factorial", [.number], syntax:
+        .init(.postfix, priority: .exponent, operator: "!")) {
+            if let i = Int(exactly: $0[0].evaluated!.doubleValue) {
+                return factorial(Double(i))
+            }
+            return "can only perform factorial on an integer"
+        },
+        .init("pct", [.any], syntax:
+        .init(.postfix, priority: .exponent)) {
+            return Function("/", [$0[0], 100])
+        },
+        
         // Equality, inequality, and equations
         .init("=", [.any, .any], syntax:
         .init(.infix, priority: .equation, operator: "=")) {
@@ -139,6 +156,7 @@ public class Operation: Equatable {
         },
         
         // List related operations
+        .init("list", [.universal]) {List($0)},
         .init("get", [.list, .number], syntax:
         .init(.infix)) {nodes in
             let list = nodes[0] as! List
@@ -343,6 +361,11 @@ fileprivate func log10(_ a: Double) -> Double {
 
 fileprivate func %(_ a: Double, _ b: Double) -> Double {
     return a.truncatingRemainder(dividingBy: b)
+}
+
+/// A very concise definition of factorial.
+fileprivate func factorial(_ n: Double) -> Double {
+    return n == 0 ? 1 : n * factorial(n - 1)
 }
 
 /**
