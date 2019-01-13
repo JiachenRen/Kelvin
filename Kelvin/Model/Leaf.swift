@@ -23,18 +23,6 @@ extension Leaf {
         return self
     }
     
-    public func toAdditionOnlyForm() -> Node {
-        return self
-    }
-    
-    public func toExponentialForm() -> Node {
-        return self
-    }
-    
-    public func flatten() -> Node {
-        return self
-    }
-    
     /**
      Replace the designated nodes identical to the node provided with the replacement
      

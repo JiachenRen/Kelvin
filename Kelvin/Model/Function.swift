@@ -8,8 +8,6 @@
 
 import Foundation
 
-typealias Definition = ([Node]) -> Node?
-
 public struct Function: Node {
     
     public var evaluated: Value? {
@@ -87,7 +85,7 @@ public struct Function: Node {
         if let fun = node as? Function {
             if let p1 = fun.syntax?.operator.priority {
                 if let p2 = syntax?.operator.priority {
-                    if p1 < p2 {
+                    if p1 <= p2 {
                         return true
                     }
                 }
@@ -152,7 +150,7 @@ public struct Function: Node {
         }
         
         // Simplify each argument, if requested.
-        if operation == nil || operation!.simplifiesArgs {
+        if !Operation.hasFlag(name, .preservesArguments) {
             copy.args = copy.args.simplify() as! List
         }
         
@@ -175,71 +173,17 @@ public struct Function: Node {
     }
     
     /**
-     Convert the expression to addition only form.
-     i.e. -(a,b)      -> +(a,negate(b))
-          -(-(a,b),c) -> +(+(a,negate(b)),negate(c))
-          -(a,-(b,c)) -> +(a,negate(+(b,negate(c))))
-     
-     - Returns: The additional form of the original expression
-     */
-    public func toAdditionOnlyForm() -> Node {
-        var copy = arguments{$0.toAdditionOnlyForm()}
-        if copy.name == "-" {
-            if args.elements.count == 2 {
-                // Change subtraction to addition
-                copy.name = "+"
-                let rhs = copy.args[1]
-                let negated = Function("negate", [rhs])
-                copy.args[1] = negated
-            } else {
-                copy.name = "negate"
-            }
-            return copy
-        }
-        return copy
-    }
-    
-    /**
-     Convert all divisions to exponential form.
-     e.g. a/b becomes a*b^(-1)
-     
-     - Returns: The exponential form of the original expression
-     */
-    public func toExponentialForm() -> Node {
-        var copy = arguments{$0.toExponentialForm()}
-        if copy.name == "/" {
-            assert(copy.args.elements.count == 2)
-            // Change division to multiplication
-            copy.name = "*"
-            let rhs = copy.args[1]
-            copy.args[1] = Function("^", [rhs, -1])
-        }
-        return copy
-    }
-    
-    /**
      Unravel the binary operation tree.
      e.g. +(d,+(+(a,b),c)) becomes +(a,b,c,d)
      
      - Warning: Before invoking this function, the expression should be in addtion only form.
                 Under normal circumstances, don't use this function.
      */
-    public func flatten() -> Node {
-        var copy = arguments{$0.flatten()} // Initial recursive call
-        switch copy.name {
-        case "negate":
-            assert(copy.args.elements.count == 1)
-            let nested = copy.args[0]
-            if var fun = nested as? Function {
-                if fun.name == "negate" {
-                    return fun.args[0]
-                } else if fun.name == "+" {
-                    fun.args.elements = fun.args.elements
-                        .map{Function("negate", [$0])}
-                    return fun.flatten()
-                }
-            }
-        case "+", "*":
+    public func flatten() -> Function {
+        var copy = arguments{($0 as? Function)?.flatten() ?? $0} // Initial recursive call
+        
+        // Flatten commutative operations
+        if Operation.hasFlag(copy.name, .isCommutative) {
             var newArgs = [Node]()
             copy.args.elements.forEach {arg in
                 if let fun = arg as? Function, fun.name == copy.name {
@@ -249,8 +193,8 @@ public struct Function: Node {
                 }
             }
             copy.args.elements = newArgs
-        default: break
         }
+        
         return copy
     }
     

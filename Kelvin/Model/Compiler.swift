@@ -39,7 +39,16 @@ public class Compiler {
         .filter {$0.syntax != nil}
         .map {($0, $0.syntax!)}
     
+    /// Definitions are loaded once - before the first compilation
+    private static var definitionsLoaded = false
+    
     public static func compile(_ expr: String) throws -> Node {
+        
+        // Load definitions before compilation.
+        if !definitionsLoaded {
+            Operation.reloadDefinitions()
+            definitionsLoaded = true
+        }
         
         // Remove lines
         var expr = expr.replacingOccurrences(of: "\n", with: "")

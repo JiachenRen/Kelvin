@@ -18,9 +18,9 @@ while true {
 //        print("     =: \(parent.simplify())")
 //        print("- -> +: \(parent.toAdditionOnlyForm())")
 //        print("/ -> *: \(parent.toExponentialForm())")
-        print("      # \(parent.format())")
-        print("      = \(parent.format().simplify())")
-        print("      ~ \(parent.format().evaluated ?? Double.nan)")
+        print("      # \(parent)")
+        print("      = \(parent.simplify())")
+        print("      ~ \(parent.evaluated ?? Double.nan)")
         print()
     } catch CompilerError.illegalArgument(let msg) {
         print("ERR >>> illegal argument: \(msg)")

@@ -176,18 +176,6 @@ public struct Equation: Node, NaN {
         return eq
     }
     
-    public func toAdditionOnlyForm() -> Node {
-        return perform{$0.toAdditionOnlyForm()}
-    }
-    
-    public func toExponentialForm() -> Node {
-        return perform{$0.toExponentialForm()}
-    }
-    
-    public func flatten() -> Node {
-        return perform{$0.flatten()}
-    }
-    
     /**
      Swap left hand side and right and side of the equation
      e.g. a+b=c -> c=a+b

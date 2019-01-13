@@ -27,21 +27,6 @@ public protocol Node: CustomStringConvertible {
     /// TODO: Implement Log
     func simplify() -> Node
     
-    /// Formats the expression for ease of computation
-    /// - Convert all subtraction to addition + negation
-    /// - Convert all division to multiplifications
-    /// - Flatten binary operation trees. i.e. (a+b)+c becomes a+b+c
-    func format() -> Node
-    
-    /// Convert all subtractions to additions
-    func toAdditionOnlyForm() -> Node
-    
-    /// Convert all divisions to multiplications and exponentiations
-    func toExponentialForm() -> Node
-    
-    /// Flatten binary operation trees
-    func flatten() -> Node
-    
     /**
      Replace the designated nodes identical to the node provided with the replacement
      
@@ -53,16 +38,6 @@ public protocol Node: CustomStringConvertible {
     
     /// - Returns: Whether the provided node is identical with self.
     func equals(_ node: Node) -> Bool
-}
-
-extension Node {
-    
-    public func format() -> Node {
-        return self.toAdditionOnlyForm()
-            .toExponentialForm()
-            .flatten()
-    }
-    
 }
 
 /// Infix shorthand for lhs.equals(rhs)

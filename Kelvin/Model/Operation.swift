@@ -25,210 +25,29 @@ public class Operation: Equatable {
         case equation = 5
         case any = 100
         case numbers = 1000
+        case booleans = 1001
         case universal = 10000 // Takes in any # of args.
     }
     
-    /**
-     Pre-defined operations with signatures that are resolved and assigned
-     to function definitions during compilation.
-     */
-    static var registered: [Operation] = [
+    /// Flags that denote special attributes for certain operations.
+    public enum Flag {
         
-        // Basic binary arithmetic
-        .init("+", [.numbers], syntax:
-        .init(.infix, priority: .addition, operator: "+")) {bin($0, +)},
-        .init("-", [.numbers], syntax:
-        .init(.infix, priority: .addition, operator: "-")) {bin($0, -)},
-        .init("*", [.numbers], syntax:
-        .init(.infix, priority: .product, operator: "*")) {bin($0, *)},
-        .init("/", [.numbers], syntax:
-        .init(.infix, priority: .product, operator: "/")) {bin($0, /)},
-        .init("mod", [.numbers], syntax:
-        .init(.infix, priority: .product, operator: "%")) {bin($0, %)},
-        .init("^", [.numbers], syntax:
-        .init(.infix, priority: .exponent, operator: "^")) {bin($0, pow)},
+        /// Debugging and flow control functions like "complexity" and "repeat"
+        /// should not simplify args before their execution.
+        case preservesArguments
         
-        // Basic unary transcendental functions
-        .init("log", [.number]) {u($0, log10)},
-        .init("log2", [.number]) {u($0, log2)},
-        .init("ln", [.number]) {u($0, log)},
-        .init("cos", [.number]) {u($0, cos)},
-        .init("sin", [.number]) {u($0, sin)},
-        .init("tan", [.number]) {u($0, tan)},
-        .init("int", [.number]) {u($0, floor)},
-        .init("round", [.number]) {u($0, round)},
-        .init("negate", [.number]) {u($0, -)},
-        .init("sqrt", [.number]) {u($0, sqrt)},
-        
-        // Postfix operations
-        .init("degrees", [.any], syntax:
-        .init(.postfix, priority: .exponent, operator: "°")) {
-            return Function("*", [Function("/", [$0[0], 180]), try! Variable("pi")]).format()
-        },
-        .init("factorial", [.number], syntax:
-        .init(.postfix, priority: .exponent, operator: "!")) {
-            if let i = Int(exactly: $0[0].evaluated!.doubleValue) {
-                return factorial(Double(i))
-            }
-            return "can only perform factorial on an integer"
-        },
-        .init("pct", [.any], syntax:
-        .init(.postfix, priority: .exponent)) {
-            return Function("/", [$0[0], 100])
-        },
-        
-        // Equality, inequality, and equations
-        .init("=", [.any, .any], syntax:
-        .init(.infix, priority: .equation, operator: "=")) {
-            return Equation(lhs: $0[0], rhs: $0[1])
-        },
-        .init("<", [.any, .any], syntax:
-        .init(.infix, priority: .equality, operator: "<")) {
-            return Equation(lhs: $0[0], rhs: $0[1], mode: .lessThan)
-        },
-        .init(">", [.any, .any], syntax:
-        .init(.infix, priority: .equality, operator: ">")) {
-            return Equation(lhs: $0[0], rhs: $0[1], mode: .greaterThan)
-        },
-        .init(">=", [.any, .any], syntax:
-        .init(.infix, priority: .equality, shorthand: ">=", operator: "≥")) {
-            return Equation(lhs: $0[0], rhs: $0[1], mode: .greaterThanOrEquals)
-        },
-        .init("<=", [.any, .any], syntax:
-        .init(.infix, priority: .equality, shorthand: "<=", operator: "≤")) {
-            return Equation(lhs: $0[0], rhs: $0[1], mode: .lessThanOrEquals)
-        },
-        .init("equals", [.any, .any], syntax:
-        .init(.infix, priority: .equality, shorthand: "==")) {nodes in
-            return nodes[0] === nodes[1]
-        },
-        
-        // Boolean logic and, or
-        .init("and", [.bool, .bool], syntax:
-        .init(.infix, priority: .and, shorthand: "&&")) {nodes in
-            return nodes.map{$0 as! Bool}
-                .reduce(true){$0 && $1}
-        },
-        .init("or", [.bool, .bool], syntax:
-        .init(.infix, priority: .or, shorthand: "||")) {nodes in
-            return nodes.map{$0 as! Bool}
-                .reduce(false){$0 || $1}
-        },
-        
-        // Variable/function definition and deletion
-        .init("define", [.equation], simplifiesArgs: false, syntax:
-        .init(.prefix, priority: .definition, shorthand: ":=")) {nodes in
-            if let err = (nodes[0] as? Equation)?.define() {
-                return err
-            }
-            return "done"
-        },
-        .init("define", [.any, .any], simplifiesArgs: false, syntax:
-        .init(.prefix)) {nodes in
-            return Function("define", [Equation(lhs: nodes[0], rhs: nodes[1])])
-        },
-        .init("del", [.var], syntax:
-        .init(.prefix)) {nodes in
-            if let v = nodes[0] as? Variable {
-                Variable.delete(v.name)
-                Operation.remove(v.name)
-                return "deleted '\(v.name)'"
-            }
-            return nil
-        },
-        
-        // Summation
-        .init("sum", [.list]) {nodes in
-            return Function("+", (nodes[0] as! List).elements)
-        },
-        .init("sum", [.universal]) {nodes in
-            return Function("+", nodes)
-        },
-        
-        // Random number generation
-        .init("random", []) {nodes in
-            return Double.random(in: 0...1)
-        },
-        .init("random", [.number, .number]) {nodes in
-            let lb = nodes[0].evaluated!.doubleValue
-            let ub = nodes[1].evaluated!.doubleValue
-            return Double.random(in: lb...ub)
-        },
-        
-        // List related operations
-        .init("list", [.universal]) {List($0)},
-        .init("get", [.list, .number], syntax:
-        .init(.infix)) {nodes in
-            let list = nodes[0] as! List
-            let idx = Int(nodes[1].evaluated!.doubleValue)
-            if idx >= list.elements.count {
-                return "error: index out of bounds"
-            } else {
-                return list[idx]
-            }
-        },
-        .init("size", [.list], syntax: .init(.prefix)) {
-            return ($0[0] as! List).elements.count
-        },
-        .init("map", [.list, .any], syntax:
-        .init(.infix, priority: .execution, operator: "|")) {nodes in
-            let list = nodes[0] as! List
-            let updated = list.elements.map {element in
-                nodes[1].replacing(by: {_ in element}) {
-                    ($0 as? Variable)?.name == "$"
-                }
-            }
-            return List(updated)
-        },
-        
-        // Average
-        .init("avg", [.list]) {nodes in
-            let l = (nodes[0] as! List).elements
-            return Function("/", [Function("+", l), l.count])
-                .format()
-        },
-        .init("avg", [.universal]) {nodes in
-            return Function("/", [Function("+", nodes), nodes.count])
-                .format()
-        },
-
-        // Consecutive execution, feed forward, flow control
-        .init("exec", [.universal], simplifiesArgs: false, syntax:
-        .init(.prefix, shorthand: ";")) {nodes in
-            return nodes.map{$0.simplify()}.last
-        },
-        .init("feed", [.any, .any], simplifiesArgs: false, syntax:
-        .init(.infix, shorthand: "->")) {nodes in
-            let simplified = nodes[0].simplify()
-            return nodes.last!.replacing(by: {_ in simplified}) {
-                ($0 as? Variable)?.name == "$"
-            }
-        },
-        .init("repeat", [.any, .number], simplifiesArgs: false, syntax:
-        .init(.infix, priority: .repeat)) {nodes in
-            let times = Int(nodes[1].evaluated!.doubleValue)
-            var elements = [Node]()
-            (0..<times).forEach{_ in elements.append(nodes[0])}
-            return List(elements)
-        },
-        .init("copy", [.any, .number], syntax:
-        .init(.infix, priority: .repeat)) {nodes in
-            return Function("repeat", nodes)
-        },
-        
-        // Developer/debug functions
-        .init("complexity", [.any], simplifiesArgs: false, syntax:
-        .init(.prefix)) {$0[0].complexity},
-        .init("eval", [.any], syntax: .init(.prefix)) {
-            $0[0].evaluated?.doubleValue ?? Double.nan
-        },
-    ]
+        /// Addition, multiplication, and boolean logic are all commutative
+        /// Commutative functions with the same name should only be marked once.
+        case isCommutative
+    }
     
-    let def: Definition
-    let name: String
-    let signature: [ArgumentType]
-    let syntax: Syntax?
-    var simplifiesArgs: Bool
+    /// Registered operations are resolved dynamically during runtime
+    /// and assigned to functions with matching signature as definitions.
+    static var registered = [Operation]()
+    
+    /// Use this dictionary to assign special attributes to operations.
+    /// e.g. since + and * are commutaive, the "commutative" flag should be assigned to them.
+    static var configuration = [Flag: [String]]()
     
     /// A value that represents the scope of the signature
     /// The larger the scope, the more universally applicable the function.
@@ -236,17 +55,52 @@ public class Operation: Equatable {
         return signature.reduce(0) {$0 + $1.rawValue}
     }
     
-    init(_ name: String, _ signature: [ArgumentType], simplifiesArgs: Bool = true, syntax: Syntax? = nil, definition: @escaping Definition) {
+    let def: Definition
+    let name: String
+    let signature: [ArgumentType]
+    let syntax: Syntax?
+    
+    init(_ name: String, _ signature: [ArgumentType], syntax: Syntax? = nil, definition: @escaping Definition) {
         self.name = name
         self.def = definition
         self.signature = signature
         self.syntax = syntax
-        self.simplifiesArgs = simplifiesArgs
     }
     
     /// Register the parametric operation.
-    static func register(_ parOp: Operation) {
-        registered.append(parOp)
+    public static func register(_ operation: Operation) {
+        registered.append(operation)
+        
+        if Operation.hasFlag(operation.name, .isCommutative) {
+            registerCommutativeDefinition(for: operation.name)
+        }
+    }
+    
+    /// Clear the existing registered operations, then
+    /// load the default definitions and configurations from Definitions.swift
+    public static func reloadDefinitions() {
+        
+        // Restore to default configuration
+        self.configuration = defaultConfig
+        
+        // Clear existing registrations
+        registered = []
+        
+        // Register default definitions
+        definitions.forEach{Operation.register($0)}
+    }
+    
+    /// Generate a commutative definition for the given name,
+    /// then register the definition.
+    private static func registerCommutativeDefinition(for name: String) {
+        let simplification = Operation(name, [.universal]) {
+            let before = Function(name, $0)
+            let tmp = before.flatten()
+            let after = Operation.simplifyCommutatively(tmp.args.elements, by: name)
+            return after.complexity < before.complexity ? after : nil
+        }
+        
+        registered.append(simplification)
     }
     
     /**
@@ -289,6 +143,8 @@ public class Operation: Equatable {
                     signature = [ArgumentType](repeating: .any, count: args.count)
                 case .numbers:
                     signature = [ArgumentType](repeating: .number, count: args.count)
+                case .booleans:
+                    signature = [ArgumentType](repeating: .booleans, count: args.count)
                 default: break
                 }
             }
@@ -327,6 +183,50 @@ public class Operation: Equatable {
     }
     
     /**
+     Commutatively simplify a list of arguments.
+     Suppose we have an expression, 1 + a + negate(1) + negate(a);
+     First, we check if 1 + a is simplifiable, in this case no.
+     Then, we check if 1 + negate(1) is simplifiable, if so,
+     simplify and put them back into the pool. At this point,
+     we have "a + negate(a) + 0", which then easily simplifies to 0.
+     
+     - Parameter nodes: The list of nodes to be commutatively simplified.
+     - Parameter fun: A function that performs binary simplification.
+     - Returns: A node resulting from the simplification.
+     */
+    private static func simplifyCommutatively(_ nodes: [Node], by fun: String) -> Node {
+        var nodes = nodes
+        
+        if nodes.count == 2 {
+            return Function(fun, nodes)
+        }
+        
+        for i in 0..<nodes.count - 1 {
+            let n = nodes.remove(at: i)
+            for j in i..<nodes.count {
+                let bin = Function(fun, [n, nodes[j]])
+                let simplified = bin.simplify()
+                
+                // If the junction of i and j can be simplified...
+                if simplified.complexity < bin.complexity {
+                    nodes.remove(at: j)
+                    nodes.append(simplified)
+                    
+                    // Commutatively simplify the updated list of nodes
+                    return simplifyCommutatively(nodes, by: fun)
+                }
+            }
+            
+            // Can't perform simplification w/ current node.
+            // Insert it back in and move on to the next.
+            nodes.insert(n, at: i)
+        }
+        
+        // Fully simplified. Reconstruct commutative operation and return.
+        return Function(fun, nodes)
+    }
+    
+    /**
      Find the syntax for the operation w/ the speficied name.
      The first operation that has syntax requirement w/ the given name is returned.
      
@@ -336,6 +236,16 @@ public class Operation: Equatable {
     public static func getSyntax(for name: String) -> Syntax? {
         return registered.filter{$0.name == name && $0.syntax != nil}
             .map{$0.syntax!}.first
+    }
+    
+    /**
+     - Parameters:
+        - name: The name of the function
+        - flag: The flag in question such as .isCommutaive
+     - Returns: Whether the function w/ the given name has the designated flag
+     */
+    public static func hasFlag(_ name: String, _ flag: Flag) -> Bool {
+        return configuration[flag]!.contains(name)
     }
     
     /**
@@ -361,109 +271,5 @@ public enum Priority: Int, Comparable {
     
     public static func < (lhs: Priority, rhs: Priority) -> Bool {
         return lhs.rawValue < rhs.rawValue
-    }
-}
-
-/// Numerical unary operation
-typealias NUnary = (Double) -> Double
-
-/// Numerical binary operation
-typealias NBinary = (Double, Double) -> Double
-
-fileprivate func bin(_ nodes: [Node], _ binary: NBinary) -> Double {
-    return nodes.map{$0.evaluated?.doubleValue ?? .nan}
-        .reduce(nil) {$0 == nil ? $1 : binary($0!, $1)}!
-}
-
-fileprivate func u(_ nodes: [Node], _ unary: NUnary) -> Double {
-    return unary(nodes[0].evaluated?.doubleValue ?? .nan)
-}
-
-fileprivate func log10(_ a: Double) -> Double {
-    return log(a) / log(10)
-}
-
-fileprivate func %(_ a: Double, _ b: Double) -> Double {
-    return a.truncatingRemainder(dividingBy: b)
-}
-
-/// A very concise definition of factorial.
-fileprivate func factorial(_ n: Double) -> Double {
-    return n == 0 ? 1 : n * factorial(n - 1)
-}
-
-/**
- This defines the syntax that the operation uses.
- For the function with signature "define(f(x)=x^2)",
- the prefix syntax is "define f(x)=x^2".
- 
- The infix syntax, on the other hand, only applies to
- functions that take in two arguments.
- e.g. the function "and(a,b)" can be invoked with "a and b"
- */
-public struct Syntax {
-    
-    enum Position {
-        case prefix
-        case infix
-        case postfix
-    }
-    
-    /// The shorthand for the operation.
-    /// e.g. && for "and", and || for "or"
-    var shorthand: String?
-    
-    /// A single character that represents the operation.
-    var `operator`: Operator
-    
-    struct Operator: CustomStringConvertible {
-        
-        /// The syntactic position of the operator, either prefix, postfic, or infix
-        var position: Position
-        
-        /// The priority of the operator
-        var priority: Priority
-        
-        /// A single character is used to represent the operation;
-        /// By doing so, the compiler can treat the operation like +,-,*,/, and so on.
-        var code: Character
-        
-        var description: String {
-            return "\(code)"
-        }
-        
-        init(_ position: Position, _ priority: Priority, _ code: Character) {
-            self.position = position
-            self.priority = priority
-            self.code = code
-        }
-    }
-    
-    /// A unicode scalar value that would never interfere with input
-    /// In this case, the scalar value (and the ones after)
-    /// does not have any unicode counterparts
-    static var scalar = 60000
-    
-    /// A dictionary that automatically keeps track of operators.
-    static var operators = [Character: Operator]()
-    
-    init(_ position: Position, priority: Priority = .execution, shorthand: String? = nil, operator: Character? = nil) {
-        
-        self.shorthand = shorthand
-        
-        // Assign a unique operator to the operation consisting of
-        // a single character that does not exist in any language.
-        let code = `operator` ?? Character(UnicodeScalar(Syntax.scalar)!)
-        self.operator = Operator(position, priority, code)
-        
-        
-        // Make sure the operator is currently undefined
-        assert(Syntax.operators[code] == nil)
-        
-        // Register the operator
-        Syntax.operators[code] = self.operator
-        
-        // Increment the scalar so that each operator is unique.
-        Syntax.scalar += 1
     }
 }

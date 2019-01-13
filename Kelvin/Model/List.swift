@@ -50,21 +50,6 @@ public struct List: Node, NaN {
         return List(elements.map{$0.simplify()})
     }
     
-    /// Convert all subtractions to additions
-    public func toAdditionOnlyForm() -> Node {
-        return List(elements.map{$0.toAdditionOnlyForm()})
-    }
-    
-    /// Convert all divisions to multiplications and exponentiations
-    public func toExponentialForm() -> Node {
-        return List(elements.map{$0.toExponentialForm()})
-    }
-    
-    /// Flatten binary operation trees
-    public func flatten() -> Node {
-        return List(elements.map{$0.flatten()})
-    }
-    
     /// The ordering of the list does not matter, i.e. {1,2,3} is considered
     /// the same as {3,2,1}.
     /// - Returns: Whether the provided node is loosely identical to self.
