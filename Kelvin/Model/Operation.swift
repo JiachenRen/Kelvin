@@ -144,7 +144,7 @@ public class Operation: Equatable {
                 case .numbers:
                     signature = [ArgumentType](repeating: .number, count: args.count)
                 case .booleans:
-                    signature = [ArgumentType](repeating: .booleans, count: args.count)
+                    signature = [ArgumentType](repeating: .bool, count: args.count)
                 default: break
                 }
             }
