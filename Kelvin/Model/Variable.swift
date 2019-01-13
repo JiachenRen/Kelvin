@@ -15,7 +15,8 @@ public struct Variable: Leaf, NaN {
     
     static var definitions: [String: Node] = [
         "e": M_E,
-        "pi": Double.pi
+        "pi": Double.pi,
+        "inf": Double.infinity,
     ]
     
     /// The name of the variable

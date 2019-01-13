@@ -146,8 +146,10 @@ public struct Function: Node {
             return Function(name, args)
         }
         
-        // First simplify each argument, if possible.
-        copy.args = copy.args.simplify() as! List
+        // Simplify each argument, if requested.
+        if operation == nil || operation!.simplifiesArgs {
+            copy.args = copy.args.simplify() as! List
+        }
         
         // If the operation can be performed on the given arguments, perform the operation.
         // Then, the result of the operation is simplified;

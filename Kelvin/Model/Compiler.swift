@@ -40,7 +40,9 @@ public class Compiler {
         .map {($0, $0.syntax!)}
     
     public static func compile(_ expr: String) throws -> Node {
-        var expr = expr
+        
+        // Remove lines
+        var expr = expr.replacingOccurrences(of: "\n", with: "")
         
         // Validate the expression
         try validate(expr)

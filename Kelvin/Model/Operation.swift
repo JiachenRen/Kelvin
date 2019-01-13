@@ -116,14 +116,14 @@ public class Operation: Equatable {
         },
         
         // Variable/function definition and deletion
-        .init("define", [.equation], syntax:
+        .init("define", [.equation], simplifiesArgs: false, syntax:
         .init(.prefix, priority: .definition, shorthand: ":=")) {nodes in
             if let err = (nodes[0] as? Equation)?.define() {
                 return err
             }
             return "done"
         },
-        .init("define", [.any, .any], syntax:
+        .init("define", [.any, .any], simplifiesArgs: false, syntax:
         .init(.prefix)) {nodes in
             return Function("define", [Equation(lhs: nodes[0], rhs: nodes[1])])
         },
@@ -167,9 +167,18 @@ public class Operation: Equatable {
                 return list[idx]
             }
         },
-        .init("size", [.list], syntax:
-        .init(.prefix)) {nodes in
-            return (nodes[0] as! List).elements.count
+        .init("size", [.list], syntax: .init(.prefix)) {
+            return ($0[0] as! List).elements.count
+        },
+        .init("map", [.list, .any], syntax:
+        .init(.infix, priority: .execution, operator: "|")) {nodes in
+            let list = nodes[0] as! List
+            let updated = list.elements.map {element in
+                nodes[1].replacing(by: {_ in element}) {
+                    ($0 as? Variable)?.name == "$"
+                }
+            }
+            return List(updated)
         },
         
         // Average
@@ -184,18 +193,19 @@ public class Operation: Equatable {
         },
 
         // Consecutive execution, feed forward, flow control
-        .init("exec", [.universal], syntax:
+        .init("exec", [.universal], simplifiesArgs: false, syntax:
         .init(.prefix, shorthand: ";")) {nodes in
-            return nodes.last
+            return nodes.map{$0.simplify()}.last
         },
-        .init("feed", [.any, .any], syntax:
+        .init("feed", [.any, .any], simplifiesArgs: false, syntax:
         .init(.infix, shorthand: ">>")) {nodes in
-            return nodes.last!.replacing(by: {_ in nodes[0]}) {
+            let simplified = nodes[0].simplify()
+            return nodes.last!.replacing(by: {_ in simplified}) {
                 ($0 as? Variable)?.name == "$"
             }
         },
-        .init("repeat", [.any, .number], syntax:
-        .init(.infix)) {nodes in
+        .init("repeat", [.any, .number], simplifiesArgs: false, syntax:
+        .init(.infix, priority: .repeat)) {nodes in
             let times = Int(nodes[1].evaluated!.doubleValue)
             var elements = [Node]()
             (0..<times).forEach{_ in elements.append(nodes[0])}
@@ -207,6 +217,7 @@ public class Operation: Equatable {
     let name: String
     let signature: [ArgumentType]
     let syntax: Syntax?
+    var simplifiesArgs: Bool
     
     /// A value that represents the scope of the signature
     /// The larger the scope, the more universally applicable the function.
@@ -214,11 +225,12 @@ public class Operation: Equatable {
         return signature.reduce(0) {$0 + $1.rawValue}
     }
     
-    init(_ name: String, _ signature: [ArgumentType], syntax: Syntax? = nil, definition: @escaping Definition) {
+    init(_ name: String, _ signature: [ArgumentType], simplifiesArgs: Bool = true, syntax: Syntax? = nil, definition: @escaping Definition) {
         self.name = name
         self.def = definition
         self.signature = signature
         self.syntax = syntax
+        self.simplifiesArgs = simplifiesArgs
     }
     
     /// Register the parametric operation.
@@ -327,6 +339,7 @@ public class Operation: Equatable {
 public enum Priority: Int, Comparable {
     case execution = 1  // ;, >>
     case definition     // :=
+    case `repeat`       // repeat
     case equation       // =
     case or             // ||
     case and            // &&
