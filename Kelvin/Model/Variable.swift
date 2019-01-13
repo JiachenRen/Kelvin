@@ -44,6 +44,11 @@ public struct Variable: Leaf, NaN {
         return definition?.evaluated
     }
     
+    /// Variables have a complexity of 2.
+    public var complexity: Int {
+        return 2
+    }
+    
     init(_ name: String) throws {
         
         // Check if the variable name is valid

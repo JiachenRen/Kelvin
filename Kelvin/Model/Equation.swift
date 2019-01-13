@@ -213,6 +213,11 @@ public struct Equation: Node, NaN {
         return "\(lhs) \(mode.rawValue) \(rhs)"
     }
     
+    /// Complexity of the equation is the sum of the complexity of both sides + 1.
+    public var complexity: Int {
+        return lhs.complexity + rhs.complexity + 1
+    }
+    
     /**
      Replace the designated nodes identical to the node provided with the replacement
      

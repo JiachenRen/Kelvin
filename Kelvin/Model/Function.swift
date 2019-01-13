@@ -16,6 +16,11 @@ public struct Function: Node {
         return invoke()?.evaluated
     }
     
+    /// Complexity of the function is the complexity of the List of args + 1.
+    public var complexity: Int {
+        return args.complexity + 1
+    }
+    
     /// The name of the function
     var name: String {
         didSet {

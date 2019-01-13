@@ -13,6 +13,11 @@ public protocol Leaf: Node {
 
 extension Leaf {
     
+    /// Leaf nodes have a complexity of 1
+    public var complexity: Int {
+        return 1
+    }
+    
     /// Leaf nodes cannot be further simplified by definition.
     public func simplify() -> Node {
         return self

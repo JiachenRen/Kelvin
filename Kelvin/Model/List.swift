@@ -12,6 +12,11 @@ public struct List: Node, NaN {
     
     var elements: [Node]
     
+    /// Complexity of the list is the complexity of all its elements + 1.
+    public var complexity: Int {
+        return elements.reduce(0){$0 + $1.complexity} + 1
+    }
+    
     public var description: String {
         let pars = elements.map {$0.description}.reduce(nil) {
             $0 == nil ? "\($1)": "\($0!), \($1)"

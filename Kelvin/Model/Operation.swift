@@ -198,7 +198,7 @@ public class Operation: Equatable {
             return nodes.map{$0.simplify()}.last
         },
         .init("feed", [.any, .any], simplifiesArgs: false, syntax:
-        .init(.infix, shorthand: ">>")) {nodes in
+        .init(.infix, shorthand: "->")) {nodes in
             let simplified = nodes[0].simplify()
             return nodes.last!.replacing(by: {_ in simplified}) {
                 ($0 as? Variable)?.name == "$"
@@ -210,6 +210,17 @@ public class Operation: Equatable {
             var elements = [Node]()
             (0..<times).forEach{_ in elements.append(nodes[0])}
             return List(elements)
+        },
+        .init("copy", [.any, .number], syntax:
+        .init(.infix, priority: .repeat)) {nodes in
+            return Function("repeat", nodes)
+        },
+        
+        // Developer/debug functions
+        .init("complexity", [.any], simplifiesArgs: false, syntax:
+        .init(.prefix)) {$0[0].complexity},
+        .init("eval", [.any], syntax: .init(.prefix)) {
+            $0[0].evaluated?.doubleValue ?? Double.nan
         },
     ]
     
