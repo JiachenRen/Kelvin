@@ -50,3 +50,26 @@ public func !==(_ lhs: Node, _ rhs: Node) -> Bool {
     return !(lhs === rhs)
 }
 
+public func +(_ lhs: Node, _ rhs: Node) -> Node {
+    return Function("+", [lhs, rhs])
+}
+
+public func -(_ lhs: Node, _ rhs: Node) -> Node {
+    return Function("-", [lhs, rhs])
+}
+
+public func ^(_ lhs: Node, _ rhs: Node) -> Node {
+    return Function("^", [lhs, rhs])
+}
+
+public func *(_ lhs: Node, _ rhs: Node) -> Node {
+    return Function("*", [lhs, rhs])
+}
+
+public func /(_ lhs: Node, _ rhs: Node) -> Node {
+    return Function("/", [lhs, rhs])
+}
+
+public prefix func -(_ arg: Node) -> Node {
+    return Function("negate", [arg])
+}

@@ -80,13 +80,25 @@ public struct Function: Node {
         return formatted()
     }
     
-    /// Whether the target node should be enveloped in parenthesis when printing.
-    private func usesParenthesis(for node: Node) -> Bool {
-        if let fun = node as? Function {
+    /**
+     Whether the child node should be enveloped in parenthesis when printing.
+     If the parent and the child are both commutative and have the same name,
+     then the parenthesis for the child is omitted; otherwise if the child's
+     priority is larger than that of the parent, the parenthesis is also omitted.
+     
+     - Note: Parentheses only apply to infix operations.
+     - Parameter child: A child node of this function
+     - Returns: Whether a parenthesis should be used for the child when printing.
+     */
+    private func usesParenthesis(for child: Node) -> Bool {
+        if let fun = child as? Function {
             if let p1 = fun.syntax?.operator.priority {
                 if let p2 = syntax?.operator.priority {
-                    if p1 <= p2 {
+                    if p1 < p2 {
                         return true
+                    } else if p1 == p2 {
+                        let isCommutative = Operation.hasFlag(name, .isCommutative)
+                        return !isCommutative || name != fun.name
                     }
                 }
             }
@@ -154,6 +166,16 @@ public struct Function: Node {
             copy.args = copy.args.simplify() as! List
         }
         
+        // If the function is commutative, then try simplifying in reverse order as well.
+        if Operation.hasFlag(name, .isCommutative) {
+            if let s = copy.invoke()?.simplify() {
+                return s
+            } else {
+                let elements = copy.args.elements.reversed()
+                copy.args = List(Array(elements))
+            }
+        }
+        
         // If the operation can be performed on the given arguments, perform the operation.
         // Then, the result of the operation is simplified;
         // otherwise returns a copy of the original function with each argument simplified.
@@ -199,9 +221,16 @@ public struct Function: Node {
     }
     
     /// Functions are equal to each other if their name and arguments are the same
+    /// Commutative functions are equal to each other if they have the same elements -
+    /// that is, regardless of the order they are in.
     public func equals(_ node: Node) -> Bool {
         if let fun = node as? Function {
-            return fun.name == name && List.strictlyEquals(args, fun.args)
+            if fun.name == name {
+                if Operation.hasFlag(name, .isCommutative) {
+                    return fun.args === args
+                }
+                return List.strictlyEquals(args, fun.args)
+            }
         }
         return false
     }

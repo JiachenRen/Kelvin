@@ -20,29 +20,61 @@ public let definitions: [Operation] = [
     .init("+", [.numbers], syntax:
     .init(.infix, priority: .addition, operator: "+")) {bin($0, +)},
     .init("+", [.var, .var]) {
-        return ($0[0] as! Variable).name == ($0[1] as! Variable).name ?
-            Function("*", [2, $0[0]]) : nil
+        $0[0] === $0[1] ? 2 * $0[0] : nil
     },
     
     .init("-", [.numbers], syntax:
     .init(.infix, priority: .addition, operator: "-")) {bin($0, -)},
     .init("-", [.any, .any]) {
-        return Function("+", [$0[0], Function("negate", [$0[1]])])
+        if $0[0] === $0[1] {
+            return 0
+        }
+        return $0[0] + -$0[1]
     },
     
     .init("*", [.numbers], syntax:
     .init(.infix, priority: .product, operator: "*")) {bin($0, *)},
+    .init("*", [.var, .var]) {
+        $0[0] === $0[1] ? $0[0] ^ 2 : nil
+    },
+    .init("*", [.var, .func]) {
+        let fun = $0[1] as! Function
+        let v = $0[0] as! Variable
+        switch fun.name {
+        case "^" where fun.args[0] === v:
+            return v ^ (fun.args[1] + 1)
+        default: break
+        }
+        return nil
+    },
     
     .init("/", [.numbers], syntax:
     .init(.infix, priority: .product, operator: "/")) {bin($0, /)},
     .init("/", [.any, .any]) {
-        Function("*", [$0[0], Function("^", [$0[1], -1])])
+        if $0[0] === $0[1] {
+            return 1
+        }
+        return $0[0] * ($0[1] ^ -1)
     },
     
     .init("mod", [.numbers], syntax:
     .init(.infix, priority: .product, operator: "%")) {bin($0, %)},
     .init("^", [.numbers], syntax:
     .init(.infix, priority: .exponent, operator: "^")) {bin($0, pow)},
+    .init("^", [.nan, .number]) {
+        if let n = $0[1] as? Int {
+            switch n {
+            case 0: return 1
+            case 1: return $0[0]
+            default: break
+            }
+        }
+        return nil
+    },
+    .init("^", [.number, .nan]) {
+        $0[0] === 0 ? 0 : nil
+    },
+    
     
     // Basic unary transcendental functions
     .init("log", [.number]) {u($0, log10)},
@@ -59,8 +91,7 @@ public let definitions: [Operation] = [
         if fun.name == "negate" {
             return fun.args[0]
         } else if fun.name == "+" {
-            fun.args.elements = fun.args.elements
-                .map{Function("negate", [$0])}
+            fun.args.elements = fun.args.elements.map{-$0}
             return fun.flatten()
         }
         return nil
@@ -70,7 +101,7 @@ public let definitions: [Operation] = [
     // Postfix operations
     .init("degrees", [.any], syntax:
     .init(.postfix, priority: .exponent, operator: "°")) {
-        return Function("*", [Function("/", [$0[0], 180]), try! Variable("pi")])
+        return $0[0] / 180 * v("pi")
     },
     .init("factorial", [.number], syntax:
     .init(.postfix, priority: .exponent, operator: "!")) {
@@ -81,7 +112,7 @@ public let definitions: [Operation] = [
     },
     .init("pct", [.any], syntax:
     .init(.postfix, priority: .exponent)) {
-        return Function("/", [$0[0], 100])
+        return $0[0] / 100
     },
     
     // Equality, inequality, and equations
@@ -139,7 +170,7 @@ public let definitions: [Operation] = [
         if let v = nodes[0] as? Variable {
             Variable.delete(v.name)
             Operation.remove(v.name)
-            return "deleted '\(v.name)'"
+            return "deleted '\(v)'"
         }
         return nil
     },
@@ -182,7 +213,7 @@ public let definitions: [Operation] = [
         let list = nodes[0] as! List
         let updated = list.elements.map {element in
             nodes[1].replacing(by: {_ in element}) {
-                ($0 as? Variable)?.name == "$"
+                $0 === v("$")
             }
         }
         return List(updated)
@@ -191,10 +222,10 @@ public let definitions: [Operation] = [
     // Average
     .init("avg", [.list]) {nodes in
         let l = (nodes[0] as! List).elements
-        return Function("/", [Function("+", l), l.count])
+        return Function("+", l) / l.count
     },
     .init("avg", [.universal]) {nodes in
-        return Function("/", [Function("+", nodes), nodes.count])
+        return Function("+", nodes) / nodes.count
     },
     
     // Consecutive execution, feed forward, flow control
@@ -206,7 +237,7 @@ public let definitions: [Operation] = [
     .init(.infix, shorthand: ">>")) {nodes in
         let simplified = nodes[0].simplify()
         return nodes.last!.replacing(by: {_ in simplified}) {
-            ($0 as? Variable)?.name == "$"
+            $0 === v("$")
         }
     },
     .init("repeat", [.any, .number], syntax:
@@ -250,6 +281,10 @@ typealias NUnary = (Double) -> Double
 
 /// Numerical binary operation
 typealias NBinary = (Double, Double) -> Double
+
+fileprivate func v(_ n: String) -> Variable {
+    return try! Variable(n)
+}
 
 fileprivate func bin(_ nodes: [Node], _ binary: NBinary) -> Double {
     return nodes.map{$0.evaluated?.doubleValue ?? .nan}
