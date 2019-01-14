@@ -28,8 +28,6 @@ public let definitions: [Operation] = [
     .init("+", [.any, .func]) {
         let fun = $0[1] as! Function
         switch fun.name {
-        case "negate" where $0[0] === fun.args[0]:
-            return 0
         case "*":
             var args = fun.args.elements
             for (i, arg) in args.enumerated() {
@@ -58,10 +56,9 @@ public let definitions: [Operation] = [
         if f1.name == f2.name {
             switch f1.name {
             case "*":
-                let p: PUnary = {$0 is NSNumber}
-                if f1.contains(where: p, depth: 1) && f2.contains(where: p, depth: 1) {
-                    let (n1, r1) = f1.args.split(by: p)
-                    let (n2, r2) = f2.args.split(by: p)
+                if f1.contains(where: isNumber, depth: 1) && f2.contains(where: isNumber, depth: 1) {
+                    let (n1, r1) = f1.args.split(by: isNumber)
+                    let (n2, r2) = f2.args.split(by: isNumber)
                     if **r1 === **r2 {
                         return **r1 * (**n1 + **n2)
                     }
@@ -94,9 +91,6 @@ public let definitions: [Operation] = [
         switch fun.name {
         case "^" where fun.args[0] === v:
             return v ^ (fun.args[1] + 1)
-        case "negate":
-            assert(fun.args.count == 1)
-            return -(v * fun.args[0])
         default:
             break
         }
@@ -115,6 +109,17 @@ public let definitions: [Operation] = [
             }
         }
         return nil
+    },
+    .init("*", [.any, .number]) {
+        let n = $0[1] as! NSNumber
+        switch n {
+        case 0:
+            return 0
+        case 1:
+            return $0[0]
+        default:
+            return nil
+        }
     },
     
     .init("/", [.number, .number], syntax:
@@ -146,16 +151,22 @@ public let definitions: [Operation] = [
     .init("^", [.func, .any]) {
         let fun = $0[0] as! Function
         switch fun.name {
-        case "negate":
-            return (-1 ^ $0[1]) * (fun.args[0] ^ $0[1])
         case "*":
             let p: PUnary = {$0 is NSNumber}
             if fun.contains(where: p, depth: 1) && p($0[1]) {
                 let (nums, nans) = fun.args.split(by: p)
-                let m = nums.reduce(1){$0.doubleValue * $1.evaluated!.doubleValue}
-                let n = pow(m, $0[1].evaluated!.doubleValue)
-                return n * (**nans ^ $0[1])
+                return (**nums ^ $0[1]) * (**nans ^ $0[1])
             }
+        default: break
+        }
+        return nil
+    },
+    .init("^", [.number, .func]) {
+        let fun = $0[1] as! Function
+        switch fun.name {
+        case "*" where fun.args.contains(where: isNumber, depth: 1):
+            let (nums, nans) = fun.args.split(by: isNumber)
+            return ($0[0] ^ **nums) * ($0[0] ^ **nans)
         default: break
         }
         return nil
@@ -178,21 +189,17 @@ public let definitions: [Operation] = [
         case "nagate":
             return fun.args[0]
         case "+":
-            fun.args.elements = fun.args.elements.map{-$0}
+            fun.args.elements = fun.args.elements.map{$0 * -1}
             return fun.flatten()
         case "*":
             var args = fun.args.elements
-            for (i, arg) in args.enumerated() {
-                if arg is NSNumber {
-                    args.remove(at: i)
-                    args.append(-arg)
-                    return Function("*", args)
-                }
-            }
+            args.append(-1)
+            return Function("*", args)
         default: break
         }
         return nil
     },
+    .init("negate", [.var]){$0[0] * -1},
     .init("sqrt", [.number]) {u($0, sqrt)},
     
     // Postfix operations
@@ -378,6 +385,8 @@ typealias NUnary = (Double) -> Double
 
 /// Numerical binary operation
 typealias NBinary = (Double, Double) -> Double
+
+fileprivate let isNumber: PUnary = {$0 is NSNumber}
 
 fileprivate func v(_ n: String) -> Variable {
     return try! Variable(n)
