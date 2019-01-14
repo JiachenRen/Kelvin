@@ -71,10 +71,6 @@ public class Operation: Equatable {
     /// Register the parametric operation.
     public static func register(_ operation: Operation) {
         registered.append(operation)
-        
-        if Operation.hasFlag(operation.name, .isCommutative) {
-            registerCommutativeDefinition(for: operation.name)
-        }
     }
     
     /// Clear the existing registered operations, then
@@ -89,19 +85,6 @@ public class Operation: Equatable {
         
         // Register default definitions
         definitions.forEach{Operation.register($0)}
-    }
-    
-    /// Generate a commutative definition for the given name,
-    /// then register the definition.
-    private static func registerCommutativeDefinition(for name: String) {
-        let simplification = Operation(name, [.universal]) {
-            let before = Function(name, $0)
-            let tmp = before.flatten()
-            let after = Operation.simplifyCommutatively(tmp.args.elements, by: name)
-            return after.complexity < before.complexity ? after : nil
-        }
-        
-        registered.append(simplification)
     }
     
     /**
@@ -127,12 +110,14 @@ public class Operation: Equatable {
      
      - Parameter name: The name of the operation
      - Parameter args: The arguments supplied to the operation
-     - Returns: The parametric operation with matching signature, if found.
+     - Returns: A list of operations with matching signature, sorted in order of increasing scope.
      */
-    public static func resolve(_ name: String, args: [Node]) -> Operation? {
+    public static func resolve(_ name: String, args: [Node]) -> [Operation] {
         let candidates = registered.filter{$0.name == name}
             // Operations with the smaller scope should be prioritized.
             .sorted{$0.scope < $1.scope}
+        
+        var matching = [Operation]()
         
         candLoop: for cand in candidates {
             var signature = cand.signature
@@ -179,10 +164,11 @@ public class Operation: Equatable {
                 default: continue
                 }
             }
-            return cand
+            
+            matching.append(cand)
         }
         
-        return nil
+        return matching
     }
     
     /**
@@ -197,7 +183,7 @@ public class Operation: Equatable {
      - Parameter fun: A function that performs binary simplification.
      - Returns: A node resulting from the simplification.
      */
-    private static func simplifyCommutatively(_ nodes: [Node], by fun: String) -> Node {
+    public static func simplifyCommutatively(_ nodes: [Node], by fun: String) -> Node {
         var nodes = nodes
         
         func simplifyBidirectionally(_ nodes: [Node]) -> Node? {
@@ -225,7 +211,7 @@ public class Operation: Equatable {
         if nodes.count == 2 {
             
             // Reverse the order of arguments and simplify again!
-            return Function(fun, nodes.reversed())
+            return Function(fun, nodes.reversed()).simplify()
         }
         
         for i in 0..<nodes.count - 1 {

@@ -37,9 +37,9 @@ public struct Function: Node {
         }
     }
     
-    /// The operation that contains the definition of the function
-    /// - Note: An operation only exists when the arguments match the requirements
-    var operation: Operation?
+    /// Operations contain definitions that define what the function does.
+    /// - Note: Operations only exists when the arguments match the requirements
+    var operations = [Operation]()
     
     /// The syntax of the function (derived from just the name)
     var syntax: Syntax? {
@@ -126,15 +126,18 @@ public struct Function: Node {
     private mutating func resolveDefinition() {
         
         // Match function with registered operations
-        if let op = Operation.resolve(name, args: args.elements) {
-            self.operation = op
-        }
-        
+        self.operations = Operation.resolve(name, args: args.elements)
     }
     
     /// Performs the operation defined by the function on the arguments.
+    /// The first successful result acquired is returned.
     func invoke() -> Node? {
-        return operation?.def(args.elements)
+        for operation in operations {
+            if let result = operation.def(args.elements) {
+                return result
+            }
+        }
+        return nil
     }
     
     /**
@@ -166,20 +169,36 @@ public struct Function: Node {
             copy.args = copy.args.simplify() as! List
         }
         
-        // If the function is commutative, then try simplifying in reverse order as well.
-        if Operation.hasFlag(name, .isCommutative) {
-            if let s = copy.invoke()?.simplify() {
-                return s
-            } else {
-                let elements = copy.args.elements.reversed()
-                copy.args = List(Array(elements))
-            }
-        }
-        
         // If the operation can be performed on the given arguments, perform the operation.
         // Then, the result of the operation is simplified;
         // otherwise returns a copy of the original function with each argument simplified.
-        return copy.invoke()?.simplify() ?? copy
+        if let s = copy.invoke()?.simplify() {
+            return s
+        } else if Operation.hasFlag(name, .isCommutative) {
+            // If the function is commutative, then reverse the order or args.
+            copy.reverse()
+            
+            // Try simplifying in the reserve order.
+            if let s = copy.invoke()?.simplify() {
+                return s
+            }
+            
+            // If still didn't work, try commutative simplification.
+            let tmp = copy.flatten()
+            
+            if tmp.args.elements.count > 2 {
+                let after = Operation.simplifyCommutatively(tmp.args.elements, by: name)
+                return after.complexity < copy.complexity ? after : tmp
+            }
+        }
+        
+        // Cannot be further simplified
+        return copy
+    }
+    
+    /// Reverse the order of arguments.
+    private mutating func reverse() {
+        args.elements = args.elements.reversed()
     }
     
     /**

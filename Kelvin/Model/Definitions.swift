@@ -17,13 +17,42 @@ typealias Definition = ([Node]) -> Node?
 public let definitions: [Operation] = [
     
     // Basic binary arithmetic
-    .init("+", [.numbers], syntax:
+    .init("+", [.number, .number], syntax:
     .init(.infix, priority: .addition, operator: "+")) {bin($0, +)},
-    .init("+", [.var, .var]) {
+    .init("+", [.any, .any]) {
         $0[0] === $0[1] ? 2 * $0[0] : nil
     },
+    .init("+", [.number, .nan]) {
+        $0[0] === 0 ? $0[1] : nil
+    },
+    .init("+", [.any, .func]) {
+        let fun = $0[1] as! Function
+        switch fun.name {
+        case "negate" where $0[0] === fun.args[0]:
+            return 0
+        case "*":
+            var args = fun.args.elements
+            for (i, arg) in args.enumerated() {
+                if arg === $0[0] {
+                    let a = args.remove(at: i)
+                    if args.count != 1 {
+                        continue
+                    }
+                    let n = args[0] + 1
+                    let s = n.simplify()
+                    if s.complexity < n.complexity {
+                        return s * $0[0]
+                    } else {
+                        return nil
+                    }
+                }
+            }
+        default: break
+        }
+        return nil
+    },
     
-    .init("-", [.numbers], syntax:
+    .init("-", [.number, .number], syntax:
     .init(.infix, priority: .addition, operator: "-")) {bin($0, -)},
     .init("-", [.any, .any]) {
         if $0[0] === $0[1] {
@@ -32,7 +61,7 @@ public let definitions: [Operation] = [
         return $0[0] + -$0[1]
     },
     
-    .init("*", [.numbers], syntax:
+    .init("*", [.number, .number], syntax:
     .init(.infix, priority: .product, operator: "*")) {bin($0, *)},
     .init("*", [.var, .var]) {
         $0[0] === $0[1] ? $0[0] ^ 2 : nil
@@ -43,12 +72,30 @@ public let definitions: [Operation] = [
         switch fun.name {
         case "^" where fun.args[0] === v:
             return v ^ (fun.args[1] + 1)
-        default: break
+        case "negate":
+            assert(fun.args.elements.count == 1)
+            return -(v * fun.args[0])
+        default:
+            break
+        }
+        return nil
+    },
+    .init("*", [.func, .func]) {
+        let f1 = $0[0] as! Function
+        let f2 = $0[1] as! Function
+        
+        if f1.name == f2.name {
+            switch f1.name {
+            case "^" where f1.args[0] === f2.args[0]:
+                return f1.args[0] ^ (f1.args[1] + f2.args[1])
+            default:
+                break
+            }
         }
         return nil
     },
     
-    .init("/", [.numbers], syntax:
+    .init("/", [.number, .number], syntax:
     .init(.infix, priority: .product, operator: "/")) {bin($0, /)},
     .init("/", [.any, .any]) {
         if $0[0] === $0[1] {
@@ -57,9 +104,9 @@ public let definitions: [Operation] = [
         return $0[0] * ($0[1] ^ -1)
     },
     
-    .init("mod", [.numbers], syntax:
+    .init("mod", [.number, .number], syntax:
     .init(.infix, priority: .product, operator: "%")) {bin($0, %)},
-    .init("^", [.numbers], syntax:
+    .init("^", [.number, .number], syntax:
     .init(.infix, priority: .exponent, operator: "^")) {bin($0, pow)},
     .init("^", [.nan, .number]) {
         if let n = $0[1] as? Int {
@@ -73,6 +120,15 @@ public let definitions: [Operation] = [
     },
     .init("^", [.number, .nan]) {
         $0[0] === 0 ? 0 : nil
+    },
+    .init("^", [.func, .any]) {
+        let fun = $0[0] as! Function
+        switch fun.name {
+        case "negate":
+            return (-1 ^ $0[1]) * (fun.args[0] ^ $0[1])
+        default: break
+        }
+        return nil
     },
     
     
@@ -88,11 +144,22 @@ public let definitions: [Operation] = [
     .init("negate", [.number]) {u($0, -)},
     .init("negate", [.func]) {
         var fun = $0[0] as! Function
-        if fun.name == "negate" {
+        switch fun.name {
+        case "nagate":
             return fun.args[0]
-        } else if fun.name == "+" {
+        case "+":
             fun.args.elements = fun.args.elements.map{-$0}
             return fun.flatten()
+        case "*":
+            var args = fun.args.elements
+            for (i, arg) in args.enumerated() {
+                if arg is Double || arg is Int {
+                    args.remove(at: i)
+                    args.append(-arg)
+                    return Function("*", args)
+                }
+            }
+        default: break
         }
         return nil
     },
@@ -142,12 +209,12 @@ public let definitions: [Operation] = [
     },
     
     // Boolean logic and, or
-    .init("and", [.booleans], syntax:
+    .init("and", [.bool, .bool], syntax:
     .init(.infix, priority: .and, shorthand: "&&")) {nodes in
         return nodes.map{$0 as! Bool}
             .reduce(true){$0 && $1}
     },
-    .init("or", [.booleans], syntax:
+    .init("or", [.bool, .bool], syntax:
     .init(.infix, priority: .or, shorthand: "||")) {nodes in
         return nodes.map{$0 as! Bool}
             .reduce(false){$0 || $1}
