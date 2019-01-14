@@ -186,9 +186,11 @@ public struct Function: Node {
             // If still didn't work, try commutative simplification.
             let tmp = copy.flatten()
             
-            if tmp.args.elements.count > 2 {
+            if tmp.args.count > 2 {
                 let after = Operation.simplifyCommutatively(tmp.args.elements, by: name)
                 return after.complexity < copy.complexity ? after : tmp
+            } else if let s = tmp.invoke()?.simplify() {
+                return s
             }
         }
         
@@ -255,13 +257,32 @@ public struct Function: Node {
     }
     
     /**
+     - Parameters:
+        - predicament: The condition for the matching node.
+        - depth: Search depth. Won't search for nodes beyond this designated depth.
+     - Returns: Whether the current node contains the target node.
+     */
+    public func contains(where predicament: PUnary, depth: Int) -> Bool {
+        if predicament(self) {
+            return true
+        } else if depth != 0 {
+            for e in args.elements {
+                if e.contains(where: predicament, depth: depth - 1) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
+    /**
      Replace the designated nodes identical to the node provided with the replacement
      
      - Parameter predicament: The condition that needs to be met for a node to be replaced
      - Parameter replace:   A function that takes the old node as input (and perhaps
                             ignores it) and returns a node as replacement.
      */
-    public func replacing(by replace: Unary, where predicament: (Node) -> Bool) -> Node {
+    public func replacing(by replace: Unary, where predicament: PUnary) -> Node {
         var copy = self
         copy.args.elements = copy.args.elements.map{
             $0.replacing(by: replace, where: predicament)

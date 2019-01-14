@@ -206,6 +206,29 @@ public struct Equation: Node, NaN {
         return lhs.complexity + rhs.complexity + 1
     }
     
+    
+    /**
+     If either side contains the node, then return true
+     Else if self is node, return true, other wise return false.
+     
+     - Parameters:
+        - predicament: The condition for the matching node.
+        - depth: Search depth. Won't search for nodes beyond this designated depth.
+     - Returns: Whether the current node contains the target node.
+     */
+    public func contains(where predicament: PUnary, depth: Int) -> Bool {
+        if predicament(self) {
+            return true
+        } else if depth != 0 {
+            for n in [lhs, rhs] {
+                if n.contains(where: predicament, depth: depth - 1) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
     /**
      Replace the designated nodes identical to the node provided with the replacement
      
@@ -213,7 +236,7 @@ public struct Equation: Node, NaN {
      - Parameter replace:   A function that takes the old node as input (and perhaps
      ignores it) and returns a node as replacement.
      */
-    public func replacing(by replace: Unary, where predicament: (Node) -> Bool) -> Node {
+    public func replacing(by replace: Unary, where predicament: PUnary) -> Node {
         var copy = self
         copy.lhs = lhs.replacing(by: replace, where: predicament)
         copy.rhs = rhs.replacing(by: replace, where: predicament)

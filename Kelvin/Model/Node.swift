@@ -11,6 +11,12 @@ import Foundation
 // Unary operation
 public typealias Unary = (Node) -> Node
 
+/// Unary predicament
+public typealias PUnary = (Node) -> Bool
+
+/// Binary predicament
+public typealias PBinary = (Node, Node) -> Bool
+
 public protocol Node: CustomStringConvertible {
     
     /// Computes the numerical value that the node represents.
@@ -28,13 +34,21 @@ public protocol Node: CustomStringConvertible {
     func simplify() -> Node
     
     /**
+     - Parameters:
+        - predicament: The condition for the matching node.
+        - depth: Search depth. Won't search for nodes beyond this designated depth.
+     - Returns: Whether the current node contains the target node.
+     */
+    func contains(where predicament: PUnary, depth: Int) -> Bool
+    
+    /**
      Replace the designated nodes identical to the node provided with the replacement
      
      - Parameter predicament: The condition that needs to be met for a node to be replaced
      - Parameter replace:   A function that takes the old node as input (and perhaps
                             ignores it) and returns a node as replacement.
      */
-    func replacing(by replace: Unary, where predicament: (Node) -> Bool) -> Node
+    func replacing(by replace: Unary, where predicament: PUnary) -> Node
     
     /// - Returns: Whether the provided node is identical with self.
     func equals(_ node: Node) -> Bool
@@ -64,6 +78,22 @@ public func ^(_ lhs: Node, _ rhs: Node) -> Node {
 
 public func *(_ lhs: Node, _ rhs: Node) -> Node {
     return Function("*", [lhs, rhs])
+}
+
+prefix operator *
+public prefix func *(_ args: [Node]) -> Node {
+    assert(args.count > 2)
+    return Function("*", args)
+}
+
+prefix operator **
+public prefix func **(_ args: [Node]) -> Node {
+    if args.count == 0 {
+        return 1
+    } else if args.count == 1 {
+        return args[0]
+    }
+    return Function("*", args)
 }
 
 public func /(_ lhs: Node, _ rhs: Node) -> Node {

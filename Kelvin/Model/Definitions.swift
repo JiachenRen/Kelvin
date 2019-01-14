@@ -54,31 +54,17 @@ public let definitions: [Operation] = [
     .init("+", [.func, .func]) {
         let f1 = $0[0] as! Function
         let f2 = $0[1] as! Function
-        
-        func sumNums(_ args: inout [Node]) -> Double {
-            var nums: [Value] = []
-            for (i, arg) in args.enumerated() {
-                if arg is Double || arg is Int {
-                    nums.append(args.remove(at: i) as! Value)
-                }
-            }
-            return nums.reduce(1){$0 * $1.doubleValue}
-        }
-        
+
         if f1.name == f2.name {
             switch f1.name {
             case "*":
-                var args1 = f1.args.elements
-                var args2 = f2.args.elements
-    
-                let n1 = sumNums(&args1)
-                let n2 = sumNums(&args2)
-                
-                let r1 = Function("*", args1)
-                let r2 = Function("*", args2)
-                
-                if r1 === r2 {
-                    return r1 * (n1 + n2)
+                let p: PUnary = {$0 is NSNumber}
+                if f1.contains(where: p, depth: 1) && f2.contains(where: p, depth: 1) {
+                    let (n1, r1) = f1.args.split(by: p)
+                    let (n2, r2) = f2.args.split(by: p)
+                    if **r1 === **r2 {
+                        return **r1 * (**n1 + **n2)
+                    }
                 }
             default:
                 break
@@ -109,7 +95,7 @@ public let definitions: [Operation] = [
         case "^" where fun.args[0] === v:
             return v ^ (fun.args[1] + 1)
         case "negate":
-            assert(fun.args.elements.count == 1)
+            assert(fun.args.count == 1)
             return -(v * fun.args[0])
         default:
             break
@@ -162,6 +148,14 @@ public let definitions: [Operation] = [
         switch fun.name {
         case "negate":
             return (-1 ^ $0[1]) * (fun.args[0] ^ $0[1])
+        case "*":
+            let p: PUnary = {$0 is NSNumber}
+            if fun.contains(where: p, depth: 1) && p($0[1]) {
+                let (nums, nans) = fun.args.split(by: p)
+                let m = nums.reduce(1){$0.doubleValue * $1.evaluated!.doubleValue}
+                let n = pow(m, $0[1].evaluated!.doubleValue)
+                return n * (**nans ^ $0[1])
+            }
         default: break
         }
         return nil
@@ -189,7 +183,7 @@ public let definitions: [Operation] = [
         case "*":
             var args = fun.args.elements
             for (i, arg) in args.enumerated() {
-                if arg is Double || arg is Int {
+                if arg is NSNumber {
                     args.remove(at: i)
                     args.append(-arg)
                     return Function("*", args)
@@ -302,14 +296,14 @@ public let definitions: [Operation] = [
     .init(.infix)) {nodes in
         let list = nodes[0] as! List
         let idx = Int(nodes[1].evaluated!.doubleValue)
-        if idx >= list.elements.count {
+        if idx >= list.count {
             return "error: index out of bounds"
         } else {
             return list[idx]
         }
     },
     .init("size", [.list], syntax: .init(.prefix)) {
-        return ($0[0] as! List).elements.count
+        return ($0[0] as! List).count
     },
     .init("map", [.list, .any], syntax:
     .init(.infix, priority: .execution, operator: "|")) {nodes in

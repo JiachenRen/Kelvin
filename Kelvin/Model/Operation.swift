@@ -153,9 +153,9 @@ public class Operation: Equatable {
                     fallthrough
                 case .list where !(arg is List):
                     fallthrough
-                case .number where !(arg is Double || arg is Int):
+                case .number where !(arg is NSNumber):
                     fallthrough
-                case .nan where arg is Double || arg is Int:
+                case .nan where arg is NSNumber:
                     fallthrough
                 case .equation where !(arg is Equation):
                     fallthrough
