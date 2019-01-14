@@ -51,6 +51,42 @@ public let definitions: [Operation] = [
         }
         return nil
     },
+    .init("+", [.func, .func]) {
+        let f1 = $0[0] as! Function
+        let f2 = $0[1] as! Function
+        
+        func sumNums(_ args: inout [Node]) -> Double {
+            var nums: [Value] = []
+            for (i, arg) in args.enumerated() {
+                if arg is Double || arg is Int {
+                    nums.append(args.remove(at: i) as! Value)
+                }
+            }
+            return nums.reduce(1){$0 * $1.doubleValue}
+        }
+        
+        if f1.name == f2.name {
+            switch f1.name {
+            case "*":
+                var args1 = f1.args.elements
+                var args2 = f2.args.elements
+    
+                let n1 = sumNums(&args1)
+                let n2 = sumNums(&args2)
+                
+                let r1 = Function("*", args1)
+                let r2 = Function("*", args2)
+                
+                if r1 === r2 {
+                    return r1 * (n1 + n2)
+                }
+            default:
+                break
+            }
+        }
+        
+        return nil
+    },
     
     .init("-", [.number, .number], syntax:
     .init(.infix, priority: .addition, operator: "-")) {bin($0, -)},
