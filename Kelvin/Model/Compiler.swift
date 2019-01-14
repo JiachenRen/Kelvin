@@ -391,6 +391,9 @@ public class Compiler {
         // Remove spaces for ease of processing
         expr.removeAll{$0 == " "}
         
+        // Add another layer of parenthesis to prevent an error
+        expr = "(\(expr))"
+        
         // When naturally writing mathematic expressions, we tend to write
         // 3*-x instead of 3*(-x), etc.
         // This corrects the format to make it consistent.
@@ -404,9 +407,6 @@ public class Compiler {
                 replace(&expr, of: "\(cand)\(extracted)", with: "\(cand)(0\(extracted))")
             }
         }
-        
-        // Add another layer of parenthesis to prevent an error
-        expr = "(\(expr))"
         
         func fixCoefficientShorthand(_ symbol: Character, _ digit: Character) {
             let indices = findIndices(of: "\(symbol)\(digit)", in: expr)
@@ -432,7 +432,6 @@ public class Compiler {
         // "arg3er" should be seen as "arg3*er"
         // "3a*4x" should be converted to "3*a*4*x"
         symbols.forEach{s in digits.forEach{fixCoefficientShorthand(s, $0)}}
-        
     }
     
     /**
