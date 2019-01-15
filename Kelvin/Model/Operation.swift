@@ -31,7 +31,7 @@ public class Operation: Equatable {
     }
     
     /// Flags that denote special attributes for certain operations.
-    public enum Flag {
+    public enum Flag: Hashable {
         
         /// Debugging and flow control functions like "complexity" and "repeat"
         /// should not simplify args before their execution.
@@ -39,7 +39,11 @@ public class Operation: Equatable {
         
         /// Addition, multiplication, and boolean logic are all commutative
         /// Commutative functions with the same name should only be marked once.
-        case isCommutative
+        case commutative
+        
+        /// Operations with this flag are only commutative in the forward direction.
+        /// e.g. division and subtraction.
+        case forwardCommutative
     }
     
     /// Registered operations are resolved dynamically during runtime

@@ -57,7 +57,7 @@ public struct Function: Node {
             return "\(name)(\(l ?? ""))"
         }
         
-        if let position = self.syntax?.operator.position {
+        if let position = syntax?.operator.position {
             switch position {
             case .infix:
                 if let s = r.enumerated().reduce(nil, {(a, c) -> String in
