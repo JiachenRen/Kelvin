@@ -41,14 +41,32 @@ public struct Function: Node {
     /// - Note: Operations only exists when the arguments match the requirements
     var operations = [Operation]()
     
-    /// The syntax of the function (derived from just the name)
+    /// The syntactic rules of the function (looked up by the name)
     var syntax: Syntax? {
-        for operation in operations {
-            if let syntax = operation.syntax {
-                return syntax
-            }
-        }
-        return Operation.getSyntax(for: name, numArgs: args.count)
+        return Syntax.glossary[name]
+    }
+    
+    init(_ name: String, _ args: List) {
+        self.name = name
+        self.args = args
+        
+        resolveDefinition()
+    }
+    
+    init(_ name: String, _ args: [Node]) {
+        self.init(name, List(args))
+    }
+    
+    /**
+     Resolve the definition of the function. There are three types of definitions:
+     - binary: Pre-defined operations such as +, -, *, /
+     - unary: Pre-defined operations such as log, negate, etc.
+     - custom: user defined operations, such as a function f(x)
+     */
+    private mutating func resolveDefinition() {
+        
+        // Match function with registered operations
+        self.operations = Operation.resolve(name, args: args.elements)
     }
     
     public var description: String {
@@ -57,7 +75,7 @@ public struct Function: Node {
         
         func formatted() -> String  {
             let l = r.map{$0.description}.reduce(nil) {
-                $0 == nil ? "\($1)": "\($0!),\($1)"
+                $0 == nil ? "\($1)": "\($0!), \($1)"
             }
             return "\(name)(\(l ?? ""))"
         }
@@ -66,19 +84,9 @@ public struct Function: Node {
             
             // Determine which form of the function to use;
             // there are three options: shorthand, operator, or default.
-            if syntax.userAssignedOperator {
-                n = "\(syntax.operator)"
-            } else if let shorthand = syntax.shorthand {
-                n = "\(shorthand)"
-            } else {
-                switch syntax.operator.position {
-                case .postfix: n.removeLast()
-                case .prefix: n.removeFirst()
-                default: break
-                }
-            }
+            let n = syntax.formatted
             
-            switch syntax.operator.position {
+            switch syntax.position {
             case .infix:
                 if let s = r.enumerated().reduce(nil, {(a, c) -> String in
                     let (i, b) = c
@@ -117,8 +125,8 @@ public struct Function: Node {
     private func usesParenthesis(forNodeAtIndex idx: Int) -> Bool {
         let child = args[idx]
         if let fun = child as? Function {
-            if let p1 = fun.syntax?.operator.priority {
-                if let p2 = syntax?.operator.priority {
+            if let p1 = fun.syntax?.priority {
+                if let p2 = syntax?.priority {
                     if p1 < p2 {
                         
                         // e.g. (a + b) * c
@@ -135,13 +143,13 @@ public struct Function: Node {
                         // If the child is on the left and has the same priority,
                         // a parenthesis is not needed.
                         if idx != 0 {
-                            if Operation.hasFlag(name, .forwardCommutative) {
+                            if Operation.has(attr: .forwardCommutative, name) {
                                 
                                 // e.g. case of a - (b + c)
                                 // If the parent is only commutative in the forward direction,
                                 // then always use a parenthesis for rhs.
                                 return true
-                            } else if Operation.hasFlag(name, .commutative) {
+                            } else if Operation.has(attr: .commutative, name) {
                                 
                                 // e.g. a + b + c
                                 // If the parent is commutative both forward and backward,
@@ -156,29 +164,6 @@ public struct Function: Node {
             }
         }
         return false
-    }
-    
-    init(_ name: String, _ args: List) {
-        self.name = name
-        self.args = args
-        
-        resolveDefinition()
-    }
-    
-    init(_ name: String, _ args: [Node]) {
-        self.init(name, List(args))
-    }
-    
-    /**
-     Resolve the definition of the function. There are three types of definitions:
-     - binary: Pre-defined operations such as +, -, *, /
-     - unary: Pre-defined operations such as log, negate, etc.
-     - custom: user defined operations, such as a function f(x)
-     */
-    private mutating func resolveDefinition() {
-        
-        // Match function with registered operations
-        self.operations = Operation.resolve(name, args: args.elements)
     }
     
     /// Performs the operation defined by the function on the arguments.
@@ -217,7 +202,7 @@ public struct Function: Node {
         }
         
         // Simplify each argument, if requested.
-        if !Operation.hasFlag(name, .preservesArguments) {
+        if !Operation.has(attr: .preservesArguments, name) {
             copy.args = copy.args.simplify() as! List
         }
         
@@ -226,7 +211,7 @@ public struct Function: Node {
         // otherwise returns a copy of the original function with each argument simplified.
         if let s = copy.invoke()?.simplify() {
             return s
-        } else if Operation.hasFlag(name, .commutative) {
+        } else if Operation.has(attr: .commutative, name) {
             // If the function is commutative, then reverse the order or args.
             copy.reverse()
             
@@ -278,7 +263,7 @@ public struct Function: Node {
         var copy = arguments{($0 as? Function)?.flatten() ?? $0} // Initial recursive call
         
         // Flatten commutative operations
-        if Operation.hasFlag(copy.name, .commutative) {
+        if Operation.has(attr: .commutative, copy.name) {
             var newArgs = [Node]()
             copy.args.elements.forEach {arg in
                 if let fun = arg as? Function, fun.name == copy.name {
@@ -299,7 +284,7 @@ public struct Function: Node {
     public func equals(_ node: Node) -> Bool {
         if let fun = node as? Function {
             if fun.name == name {
-                if Operation.hasFlag(name, .commutative) {
+                if Operation.has(attr: .commutative, name) {
                     return fun.args === args
                 }
                 return List.strictlyEquals(args, fun.args)

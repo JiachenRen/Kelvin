@@ -19,7 +19,7 @@ public class Compiler {
     
     // Symbols from binary operators, shorthands, and syntactic sugars.
     private static var symbols: String {
-        let operators = Syntax.operators
+        let operators = Syntax.lexicon
             .keys.reduce(""){"\($0)\($1)"}
         return ",(){}[]'\(operators)"
     }
@@ -28,26 +28,21 @@ public class Compiler {
     private static var digits = (0...9).reduce(""){"\($0)\($1)"}
     
     // &? -> +, - , *, /, ^, etc.
-    typealias OperatorReference = Dictionary<String, Operator>
+    typealias OperatorReference = Dictionary<String, Syntax.Encoding>
     
     // #? -> node
     typealias NodeReference = Dictionary<String, Node>
     
-    typealias Operator = Syntax.Operator
-    
-    private static let operationsWithSyntax = Operation.registered
-        .filter {$0.syntax != nil}
-        .map {($0, $0.syntax!)}
-    
-    /// Definitions are loaded once - before the first compilation
-    private static var definitionsLoaded = false
+    /// Definitions for operation and encodings for operators are loaded once.
+    private static var initialized = false
     
     public static func compile(_ expr: String) throws -> Node {
         
         // Load definitions before compilation.
-        if !definitionsLoaded {
+        if !initialized {
             Operation.reloadDefinitions()
-            definitionsLoaded = true
+            Syntax.createDefinitions()
+            initialized = true
         }
         
         // Remove lines
@@ -56,8 +51,19 @@ public class Compiler {
         // Validate the expression
         try validate(expr)
         
-        // Apply shorthands before compilation
-        applyShorthands(&expr)
+        // Format lists and vectors
+        while expr.contains("{") {
+            expr = replace(expr, "{", "}", "list(", ")")
+        }
+        
+        while expr.contains("[") {
+            expr = replace(expr, "[", "]", "vector(", ")")
+        }
+        
+        // Apply syntactic transformations before compilation (encoding)
+        Syntax.lexicon.map {$0.value}
+            .sorted {$0.compilationPriority > $1.compilationPriority}
+            .forEach {expr = applySyntax($0, for: expr)}
         
         // Format the expression for compilation
         format(&expr)
@@ -71,46 +77,43 @@ public class Compiler {
         let parent = try resolve(expr, &dict, binOps)
         
         // Restore list() to {}, =(a,b) to a=b
-        return restoreDataType(parent)
+        return decode(parent)
     }
     
-    private static func applyShorthands(_ expr: inout String) {
+    /**
+     Perform syntactic manipulations on the expression.
+     Replace common names and operators with their encodings.
+     
+     - Parameters:
+        - syntax: The syntax to be applied
+        - expr: The string on which the syntax is applied.
+     - Returns: The expression w/ the syntax applied.
+     */
+    private static func applySyntax(_ syntax: Syntax, for expr: String) -> String {
+        var expr = expr
+        let c = "\(syntax.encoding)"
+        let n = syntax.commonName
         
-        // Format lists and vectors
-        while expr.contains("{") {
-            expr = replace(expr, "{", "}", "list(", ")")
+        // Replace operators with their code
+        if let o = syntax.operator {
+            expr = expr.replacingOccurrences(of: o.name, with: c)
         }
         
-        while expr.contains("[") {
-            expr = replace(expr, "[", "]", "vector(", ")")
-        }
-        
-        // Apply syntactic shorthands
-        operationsWithSyntax.forEach {
-            let c = "\($0.1.operator)"
-            let n = $0.0.name
-            
-            // Replace shorthand w/ operator
-            if let shorthand = $0.1.shorthand {
-                expr = expr.replacingOccurrences(of: shorthand, with: c)
-            }
-            
-            // Replace infix function names with operator
-            switch $0.1.operator.position {
-            case .prefix:
-                // "define a=b" becomes _𑅰a=b
-                // Force prefix unary operations into binary infix operations by
-                // giving it a left hand side operand. This lowers compilation overhead.
-                expr = expr.replacingOccurrences(of: "\(n) ", with: "@\(c)")
-            case .infix:
-                // "a and b" becomes "a𑅰b";
-                expr = expr.replacingOccurrences(of: " \(n) ", with: "\(c)")
-            case .postfix:
-                // "5 degrees" becomes "5𑅰_"
-                // "a!" becomes "a!_"
-                expr = expr.replacingOccurrences(of: "\(c)", with: "\(c)@")
-                    .replacingOccurrences(of: " \(n)", with: "\(c)@")
-            }
+        // Replace infix function names with operator
+        switch syntax.position {
+        case .prefix:
+            // "define a=b" becomes @𑅰a=b
+            // Force prefix unary operations into binary infix operations by
+            // giving it a left hand side operand. This lowers compilation overhead.
+            return expr.replacingOccurrences(of: "\(n) ", with: "@\(c)")
+        case .infix:
+            // "a and b" becomes "a𑅰b";
+            return expr.replacingOccurrences(of: " \(n) ", with: "\(c)")
+        case .postfix:
+            // "5 degrees" becomes "5𑅰@"
+            // "a!" becomes "a!@"
+            return expr.replacingOccurrences(of: "\(c)", with: "\(c)@")
+                .replacingOccurrences(of: " \(n)", with: "\(c)@")
         }
     }
     
@@ -123,7 +126,7 @@ public class Compiler {
      - Parameter parent: The parent node to have DTs restored.
      - Returns: The parent node with DTs restored.
      */
-    private static func restoreDataType(_ parent: Node) -> Node {
+    private static func decode(_ parent: Node) -> Node {
         var parent = parent
         
         func name(_ node: Node) -> String? {
@@ -136,37 +139,20 @@ public class Compiler {
         
         // Replace functions generated from syntactic sugars with their
         // corrected names.
-        operationsWithSyntax.forEach {tuple in
-            let (op, syntax) = tuple
-            parent = parent.replacing(by: {Function(op.name, args($0))}) {
-                return name($0) == "\(syntax.operator)"
-            }
+        parent = parent.replacing(by: {
+            var a = args($0)
+            let syntax = Syntax.lexicon[Syntax.Encoding(name($0)!)]!
             
-            // During compilation, prefix and postfix unary operations are converted to binary operations;
-            // This converts them back to unary operations
-            switch syntax.operator.position {
-            case .prefix:
-                parent = parent.replacing(by: {node in
-                    var fun = node as! Function
-                    
-                    // Remove fist argument of prefix operation b/c it is a dummy
-                    fun.args.elements.removeFirst()
-                    return fun
-                }, where: {
-                    name($0) == op.name && args($0)[0] is PlaceHolder
-                })
-            case .postfix:
-                parent = parent.replacing(by: {node in
-                    var fun = node as! Function
-                    
-                    // Remove second argument of postfix operation
-                    fun.args.elements.removeLast()
-                    return fun
-                }, where: {
-                    name($0) == op.name && args($0)[1] is PlaceHolder
-                })
-            default: break
+            // remove all place holders
+            a.elements.removeAll{$0 is PlaceHolder}
+            return Function(syntax.commonName, a)
+        }) {
+            // If the name of the function is an encoding key,
+            // Replace it with its common name.
+            if let name = name($0), name.count == 1 {
+                return Syntax.lexicon[Syntax.Encoding(name)] != nil
             }
+            return false
         }
         
         // Restore list() to {}
@@ -272,19 +258,19 @@ public class Compiler {
     }
     
     private static func binaryToFunction(_ expr: inout String) -> OperatorReference {
-        let operators = Syntax.operators.values
+        let operators = Syntax.lexicon.values
         let prioritized = operators.sorted{$0.priority > $1.priority}
         
-        var segregated = [[Operator]]()
+        var segregated = [[Syntax.Encoding]]()
         var cur = prioritized[0].priority
-        var buf = [Operator]()
+        var buf = [Syntax.Encoding]()
         prioritized.forEach {
             if $0.priority != cur {
                 cur = $0.priority
                 segregated.append(buf)
-                buf = [Operator]()
+                buf = [Syntax.Encoding]()
             }
-            buf.append($0)
+            buf.append($0.encoding)
         }
         segregated.append(buf)
         
@@ -294,9 +280,9 @@ public class Compiler {
             operators.forEach {
                 let id = "&\(dict.count)"
                 dict[id] = $0
-                d[$0.code] = id
+                d[$0] = id
             }
-            parenthesize(&expr, operators.map{$0.code}, d)
+            parenthesize(&expr, operators.map{$0}, d)
         }
         return dict
     }

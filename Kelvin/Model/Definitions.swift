@@ -17,8 +17,7 @@ typealias Definition = ([Node]) -> Node?
 public let definitions: [Operation] = [
     
     // Basic binary arithmetic
-    .init("+", [.number, .number], syntax:
-    .init(.infix, priority: .addition, operator: "+")) {bin($0, +)},
+    .init("+", [.number, .number]) {bin($0, +)},
     .init("+", [.any, .any]) {
         $0[0] === $0[1] ? 2 * $0[0] : nil
     },
@@ -71,8 +70,7 @@ public let definitions: [Operation] = [
         return nil
     },
     
-    .init("-", [.number, .number], syntax:
-    .init(.infix, priority: .addition, operator: "-")) {bin($0, -)},
+    .init("-", [.number, .number]) {bin($0, -)},
     .init("-", [.any, .any]) {
         if $0[0] === $0[1] {
             return 0
@@ -80,8 +78,7 @@ public let definitions: [Operation] = [
         return $0[0] + -$0[1]
     },
     
-    .init("*", [.number, .number], syntax:
-    .init(.infix, priority: .product, operator: "*")) {bin($0, *)},
+    .init("*", [.number, .number]) {bin($0, *)},
     .init("*", [.var, .var]) {
         $0[0] === $0[1] ? $0[0] ^ 2 : nil
     },
@@ -122,8 +119,7 @@ public let definitions: [Operation] = [
         }
     },
     
-    .init("/", [.number, .number], syntax:
-    .init(.infix, priority: .product, operator: "/")) {bin($0, /)},
+    .init("/", [.number, .number]) {bin($0, /)},
     .init("/", [.any, .any]) {
         if $0[0] === $0[1] {
             return 1
@@ -131,10 +127,8 @@ public let definitions: [Operation] = [
         return $0[0] * ($0[1] ^ -1)
     },
     
-    .init("mod", [.number, .number], syntax:
-    .init(.infix, priority: .product, operator: "%")) {bin($0, %)},
-    .init("^", [.number, .number], syntax:
-    .init(.infix, priority: .exponent, operator: "^")) {bin($0, pow)},
+    .init("mod", [.number, .number]) {bin($0, %)},
+    .init("^", [.number, .number]) {bin($0, pow)},
     .init("^", [.nan, .number]) {
         if let n = $0[1] as? Int {
             switch n {
@@ -199,78 +193,63 @@ public let definitions: [Operation] = [
         return nil
     },
     .init("negate", [.var]){$0[0] * -1},
-    .init("sqrt", [.number], syntax:
-    .init(.prefix, priority: .exponent, operator: "√")) {u($0, sqrt)},
+    .init("sqrt", [.number]) {u($0, sqrt)},
     
     // Postfix operations
-    .init("degrees", [.any], syntax:
-    .init(.postfix, priority: .exponent, operator: "°")) {
+    .init("degrees", [.any]) {
         return $0[0] / 180 * v("pi")
     },
-    .init("factorial", [.number], syntax:
-    .init(.postfix, priority: .exponent, operator: "!")) {
+    .init("factorial", [.number]) {
         if let i = Int(exactly: $0[0].evaluated!.doubleValue) {
             return factorial(Double(i))
         }
         return "can only perform factorial on an integer"
     },
-    .init("pct", [.any], syntax:
-    .init(.postfix, priority: .exponent)) {
+    .init("pct", [.any]) {
         return $0[0] / 100
     },
     
     // Equality, inequality, and equations
-    .init("=", [.any, .any], syntax:
-    .init(.infix, priority: .equation, operator: "=")) {
+    .init("=", [.any, .any]) {
         return Equation(lhs: $0[0], rhs: $0[1])
     },
-    .init("<", [.any, .any], syntax:
-    .init(.infix, priority: .equality, operator: "<")) {
+    .init("<", [.any, .any]) {
         return Equation(lhs: $0[0], rhs: $0[1], mode: .lessThan)
     },
-    .init(">", [.any, .any], syntax:
-    .init(.infix, priority: .equality, operator: ">")) {
+    .init(">", [.any, .any]) {
         return Equation(lhs: $0[0], rhs: $0[1], mode: .greaterThan)
     },
-    .init(">=", [.any, .any], syntax:
-    .init(.infix, priority: .equality, shorthand: ">=", operator: "≥")) {
+    .init(">=", [.any, .any]) {
         return Equation(lhs: $0[0], rhs: $0[1], mode: .greaterThanOrEquals)
     },
-    .init("<=", [.any, .any], syntax:
-    .init(.infix, priority: .equality, shorthand: "<=", operator: "≤")) {
+    .init("<=", [.any, .any]) {
         return Equation(lhs: $0[0], rhs: $0[1], mode: .lessThanOrEquals)
     },
-    .init("equals", [.any, .any], syntax:
-    .init(.infix, priority: .equality, shorthand: "==")) {nodes in
+    .init("equals", [.any, .any]) {nodes in
         return nodes[0] === nodes[1]
     },
     
     // Boolean logic and, or
-    .init("and", [.bool, .bool], syntax:
-    .init(.infix, priority: .and, shorthand: "&&")) {nodes in
+    .init("and", [.bool, .bool]) {nodes in
         return nodes.map{$0 as! Bool}
             .reduce(true){$0 && $1}
     },
-    .init("or", [.bool, .bool], syntax:
-    .init(.infix, priority: .or, shorthand: "||")) {nodes in
+    .init("or", [.bool, .bool]) {nodes in
         return nodes.map{$0 as! Bool}
             .reduce(false){$0 || $1}
     },
     
     // Variable/function definition and deletion
-    .init("define", [.equation], syntax:
-    .init(.prefix, priority: .definition, shorthand: ":=")) {nodes in
+    .init("def", [.equation]) {nodes in
         if let err = (nodes[0] as? Equation)?.define() {
             return err
         }
         return "done"
     },
-    .init("define", [.any, .any], syntax:
-    .init(.infix, shorthand: ":=")) {nodes in
-        return Function("define", [Equation(lhs: nodes[0], rhs: nodes[1])])
+    .init("define", [.any, .any]) {nodes in
+        return Function("def", [Equation(lhs: nodes[0], rhs: nodes[1])])
     },
-    .init("del", [.var], syntax:
-    .init(.prefix)) {nodes in
+    .init("del", [.var]) {nodes in
         if let v = nodes[0] as? Variable {
             Variable.delete(v.name)
             Operation.remove(v.name)
@@ -299,8 +278,7 @@ public let definitions: [Operation] = [
     
     // List related operations
     .init("list", [.universal]) {List($0)},
-    .init("get", [.list, .number], syntax:
-    .init(.infix)) {nodes in
+    .init("get", [.list, .number]) {nodes in
         let list = nodes[0] as! List
         let idx = Int(nodes[1].evaluated!.doubleValue)
         if idx >= list.count {
@@ -309,11 +287,10 @@ public let definitions: [Operation] = [
             return list[idx]
         }
     },
-    .init("size", [.list], syntax: .init(.prefix)) {
+    .init("size", [.list]) {
         return ($0[0] as! List).count
     },
-    .init("map", [.list, .any], syntax:
-    .init(.infix, priority: .execution, operator: "|")) {nodes in
+    .init("map", [.list, .any]) {nodes in
         let list = nodes[0] as! List
         let updated = list.elements.map {element in
             nodes[1].replacing(by: {_ in element}) {
@@ -333,38 +310,33 @@ public let definitions: [Operation] = [
     },
     
     // Consecutive execution, feed forward, flow control
-    .init("then", [.universal], syntax:
-    .init(.infix, operator: ";")) {nodes in
+    .init("then", [.universal]) {nodes in
         return nodes.map{$0.simplify()}.last
     },
-    .init("feed", [.any, .any], syntax:
-    .init(.infix, shorthand: "->")) {nodes in
+    .init("feed", [.any, .any]) {nodes in
         let simplified = nodes[0].simplify()
         return nodes.last!.replacing(by: {_ in simplified}) {
             $0 === v("$")
         }
     },
-    .init("repeat", [.any, .number], syntax:
-    .init(.infix, priority: .repeat, operator: "…")) {nodes in
+    .init("repeat", [.any, .number]) {nodes in
         let times = Int(nodes[1].evaluated!.doubleValue)
         var elements = [Node]()
         (0..<times).forEach{_ in elements.append(nodes[0])}
         return List(elements)
     },
-    .init("copy", [.any, .number], syntax:
-    .init(.infix, priority: .repeat)) {nodes in
+    .init("copy", [.any, .number]) {nodes in
         return Function("repeat", nodes)
     },
     
     // Developer/debug functions
-    .init("complexity", [.any], syntax:
-    .init(.prefix)) {$0[0].complexity},
-    .init("eval", [.any], syntax: .init(.prefix)) {
+    .init("complexity", [.any]) {$0[0].complexity},
+    .init("eval", [.any]) {
         $0[0].evaluated?.doubleValue ?? Double.nan
     },
 ]
 
-let defaultConfig: [Operation.Flag: [String]] = [
+let defaultConfig: [Operation.Attribute: [String]] = [
     .commutative: [
         "*",
         "+",

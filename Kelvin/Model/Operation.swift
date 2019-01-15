@@ -31,7 +31,7 @@ public class Operation: Equatable {
     }
     
     /// Flags that denote special attributes for certain operations.
-    public enum Flag: Hashable {
+    public enum Attribute: Hashable {
         
         /// Debugging and flow control functions like "complexity" and "repeat"
         /// should not simplify args before their execution.
@@ -52,7 +52,7 @@ public class Operation: Equatable {
     
     /// Use this dictionary to assign special attributes to operations.
     /// e.g. since + and * are commutaive, the "commutative" flag should be assigned to them.
-    static var configuration = [Flag: [String]]()
+    static var configuration = [Attribute: [String]]()
     
     /// A value that represents the scope of the signature
     /// The larger the scope, the more universally applicable the function.
@@ -63,13 +63,11 @@ public class Operation: Equatable {
     let def: Definition
     let name: String
     let signature: [ArgumentType]
-    let syntax: Syntax?
     
-    init(_ name: String, _ signature: [ArgumentType], syntax: Syntax? = nil, definition: @escaping Definition) {
+    init(_ name: String, _ signature: [ArgumentType], definition: @escaping Definition) {
         self.name = name
         self.def = definition
         self.signature = signature
-        self.syntax = syntax
     }
     
     /// Register the parametric operation.
@@ -240,29 +238,13 @@ public class Operation: Equatable {
     }
     
     /**
-     Find the syntax for the operation w/ the speficied name.
-     The first operation that has syntax requirement w/ the given name is returned.
-     
-     - Parameter name: The name of the operation
-     - Parameter numArgs: The # of args that the function takes in
-     - Returns: The syntax of the operation w/ the given name. 
-     */
-    public static func getSyntax(for name: String, numArgs: Int) -> Syntax? {
-        let sameName =  registered.filter {
-            $0.name == name && $0.syntax != nil
-        }
-        return sameName.filter {$0.signature.count == numArgs}
-            .first?.syntax ?? sameName.first?.syntax
-    }
-    
-    /**
      - Parameters:
         - name: The name of the function
-        - flag: The flag in question such as .isCommutaive
-     - Returns: Whether the function w/ the given name has the designated flag
+        - attr: The attribute in question such as .commutaive
+     - Returns: Whether the function w/ the given name has the designated attribute
      */
-    public static func hasFlag(_ name: String, _ flag: Flag) -> Bool {
-        return configuration[flag]!.contains(name)
+    public static func has(attr: Attribute, _ name: String) -> Bool {
+        return configuration[attr]!.contains(name)
     }
     
     /**

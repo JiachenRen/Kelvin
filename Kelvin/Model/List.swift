@@ -23,7 +23,7 @@ public struct List: Node, NaN {
     
     public var description: String {
         let pars = elements.map {$0.description}.reduce(nil) {
-            $0 == nil ? "\($1)": "\($0!),\($1)"
+            $0 == nil ? "\($1)": "\($0!), \($1)"
         }
         return "{\(pars ?? "")}"
     }
