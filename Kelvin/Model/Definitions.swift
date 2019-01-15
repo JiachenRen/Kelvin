@@ -52,7 +52,7 @@ public let definitions: [Operation] = [
     .init("+", [.func, .func]) {
         let f1 = $0[0] as! Function
         let f2 = $0[1] as! Function
-
+        
         if f1.name == f2.name {
             switch f1.name {
             case "*":
@@ -199,7 +199,8 @@ public let definitions: [Operation] = [
         return nil
     },
     .init("negate", [.var]){$0[0] * -1},
-    .init("sqrt", [.number]) {u($0, sqrt)},
+    .init("sqrt", [.number], syntax:
+    .init(.prefix, priority: .exponent, operator: "√")) {u($0, sqrt)},
     
     // Postfix operations
     .init("degrees", [.any], syntax:
@@ -265,7 +266,7 @@ public let definitions: [Operation] = [
         return "done"
     },
     .init("define", [.any, .any], syntax:
-    .init(.prefix)) {nodes in
+    .init(.infix, shorthand: ":=")) {nodes in
         return Function("define", [Equation(lhs: nodes[0], rhs: nodes[1])])
     },
     .init("del", [.var], syntax:
@@ -332,8 +333,8 @@ public let definitions: [Operation] = [
     },
     
     // Consecutive execution, feed forward, flow control
-    .init("do", [.universal], syntax:
-    .init(.prefix, shorthand: ";")) {nodes in
+    .init("then", [.universal], syntax:
+    .init(.infix, operator: ";")) {nodes in
         return nodes.map{$0.simplify()}.last
     },
     .init("feed", [.any, .any], syntax:
@@ -344,7 +345,7 @@ public let definitions: [Operation] = [
         }
     },
     .init("repeat", [.any, .number], syntax:
-    .init(.infix, priority: .repeat)) {nodes in
+    .init(.infix, priority: .repeat, operator: "…")) {nodes in
         let times = Int(nodes[1].evaluated!.doubleValue)
         var elements = [Node]()
         (0..<times).forEach{_ in elements.append(nodes[0])}

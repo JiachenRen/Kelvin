@@ -244,11 +244,15 @@ public class Operation: Equatable {
      The first operation that has syntax requirement w/ the given name is returned.
      
      - Parameter name: The name of the operation
+     - Parameter numArgs: The # of args that the function takes in
      - Returns: The syntax of the operation w/ the given name. 
      */
-    public static func getSyntax(for name: String) -> Syntax? {
-        return registered.filter{$0.name == name && $0.syntax != nil}
-            .map{$0.syntax!}.first
+    public static func getSyntax(for name: String, numArgs: Int) -> Syntax? {
+        let sameName =  registered.filter {
+            $0.name == name && $0.syntax != nil
+        }
+        return sameName.filter {$0.signature.count == numArgs}
+            .first?.syntax ?? sameName.first?.syntax
     }
     
     /**

@@ -63,9 +63,12 @@ public struct Syntax {
     /// A dictionary that automatically keeps track of operators.
     static var operators = [Character: Operator]()
     
+    var userAssignedOperator: Bool
+    
     init(_ position: Position, priority: Priority = .execution, shorthand: String? = nil, operator: Character? = nil) {
         
         self.shorthand = shorthand
+        self.userAssignedOperator = `operator` != nil
         
         // Assign a unique operator to the operation consisting of
         // a single character that does not exist in any language.

@@ -114,3 +114,15 @@ public struct Variable: Leaf, NaN {
         return self
     }
 }
+
+struct PlaceHolder: Leaf, NaN {
+    
+    func equals(_ node: Node) -> Bool {
+        return node is PlaceHolder
+    }
+    
+    var description: String {
+        return "@"
+    }
+    
+}

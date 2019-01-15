@@ -101,15 +101,15 @@ public class Compiler {
                 // "define a=b" becomes _𑅰a=b
                 // Force prefix unary operations into binary infix operations by
                 // giving it a left hand side operand. This lowers compilation overhead.
-                expr = expr.replacingOccurrences(of: "\(n) ", with: "_\(c)")
+                expr = expr.replacingOccurrences(of: "\(n) ", with: "@\(c)")
             case .infix:
                 // "a and b" becomes "a𑅰b";
                 expr = expr.replacingOccurrences(of: " \(n) ", with: "\(c)")
             case .postfix:
                 // "5 degrees" becomes "5𑅰_"
                 // "a!" becomes "a!_"
-                expr = expr.replacingOccurrences(of: "\(c)", with: "\(c)_")
-                    .replacingOccurrences(of: " \(n)", with: "\(c)_")
+                expr = expr.replacingOccurrences(of: "\(c)", with: "\(c)@")
+                    .replacingOccurrences(of: " \(n)", with: "\(c)@")
             }
         }
     }
@@ -153,7 +153,7 @@ public class Compiler {
                     fun.args.elements.removeFirst()
                     return fun
                 }, where: {
-                    name($0) == op.name && (args($0)[0] as? Variable)?.name == "_"
+                    name($0) == op.name && args($0)[0] is PlaceHolder
                 })
             case .postfix:
                 parent = parent.replacing(by: {node in
@@ -163,7 +163,7 @@ public class Compiler {
                     fun.args.elements.removeLast()
                     return fun
                 }, where: {
-                    name($0) == op.name && (args($0)[1] as? Variable)?.name == "_"
+                    name($0) == op.name && args($0)[1] is PlaceHolder
                 })
             default: break
             }
@@ -244,6 +244,9 @@ public class Compiler {
             return List(nodes)
         } else {
             expr = removeWhiteSpace(expr)
+            if expr == "@" {
+                return PlaceHolder()
+            }
             if let node = dict[expr] ?? Int(expr) ?? Double(expr) ?? Bool(expr) {
                 return node
             } else {
@@ -397,7 +400,7 @@ public class Compiler {
         // When naturally writing mathematic expressions, we tend to write
         // 3*-x instead of 3*(-x), etc.
         // This corrects the format to make it consistent.
-        "([*/^<>".forEach { cand in
+        "([*/^<>,".forEach { cand in
             let target = "\(cand)-"
             while expr.contains(target) {
                 let r = expr.range(of: target)!

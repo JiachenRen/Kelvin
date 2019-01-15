@@ -43,28 +43,48 @@ public struct Function: Node {
     
     /// The syntax of the function (derived from just the name)
     var syntax: Syntax? {
-        return Operation.getSyntax(for: name)
+        for operation in operations {
+            if let syntax = operation.syntax {
+                return syntax
+            }
+        }
+        return Operation.getSyntax(for: name, numArgs: args.count)
     }
     
     public var description: String {
         let r = args.elements
-        let n = name
+        var n = " \(name) "
         
         func formatted() -> String  {
             let l = r.map{$0.description}.reduce(nil) {
-                $0 == nil ? "\($1)": "\($0!), \($1)"
+                $0 == nil ? "\($1)": "\($0!),\($1)"
             }
             return "\(name)(\(l ?? ""))"
         }
         
-        if let position = syntax?.operator.position {
-            switch position {
+        if let syntax = self.syntax {
+            
+            // Determine which form of the function to use;
+            // there are three options: shorthand, operator, or default.
+            if syntax.userAssignedOperator {
+                n = "\(syntax.operator)"
+            } else if let shorthand = syntax.shorthand {
+                n = "\(shorthand)"
+            } else {
+                switch syntax.operator.position {
+                case .postfix: n.removeLast()
+                case .prefix: n.removeFirst()
+                default: break
+                }
+            }
+            
+            switch syntax.operator.position {
             case .infix:
                 if let s = r.enumerated().reduce(nil, {(a, c) -> String in
                     let (i, b) = c
                     let p = usesParenthesis(forNodeAtIndex: i)
                     let b1 = p ? "(\(b))" : "\(b)"
-                    return a == nil ? "\(b1)" : "\(a!) \(n) \(b1)"
+                    return a == nil ? "\(b1)" : "\(a!)\(n)\(b1)"
                 }) {
                     return "\(s)"
                 } else {
@@ -72,7 +92,10 @@ public struct Function: Node {
                 }
             case .prefix where r.count == 1:
                 let p = usesParenthesis(forNodeAtIndex: 0)
-                return p ? "\(n) (\(r[0]))" : "\(n) \(r[0])"
+                return p ? "\(n)(\(r[0]))" : "\(n)\(r[0])"
+            case .postfix where r.count == 1:
+                let p = usesParenthesis(forNodeAtIndex: 0)
+                return p ? "(\(r[0]))\(n)" : "\(r[0])\(n)"
             default:
                 break
             }
@@ -103,6 +126,11 @@ public struct Function: Node {
                         return true
                     } else if p1 == p2 {
                         
+                        // Always parenthesize unary operations to disambiguate
+                        if fun.args.count == 1 {
+                            return true
+                        }
+                        
                         // e.g. a + b - c
                         // If the child is on the left and has the same priority,
                         // a parenthesis is not needed.
@@ -119,6 +147,8 @@ public struct Function: Node {
                                 // If the parent is commutative both forward and backward,
                                 // then omit parenthesis when the child and parent are the same function.
                                 return name != fun.name
+                            } else  {
+                                return true
                             }
                         }
                     }
