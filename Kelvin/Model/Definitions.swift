@@ -148,13 +148,12 @@ public let definitions: [Operation] = [
     .init("^", [.number, .nan]) {
         $0[0] === 0 ? 0 : nil
     },
-    .init("^", [.func, .any]) {
+    .init("^", [.func, .number]) {
         let fun = $0[0] as! Function
         switch fun.name {
         case "*":
-            let p: PUnary = {$0 is NSNumber}
-            if fun.contains(where: p, depth: 1) && p($0[1]) {
-                let (nums, nans) = fun.args.split(by: p)
+            if fun.contains(where: isNumber, depth: 1) {
+                let (nums, nans) = fun.args.split(by: isNumber)
                 return (**nums ^ $0[1]) * (**nans ^ $0[1])
             }
         default: break
@@ -333,12 +332,12 @@ public let definitions: [Operation] = [
     },
     
     // Consecutive execution, feed forward, flow control
-    .init("exec", [.universal], syntax:
+    .init("do", [.universal], syntax:
     .init(.prefix, shorthand: ";")) {nodes in
         return nodes.map{$0.simplify()}.last
     },
     .init("feed", [.any, .any], syntax:
-    .init(.infix, shorthand: ">>")) {nodes in
+    .init(.infix, shorthand: "->")) {nodes in
         let simplified = nodes[0].simplify()
         return nodes.last!.replacing(by: {_ in simplified}) {
             $0 === v("$")
@@ -365,7 +364,7 @@ public let definitions: [Operation] = [
 ]
 
 let defaultConfig: [Operation.Flag: [String]] = [
-    .isCommutative: [
+    .commutative: [
         "*",
         "+",
         "and",
@@ -377,6 +376,10 @@ let defaultConfig: [Operation.Flag: [String]] = [
         "feed",
         "exec",
         "define"
+    ],
+    .forwardCommutative: [
+        "/",
+        "-"
     ]
 ]
 

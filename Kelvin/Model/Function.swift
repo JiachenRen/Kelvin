@@ -60,8 +60,9 @@ public struct Function: Node {
         if let position = self.syntax?.operator.position {
             switch position {
             case .infix:
-                if let s = r.reduce(nil, {(a, b) -> String in
-                    let p = usesParenthesis(for: b)
+                if let s = r.enumerated().reduce(nil, {(a, c) -> String in
+                    let (i, b) = c
+                    let p = usesParenthesis(forNodeAtIndex: i)
                     let b1 = p ? "(\(b))" : "\(b)"
                     return a == nil ? "\(b1)" : "\(a!) \(n) \(b1)"
                 }) {
@@ -70,7 +71,7 @@ public struct Function: Node {
                     return ""
                 }
             case .prefix where r.count == 1:
-                let p = usesParenthesis(for: r[0])
+                let p = usesParenthesis(forNodeAtIndex: 0)
                 return p ? "\(n) (\(r[0]))" : "\(n) \(r[0])"
             default:
                 break
@@ -87,18 +88,39 @@ public struct Function: Node {
      priority is larger than that of the parent, the parenthesis is also omitted.
      
      - Note: Parentheses only apply to infix operations.
-     - Parameter child: A child node of this function
+     - Parameter idx: The index of the child.
      - Returns: Whether a parenthesis should be used for the child when printing.
      */
-    private func usesParenthesis(for child: Node) -> Bool {
+    private func usesParenthesis(forNodeAtIndex idx: Int) -> Bool {
+        let child = args[idx]
         if let fun = child as? Function {
             if let p1 = fun.syntax?.operator.priority {
                 if let p2 = syntax?.operator.priority {
                     if p1 < p2 {
+                        
+                        // e.g. (a + b) * c
+                        // If the child's priority is lower, a parenthesis is always needed.
                         return true
                     } else if p1 == p2 {
-                        let isCommutative = Operation.hasFlag(name, .isCommutative)
-                        return !isCommutative || name != fun.name
+                        
+                        // e.g. a + b - c
+                        // If the child is on the left and has the same priority,
+                        // a parenthesis is not needed.
+                        if idx != 0 {
+                            if Operation.hasFlag(name, .forwardCommutative) {
+                                
+                                // e.g. case of a - (b + c)
+                                // If the parent is only commutative in the forward direction,
+                                // then always use a parenthesis for rhs.
+                                return true
+                            } else if Operation.hasFlag(name, .commutative) {
+                                
+                                // e.g. a + b + c
+                                // If the parent is commutative both forward and backward,
+                                // then omit parenthesis when the child and parent are the same function.
+                                return name != fun.name
+                            }
+                        }
                     }
                 }
             }
@@ -174,7 +196,7 @@ public struct Function: Node {
         // otherwise returns a copy of the original function with each argument simplified.
         if let s = copy.invoke()?.simplify() {
             return s
-        } else if Operation.hasFlag(name, .isCommutative) {
+        } else if Operation.hasFlag(name, .commutative) {
             // If the function is commutative, then reverse the order or args.
             copy.reverse()
             
@@ -226,7 +248,7 @@ public struct Function: Node {
         var copy = arguments{($0 as? Function)?.flatten() ?? $0} // Initial recursive call
         
         // Flatten commutative operations
-        if Operation.hasFlag(copy.name, .isCommutative) {
+        if Operation.hasFlag(copy.name, .commutative) {
             var newArgs = [Node]()
             copy.args.elements.forEach {arg in
                 if let fun = arg as? Function, fun.name == copy.name {
@@ -247,7 +269,7 @@ public struct Function: Node {
     public func equals(_ node: Node) -> Bool {
         if let fun = node as? Function {
             if fun.name == name {
-                if Operation.hasFlag(name, .isCommutative) {
+                if Operation.hasFlag(name, .commutative) {
                     return fun.args === args
                 }
                 return List.strictlyEquals(args, fun.args)
