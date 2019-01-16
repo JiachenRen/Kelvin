@@ -36,6 +36,12 @@ public class Compiler {
     /// Definitions for operation and encodings for operators are loaded once.
     private static var initialized = false
     
+    /**
+     Compile a single line expression.
+     
+     - Parameter expr: String representation of an expression
+     - Returns: Parent node of the compiled expression.
+     */
     public static func compile(_ expr: String) throws -> Node {
         
         // Load definitions before compilation.
@@ -76,8 +82,37 @@ public class Compiler {
         var dict = Dictionary<String, Node>()
         let parent = try resolve(expr, &dict, binOps)
         
-        // Restore list() to {}, =(a,b) to a=b
+        // Restore encodings to their original form.
         return decode(parent)
+    }
+    
+    /**
+     Compile a multi-line document into a program.
+     
+     - Parameter document: A string containing multiple lines of code
+     - Returns: A program.
+     */
+    public static func compile(document: String) throws -> Program {
+        let lines = document.split(separator: "\n")
+            .map {String($0)}
+        var statements = [Node]()
+        
+        for (i, line) in lines.enumerated() {
+            
+            // Character '#' serves as a precursor for comment
+            if line.starts(with: "#") {
+                continue
+            }
+            
+            do {
+                let node = try compile(line)
+                statements.append(node)
+            } catch let e {
+                throw CompilerError.error(onLine: i, e)
+            }
+        }
+        
+        return Program(statements)
     }
     
     /**
@@ -449,7 +484,7 @@ public class Compiler {
         var beginIdx = left.startIndex
         var endIdx = right.endIndex
         
-        symbols.forEach { symbol in
+        symbols.forEach {(symbol: Character) in
             if let idx = left.lastIndex(of: symbol) {
                 if idx >= beginIdx {
                     beginIdx = left.index(after: idx)

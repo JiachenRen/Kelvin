@@ -33,6 +33,9 @@ public protocol Node: CustomStringConvertible {
     /// TODO: Implement Log
     func simplify() -> Node
     
+    /// Perform an action on each node in the tree.
+    func forEach(_ body: (Node) -> ())
+    
     /**
      - Parameters:
         - predicament: The condition for the matching node.

@@ -326,4 +326,12 @@ public struct Function: Node {
         }
         return predicament(copy) ? replace(copy) : copy
     }
+    
+    /// Perform an action on each node in the tree.
+    public func forEach(_ body: (Node) -> ()) {
+        body(self)
+        for e in args.elements {
+            e.forEach(body)
+        }
+    }
 }

@@ -13,4 +13,5 @@ import Foundation
 public enum CompilerError: Error {
     case illegalArgument(errMsg: String)
     case syntax(errMsg: String)
+    case error(onLine: Int, _ err: Error)
 }

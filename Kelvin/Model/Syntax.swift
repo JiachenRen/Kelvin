@@ -143,7 +143,10 @@ public struct Syntax {
         define(for: "repeat", .infix, priority: .repeat, operator: .init("…", padding: .none))
         define(for: "copy", .infix, priority: .repeat)
         define(for: "complexity", .prefix)
+        define(for: "round", .prefix, priority: .exponent)
         define(for: "eval", .prefix)
+        define(for: "print", .prefix)
+        define(for: "println", .prefix)
     }
     
     public enum Position {

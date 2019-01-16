@@ -332,7 +332,7 @@ public let definitions: [Operation] = [
     // Developer/debug functions
     .init("complexity", [.any]) {$0[0].complexity},
     .init("eval", [.any]) {
-        $0[0].evaluated?.doubleValue ?? Double.nan
+        return $0[0].simplify()
     },
 ]
 
@@ -348,7 +348,9 @@ let defaultConfig: [Operation.Attribute: [String]] = [
         "repeat",
         "feed",
         "exec",
-        "define"
+        "define",
+        "def",
+        "del"
     ],
     .forwardCommutative: [
         "/",

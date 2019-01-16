@@ -156,4 +156,13 @@ public struct List: Node, NaN {
         }
         return predicament(copy) ? replace(copy) : copy
     }
+    
+    /// Perform an action on each node in the tree.
+    public func forEach(_ body: (Node) -> ()) {
+        body(self)
+        for e in elements {
+            e.forEach(body)
+        }
+    }
+    
 }

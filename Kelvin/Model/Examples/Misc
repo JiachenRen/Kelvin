@@ -1,0 +1,34 @@
+# Create a list {f(3,4), f(3,4), f(3,4), f(3,4), f(3,4)}, then store the list in variable "c"
+c:=repeat(f(3,4),5)
+
+# Define f(a,b) = random(a, b) ^ 2
+f(a,b):=random(a,b)^2
+
+# Evaluate c, which generate a list of random numbers according to the definition of f.
+println(eval c)
+
+# Delete variable c.
+del c
+
+# Evaluate c again. You can see now that it no longer has any value.
+eval c
+# Define a function that generates a 2D matrix consisting of random 0 and 1s.
+def matrix(dim)=repeat(repeat(round(random()),dim),dim)
+
+# Set x equal to a list of 5 random integers from 1 to 5
+x:=round(random(1,5)) repeat 5
+println x
+
+# Set x to the sum of all elements in x
+x:=sum(x)
+println x
+
+# Store a x by x random matrix into variable m
+m:=matrix(x)
+
+# Print the matrix as the second output
+println m
+
+# Or, you can do something crazy like this, all on a single line!
+def f() = ({1, 2, 3, x} | $ ^ 2 -> define(f(x), sum($)); f(12) -> $…5 | $ % 7 -> (sum($)!)° -> define(a, $ % 12345 / 3 * e); cos(log(a) ^ 2) * √((5!)!) * 360°)
+println(f())

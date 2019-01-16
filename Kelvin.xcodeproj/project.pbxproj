@@ -13,6 +13,9 @@
 		1F0CF2CA21EBAAB500E40086 /* Syntax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C621EBA8C800E40086 /* Syntax.swift */; };
 		1F0CF2CD21EBC3E300E40086 /* Definitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2CC21EBC3E300E40086 /* Definitions.swift */; };
 		1F0CF2CE21EBC3EC00E40086 /* Definitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2CC21EBC3E300E40086 /* Definitions.swift */; };
+		1F0CF2D321EEA74A00E40086 /* Misc in Resources */ = {isa = PBXBuildFile; fileRef = 1F0CF2D221EEA74A00E40086 /* Misc */; };
+		1F0CF2D521EEB69300E40086 /* Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2D421EEB69300E40086 /* Program.swift */; };
+		1F0CF2D621EEB6C100E40086 /* Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2D421EEB69300E40086 /* Program.swift */; };
 		1F2E82AC21966FC5005C3353 /* Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AB21966FC5005C3353 /* Operation.swift */; };
 		1F2E82AE2197331F005C3353 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AD2197331F005C3353 /* Function.swift */; };
 		1F2E82B02197338B005C3353 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AF2197338B005C3353 /* Node.swift */; };
@@ -80,6 +83,8 @@
 		1F0CF2C321EA420400E40086 /* Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
 		1F0CF2C621EBA8C800E40086 /* Syntax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Syntax.swift; sourceTree = "<group>"; };
 		1F0CF2CC21EBC3E300E40086 /* Definitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Definitions.swift; sourceTree = "<group>"; };
+		1F0CF2D221EEA74A00E40086 /* Misc */ = {isa = PBXFileReference; lastKnownFileType = text; path = Misc; sourceTree = "<group>"; };
+		1F0CF2D421EEB69300E40086 /* Program.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Program.swift; sourceTree = "<group>"; };
 		1F2E82AB21966FC5005C3353 /* Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operation.swift; sourceTree = "<group>"; };
 		1F2E82AD2197331F005C3353 /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
 		1F2E82AF2197338B005C3353 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
@@ -142,6 +147,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1F0CF2CF21EEA6D600E40086 /* Examples */ = {
+			isa = PBXGroup;
+			children = (
+				1F0CF2D221EEA74A00E40086 /* Misc */,
+			);
+			path = Examples;
+			sourceTree = "<group>";
+		};
 		1F2E82BC219757FC005C3353 /* KelvinCommandLine */ = {
 			isa = PBXGroup;
 			children = (
@@ -224,7 +237,9 @@
 		1FFD8CD3218F522E0004ECEB /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				1F0CF2CF21EEA6D600E40086 /* Examples */,
 				1FFD8CD4218F52430004ECEB /* Compiler.swift */,
+				1F0CF2D421EEB69300E40086 /* Program.swift */,
 				1F2E82B32197416D005C3353 /* List.swift */,
 				1F2E82B121973FF7005C3353 /* Value.swift */,
 				1F0CF2C321EA420400E40086 /* Text.swift */,
@@ -369,6 +384,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */,
+				1F0CF2D321EEA74A00E40086 /* Misc in Resources */,
 				1FFD8CAD218F50870004ECEB /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -394,6 +410,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F0CF2D621EEB6C100E40086 /* Program.swift in Sources */,
 				1F0CF2CE21EBC3EC00E40086 /* Definitions.swift in Sources */,
 				1F0CF2CA21EBAAB500E40086 /* Syntax.swift in Sources */,
 				1F0CF2C521EA428000E40086 /* Text.swift in Sources */,
@@ -429,6 +446,7 @@
 				1F2E82AE2197331F005C3353 /* Function.swift in Sources */,
 				1F0CF2CD21EBC3E300E40086 /* Definitions.swift in Sources */,
 				1F0CF2C421EA420400E40086 /* Text.swift in Sources */,
+				1F0CF2D521EEB69300E40086 /* Program.swift in Sources */,
 				1F0CF2C721EBA8C800E40086 /* Syntax.swift in Sources */,
 				1FFD8CA5218F50850004ECEB /* ViewController.swift in Sources */,
 				1F3974C821E67627006D6DC2 /* Mode.swift in Sources */,

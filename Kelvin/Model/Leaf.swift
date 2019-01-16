@@ -23,6 +23,11 @@ extension Leaf {
         return self
     }
     
+    /// Perform an action on each node in the tree.
+    public func forEach(_ body: (Node) -> ()) {
+        body(self)
+    }
+    
     /**
      If self satisfies target node, then return true, otherwise return false.
      
