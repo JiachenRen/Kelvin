@@ -420,6 +420,21 @@ public class Compiler {
         // Add another layer of parenthesis to prevent an error
         expr = "(\(expr))"
         
+        // When naturally writing mathematic expressions, we tend to write
+        // 3*-x instead of 3*(-x), etc.
+        // This corrects the format to make it consistent.
+        let candidates = "([*/^<>,".map {Syntax.glossary[String($0)]?.encoding ?? $0}
+        for c in candidates {
+            let target = "\(c)\(Syntax.glossary["-"]!.encoding)"
+            while expr.contains(target) {
+                let r = expr.range(of: target)!
+                let m = expr.index(before: r.upperBound)
+                let bin = binRange(expr, m)
+                let e = expr[m...bin.upperBound]
+                replace(&expr, of: "\(c)\(e)", with: "\(c)(0\(e))")
+            }
+        }
+        
         func fixCoefficientShorthand(_ symbol: Character, _ digit: Character) {
             let indices = findIndices(of: "\(symbol)\(digit)", in: expr)
             for i in indices {
@@ -443,7 +458,7 @@ public class Compiler {
         // "f1()" should be seen as a function whereas "3(x)" should be seen as "3*x"
         // "arg3er" should be seen as "arg3*er"
         // "3a*4x" should be converted to "3*a*4*x"
-        symbols.forEach{s in digits.forEach{fixCoefficientShorthand(s, $0)}}
+        symbols.forEach{s in digits.forEach {fixCoefficientShorthand(s, $0)}}
     }
     
     /**
