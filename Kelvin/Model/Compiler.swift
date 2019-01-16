@@ -93,14 +93,15 @@ public class Compiler {
      - Returns: A program.
      */
     public static func compile(document: String) throws -> Program {
-        let lines = document.split(separator: "\n")
+        let lines = document.split(separator: "\n", omittingEmptySubsequences: false)
             .map {String($0)}
         var statements = [Node]()
         
         for (i, line) in lines.enumerated() {
             
             // Character '#' serves as a precursor for comment
-            if line.starts(with: "#") {
+            // Empty lines are omitted.
+            if line.starts(with: "#") || line == "" {
                 continue
             }
             
@@ -108,7 +109,7 @@ public class Compiler {
                 let node = try compile(line)
                 statements.append(node)
             } catch let e {
-                throw CompilerError.error(onLine: i, e)
+                throw CompilerError.error(onLine: i + 1, e)
             }
         }
         
@@ -134,22 +135,23 @@ public class Compiler {
             expr = expr.replacingOccurrences(of: o.name, with: c)
         }
         
+        var keyword: String
+        
         // Replace infix function names with operator
         switch syntax.position {
         case .prefix:
-            // "define a=b" becomes @𑅰a=b
-            // Force prefix unary operations into binary infix operations by
-            // giving it a left hand side operand. This lowers compilation overhead.
-            return expr.replacingOccurrences(of: "\(n) ", with: "@\(c)")
+            // "define a=b" becomes 𑅰a=b
+            keyword = "\(n) "
         case .infix:
             // "a and b" becomes "a𑅰b";
-            return expr.replacingOccurrences(of: " \(n) ", with: "\(c)")
+            keyword = " \(n) "
         case .postfix:
-            // "5 degrees" becomes "5𑅰@"
-            // "a!" becomes "a!@"
-            return expr.replacingOccurrences(of: "\(c)", with: "\(c)@")
-                .replacingOccurrences(of: " \(n)", with: "\(c)@")
+            // "5 degrees" becomes "5𑅰"
+            // "a!" becomes "a𑅰"
+            keyword = " \(n)"
         }
+        
+        return expr.replacingOccurrences(of: keyword, with: c)
     }
     
     /**
@@ -418,20 +420,6 @@ public class Compiler {
         // Add another layer of parenthesis to prevent an error
         expr = "(\(expr))"
         
-        // When naturally writing mathematic expressions, we tend to write
-        // 3*-x instead of 3*(-x), etc.
-        // This corrects the format to make it consistent.
-        "([*/^<>,".forEach { cand in
-            let target = "\(cand)-"
-            while expr.contains(target) {
-                let r = expr.range(of: target)!
-                let minusIdx = expr.index(before: r.upperBound)
-                let bin = binRange(expr, minusIdx)
-                let extracted = expr[minusIdx...bin.upperBound]
-                replace(&expr, of: "\(cand)\(extracted)", with: "\(cand)(0\(extracted))")
-            }
-        }
-        
         func fixCoefficientShorthand(_ symbol: Character, _ digit: Character) {
             let indices = findIndices(of: "\(symbol)\(digit)", in: expr)
             for i in indices {
@@ -441,7 +429,7 @@ public class Compiler {
                     a = b
                     let ch = String(expr[a])
                     if "\(Variable.legalChars)(".contains(ch) {
-                        expr.insert("*", at: a)
+                        expr.insert(Syntax.glossary["*"]!.encoding, at: a)
                         break
                     } else if !"\(digits).".contains(ch) {
                         break

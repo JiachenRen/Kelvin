@@ -77,6 +77,7 @@ public let definitions: [Operation] = [
         }
         return $0[0] + -$0[1]
     },
+    .init("-", [.any]) {-1 * $0[0]},
     
     .init("*", [.number, .number]) {bin($0, *)},
     .init("*", [.var, .var]) {
@@ -333,6 +334,9 @@ public let definitions: [Operation] = [
     .init("complexity", [.any]) {$0[0].complexity},
     .init("eval", [.any]) {
         return $0[0].simplify()
+    },
+    .init("exit", []) {_ in
+        exit(0)
     },
 ]
 

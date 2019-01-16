@@ -12,8 +12,9 @@ del c
 
 # Evaluate c again. You can see now that it no longer has any value.
 eval c
-# Define a function that generates a 2D matrix consisting of random 0 and 1s.
-def matrix(dim)=repeat(repeat(round(random()),dim),dim)
+
+# Define a function that generates a 2D matrix consisting of random 0 and 1s of a dimension
+def matrix(a) = (round(random())...a...a)
 
 # Set x equal to a list of 5 random integers from 1 to 5
 x:=round(random(1,5)) repeat 5
@@ -25,10 +26,25 @@ println x
 
 # Store a x by x random matrix into variable m
 m:=matrix(x)
+del x
 
 # Print the matrix as the second output
 println m
 
 # Or, you can do something crazy like this, all on a single line!
-def f() = ({1, 2, 3, x} | $ ^ 2 -> define(f(x), sum($)); f(12) -> $…5 | $ % 7 -> (sum($)!)° -> define(a, $ % 12345 / 3 * e); cos(log(a) ^ 2) * √((5!)!) * 360°)
+def f() = ({1, 2, 3, x} | $ ^ 2 -> define(f(x), sum($)); f(12) -> $...5 | $ % 7 -> (sum($)!)° -> define(a, $ % 12345 / 3 * e); cos(log(a) ^ 2) * √((5!)!) * 360°)
 println(f())
+del a
+
+# Here comes the feature that makes Kelvin different - algebraic computations!
+# Try the following expressions:
+println 1+(a-1-(b-3))+4
+println a || b && true and false || true || d || false
+println x*x^x/x
+println a+b+d+c+v-b-(d-c+a)-a-v
+println a^x*-a^3
+println 3a*4a
+println 3a+4a
+println (3a)^2
+println a^2+b+2a^2-b+c-3a^2
+println 33+43-23*(5+47)^2/2+cos(12)^log(4)%0.1

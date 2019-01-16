@@ -140,7 +140,7 @@ public struct Syntax {
         define(for: "map", .infix, operator: .init("|"))
         define(for: "then", .infix, operator: .init(";", padding: .rightSide))
         define(for: "feed", .infix, operator: .init("->"))
-        define(for: "repeat", .infix, priority: .repeat, operator: .init("…", padding: .none))
+        define(for: "repeat", .infix, priority: .repeat, operator: .init("...", padding: .none))
         define(for: "copy", .infix, priority: .repeat)
         define(for: "complexity", .prefix)
         define(for: "round", .prefix, priority: .exponent)
