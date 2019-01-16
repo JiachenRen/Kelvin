@@ -87,6 +87,11 @@ public struct Function: Node {
             let n = syntax.formatted
             
             switch syntax.position {
+            case .infix where args.count == 1:
+                
+                // Handle special case of -x.
+                let c = syntax.operator?.name ?? name
+                return "\(c)\(r[0])"
             case .infix:
                 if let s = r.enumerated().reduce(nil, {(a, c) -> String in
                     let (i, b) = c
