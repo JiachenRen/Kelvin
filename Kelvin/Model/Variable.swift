@@ -13,7 +13,11 @@ public struct Variable: Leaf, NaN {
     /// The characters that are allowed in the variable
     static let legalChars = "$abcdefghijklmnopqrstuvwxyz_"
     
-    static var definitions: [String: Node] = [
+    static var definitions: [String: Node] = {
+        constants.reduce(into: [:]) {$0[$1.key] = $1.value}
+    }()
+    
+    static var constants: [String: Double] = [
         "e": M_E,
         "pi": Double.pi,
         "inf": Double.infinity,
@@ -66,6 +70,11 @@ public struct Variable: Leaf, NaN {
         }
 
         self.name = name
+    }
+    
+    /// Clear all variable definitions.
+    public static func clearAll() {
+        definitions = constants.reduce(into: [:]) {$0[$1.key] = $1.value}
     }
     
     /**

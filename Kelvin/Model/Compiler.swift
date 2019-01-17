@@ -67,8 +67,9 @@ public class Compiler {
         
         // Load definitions before compilation.
         if !initialized {
-            Operation.reloadDefinitions()
-            Syntax.createDefinitions()
+            Operation.reset()
+            Syntax.reset()
+            Variable.clearAll()
             initialized = true
         }
         
@@ -164,7 +165,7 @@ public class Compiler {
                 if i < rg.lowerBound {
                     left += s
                 } else if i == rg.lowerBound || i == rg.upperBound - 1 {
-                    continue // Skip left quotation mark
+                    continue // Skip left & right quotation mark
                 } else if i < rg.upperBound {
                     extracted += s
                 } else {

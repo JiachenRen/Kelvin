@@ -77,7 +77,7 @@ public class Operation: Equatable {
     
     /// Clear the existing registered operations, then
     /// load the default definitions and configurations from Definitions.swift
-    public static func reloadDefinitions() {
+    public static func reset() {
         
         // Restore to default configuration
         self.configuration = defaultConfig

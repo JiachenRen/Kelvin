@@ -77,6 +77,11 @@ public class Program {
             print(outputs.map {$0.stringified}.reduce("") {$0 + $1}, terminator: "\n")
         }
         
+        // Clear all temporary variables, functions, and syntax definitions.
+        Operation.reset()
+        Syntax.reset()
+        Variable.clearAll()
+        
         return (logs, outputs)
     }
     

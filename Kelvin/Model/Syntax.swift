@@ -98,7 +98,15 @@ public struct Syntax {
         glossary[commonName] = syntax
     }
     
-    public static func createDefinitions() {
+    /// Reset to syntactic definitions for operations.
+    public static func reset() {
+        
+        // Clear glossary, lexicon, and reset encoder scalar before proceeding.
+        lexicon = [Encoding: Syntax]()
+        glossary = [String: Syntax]()
+        Encoder.reset()
+        
+        // Definitions
         define(for: "+", .infix, priority: .addition, operator: .init("+"))
         define(for: "-", .infix, priority: .addition, operator: .init("-"))
         define(for: "*", .infix, priority: .product, operator: .init("*"))
@@ -140,6 +148,11 @@ public struct Syntax {
         /// In this case, the scalar value (and the ones after)
         /// does not have any unicode counterparts
         private static var scalar = 60000
+        
+        /// Reset the scalar
+        fileprivate static func reset() {
+            scalar = 60000
+        }
         
         /// Generate next available encoding from a unique scalar.
         public static func next() -> Character {
