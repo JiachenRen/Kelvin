@@ -10,18 +10,18 @@ import Foundation
 
 
 public protocol Value: Leaf {
-    var doubleValue: Double {get}
+    var doubleValue: Double { get }
 }
 
 extension Value {
     public var evaluated: Value? {
         return self
     }
-    
+
     public var stringified: String {
         return "\(self)"
     }
-    
+
     public func equals(_ node: Node) -> Bool {
         if let d = node as? Value {
             return d.doubleValue == doubleValue
@@ -34,17 +34,17 @@ extension Double: Value {
     var isInteger: Bool {
         return floor(self) == self
     }
-    
+
     public var doubleValue: Double {
         return self
     }
-    
-    public var stringified: String  {
-        
+
+    public var stringified: String {
+
         // Use the proper scientific notation
         return "\(self)".replacingOccurrences(of: "e+", with: "E")
     }
-    
+
     /// If the double is an integer, convert it to an integer.
     public func simplify() -> Node {
         return Int(exactly: self) ?? self

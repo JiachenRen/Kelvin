@@ -9,11 +9,11 @@
 import Foundation
 
 extension String: Leaf, NaN {
-    
+
     public var stringified: String {
         return self
     }
-    
+
     public func equals(_ node: Node) -> Bool {
         if let s = node as? String {
             return self == s

@@ -9,33 +9,37 @@
 import Foundation
 
 public struct List: Node, NaN {
-    
+
     var elements: [Node]
-    
+
     var count: Int {
         return elements.count
     }
-    
+
     /// Complexity of the list is the complexity of all its elements + 1.
     public var complexity: Int {
-        return elements.reduce(0){$0 + $1.complexity} + 1
+        return elements.reduce(0) {
+            $0 + $1.complexity
+        } + 1
     }
-    
+
     public var stringified: String {
-        let pars = elements.map {$0.stringified}.reduce(nil) {
-            $0 == nil ? "\($1)": "\($0!), \($1)"
+        let pars = elements.map {
+            $0.stringified
+        }.reduce(nil) {
+            $0 == nil ? "\($1)" : "\($0!), \($1)"
         }
         return "{\(pars ?? "")}"
     }
-    
+
     init(_ elements: [Node]) {
         self.elements = elements
     }
-    
+
     init(_ elements: Node...) {
         self.init(elements)
     }
-    
+
     subscript(_ idx: Int) -> Node {
         get {
             return elements[idx]
@@ -44,25 +48,27 @@ public struct List: Node, NaN {
             elements[idx] = newValue
         }
     }
-    
+
     /**
      Simplify each element in the list.
      
      - Returns: A copy of the list with each element simplified.
      */
     public func simplify() -> Node {
-        return List(elements.map{$0.simplify()})
+        return List(elements.map {
+            $0.simplify()
+        })
     }
-    
+
     /// The ordering of the list does not matter, i.e. {1,2,3} is considered
     /// the same as {3,2,1}.
     /// - Returns: Whether the provided node is loosely identical to self.
     public func equals(_ node: Node) -> Bool {
-        
+
         func comparator(_ lhs: Node, _ rhs: Node) -> Bool {
             return "\(lhs.stringified)" > "\(rhs.stringified)"
         }
-        
+
         if let list = node as? List, list.elements.count == elements.count {
             let l1 = sorted(by: comparator)
             let l2 = list.sorted(by: comparator)
@@ -70,7 +76,7 @@ public struct List: Node, NaN {
         }
         return false
     }
-    
+
     /**
      Split the list of elements into two groups, with the first group satisfying
      the predicament and the second group being the rest.
@@ -80,17 +86,17 @@ public struct List: Node, NaN {
      */
     public func split(by predicament: PUnary) -> ([Node], [Node]) {
         var o = self.elements
-        
+
         var s = [Node]()
         for (i, e) in o.enumerated() {
             if predicament(e) {
                 s.append(o.remove(at: i))
             }
         }
-        
+
         return (s, o)
     }
-    
+
     /**
      Sort the list by using the provided comparator.
      
@@ -100,7 +106,7 @@ public struct List: Node, NaN {
     public func sorted(by comparator: PBinary) -> List {
         return List(elements.sorted(by: comparator))
     }
-    
+
     /**
      Check if the two lists are strictly equivalent, i.e. order does matter.
      
@@ -119,7 +125,7 @@ public struct List: Node, NaN {
         }
         return true
     }
-    
+
     /**
      If self is the target node or any of the elements contains the target,
      then return true; otherwise return false.
@@ -138,10 +144,10 @@ public struct List: Node, NaN {
                 }
             }
         }
-        
+
         return false
     }
-    
+
     /**
      Replace the designated nodes identical to the node provided with the replacement
      
@@ -151,12 +157,12 @@ public struct List: Node, NaN {
      */
     public func replacing(by replace: Unary, where predicament: PUnary) -> Node {
         var copy = self
-        copy.elements = copy.elements.map{ element in
+        copy.elements = copy.elements.map { element in
             return element.replacing(by: replace, where: predicament)
         }
         return predicament(copy) ? replace(copy) : copy
     }
-    
+
     /// Perform an action on each node in the tree.
     public func forEach(_ body: (Node) -> ()) {
         body(self)
@@ -164,5 +170,5 @@ public struct List: Node, NaN {
             e.forEach(body)
         }
     }
-    
+
 }

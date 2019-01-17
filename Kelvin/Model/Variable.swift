@@ -9,32 +9,34 @@
 import Foundation
 
 public struct Variable: Leaf, NaN {
-    
+
     /// The characters that are allowed in the variable
     static let legalChars = "$abcdefghijklmnopqrstuvwxyz_"
-    
+
     static var definitions: [String: Node] = {
-        constants.reduce(into: [:]) {$0[$1.key] = $1.value}
+        constants.reduce(into: [:]) {
+            $0[$1.key] = $1.value
+        }
     }()
-    
+
     static var constants: [String: Double] = [
         "e": M_E,
         "pi": Double.pi,
         "inf": Double.infinity,
     ]
-    
+
     /// The name of the variable
     var name: String
-    
+
     public var stringified: String {
         return name
     }
-    
+
     /// Extract the definition of the variable from the definitions.
     var definition: Node? {
         return Variable.definitions[name]
     }
-    
+
     /// Whether the variable represents a constant.
     /// e.g. pi, e
     var isConstant: Bool {
@@ -43,22 +45,22 @@ public struct Variable: Leaf, NaN {
         }
         return false
     }
-    
+
     public var evaluated: Value? {
         return definition?.evaluated
     }
-    
+
     /// Variables have a complexity of 2.
     public var complexity: Int {
         return 2
     }
-    
+
     init(_ name: String) throws {
-        
+
         // Check if the variable name is valid
         for ch in name {
             let isDigit = Int("\(ch)") != nil
-            if !Variable.legalChars.contains(ch) && !isDigit  {
+            if !Variable.legalChars.contains(ch) && !isDigit {
                 // Check if the variable contains illegal characters
                 let msg = "illegal variable name '\(name)'; character '\(ch)' is not allowed."
                 throw CompilerError.syntax(errMsg: msg)
@@ -71,12 +73,14 @@ public struct Variable: Leaf, NaN {
 
         self.name = name
     }
-    
+
     /// Clear all variable definitions.
     public static func clearDefinitions() {
-        definitions = constants.reduce(into: [:]) {$0[$1.key] = $1.value}
+        definitions = constants.reduce(into: [:]) {
+            $0[$1.key] = $1.value
+        }
     }
-    
+
     /**
      Assign a definition to variables with the given name.
      
@@ -88,7 +92,7 @@ public struct Variable: Leaf, NaN {
     static func define(_ name: String, _ def: Node) {
         definitions.updateValue(def, forKey: name)
     }
-    
+
     /**
      Remove the definition of the variables with the given name.
      
@@ -97,7 +101,7 @@ public struct Variable: Leaf, NaN {
     static func delete(_ name: String) {
         definitions.removeValue(forKey: name)
     }
-    
+
     /// Two variables are equal to each other if they have the same name.
     public func equals(_ node: Node) -> Bool {
         if let v = node as? Variable {
@@ -105,7 +109,7 @@ public struct Variable: Leaf, NaN {
         }
         return false
     }
-    
+
     /**
      If the variable does not have a definition, the variable itself is returned.
      If the variable is a constant, then depending on the mode, the exact value

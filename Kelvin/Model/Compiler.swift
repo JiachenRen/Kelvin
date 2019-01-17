@@ -16,33 +16,37 @@ public class Compiler {
     private static let squareBrackets = ["[", "]"]
     private static let parentheses = ["(", ")"]
     private static let brackets = ["{", "}"]
-    
+
     /// Symbols from binary operators, shorthands, and syntactic sugars.
     private static var symbols: String {
         let operators = Syntax.lexicon
-            .keys.reduce(""){"\($0)\($1)"}
+                .keys.reduce("") {
+            "\($0)\($1)"
+        }
         return ",(){}[]'\(operators)"
     }
-    
+
     /// Digits from 0 to 9
-    private static var digits = (0...9).reduce(""){"\($0)\($1)"}
-    
+    private static var digits = (0...9).reduce("") {
+        "\($0)\($1)"
+    }
+
     /// A dictionary that maps a operator reference to its encoding.
     typealias OperatorReference = Dictionary<String, Syntax.Encoding>
-    
+
     /// A dictionary that maps a node reference to a node value.
     typealias NodeReference = Dictionary<String, Node>
-    
+
     /// Flags are unique unicode codes that are only understood by the compiler.
     private class Flag {
-        
+
         /// Denotes a reference to a node.
         static let node = Syntax.Encoder.next()
-        
+
         /// Denotes a reference to an operator.
         static let `operator` = Syntax.Encoder.next()
     }
-    
+
     /// Used to restore escape characters to their original form
     /// e.g \t becomes a tab.
     private static let escapeCharDict: [String: String] = [
@@ -52,7 +56,7 @@ public class Compiler {
         "\\\"": "\"",
         "\\\\": "\\"
     ]
-    
+
     /**
      Compile a single line expression.
      
@@ -61,42 +65,48 @@ public class Compiler {
      */
     public static func compile(_ expr: String) throws -> Node {
         var expr = expr
-        
+
         // Encode strings
         var dict = Dictionary<String, Node>()
         encodeStrings(&expr, dict: &dict)
-        
+
         // Validate the expression
         try validate(expr)
-        
+
         // Format lists and vectors
         while expr.contains("{") {
             expr = replace(expr, "{", "}", "list(", ")")
         }
-        
+
         while expr.contains("[") {
             expr = replace(expr, "[", "]", "vector(", ")")
         }
-        
+
         // Apply syntactic transformations before compilation (encoding)
-        Syntax.lexicon.map {$0.value}
-            .sorted {$0.compilationPriority > $1.compilationPriority}
-            .forEach {expr = applySyntax($0, for: expr)}
-        
+        Syntax.lexicon.map {
+                    $0.value
+                }
+                .sorted {
+                    $0.compilationPriority > $1.compilationPriority
+                }
+                .forEach {
+                    expr = applySyntax($0, for: expr)
+                }
+
         // Format the expression for compilation
         format(&expr)
-        
+
         // Convert all binary operations to functions with parameters.
         // i.e. a+b becomes &?(a,b)
         let binOps = binaryToFunction(&expr)
-        
+
         // Construct operation tree
         let parent = try resolve(expr, &dict, binOps)
-        
+
         // Restore encodings to their original form.
         return decode(parent)
     }
-    
+
     /**
      Compile a multi-line document into a program.
      
@@ -105,17 +115,19 @@ public class Compiler {
      */
     public static func compile(document: String) throws -> Program {
         let lines = document.split(separator: "\n", omittingEmptySubsequences: false)
-            .map {String($0)}
+                .map {
+                    String($0)
+                }
         var statements = [Node]()
-        
+
         for (i, line) in lines.enumerated() {
-            
+
             // Character '#' serves as a precursor for comment
             // Empty lines are omitted.
             if line.starts(with: "#") || line == "" {
                 continue
             }
-            
+
             do {
                 let node = try compile(line)
                 statements.append(node)
@@ -123,32 +135,32 @@ public class Compiler {
                 throw CompilerError.error(onLine: i + 1, e)
             }
         }
-        
+
         return Program(statements)
     }
-    
+
     /// Replace strings in the expression w/ node references and store the
     /// actual string values into the node reference dictionary.
     /// They are converted back at the final step of compilation.
     private static func encodeStrings(_ expr: inout String, dict: inout NodeReference) {
-        
+
         // Regex for matching string inside double quotes
         let regex = try! NSRegularExpression(pattern: "([\"'])(\\\\?.)*?\\1", options: NSRegularExpression.Options.caseInsensitive)
-        
+
         var count = 0
         while true {
             let range = NSMakeRange(0, expr.count)
             let rg = regex.rangeOfFirstMatch(in: expr, options: [], range: range)
-            
+
             // No more matches, break the loop.
             if rg.upperBound == Int.max {
                 break
             }
-            
+
             var left = ""
             var extracted = ""
             var right = ""
-            
+
             for (i, c) in expr.enumerated() {
                 let s = "\(c)"
                 if i < rg.lowerBound {
@@ -161,24 +173,24 @@ public class Compiler {
                     right += s
                 }
             }
-            
+
             let encoded = "\(Flag.node)\(count)"
-            
+
             // Updated the expression with the code for the extracted string.
             expr = "\(left)\(encoded)\(right)"
-            
+
             // Restore escape characters to their original form.
             for (key, value) in escapeCharDict {
                 extracted = extracted.replacingOccurrences(of: key, with: value)
             }
-            
+
             // Store the extracted string as a node reference
             dict[encoded] = extracted
-            
+
             count += 1
         }
     }
-    
+
     /**
      Perform syntactic manipulations on the expression.
      Replace common names and operators with their encodings.
@@ -192,14 +204,14 @@ public class Compiler {
         var expr = expr
         let c = "\(syntax.encoding)"
         let n = syntax.commonName
-        
+
         // Replace operators with their code
         if let o = syntax.operator {
             expr = expr.replacingOccurrences(of: o.name, with: c)
         }
-        
+
         var keyword: String
-        
+
         // Replace infix function names with operator
         switch syntax.position {
         case .prefix:
@@ -213,10 +225,10 @@ public class Compiler {
             // "a!" becomes "a𑅰"
             keyword = " \(n)"
         }
-        
+
         return expr.replacingOccurrences(of: keyword, with: c)
     }
-    
+
     /**
      During compilation, all data types are functionalized.
      This restores the functions back to their original data type.
@@ -228,15 +240,15 @@ public class Compiler {
      */
     private static func decode(_ parent: Node) -> Node {
         var parent = parent
-        
+
         func name(_ node: Node) -> String? {
             return (node as? Function)?.name
         }
-        
+
         func args(_ node: Node) -> List {
             return (node as! Function).args
         }
-        
+
         // Replace functions generated from syntactic sugars with their
         // corrected names.
         parent = parent.replacing(by: {
@@ -250,23 +262,23 @@ public class Compiler {
             }
             return false
         }
-        
+
         // Restore list() to {}
-        parent = parent.replacing(by: {args($0)}){
+        parent = parent.replacing(by: { args($0) }) {
             name($0) == "list"
         }
-        
+
         // Restore equations
-        parent = parent.replacing(by: {Equation(lhs: args($0)[0], rhs: args($0)[1])}) {
+        parent = parent.replacing(by: { Equation(lhs: args($0)[0], rhs: args($0)[1]) }) {
             name($0) == "="
         }
-        
+
         return parent
     }
-    
+
     private static func resolve(_ expr: String, _ dict: inout NodeReference, _ binOps: OperatorReference) throws -> Node {
         var expr = expr
-        
+
         while expr.contains("(") {
             let r = innermost(expr, "(", ")")
             var prefixIdx = r.lowerBound
@@ -280,11 +292,11 @@ public class Compiler {
             }
             let idx1 = expr.index(after: r.lowerBound)
             let idx2 = expr.index(before: r.upperBound)
-            
+
             // Range inside parenthesis
             // A range isn't use here to avoid error caused by upperBound < lowerBound
             let ir = [idx1, idx2]
-            
+
             var node: Node? = nil
             if hasPrefix {
                 // In case of definitions like random()
@@ -292,9 +304,9 @@ public class Compiler {
                 if let bin = binOps[name] {
                     name = bin.description
                 }
-                
+
                 name = removeWhiteSpace(name)
-                
+
                 if ir[0] == r.upperBound {
                     node = Function(name, [Node]())
                 } else {
@@ -311,18 +323,22 @@ public class Compiler {
                 }
                 node = try resolve(String(expr[ir[0]...ir[1]]), &dict, binOps)
             }
-            
+
             let id = "\(Flag.node)\(dict.count)"
             dict[id] = node
             let left = String(expr[expr.startIndex..<prefixIdx])
             let right = String(expr[expr.index(after: r.upperBound)...])
             expr = left + id + right
         }
-        
+
         if expr.contains(",") {
             let nodes = try expr.split(separator: ",")
-                .map{String($0)}
-                .map{try resolve($0, &dict, binOps)}
+                    .map {
+                        String($0)
+                    }
+                    .map {
+                        try resolve($0, &dict, binOps)
+                    }
             return List(nodes)
         } else {
             expr = removeWhiteSpace(expr)
@@ -334,7 +350,7 @@ public class Compiler {
             }
         }
     }
-    
+
     /// Remove trailing and padding white space.
     private static func removeWhiteSpace(_ expr: String) -> String {
         var expr = expr
@@ -342,19 +358,21 @@ public class Compiler {
         while expr.starts(with: " ") {
             expr.removeFirst()
         }
-        
+
         // Remove trailing white space
         while expr.reversed().first == " " {
             expr.removeLast()
         }
-        
+
         return expr
     }
-    
+
     private static func binaryToFunction(_ expr: inout String) -> OperatorReference {
         let operators = Syntax.lexicon.values
-        let prioritized = operators.sorted{$0.priority > $1.priority}
-        
+        let prioritized = operators.sorted {
+            $0.priority > $1.priority
+        }
+
         var segregated = [[Syntax.Encoding]]()
         var cur = prioritized[0].priority
         var buf = [Syntax.Encoding]()
@@ -367,7 +385,7 @@ public class Compiler {
             buf.append($0.encoding)
         }
         segregated.append(buf)
-        
+
         var dict = OperatorReference()
         for operators in segregated {
             var d = Dictionary<Character, String>()
@@ -376,15 +394,17 @@ public class Compiler {
                 dict[id] = $0
                 d[$0] = id
             }
-            parenthesize(&expr, operators.map{$0}, d)
+            parenthesize(&expr, operators.map {
+                $0
+            }, d)
         }
         return dict
     }
-    
+
     private static func parenthesize(_ expr: inout String, _ ops: [Character], _ rp: Dictionary<Character, String>) {
         func firstIndex() -> String.Index? {
             var first: String.Index? = nil
-            ops.forEach {operator_ in
+            ops.forEach { operator_ in
                 if let idx = expr.firstIndex(of: operator_) {
                     if first == nil || idx < first! {
                         first = idx
@@ -393,15 +413,15 @@ public class Compiler {
             }
             return first
         }
-        
+
         while let idx = firstIndex() {
             let idx_ = expr.index(after: idx)
             let _idx = expr.index(before: idx)
             var left: String?, right: String?
             var begin = expr.startIndex, end = expr.endIndex
             let r = binRange(expr, idx)
-            
-            
+
+
             // To the right of binary operator
             if expr[idx_] == "(" {
                 end = find(expr, start: idx_, close: ")")!
@@ -419,7 +439,7 @@ public class Compiler {
                 }
                 end = r.upperBound
             }
-            
+
             // To the left of binary operator
             if expr[_idx] == ")" {
                 begin = find(expr, end: _idx, open: "(")!
@@ -440,28 +460,28 @@ public class Compiler {
                 }
                 begin = r.lowerBound
             }
-            
+
             let rLeft = String(expr[..<begin])
             let rRight = String(expr[expr.index(after: end)...])
             let id = rp[expr[idx]]!
-            
+
             var args = ""
-            if let l = left, let r = right  {
+            if let l = left, let r = right {
                 args = "\(l),\(r)"
             } else if let r = right {
                 args = "\(r)"
             } else if let l = left {
                 args = "\(l)"
             }
-            
+
             expr = rLeft + "\(id)(\(args))" + rRight
         }
     }
-    
+
     private static func replace(_ expr: inout String, of target: String, with replacement: String) {
         expr = expr.replacingOccurrences(of: target, with: replacement)
     }
-    
+
     /**
      Formats the raw String to prepare it for the formulation into a Function instance.
      For instance, the call to formatCoefficients("x+2x^2+3x+4") would return "x+2*x^2+3*x+4"
@@ -470,17 +490,21 @@ public class Compiler {
      - Parameter expr: the expression to have coefficients and negative sign formatted
      */
     private static func format(_ expr: inout String) {
-        
+
         // Remove spaces for ease of processing
-        expr.removeAll{$0 == " "}
-        
+        expr.removeAll {
+            $0 == " "
+        }
+
         // Add another layer of parenthesis to prevent an error
         expr = "(\(expr))"
-        
+
         // When naturally writing mathematic expressions, we tend to write
         // 3*-x instead of 3*(-x), etc.
         // This corrects the format to make it consistent.
-        let candidates = "([*/^<>,".map {Syntax.glossary[String($0)]?.encoding ?? $0}
+        let candidates = "([*/^<>,".map {
+            Syntax.glossary[String($0)]?.encoding ?? $0
+        }
         for c in candidates {
             let target = "\(c)\(Syntax.glossary["-"]!.encoding)"
             while expr.contains(target) {
@@ -491,7 +515,7 @@ public class Compiler {
                 replace(&expr, of: "\(c)\(e)", with: "\(c)(0\(e))")
             }
         }
-        
+
         func fixCoefficientShorthand(_ symbol: Character, _ digit: Character) {
             let indices = findIndices(of: "\(symbol)\(digit)", in: expr)
             for i in indices {
@@ -509,15 +533,19 @@ public class Compiler {
                 }
             }
         }
-        
+
         // Fix shorthand syntax of variable coefficients.
         // This can be really tricky:
         // "f1()" should be seen as a function whereas "3(x)" should be seen as "3*x"
         // "arg3er" should be seen as "arg3*er"
         // "3a*4x" should be converted to "3*a*4*x"
-        symbols.forEach{s in digits.forEach {fixCoefficientShorthand(s, $0)}}
+        symbols.forEach { s in
+            digits.forEach {
+                fixCoefficientShorthand(s, $0)
+            }
+        }
     }
-    
+
     /**
      Find all indices in which the substring occurs in the given string
      
@@ -532,19 +560,21 @@ public class Compiler {
             let left = str[...r.lowerBound]
             let right = String(str[str.index(after: r.lowerBound)...])
             let subIndices = findIndices(of: substr, in: right)
-            indices.append(contentsOf: subIndices.map{str.index($0, offsetBy: left.count)})
+            indices.append(contentsOf: subIndices.map {
+                str.index($0, offsetBy: left.count)
+            })
         }
         return indices
     }
-    
+
     private static func binRange(_ segment: String, _ binIdx: String.Index) -> ClosedRange<String.Index> {
         let left = String(segment[..<binIdx])
         let right = String(segment[segment.index(after: binIdx)...])
-        
+
         var beginIdx = left.startIndex
         var endIdx = right.endIndex
-        
-        symbols.forEach {(symbol: Character) in
+
+        symbols.forEach { (symbol: Character) in
             if let idx = left.lastIndex(of: symbol) {
                 if idx >= beginIdx {
                     beginIdx = left.index(after: idx)
@@ -556,14 +586,14 @@ public class Compiler {
                 }
             }
         }
-        
+
         // Relocate indices in original expr.
         let lb = segment.index(beginIdx, offsetBy: 0)
         let ub = segment.index(endIdx, offsetBy: left.count)
-        
+
         return lb...ub
     }
-    
+
     /**
      Validate the expression for parenthesis/brackets match, illegal symbols, etc.
      */
@@ -580,6 +610,7 @@ public class Compiler {
             }
             return true
         }
+
         if !matches(expr, parentheses) {
             throw CompilerError.syntax(errMsg: "() mismatch in \(expr)")
         } else if !matches(expr, brackets) {
@@ -592,7 +623,7 @@ public class Compiler {
             throw CompilerError.syntax(errMsg: "'' mismatch in \(expr)")
         }
     }
-    
+
     /**
      - Parameters:
         - exp: the expression to be modified
@@ -606,23 +637,23 @@ public class Compiler {
         let r = self.innermost(exp, open, close)
         let idx1 = exp.index(after: r.lowerBound)
         let idx2 = exp.index(after: r.upperBound)
-        
+
         let tmp1 = String(exp[..<r.lowerBound])
         let tmp2 = String(exp[idx1..<r.upperBound])
         let tmp3 = String(exp[idx2...])
-        
+
         return tmp1 + rp1 + tmp2 + rp2 + tmp3
     }
-    
+
     /**
      - Returns: the indices of the innermost opening and the closing parenthesis/brackets
      */
-    private static func innermost(_ exp: String, _ open: Character, _ close: Character) -> ClosedRange<String.Index>{
+    private static func innermost(_ exp: String, _ open: Character, _ close: Character) -> ClosedRange<String.Index> {
         let closeIdx = exp.firstIndex(of: close)!
         let openIdx = exp[..<closeIdx].lastIndex(of: open)!
         return openIdx...closeIdx
     }
-    
+
     /**
      Call to findMatchingIndex("(56+(34+2))*(32+(13+34+2))",4,')') returns 9
      Call to findMatchingIndex("(56+(34+2))*(32+(13+34+2))",0,')') returns 10
@@ -647,8 +678,8 @@ public class Compiler {
         }
         return nil
     }
-    
-    
+
+
     /**
      See forward(_:,_:,_:); this does the exact opposite of that.
      - Returns: the index at which the parenthesis/bracket opens
@@ -668,7 +699,7 @@ public class Compiler {
         }
         return nil
     }
-    
+
     /**
      - Parameter s: String that is going to be indexed for occurrence of char c
      - Parameter c: char c for num of occurrence.

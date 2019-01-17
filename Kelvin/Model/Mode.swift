@@ -16,10 +16,10 @@ public struct Mode {
 }
 
 public enum Rounding {
-    
+
     /// Constants are left as-is, and decimals are converted to fractions
     case exact
-    
+
     /// Constants are unwrapped into their numerical values
     case approximate
 }

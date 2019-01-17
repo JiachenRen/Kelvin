@@ -12,22 +12,22 @@ public protocol Leaf: Node {
 }
 
 extension Leaf {
-    
+
     /// Leaf nodes have a complexity of 1
     public var complexity: Int {
         return 1
     }
-    
+
     /// Leaf nodes cannot be further simplified by definition.
     public func simplify() -> Node {
         return self
     }
-    
+
     /// Perform an action on each node in the tree.
     public func forEach(_ body: (Node) -> ()) {
         body(self)
     }
-    
+
     /**
      If self satisfies target node, then return true, otherwise return false.
      
@@ -39,7 +39,7 @@ extension Leaf {
     public func contains(where predicament: PUnary, depth: Int) -> Bool {
         return predicament(self)
     }
-    
+
     /**
      Replace the designated nodes identical to the node provided with the replacement
      
@@ -50,5 +50,5 @@ extension Leaf {
     public func replacing(by replace: Unary, where predicament: PUnary) -> Node {
         return predicament(self) ? replace(self) : self
     }
-    
+
 }

@@ -9,16 +9,16 @@
 import Foundation
 
 public struct Function: Node {
-    
+
     public var evaluated: Value? {
         return invoke()?.evaluated
     }
-    
+
     /// Complexity of the function is the complexity of the List of args + 1.
     public var complexity: Int {
         return args.complexity + 1
     }
-    
+
     /// The name of the function
     var name: String {
         didSet {
@@ -26,7 +26,7 @@ public struct Function: Node {
             resolveDefinition()
         }
     }
-    
+
     /// List of arguments that the function takes in.
     /// - Note: When the arguments change, the signature of the function
     /// also changes, potentially resulting in a different definition!
@@ -36,27 +36,27 @@ public struct Function: Node {
             resolveDefinition()
         }
     }
-    
+
     /// Operations contain definitions that define what the function does.
     /// - Note: Operations only exists when the arguments match the requirements
     var operations = [Operation]()
-    
+
     /// The syntactic rules of the function (looked up by the name)
     var syntax: Syntax? {
         return Syntax.glossary[name]
     }
-    
+
     init(_ name: String, _ args: List) {
         self.name = name
         self.args = args
-        
+
         resolveDefinition()
     }
-    
+
     init(_ name: String, _ args: [Node]) {
         self.init(name, List(args))
     }
-    
+
     /**
      Resolve the definition of the function. There are three types of definitions:
      - binary: Pre-defined operations such as +, -, *, /
@@ -64,36 +64,40 @@ public struct Function: Node {
      - custom: user defined operations, such as a function f(x)
      */
     private mutating func resolveDefinition() {
-        
+
         // Match function with registered operations
         self.operations = Operation.resolve(name, args: args.elements)
     }
-    
+
     public var stringified: String {
-        let r = args.elements.map {$0.stringified}
+        let r = args.elements.map {
+            $0.stringified
+        }
         var n = " \(name) "
-        
-        func formatted() -> String  {
-            let l = r.map{$0.stringified}.reduce(nil) {
-                $0 == nil ? "\($1)": "\($0!), \($1)"
+
+        func formatted() -> String {
+            let l = r.map {
+                $0.stringified
+            }.reduce(nil) {
+                $0 == nil ? "\($1)" : "\($0!), \($1)"
             }
             return "\(name)(\(l ?? ""))"
         }
-        
+
         if let syntax = self.syntax {
-            
+
             // Determine which form of the function to use;
             // there are three options: shorthand, operator, or default.
             let n = syntax.formatted
-            
+
             switch syntax.position {
             case .infix where args.count == 1:
-                
+
                 // Handle special case of -x.
                 let c = syntax.operator?.name ?? name
                 return "\(c)\(r[0])"
             case .infix:
-                if let s = r.enumerated().reduce(nil, {(a, c) -> String in
+                if let s = r.enumerated().reduce(nil, { (a, c) -> String in
                     let (i, b) = c
                     let p = usesParenthesis(forNodeAtIndex: i)
                     let b1 = p ? "(\(b))" : "\(b)"
@@ -113,10 +117,10 @@ public struct Function: Node {
                 break
             }
         }
-        
+
         return formatted()
     }
-    
+
     /**
      Whether the child node should be enveloped in parenthesis when printing.
      If the parent and the child are both commutative and have the same name,
@@ -133,34 +137,34 @@ public struct Function: Node {
             if let p1 = fun.syntax?.priority {
                 if let p2 = syntax?.priority {
                     if p1 < p2 {
-                        
+
                         // e.g. (a + b) * c
                         // If the child's priority is lower, a parenthesis is always needed.
                         return true
                     } else if p1 == p2 {
-                        
+
                         // Always parenthesize unary operations to disambiguate
                         if fun.args.count == 1 {
                             return true
                         }
-                        
+
                         // e.g. a + b - c
                         // If the child is on the left and has the same priority,
                         // a parenthesis is not needed.
                         if idx != 0 {
                             if Operation.has(attr: .forwardCommutative, name) {
-                                
+
                                 // e.g. case of a - (b + c)
                                 // If the parent is only commutative in the forward direction,
                                 // then always use a parenthesis for rhs.
                                 return true
                             } else if Operation.has(attr: .commutative, name) {
-                                
+
                                 // e.g. a + b + c
                                 // If the parent is commutative both forward and backward,
                                 // then omit parenthesis when the child and parent are the same function.
                                 return name != fun.name
-                            } else  {
+                            } else {
                                 return true
                             }
                         }
@@ -170,7 +174,7 @@ public struct Function: Node {
         }
         return false
     }
-    
+
     /// Performs the operation defined by the function on the arguments.
     /// The first successful result acquired is returned.
     func invoke() -> Node? {
@@ -181,7 +185,7 @@ public struct Function: Node {
         }
         return nil
     }
-    
+
     /**
      Simplify each argument, if possible, then perform the operation defined by this
      function on the arguments, if possible. Otherwise, a copy of the original function
@@ -190,10 +194,10 @@ public struct Function: Node {
      - Returns: a node representing the simplified(computed) value of the function.
      */
     public func simplify() -> Node {
-        
+
         // Make a copy of self.
         var copy = self
-        
+
         // If the function's name begins with "$", the compiler to preserves it once
         // This enables functions to be used as an input type.
         // Suppose we have "repeat(random(), 5)", it only execute random 1 once
@@ -205,12 +209,12 @@ public struct Function: Node {
             name.removeFirst()
             return Function(name, args)
         }
-        
+
         // Simplify each argument, if requested.
         if !Operation.has(attr: .preservesArguments, name) {
             copy.args = copy.args.simplify() as! List
         }
-        
+
         // If the operation can be performed on the given arguments, perform the operation.
         // Then, the result of the operation is simplified;
         // otherwise returns a copy of the original function with each argument simplified.
@@ -219,15 +223,15 @@ public struct Function: Node {
         } else if Operation.has(attr: .commutative, name) {
             // If the function is commutative, then reverse the order or args.
             copy.reverse()
-            
+
             // Try simplifying in the reserve order.
             if let s = copy.invoke()?.simplify() {
                 return s
             }
-            
+
             // If still didn't work, try commutative simplification.
             let tmp = copy.flatten()
-            
+
             if tmp.args.count > 2 {
                 let after = Operation.simplifyCommutatively(tmp.args.elements, by: name)
                 return after.complexity < copy.complexity ? after : tmp
@@ -235,16 +239,16 @@ public struct Function: Node {
                 return s
             }
         }
-        
+
         // Cannot be further simplified
         return copy
     }
-    
+
     /// Reverse the order of arguments.
     private mutating func reverse() {
         args.elements = args.elements.reversed()
     }
-    
+
     /**
      Perform batch operation on the list of arguments.
      
@@ -256,7 +260,7 @@ public struct Function: Node {
         copy.args = action(copy.args) as! List
         return copy
     }
-    
+
     /**
      Unravel the binary operation tree.
      e.g. +(d,+(+(a,b),c)) becomes +(a,b,c,d)
@@ -265,12 +269,14 @@ public struct Function: Node {
                 Under normal circumstances, don't use this function.
      */
     public func flatten() -> Function {
-        var copy = arguments{($0 as? Function)?.flatten() ?? $0} // Initial recursive call
-        
+        var copy = arguments {
+            ($0 as? Function)?.flatten() ?? $0
+        } // Initial recursive call
+
         // Flatten commutative operations
         if Operation.has(attr: .commutative, copy.name) {
             var newArgs = [Node]()
-            copy.args.elements.forEach {arg in
+            copy.args.elements.forEach { arg in
                 if let fun = arg as? Function, fun.name == copy.name {
                     newArgs.append(contentsOf: fun.args.elements)
                 } else {
@@ -279,10 +285,10 @@ public struct Function: Node {
             }
             copy.args.elements = newArgs
         }
-        
+
         return copy
     }
-    
+
     /// Functions are equal to each other if their name and arguments are the same
     /// Commutative functions are equal to each other if they have the same elements -
     /// that is, regardless of the order they are in.
@@ -297,7 +303,7 @@ public struct Function: Node {
         }
         return false
     }
-    
+
     /**
      - Parameters:
         - predicament: The condition for the matching node.
@@ -316,7 +322,7 @@ public struct Function: Node {
         }
         return false
     }
-    
+
     /**
      Replace the designated nodes identical to the node provided with the replacement
      
@@ -326,12 +332,12 @@ public struct Function: Node {
      */
     public func replacing(by replace: Unary, where predicament: PUnary) -> Node {
         var copy = self
-        copy.args.elements = copy.args.elements.map{
+        copy.args.elements = copy.args.elements.map {
             $0.replacing(by: replace, where: predicament)
         }
         return predicament(copy) ? replace(copy) : copy
     }
-    
+
     /// Perform an action on each node in the tree.
     public func forEach(_ body: (Node) -> ()) {
         body(self)

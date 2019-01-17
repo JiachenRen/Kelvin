@@ -17,47 +17,53 @@ typealias NUnary = (Double) -> Double
 typealias NBinary = (Double, Double) -> Double
 
 public class Operation: Equatable {
-    
+
     /// Registered operations are resolved dynamically during runtime
     /// and assigned to functions with matching signature as definitions.
-    public static var registered: [Operation] = {defaultOperations}()
-    
+    public static var registered: [Operation] = {
+        defaultOperations
+    }()
+
     /// Use this dictionary to assign special attributes to operations.
     /// e.g. since + and * are commutaive, the "commutative" flag should be assigned to them.
-    public static var configuration: [Attribute: [String]] = {defaultConfiguration}()
-    
+    public static var configuration: [Attribute: [String]] = {
+        defaultConfiguration
+    }()
+
     /// A value that represents the scope of the signature
     /// The larger the scope, the more universally applicable the function.
     public var scope: Int {
-        return signature.reduce(0) {$0 + $1.rawValue}
+        return signature.reduce(0) {
+            $0 + $1.rawValue
+        }
     }
-    
+
     let def: Definition
     let name: String
     let signature: [ArgumentType]
-    
+
     init(_ name: String, _ signature: [ArgumentType], definition: @escaping Definition) {
         self.name = name
         self.def = definition
         self.signature = signature
     }
-    
+
     /// Register the parametric operation.
     public static func register(_ operation: Operation) {
         registered.append(operation)
     }
-    
+
     /// Clear the existing registered operations, then
     /// load the default definitions and configurations from Definitions.swift
     public static func restoreDefault() {
-        
+
         // Restore to default configuration
         self.configuration = defaultConfiguration
-        
+
         // Clear existing registrations
         registered = defaultOperations
     }
-    
+
     /**
      Remove a parametric operation from registration.
      
@@ -66,16 +72,22 @@ public class Operation: Equatable {
      - signature: The signature of the operation to be removed.
      */
     static func remove(_ name: String, _ signature: [ArgumentType]) {
-        let parOp = Operation(name, signature) {_ in nil}
-        registered.removeAll{$0 == parOp}
+        let parOp = Operation(name, signature) { _ in
+            nil
+        }
+        registered.removeAll {
+            $0 == parOp
+        }
     }
-    
+
     /// Remove the parametric operations with the given name.
     /// - Parameter name: The name of the operations to be removed.
     static func remove(_ name: String) {
-        registered.removeAll{$0.name == name}
+        registered.removeAll {
+            $0.name == name
+        }
     }
-    
+
     /**
      Resolves the corresponding parametric operation based on the name and provided arguments.
      
@@ -84,15 +96,19 @@ public class Operation: Equatable {
      - Returns: A list of operations with matching signature, sorted in order of increasing scope.
      */
     public static func resolve(_ name: String, args: [Node]) -> [Operation] {
-        let candidates = registered.filter{$0.name == name}
-            // Operations with the smaller scope should be prioritized.
-            .sorted{$0.scope < $1.scope}
-        
+        let candidates = registered.filter {
+                    $0.name == name
+                }
+                // Operations with the smaller scope should be prioritized.
+                .sorted {
+                    $0.scope < $1.scope
+                }
+
         var matching = [Operation]()
-        
+
         candLoop: for cand in candidates {
             var signature = cand.signature
-            
+
             // Deal w/ function signature types that allow any # of args.
             if let first = signature.first {
                 switch first {
@@ -105,12 +121,12 @@ public class Operation: Equatable {
                 default: break
                 }
             }
-            
+
             // Bail out if # of parameters does not match # of args.
             if signature.count != args.count {
                 continue
             }
-            
+
             // Make sure that each parameter is the required type
             for i in 0..<signature.count {
                 let argType = signature[i]
@@ -137,13 +153,13 @@ public class Operation: Equatable {
                 default: continue
                 }
             }
-            
+
             matching.append(cand)
         }
-        
+
         return matching
     }
-    
+
     /**
      Commutatively simplify a list of arguments.
      Suppose we have an expression, 1 + a + negate(1) + negate(a);
@@ -158,56 +174,56 @@ public class Operation: Equatable {
      */
     public static func simplifyCommutatively(_ nodes: [Node], by fun: String) -> Node {
         var nodes = nodes
-        
+
         func simplifyBidirectionally(_ nodes: [Node]) -> Node? {
             // Make sure we are only taking in 2 arguments
             assert(nodes.count == 2)
             let forward = Function(fun, [nodes[0], nodes[1]])
             let backward = Function(fun, [nodes[1], nodes[0]])
-            
+
             let originals = [forward, backward]
-            
+
             // Simplification could be forward or backward; in that case,
             // perform simplification for both ways and compare them.
             for bin in originals {
                 let simplified = bin.simplify()
-                
+
                 // If the junction of i and j can be simplified...
                 if simplified.complexity < bin.complexity {
                     return simplified
                 }
             }
-            
+
             return nil
         }
-        
+
         if nodes.count == 2 {
-            
+
             // Reverse the order of arguments and simplify again!
             return Function(fun, nodes.reversed()).simplify()
         }
-        
+
         for i in 0..<nodes.count - 1 {
             let n = nodes.remove(at: i)
             for j in i..<nodes.count {
                 if let simplified = simplifyBidirectionally([nodes[j], n]) {
                     nodes.remove(at: j)
                     nodes.append(simplified)
-                    
+
                     // Commutatively simplify the updated list of nodes
                     return simplifyCommutatively(nodes, by: fun)
                 }
             }
-            
+
             // Can't perform simplification w/ current node.
             // Insert it back in and move on to the next.
             nodes.insert(n, at: i)
         }
-        
+
         // Fully simplified. Reconstruct commutative operation and return.
         return Function(fun, nodes)
     }
-    
+
     /**
      - Parameters:
         - name: The name of the function
@@ -217,15 +233,15 @@ public class Operation: Equatable {
     public static func has(attr: Attribute, _ name: String) -> Bool {
         return configuration[attr]!.contains(name)
     }
-    
+
     /**
      Two parametric operations are equal to each other if they have the same name
      and the same signature
      */
-    public static func == (lhs: Operation, rhs: Operation) -> Bool {
+    public static func ==(lhs: Operation, rhs: Operation) -> Bool {
         return lhs.name == rhs.name && lhs.signature == rhs.signature
     }
-    
+
     /**
      This enum is used to represent the type of the arguments.
      By giving a function a name, the number of arguments,
@@ -246,23 +262,23 @@ public class Operation: Equatable {
         case booleans = 1001
         case universal = 10000 // Takes in any # of args.
     }
-    
+
     /// Flags that denote special attributes for certain operations.
     public enum Attribute: Hashable {
-        
+
         /// Debugging and flow control functions like "complexity" and "repeat"
         /// should not simplify args before their execution.
         case preservesArguments
-        
+
         /// Addition, multiplication, and boolean logic are all commutative
         /// Commutative functions with the same name should only be marked once.
         case commutative
-        
+
         /// Operations with this flag are only commutative in the forward direction.
         /// e.g. division and subtraction.
         case forwardCommutative
     }
-    
+
     /**
      Default operation configurations
      */
@@ -287,15 +303,17 @@ public class Operation: Equatable {
             "-"
         ]
     ]
-    
+
     /**
      Pre-defined operations with signatures that are resolved and assigned
      to function definitions during compilation.
      */
     public static let defaultOperations: [Operation] = [
-        
+
         // Basic binary arithmetic
-        .init("+", [.number, .number]) {bin($0, +)},
+        .init("+", [.number, .number]) {
+            bin($0, +)
+        },
         .init("+", [.any, .any]) {
             $0[0] === $0[1] ? 2 * $0[0] : nil
         },
@@ -329,7 +347,7 @@ public class Operation: Equatable {
         .init("+", [.func, .func]) {
             let f1 = $0[0] as! Function
             let f2 = $0[1] as! Function
-            
+
             if f1.name == f2.name {
                 switch f1.name {
                 case "*":
@@ -344,20 +362,26 @@ public class Operation: Equatable {
                     break
                 }
             }
-            
+
             return nil
         },
-        
-        .init("-", [.number, .number]) {bin($0, -)},
+
+        .init("-", [.number, .number]) {
+            bin($0, -)
+        },
         .init("-", [.any, .any]) {
             if $0[0] === $0[1] {
                 return 0
             }
             return $0[0] + -$0[1]
         },
-        .init("-", [.any]) {-1 * $0[0]},
-        
-        .init("*", [.number, .number]) {bin($0, *)},
+        .init("-", [.any]) {
+            -1 * $0[0]
+        },
+
+        .init("*", [.number, .number]) {
+            bin($0, *)
+        },
         .init("*", [.var, .var]) {
             $0[0] === $0[1] ? $0[0] ^ 2 : nil
         },
@@ -375,7 +399,7 @@ public class Operation: Equatable {
         .init("*", [.func, .func]) {
             let f1 = $0[0] as! Function
             let f2 = $0[1] as! Function
-            
+
             if f1.name == f2.name {
                 switch f1.name {
                 case "^" where f1.args[0] === f2.args[0]:
@@ -397,17 +421,23 @@ public class Operation: Equatable {
                 return nil
             }
         },
-        
-        .init("/", [.number, .number]) {bin($0, /)},
+
+        .init("/", [.number, .number]) {
+            bin($0, /)
+        },
         .init("/", [.any, .any]) {
             if $0[0] === $0[1] {
                 return 1
             }
             return $0[0] * ($0[1] ^ -1)
         },
-        
-        .init("mod", [.number, .number]) {bin($0, %)},
-        .init("^", [.number, .number]) {bin($0, pow)},
+
+        .init("mod", [.number, .number]) {
+            bin($0, %)
+        },
+        .init("^", [.number, .number]) {
+            bin($0, pow)
+        },
         .init("^", [.nan, .number]) {
             if let n = $0[1] as? Int {
                 switch n {
@@ -443,25 +473,45 @@ public class Operation: Equatable {
             }
             return nil
         },
-        
-        
+
+
         // Basic unary transcendental functions
-        .init("log", [.number]) {u($0, log10)},
-        .init("log2", [.number]) {u($0, log2)},
-        .init("ln", [.number]) {u($0, log)},
-        .init("cos", [.number]) {u($0, cos)},
-        .init("sin", [.number]) {u($0, sin)},
-        .init("tan", [.number]) {u($0, tan)},
-        .init("int", [.number]) {u($0, floor)},
-        .init("round", [.number]) {u($0, round)},
-        .init("negate", [.number]) {u($0, -)},
+        .init("log", [.number]) {
+            u($0, log10)
+        },
+        .init("log2", [.number]) {
+            u($0, log2)
+        },
+        .init("ln", [.number]) {
+            u($0, log)
+        },
+        .init("cos", [.number]) {
+            u($0, cos)
+        },
+        .init("sin", [.number]) {
+            u($0, sin)
+        },
+        .init("tan", [.number]) {
+            u($0, tan)
+        },
+        .init("int", [.number]) {
+            u($0, floor)
+        },
+        .init("round", [.number]) {
+            u($0, round)
+        },
+        .init("negate", [.number]) {
+            u($0, -)
+        },
         .init("negate", [.func]) {
             var fun = $0[0] as! Function
             switch fun.name {
             case "nagate":
                 return fun.args[0]
             case "+":
-                fun.args.elements = fun.args.elements.map{$0 * -1}
+                fun.args.elements = fun.args.elements.map {
+                    $0 * -1
+                }
                 return fun.flatten()
             case "*":
                 var args = fun.args.elements
@@ -471,9 +521,13 @@ public class Operation: Equatable {
             }
             return nil
         },
-        .init("negate", [.var]){$0[0] * -1},
-        .init("sqrt", [.number]) {u($0, sqrt)},
-        
+        .init("negate", [.var]) {
+            $0[0] * -1
+        },
+        .init("sqrt", [.number]) {
+            u($0, sqrt)
+        },
+
         // Postfix operations
         .init("degrees", [.any]) {
             return $0[0] / 180 * v("pi")
@@ -487,7 +541,7 @@ public class Operation: Equatable {
         .init("pct", [.any]) {
             return $0[0] / 100
         },
-        
+
         // Equality, inequality, and equations
         .init("=", [.any, .any]) {
             return Equation(lhs: $0[0], rhs: $0[1])
@@ -504,31 +558,39 @@ public class Operation: Equatable {
         .init("<=", [.any, .any]) {
             return Equation(lhs: $0[0], rhs: $0[1], mode: .lessThanOrEquals)
         },
-        .init("equals", [.any, .any]) {nodes in
+        .init("equals", [.any, .any]) { nodes in
             return nodes[0] === nodes[1]
         },
-        
+
         // Boolean logic and, or
-        .init("and", [.bool, .bool]) {nodes in
-            return nodes.map{$0 as! Bool}
-                .reduce(true){$0 && $1}
+        .init("and", [.bool, .bool]) { nodes in
+            return nodes.map {
+                        $0 as! Bool
+                    }
+                    .reduce(true) {
+                        $0 && $1
+                    }
         },
-        .init("or", [.bool, .bool]) {nodes in
-            return nodes.map{$0 as! Bool}
-                .reduce(false){$0 || $1}
+        .init("or", [.bool, .bool]) { nodes in
+            return nodes.map {
+                        $0 as! Bool
+                    }
+                    .reduce(false) {
+                        $0 || $1
+                    }
         },
-        
+
         // Variable/function definition and deletion
-        .init("def", [.equation]) {nodes in
+        .init("def", [.equation]) { nodes in
             if let err = (nodes[0] as? Equation)?.define() {
                 return err
             }
             return "done"
         },
-        .init("define", [.any, .any]) {nodes in
+        .init("define", [.any, .any]) { nodes in
             return Function("def", [Equation(lhs: nodes[0], rhs: nodes[1])])
         },
-        .init("del", [.var]) {nodes in
+        .init("del", [.var]) { nodes in
             if let v = nodes[0] as? Variable {
                 Variable.delete(v.name)
                 Operation.remove(v.name)
@@ -536,28 +598,30 @@ public class Operation: Equatable {
             }
             return nil
         },
-        
+
         // Summation
-        .init("sum", [.list]) {nodes in
+        .init("sum", [.list]) { nodes in
             return Function("+", (nodes[0] as! List).elements)
         },
-        .init("sum", [.universal]) {nodes in
+        .init("sum", [.universal]) { nodes in
             return Function("+", nodes)
         },
-        
+
         // Random number generation
-        .init("random", []) {nodes in
+        .init("random", []) { nodes in
             return Double.random(in: 0...1)
         },
-        .init("random", [.number, .number]) {nodes in
+        .init("random", [.number, .number]) { nodes in
             let lb = nodes[0].evaluated!.doubleValue
             let ub = nodes[1].evaluated!.doubleValue
             return Double.random(in: lb...ub)
         },
-        
+
         // List related operations
-        .init("list", [.universal]) {List($0)},
-        .init("get", [.list, .number]) {nodes in
+        .init("list", [.universal]) {
+            List($0)
+        },
+        .init("get", [.list, .number]) { nodes in
             let list = nodes[0] as! List
             let idx = Int(nodes[1].evaluated!.doubleValue)
             if idx >= list.count {
@@ -569,51 +633,57 @@ public class Operation: Equatable {
         .init("size", [.list]) {
             return ($0[0] as! List).count
         },
-        .init("map", [.list, .any]) {nodes in
+        .init("map", [.list, .any]) { nodes in
             let list = nodes[0] as! List
-            let updated = list.elements.map {element in
-                nodes[1].replacing(by: {_ in element}) {
+            let updated = list.elements.map { element in
+                nodes[1].replacing(by: { _ in element }) {
                     $0 === v("$")
                 }
             }
             return List(updated)
         },
-        
+
         // Average
-        .init("avg", [.list]) {nodes in
+        .init("avg", [.list]) { nodes in
             let l = (nodes[0] as! List).elements
             return Function("+", l) / l.count
         },
-        .init("avg", [.universal]) {nodes in
+        .init("avg", [.universal]) { nodes in
             return Function("+", nodes) / nodes.count
         },
-        
+
         // Consecutive execution, feed forward, flow control
-        .init("then", [.universal]) {nodes in
-            return nodes.map{$0.simplify()}.last
+        .init("then", [.universal]) { nodes in
+            return nodes.map {
+                $0.simplify()
+            }.last
         },
-        .init("feed", [.any, .any]) {nodes in
+        .init("feed", [.any, .any]) { nodes in
             let simplified = nodes[0].simplify()
-            return nodes.last!.replacing(by: {_ in simplified}) {
+            return nodes.last!.replacing(by: { _ in simplified }) {
                 $0 === v("$")
             }
         },
-        .init("repeat", [.any, .number]) {nodes in
+        .init("repeat", [.any, .number]) { nodes in
             let times = Int(nodes[1].evaluated!.doubleValue)
             var elements = [Node]()
-            (0..<times).forEach{_ in elements.append(nodes[0])}
+            (0..<times).forEach { _ in
+                elements.append(nodes[0])
+            }
             return List(elements)
         },
-        .init("copy", [.any, .number]) {nodes in
+        .init("copy", [.any, .number]) { nodes in
             return Function("repeat", nodes)
         },
-        
+
         // Developer/debug functions, program input/output, compilation
-        .init("complexity", [.any]) {$0[0].complexity},
+        .init("complexity", [.any]) {
+            $0[0].complexity
+        },
         .init("eval", [.any]) {
             return $0[0].simplify()
         },
-        .init("exit", []) {_ in
+        .init("exit", []) { _ in
             exit(0)
         },
         .init("compile", [.string]) {
@@ -630,15 +700,21 @@ public class Operation: Equatable {
     ]
 }
 
-fileprivate let isNumber: PUnary = {$0 is NSNumber}
+fileprivate let isNumber: PUnary = {
+    $0 is NSNumber
+}
 
 fileprivate func v(_ n: String) -> Variable {
     return try! Variable(n)
 }
 
 fileprivate func bin(_ nodes: [Node], _ binary: NBinary) -> Double {
-    return nodes.map{$0.evaluated?.doubleValue ?? .nan}
-        .reduce(nil) {$0 == nil ? $1 : binary($0!, $1)}!
+    return nodes.map {
+                $0.evaluated?.doubleValue ?? .nan
+            }
+            .reduce(nil) {
+                $0 == nil ? $1 : binary($0!, $1)
+            }!
 }
 
 fileprivate func u(_ nodes: [Node], _ unary: NUnary) -> Double {
