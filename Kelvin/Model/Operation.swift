@@ -516,7 +516,7 @@ public class Operation: Equatable {
             case "*":
                 var args = fun.args.elements
                 args.append(-1)
-                return Function("*", args)
+                return *args
             default: break
             }
             return nil
@@ -530,7 +530,7 @@ public class Operation: Equatable {
 
         // Postfix operations
         .init("degrees", [.any]) {
-            return $0[0] / 180 * v("pi")
+            $0[0] / 180 * V("pi")
         },
         .init("factorial", [.number]) {
             if let i = Int(exactly: $0[0].evaluated!.doubleValue) {
@@ -539,32 +539,32 @@ public class Operation: Equatable {
             return "can only perform factorial on an integer"
         },
         .init("pct", [.any]) {
-            return $0[0] / 100
+            $0[0] / 100
         },
 
         // Equality, inequality, and equations
         .init("=", [.any, .any]) {
-            return Equation(lhs: $0[0], rhs: $0[1])
+            Equation(lhs: $0[0], rhs: $0[1])
         },
         .init("<", [.any, .any]) {
-            return Equation(lhs: $0[0], rhs: $0[1], mode: .lessThan)
+            Equation(lhs: $0[0], rhs: $0[1], mode: .lessThan)
         },
         .init(">", [.any, .any]) {
-            return Equation(lhs: $0[0], rhs: $0[1], mode: .greaterThan)
+            Equation(lhs: $0[0], rhs: $0[1], mode: .greaterThan)
         },
         .init(">=", [.any, .any]) {
-            return Equation(lhs: $0[0], rhs: $0[1], mode: .greaterThanOrEquals)
+            Equation(lhs: $0[0], rhs: $0[1], mode: .greaterThanOrEquals)
         },
         .init("<=", [.any, .any]) {
-            return Equation(lhs: $0[0], rhs: $0[1], mode: .lessThanOrEquals)
+            Equation(lhs: $0[0], rhs: $0[1], mode: .lessThanOrEquals)
         },
-        .init("equals", [.any, .any]) { nodes in
-            return nodes[0] === nodes[1]
+        .init("equals", [.any, .any]) {
+            $0[0] === $0[1]
         },
 
         // Boolean logic and, or
         .init("and", [.bool, .bool]) { nodes in
-            return nodes.map {
+            nodes.map {
                         $0 as! Bool
                     }
                     .reduce(true) {
@@ -572,7 +572,7 @@ public class Operation: Equatable {
                     }
         },
         .init("or", [.bool, .bool]) { nodes in
-            return nodes.map {
+            nodes.map {
                         $0 as! Bool
                     }
                     .reduce(false) {
@@ -601,10 +601,10 @@ public class Operation: Equatable {
 
         // Summation
         .init("sum", [.list]) { nodes in
-            return Function("+", (nodes[0] as! List).elements)
+            return ++(nodes[0] as! List).elements
         },
         .init("sum", [.universal]) { nodes in
-            return Function("+", nodes)
+            return ++nodes
         },
 
         // Random number generation
@@ -637,7 +637,7 @@ public class Operation: Equatable {
             let list = nodes[0] as! List
             let updated = list.elements.map { element in
                 nodes[1].replacing(by: { _ in element }) {
-                    $0 === v("$")
+                    $0 === V("$")
                 }
             }
             return List(updated)
@@ -646,10 +646,10 @@ public class Operation: Equatable {
         // Average
         .init("avg", [.list]) { nodes in
             let l = (nodes[0] as! List).elements
-            return Function("+", l) / l.count
+            return ++l / l.count
         },
         .init("avg", [.universal]) { nodes in
-            return Function("+", nodes) / nodes.count
+            return ++nodes / nodes.count
         },
 
         // Consecutive execution, feed forward, flow control
@@ -661,7 +661,7 @@ public class Operation: Equatable {
         .init("feed", [.any, .any]) { nodes in
             let simplified = nodes[0].simplify()
             return nodes.last!.replacing(by: { _ in simplified }) {
-                $0 === v("$")
+                $0 === V("$")
             }
         },
         .init("repeat", [.any, .number]) { nodes in
@@ -704,7 +704,7 @@ fileprivate let isNumber: PUnary = {
     $0 is NSNumber
 }
 
-fileprivate func v(_ n: String) -> Variable {
+fileprivate func V(_ n: String) -> Variable {
     return try! Variable(n)
 }
 

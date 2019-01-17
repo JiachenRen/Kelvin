@@ -113,6 +113,24 @@ public prefix func **(_ args: [Node]) -> Node {
     return Function("*", args)
 }
 
+prefix operator +
+
+public prefix func +(_ args: [Node]) -> Node {
+    assert(args.count > 2)
+    return Function("+", args)
+}
+
+prefix operator ++
+
+public prefix func ++(_ args: [Node]) -> Node {
+    if args.count == 0 {
+        return 0
+    } else if args.count == 1 {
+        return args[0]
+    }
+    return Function("+", args)
+}
+
 public func /(_ lhs: Node, _ rhs: Node) -> Node {
     return Function("/", [lhs, rhs])
 }
