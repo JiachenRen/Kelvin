@@ -65,11 +65,9 @@ public class Compiler {
     public static func compile(_ expr: String) throws -> Node {
         var expr = expr
         
-        // Load definitions before compilation.
+        // Load definitions before the first compilation.
         if !initialized {
-            Operation.reset()
-            Syntax.reset()
-            Variable.clearAll()
+            Syntax.restoreDefault()
             initialized = true
         }
         

@@ -99,7 +99,7 @@ public struct Syntax {
     }
     
     /// Reset to syntactic definitions for operations.
-    public static func reset() {
+    public static func restoreDefault() {
         
         // Clear glossary, lexicon, and reset encoder scalar before proceeding.
         lexicon = [Encoding: Syntax]()
@@ -172,6 +172,23 @@ public struct Syntax {
         case prefix
         case infix
         case postfix
+    }
+    
+    public enum Priority: Int, Comparable {
+        case execution = 1  // ;, >>
+        case definition     // :=
+        case `repeat`       // repeat
+        case equation       // =
+        case or             // ||
+        case and            // &&
+        case equality       // ==, <, >, <=, >=
+        case addition       // +,-
+        case product        // *,/
+        case exponent       // ^
+        
+        public static func < (lhs: Priority, rhs: Priority) -> Bool {
+            return lhs.rawValue < rhs.rawValue
+        }
     }
     
     public struct Operator: CustomStringConvertible {

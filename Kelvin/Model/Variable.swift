@@ -73,7 +73,7 @@ public struct Variable: Leaf, NaN {
     }
     
     /// Clear all variable definitions.
-    public static func clearAll() {
+    public static func clearDefinitions() {
         definitions = constants.reduce(into: [:]) {$0[$1.key] = $1.value}
     }
     
