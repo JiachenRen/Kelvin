@@ -21,8 +21,8 @@ public struct List: Node, NaN {
         return elements.reduce(0){$0 + $1.complexity} + 1
     }
     
-    public var description: String {
-        let pars = elements.map {$0.description}.reduce(nil) {
+    public var stringified: String {
+        let pars = elements.map {$0.stringified}.reduce(nil) {
             $0 == nil ? "\($1)": "\($0!), \($1)"
         }
         return "{\(pars ?? "")}"
@@ -60,7 +60,7 @@ public struct List: Node, NaN {
     public func equals(_ node: Node) -> Bool {
         
         func comparator(_ lhs: Node, _ rhs: Node) -> Bool {
-            return "\(lhs)" > "\(rhs)"
+            return "\(lhs.stringified)" > "\(rhs.stringified)"
         }
         
         if let list = node as? List, list.elements.count == elements.count {

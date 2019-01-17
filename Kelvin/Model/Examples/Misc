@@ -49,3 +49,7 @@ println (3a)^2
 println a^2+b+2a^2-b+c-3a^2
 println 33+43-23*(5+47)^2/2+cos(12)^log(4)%0.1
 println 3!!°/4/pi
+
+# Store a string "Hello World" into variable 'greeting'
+def greeting = "Hello World"
+println greeting

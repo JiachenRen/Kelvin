@@ -74,7 +74,7 @@ public class Program {
         if verbose {
             print("program terminated.\n")
             print("cumulative output:")
-            print(outputs.reduce(""){$0 + "\($1)"}, terminator: "\n")
+            print(outputs.map {$0.stringified}.reduce("") {$0 + $1}, terminator: "\n")
         }
         
         return (logs, outputs)

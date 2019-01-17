@@ -197,8 +197,8 @@ public struct Equation: Node, NaN {
         return false
     }
     
-    public var description: String {
-        return "\(lhs) \(mode.rawValue) \(rhs)"
+    public var stringified: String {
+        return "\(lhs.stringified) \(mode.rawValue) \(rhs.stringified)"
     }
     
     /// Complexity of the equation is the sum of the complexity of both sides + 1.

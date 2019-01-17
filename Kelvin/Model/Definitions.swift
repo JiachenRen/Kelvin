@@ -254,7 +254,7 @@ public let definitions: [Operation] = [
         if let v = nodes[0] as? Variable {
             Variable.delete(v.name)
             Operation.remove(v.name)
-            return "deleted '\(v)'"
+            return "deleted '\(v.stringified)'"
         }
         return nil
     },

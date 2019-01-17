@@ -22,7 +22,7 @@ public struct Variable: Leaf, NaN {
     /// The name of the variable
     var name: String
     
-    public var description: String {
+    public var stringified: String {
         return name
     }
     
@@ -113,16 +113,4 @@ public struct Variable: Leaf, NaN {
         }
         return self
     }
-}
-
-struct PlaceHolder: Leaf, NaN {
-    
-    func equals(_ node: Node) -> Bool {
-        return node is PlaceHolder
-    }
-    
-    var description: String {
-        return "@"
-    }
-    
 }

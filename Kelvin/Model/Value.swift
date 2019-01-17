@@ -18,6 +18,10 @@ extension Value {
         return self
     }
     
+    public var stringified: String {
+        return "\(self)"
+    }
+    
     public func equals(_ node: Node) -> Bool {
         if let d = node as? Value {
             return d.doubleValue == doubleValue
@@ -33,6 +37,12 @@ extension Double: Value {
     
     public var doubleValue: Double {
         return self
+    }
+    
+    public var stringified: String  {
+        
+        // Use the proper scientific notation
+        return "\(self)".replacingOccurrences(of: "e+", with: "E")
     }
     
     /// If the double is an integer, convert it to an integer.

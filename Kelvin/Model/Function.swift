@@ -69,12 +69,12 @@ public struct Function: Node {
         self.operations = Operation.resolve(name, args: args.elements)
     }
     
-    public var description: String {
-        let r = args.elements
+    public var stringified: String {
+        let r = args.elements.map {$0.stringified}
         var n = " \(name) "
         
         func formatted() -> String  {
-            let l = r.map{$0.description}.reduce(nil) {
+            let l = r.map{$0.stringified}.reduce(nil) {
                 $0 == nil ? "\($1)": "\($0!), \($1)"
             }
             return "\(name)(\(l ?? ""))"

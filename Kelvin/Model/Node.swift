@@ -19,6 +19,11 @@ public typealias PBinary = (Node, Node) -> Bool
 
 public protocol Node: CustomStringConvertible {
     
+    /// The string representation of the node.
+    /// This is used to override the description implemented in Double;
+    /// It serves as an intermediate.
+    var stringified: String {get}
+    
     /// Computes the numerical value that the node represents.
     var evaluated: Value? {get}
     
@@ -55,6 +60,13 @@ public protocol Node: CustomStringConvertible {
     
     /// - Returns: Whether the provided node is identical with self.
     func equals(_ node: Node) -> Bool
+}
+
+/// Interface with CustomStringConvertible.
+extension Node {
+    public var description: String {
+        return stringified
+    }
 }
 
 /// Infix shorthand for lhs.equals(rhs)

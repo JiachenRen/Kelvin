@@ -17,24 +17,44 @@ public class Compiler {
     private static let parentheses = ["(", ")"]
     private static let brackets = ["{", "}"]
     
-    // Symbols from binary operators, shorthands, and syntactic sugars.
+    /// Symbols from binary operators, shorthands, and syntactic sugars.
     private static var symbols: String {
         let operators = Syntax.lexicon
             .keys.reduce(""){"\($0)\($1)"}
         return ",(){}[]'\(operators)"
     }
     
-    // Digits from 0 to 9
+    /// Digits from 0 to 9
     private static var digits = (0...9).reduce(""){"\($0)\($1)"}
     
-    // &? -> +, - , *, /, ^, etc.
+    /// A dictionary that maps a operator reference to its encoding.
     typealias OperatorReference = Dictionary<String, Syntax.Encoding>
     
-    // #? -> node
+    /// A dictionary that maps a node reference to a node value.
     typealias NodeReference = Dictionary<String, Node>
     
     /// Definitions for operation and encodings for operators are loaded once.
     private static var initialized = false
+    
+    /// Flags are unique unicode codes that are only understood by the compiler.
+    private class Flag {
+        
+        /// Denotes a reference to a node.
+        static let node = Syntax.Encoder.next()
+        
+        /// Denotes a reference to an operator.
+        static let `operator` = Syntax.Encoder.next()
+    }
+    
+    /// Used to restore escape characters to their original form
+    /// e.g \t becomes a tab.
+    private static let escapeCharDict: [String: String] = [
+        "\\n": "\n",
+        "\\r": "\r",
+        "\\t": "\t",
+        "\\\"": "\"",
+        "\\\\": "\\"
+    ]
     
     /**
      Compile a single line expression.
@@ -43,6 +63,7 @@ public class Compiler {
      - Returns: Parent node of the compiled expression.
      */
     public static func compile(_ expr: String) throws -> Node {
+        var expr = expr
         
         // Load definitions before compilation.
         if !initialized {
@@ -51,8 +72,9 @@ public class Compiler {
             initialized = true
         }
         
-        // Remove lines
-        var expr = expr.replacingOccurrences(of: "\n", with: "")
+        // Encode strings
+        var dict = Dictionary<String, Node>()
+        encodeStrings(&expr, dict: &dict)
         
         // Validate the expression
         try validate(expr)
@@ -78,8 +100,7 @@ public class Compiler {
         // i.e. a+b becomes &?(a,b)
         let binOps = binaryToFunction(&expr)
         
-        // The symbol "#" is reserved
-        var dict = Dictionary<String, Node>()
+        // Construct operation tree
         let parent = try resolve(expr, &dict, binOps)
         
         // Restore encodings to their original form.
@@ -114,6 +135,58 @@ public class Compiler {
         }
         
         return Program(statements)
+    }
+    
+    /// Replace strings in the expression w/ node references and store the
+    /// actual string values into the node reference dictionary.
+    /// They are converted back at the final step of compilation.
+    private static func encodeStrings(_ expr: inout String, dict: inout NodeReference) {
+        
+        // Regex for matching string inside double quotes
+        let regex = try! NSRegularExpression(pattern: "([\"'])(\\\\?.)*?\\1", options: NSRegularExpression.Options.caseInsensitive)
+        
+        var count = 0
+        while true {
+            let range = NSMakeRange(0, expr.count)
+            let rg = regex.rangeOfFirstMatch(in: expr, options: [], range: range)
+            
+            // No more matches, break the loop.
+            if rg.upperBound == Int.max {
+                break
+            }
+            
+            var left = ""
+            var extracted = ""
+            var right = ""
+            
+            for (i, c) in expr.enumerated() {
+                let s = "\(c)"
+                if i < rg.lowerBound {
+                    left += s
+                } else if i == rg.lowerBound || i == rg.upperBound - 1 {
+                    continue // Skip left quotation mark
+                } else if i < rg.upperBound {
+                    extracted += s
+                } else {
+                    right += s
+                }
+            }
+            
+            let encoded = "\(Flag.node)\(count)"
+            
+            // Updated the expression with the code for the extracted string.
+            expr = "\(left)\(encoded)\(right)"
+            
+            // Restore escape characters to their original form.
+            for (key, value) in escapeCharDict {
+                extracted = extracted.replacingOccurrences(of: key, with: value)
+            }
+            
+            // Store the extracted string as a node reference
+            dict[encoded] = extracted
+            
+            count += 1
+        }
     }
     
     /**
@@ -177,12 +250,8 @@ public class Compiler {
         // Replace functions generated from syntactic sugars with their
         // corrected names.
         parent = parent.replacing(by: {
-            var a = args($0)
             let syntax = Syntax.lexicon[Syntax.Encoding(name($0)!)]!
-            
-            // remove all place holders
-            a.elements.removeAll{$0 is PlaceHolder}
-            return Function(syntax.commonName, a)
+            return Function(syntax.commonName, args($0))
         }) {
             // If the name of the function is an encoding key,
             // Replace it with its common name.
@@ -253,7 +322,7 @@ public class Compiler {
                 node = try resolve(String(expr[ir[0]...ir[1]]), &dict, binOps)
             }
             
-            let id = "#\(dict.count)"
+            let id = "\(Flag.node)\(dict.count)"
             dict[id] = node
             let left = String(expr[expr.startIndex..<prefixIdx])
             let right = String(expr[expr.index(after: r.upperBound)...])
@@ -267,9 +336,7 @@ public class Compiler {
             return List(nodes)
         } else {
             expr = removeWhiteSpace(expr)
-            if expr == "@" {
-                return PlaceHolder()
-            }
+
             if let node = dict[expr] ?? Int(expr) ?? Double(expr) ?? Bool(expr) {
                 return node
             } else {
@@ -315,7 +382,7 @@ public class Compiler {
         for operators in segregated {
             var d = Dictionary<Character, String>()
             operators.forEach {
-                let id = "&\(dict.count)"
+                let id = "\(Flag.operator)\(dict.count)"
                 dict[id] = $0
                 d[$0] = id
             }
@@ -529,8 +596,6 @@ public class Compiler {
             throw CompilerError.syntax(errMsg: "{} mismatch in \(expr)")
         } else if !matches(expr, squareBrackets) {
             throw CompilerError.syntax(errMsg: "[] mismatch in \(expr)")
-        } else if expr.contains(where: {"#@".contains($0)}) {
-            throw CompilerError.illegalArgument(errMsg: "Illegal character(s) &, #, or @")
         } else if expr == "" {
             throw CompilerError.illegalArgument(errMsg: "Give me some juice!")
         } else if num(expr, char: "'") % 2 != 0 {

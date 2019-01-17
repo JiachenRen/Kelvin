@@ -44,11 +44,6 @@ public struct Syntax {
     /// By doing so, the compiler can treat the operation like +,-,*,/, and so on.
     var encoding: Encoding
     
-    /// A unicode scalar value that would never interfere with input
-    /// In this case, the scalar value (and the ones after)
-    /// does not have any unicode counterparts
-    private static var scalar = 60000
-    
     /// Syntax w/ higher compilation priority are compiled first.
     /// The longer the name of the operator, the higher the compilation priority.
     var compilationPriority: Int  {
@@ -89,28 +84,18 @@ public struct Syntax {
     }
     
     public static func define(for commonName: String, _ position: Position, priority: Priority = .execution, operator: Operator? = nil) {
+        let encoding = Encoder.next()
         
-        // Assign a unique code to the operation consisting of
-        // an unused unicode
-        let encoding = Character(UnicodeScalar(Syntax.scalar)!)
-        
-        // Make sure the operator is currently undefined
+        // Make sure the operator is currently undefined and the name is available
         assert(Syntax.lexicon[encoding] == nil)
-        
-        // Make sure the name is available
         assert(glossary[commonName] == nil)
         
         // Create the syntax
         let syntax = Syntax(encoding, commonName, position, priority: priority, operator: `operator`)
         
-        // Register in encoding lexicon
+        // Register in encoding lexicon and common name glossary
         lexicon[encoding] = syntax
-        
-        // Register in common name glossary
         glossary[commonName] = syntax
-        
-        // Increment the scalar so that each operator is unique.
-        Syntax.scalar += 1
     }
     
     public static func createDefinitions() {
@@ -147,6 +132,27 @@ public struct Syntax {
         define(for: "eval", .prefix)
         define(for: "print", .prefix)
         define(for: "println", .prefix)
+    }
+    
+    public class Encoder {
+        
+        /// A unicode scalar value that would never interfere with input
+        /// In this case, the scalar value (and the ones after)
+        /// does not have any unicode counterparts
+        private static var scalar = 60000
+        
+        /// Generate next available encoding from a unique scalar.
+        public static func next() -> Character {
+            
+            // Assign a unique code to the operation consisting of
+            // an unused unicode
+            let encoding = Character(UnicodeScalar(scalar)!)
+            
+            // Increment the scalar so that each operator is unique.
+            scalar += 1
+            
+            return encoding
+        }
     }
     
     public enum Position {
