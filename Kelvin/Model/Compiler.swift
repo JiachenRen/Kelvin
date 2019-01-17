@@ -33,9 +33,6 @@ public class Compiler {
     /// A dictionary that maps a node reference to a node value.
     typealias NodeReference = Dictionary<String, Node>
     
-    /// Definitions for operation and encodings for operators are loaded once.
-    private static var initialized = false
-    
     /// Flags are unique unicode codes that are only understood by the compiler.
     private class Flag {
         
@@ -64,12 +61,6 @@ public class Compiler {
      */
     public static func compile(_ expr: String) throws -> Node {
         var expr = expr
-        
-        // Load definitions before the first compilation.
-        if !initialized {
-            Syntax.restoreDefault()
-            initialized = true
-        }
         
         // Encode strings
         var dict = Dictionary<String, Node>()

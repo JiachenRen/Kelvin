@@ -10,7 +10,7 @@ import Foundation
 
 /**
  This is the syntax of the operations.
- For the function with signature "define(f(x)=x^2)",
+ For the function with signature ".init(f(x)=x^2)",
  the prefix syntax is "define f(x)=x^2".
  
  The infix syntax, on the other hand, only applies to
@@ -35,10 +35,14 @@ public struct Syntax {
     var commonName: String
     
     /// A dictionary that maps an encoding to a syntax component.
-    public static var lexicon = [Encoding: Syntax]()
+    public static var lexicon: [Encoding: Syntax] = {
+        defaultDefinitions.reduce(into: [:]) {$0[$1.encoding] = $1}
+    }()
     
     /// A dictionary that maps a common name to a syntax component.
-    public static var glossary = [String: Syntax]()
+    public static var glossary: [String: Syntax] = {
+        defaultDefinitions.reduce(into: [:]) {$0[$1.commonName] = $1}
+    }()
     
     /// A single character is used to encode the operation;
     /// By doing so, the compiler can treat the operation like +,-,*,/, and so on.
@@ -75,71 +79,34 @@ public struct Syntax {
         }
     }
     
-    private init(_ code: Encoding, _ commonName: String, _ position: Position, priority: Priority, operator: Operator?) {
+    fileprivate init(for commonName: String, _ position: Position, priority: Priority = .execution, operator: Operator? = nil) {
         self.commonName = commonName
         self.position = position
-        self.encoding = code
         self.priority = priority
         self.operator = `operator`
+        self.encoding = Encoder.next() // Create a unique encoding
     }
     
+    /// Adds a custom defined syntax to lexicon and glossary collections.
     public static func define(for commonName: String, _ position: Position, priority: Priority = .execution, operator: Operator? = nil) {
-        let encoding = Encoder.next()
-        
-        // Make sure the operator is currently undefined and the name is available
-        assert(Syntax.lexicon[encoding] == nil)
-        assert(glossary[commonName] == nil)
         
         // Create the syntax
-        let syntax = Syntax(encoding, commonName, position, priority: priority, operator: `operator`)
+        let syntax = Syntax(for: commonName, position, priority: priority, operator: `operator`)
         
-        // Register in encoding lexicon and common name glossary
-        lexicon[encoding] = syntax
-        glossary[commonName] = syntax
+        // Make sure the encoding is currently unassigned and the name is available
+        assert(Syntax.lexicon[syntax.encoding] == nil)
+        assert(Syntax.glossary[commonName] == nil)
+        
+        // Register the syntax in glossary and lexicon
+        lexicon[syntax.encoding] = syntax
+        glossary[syntax.commonName] = syntax
     }
     
-    /// Reset to syntactic definitions for operations.
+    /// Reset to syntactic definitions for operations by
+    /// First reset encoder scalar, then reload glossary and lexicon
     public static func restoreDefault() {
-        
-        // Clear glossary, lexicon, and reset encoder scalar before proceeding.
-        lexicon = [Encoding: Syntax]()
-        glossary = [String: Syntax]()
-        Encoder.reset()
-        
-        // Definitions
-        define(for: "+", .infix, priority: .addition, operator: .init("+"))
-        define(for: "-", .infix, priority: .addition, operator: .init("-"))
-        define(for: "*", .infix, priority: .product, operator: .init("*"))
-        define(for: "/", .infix, priority: .product, operator: .init("/"))
-        define(for: "mod", .infix, priority: .product, operator: .init("%"))
-        define(for: "^", .infix, priority: .exponent, operator: .init("^"))
-        define(for: "sqrt", .prefix, priority: .exponent, operator: .init("√", padding: .none))
-        define(for: "degrees", .postfix, priority: .exponent, operator: .init("°", padding: .none))
-        define(for: "factorial", .postfix, priority: .exponent, operator: .init("!", padding: .none))
-        define(for: "pct", .postfix, priority: .exponent)
-        define(for: "=", .infix, priority: .equation, operator: .init("="))
-        define(for: "<", .infix, priority: .equality, operator: .init("<"))
-        define(for: ">", .infix, priority: .equality, operator: .init(">"))
-        define(for: ">=", .infix, priority: .equality, operator: .init(">="))
-        define(for: "<=", .infix, priority: .equality, operator: .init("<="))
-        define(for: "equals", .infix, priority: .equality, operator: .init("=="))
-        define(for: "and", .infix, priority: .and, operator: .init("&&"))
-        define(for: "or", .infix, priority: .or, operator: .init("||"))
-        define(for: "define", .infix, priority: .definition, operator: .init(":=", padding: .none))
-        define(for: "def", .prefix, priority: .definition)
-        define(for: "del", .prefix)
-        define(for: "get", .infix)
-        define(for: "size", .prefix)
-        define(for: "map", .infix, operator: .init("|"))
-        define(for: "then", .infix, operator: .init(";", padding: .rightSide))
-        define(for: "feed", .infix, operator: .init("->"))
-        define(for: "repeat", .infix, priority: .repeat, operator: .init("...", padding: .none))
-        define(for: "copy", .infix, priority: .repeat)
-        define(for: "complexity", .prefix)
-        define(for: "round", .prefix, priority: .exponent)
-        define(for: "eval", .prefix)
-        define(for: "print", .prefix)
-        define(for: "println", .prefix)
+        lexicon = defaultDefinitions.reduce(into: [:]) {$0[$1.encoding] = $1}
+        glossary = defaultDefinitions.reduce(into: [:]) {$0[$1.commonName] = $1}
     }
     
     public class Encoder {
@@ -222,4 +189,41 @@ public struct Syntax {
             return name
         }
     }
+    
+    /// Default syntax definitions
+    private static let defaultDefinitions: [Syntax] = [
+        .init(for: "+", .infix, priority: .addition, operator: .init("+")),
+        .init(for: "-", .infix, priority: .addition, operator: .init("-")),
+        .init(for: "*", .infix, priority: .product, operator: .init("*")),
+        .init(for: "/", .infix, priority: .product, operator: .init("/")),
+        .init(for: "mod", .infix, priority: .product, operator: .init("%")),
+        .init(for: "^", .infix, priority: .exponent, operator: .init("^")),
+        .init(for: "sqrt", .prefix, priority: .exponent, operator: .init("√", padding: .none)),
+        .init(for: "degrees", .postfix, priority: .exponent, operator: .init("°", padding: .none)),
+        .init(for: "factorial", .postfix, priority: .exponent, operator: .init("!", padding: .none)),
+        .init(for: "pct", .postfix, priority: .exponent),
+        .init(for: "=", .infix, priority: .equation, operator: .init("=")),
+        .init(for: "<", .infix, priority: .equality, operator: .init("<")),
+        .init(for: ">", .infix, priority: .equality, operator: .init(">")),
+        .init(for: ">=", .infix, priority: .equality, operator: .init(">=")),
+        .init(for: "<=", .infix, priority: .equality, operator: .init("<=")),
+        .init(for: "equals", .infix, priority: .equality, operator: .init("==")),
+        .init(for: "and", .infix, priority: .and, operator: .init("&&")),
+        .init(for: "or", .infix, priority: .or, operator: .init("||")),
+        .init(for: "define", .infix, priority: .definition, operator: .init(":=", padding: .none)),
+        .init(for: "def", .prefix, priority: .definition),
+        .init(for: "del", .prefix),
+        .init(for: "get", .infix),
+        .init(for: "size", .prefix),
+        .init(for: "map", .infix, operator: .init("|")),
+        .init(for: "then", .infix, operator: .init(";", padding: .rightSide)),
+        .init(for: "feed", .infix, operator: .init("->")),
+        .init(for: "repeat", .infix, priority: .repeat, operator: .init("...", padding: .none)),
+        .init(for: "copy", .infix, priority: .repeat),
+        .init(for: "complexity", .prefix),
+        .init(for: "round", .prefix, priority: .exponent),
+        .init(for: "eval", .prefix),
+        .init(for: "print", .prefix),
+        .init(for: "println", .prefix)
+    ]
 }
