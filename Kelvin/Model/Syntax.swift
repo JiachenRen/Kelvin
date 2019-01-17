@@ -224,6 +224,7 @@ public struct Syntax {
         .init(for: "round", .prefix, priority: .exponent),
         .init(for: "eval", .prefix),
         .init(for: "print", .prefix),
-        .init(for: "println", .prefix)
+        .init(for: "println", .prefix),
+        .init(for: "compile", .prefix)
     ]
 }

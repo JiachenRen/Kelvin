@@ -130,6 +130,8 @@ public class Operation: Equatable {
                     fallthrough
                 case .equation where !(arg is Equation):
                     fallthrough
+                case .string where !(arg is String):
+                    fallthrough
                 case .func where !(arg is Function):
                     continue candLoop
                 default: continue
@@ -238,6 +240,7 @@ public class Operation: Equatable {
         case bool = 4
         case list = 5
         case equation = 6
+        case string = 7
         case any = 100
         case numbers = 1000
         case booleans = 1001
@@ -605,13 +608,24 @@ public class Operation: Equatable {
             return Function("repeat", nodes)
         },
         
-        // Developer/debug functions
+        // Developer/debug functions, program input/output, compilation
         .init("complexity", [.any]) {$0[0].complexity},
         .init("eval", [.any]) {
             return $0[0].simplify()
         },
         .init("exit", []) {_ in
             exit(0)
+        },
+        .init("compile", [.string]) {
+            do {
+                return try Compiler.compile($0[0] as! String)
+            } catch CompilerError.illegalArgument(let msg) {
+                return "ERR >>> illegal argument: \(msg)"
+            } catch CompilerError.syntax(let msg) {
+                return "ERR >>> syntax: \(msg)"
+            } catch {
+                return "ERR >>> unknown error"
+            }
         },
     ]
 }

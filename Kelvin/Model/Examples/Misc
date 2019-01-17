@@ -53,3 +53,6 @@ println 3!!°/4/pi
 # Store a string "Hello World" into variable 'greeting'
 def greeting = "Hello World"
 println greeting
+
+# Runtime compilation!
+eval(compile "print \"Hello World from runtime compilation!\"")

@@ -79,7 +79,6 @@ public class Program {
         
         // Clear all temporary variables, functions, and syntax definitions.
         Operation.restoreDefault()
-        Syntax.restoreDefault()
         Variable.clearDefinitions()
         
         return (logs, outputs)

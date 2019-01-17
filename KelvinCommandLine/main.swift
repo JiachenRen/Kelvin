@@ -16,8 +16,21 @@ let baseURL = URL(fileURLWithPath: "/Users/jiachenren/Library/Mobile Documents/c
 
 /// Compile and run the file w/ the given file name under /Examples directory
 fileprivate func compileAndRun(_ fileName: String) throws {
-    let content = try String(contentsOf: URL(fileURLWithPath: fileName, relativeTo: baseURL))
     do {
+        var content = ""
+        do {
+            print("loading contents of absolute URL...")
+            content = try String(contentsOf: URL(fileURLWithPath: fileName))
+        } catch let e {
+            print("\(e);\ntrying relative URL to examples...")
+            
+            do {
+                content = try String(contentsOf: URL(fileURLWithPath: fileName, relativeTo: baseURL))
+            } catch let r {
+                print("\(r);\nfile not found - abort.")
+                return
+            }
+        }
         let program = try Compiler.compile(document: content)
         program.run(verbose: true)
     } catch CompilerError.error(let line, let err) {
