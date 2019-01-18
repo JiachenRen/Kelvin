@@ -828,13 +828,42 @@ public class Operation: Equatable {
             return reduced ?? List([])
         },
 
-        // Average
+        // Statistics
         .init("avg", [.list]) { nodes in
             let l = (nodes[0] as! List).elements
             return ++l / l.count
         },
         .init("avg", [.universal]) { nodes in
             return ++nodes / nodes.count
+        },
+        .init("ssx", [.list]) {
+            return ssx($0[0] as! List)
+        },
+        .init("sample_variance", [.list]) {
+            let list = $0[0] as! List
+            let s = ssx(list)
+            guard let n = s as? Double else {
+                // If we cannot calculate sum of difference squared,
+                // return the error message.
+                return s
+            }
+            
+            return n / (list.count - 1)
+        },
+        .init("population_variance", [.list]) {
+            let list = $0[0] as! List
+            let s = ssx(list)
+            guard let n = s as? Double else {
+                return s
+            }
+            
+            return n / list.count
+        },
+        .init("sample_stdev", [.list]) {
+            return √Function("sample_variance", $0)
+        },
+        .init("population_stdev", [.list]) {
+            return √Function("population_variance", $0)
         },
         
         // Combination and permutation
@@ -942,4 +971,26 @@ fileprivate func %(_ a: Double, _ b: Double) -> Double {
 /// A very concise definition of factorial.
 fileprivate func factorial(_ n: Double) -> Double {
     return n < 0 ? .nan : n == 0 ? 1 : n * factorial(n - 1)
+}
+
+/// Sum of difference squared.
+fileprivate func ssx(_ list: List) -> Node {
+    let nodes = list.elements
+    for e in nodes {
+        if !(e is NSNumber) {
+            return "every element in the list must be a number."
+        }
+    }
+    
+    let numbers: [Double] = nodes.map{$0.evaluated!.doubleValue}
+    
+    // Calculate avg.
+    let sum: Double = numbers.reduce(0) {$0 + $1}
+    let avg: Double = sum / Double(nodes.count)
+    
+    // Sum of squared differences
+    return numbers.map {pow($0 - avg, 2)}
+        .reduce(0) {(a: Double, b: Double) in
+            return a + b
+    }
 }
