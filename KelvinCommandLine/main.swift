@@ -11,7 +11,7 @@ import Foundation
 print("Kelvin Algebra System. Copyright (c) 2019, Jiachen Ren.")
 
 // Base URL to /Examples directory
-let baseURL = URL(fileURLWithPath: "/Users/jiachenren/Library/Mobile Documents/com~apple~CloudDocs/Documents/Developer/Kelvin/Kelvin/Model/Examples/")
+let baseURL = URL(fileURLWithPath: "/Users/jiachenren/Library/Mobile Documents/com~apple~CloudDocs/Documents/Developer/Kelvin/Examples/")
 
 
 /// Compile and run the file w/ the given file name under /Examples directory

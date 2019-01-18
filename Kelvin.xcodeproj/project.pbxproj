@@ -163,6 +163,7 @@
 		1FFD8C96218F50850004ECEB = {
 			isa = PBXGroup;
 			children = (
+				1F0CF2CF21EEA6D600E40086 /* Examples */,
 				1FFD8CA1218F50850004ECEB /* Kelvin */,
 				1FFD8CB7218F50870004ECEB /* KelvinTests */,
 				1FFD8CC2218F50870004ECEB /* KelvinUITests */,
@@ -234,7 +235,6 @@
 		1FFD8CD3218F522E0004ECEB /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				1F0CF2CF21EEA6D600E40086 /* Examples */,
 				1FFD8CD4218F52430004ECEB /* Compiler.swift */,
 				1F0CF2D421EEB69300E40086 /* Program.swift */,
 				1F2E82B32197416D005C3353 /* List.swift */,
