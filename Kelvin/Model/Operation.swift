@@ -25,7 +25,7 @@ public class Operation: Equatable {
     }()
 
     /// Use this dictionary to assign special attributes to operations.
-    /// e.g. since + and * are commutaive, the "commutative" flag should be assigned to them.
+    /// e.g. since + and * are commutative, the "commutative" flag should be assigned to them.
     public static var configuration: [Attribute: [String]] = {
         defaultConfiguration
     }()
@@ -112,6 +112,10 @@ public class Operation: Equatable {
             // Deal w/ function signature types that allow any # of args.
             if let first = signature.first {
                 switch first {
+                case .multivariate where args.count <= 1:
+                    break candLoop
+                case .multivariate:
+                    fallthrough
                 case .universal:
                     signature = [ArgumentType](repeating: .any, count: args.count)
                 case .numbers:
@@ -223,11 +227,143 @@ public class Operation: Equatable {
         // Fully simplified. Reconstruct commutative operation and return.
         return Function(fun, nodes)
     }
+    
+    
+    /// Factorizes the parent node; e.g. a*b+a*c becomes a*(b+c)
+    public static func factor(_ parent: Node) -> Node {
+        return parent.replacing(by: {
+            factor(($0 as! Function).args.elements)
+        }) {
+            ($0 as? Function)?.name == "+"
+        }
+    }
+
+    /**
+     - Todo: Return the simplest form of factorization.
+     - Parameter nodes: The arguments of a summation function
+     - Returns: The factorized form of arguments.
+     */
+    public static func factor(_ nodes: [Node]) -> Node {
+        var nodes = nodes
+        let factors = commonFactors(nodes)
+        for f in factors {
+            nodes = nodes.map {
+                factor($0, by: f)
+            }
+        }
+        return **factors * ++nodes
+    }
+    
+    /**
+     Factorizes a node by a given factor.
+     
+     - Note: This function assumes that the relationship b/w node and factor is addition.
+     - Parameters:
+        - node: The node to be factorized with factor
+        - factor: The factor used to factorize the node.
+     - Returns: Given node with factor factorized out.
+     */
+    private static func factor(_ node: Node, by factor: Node) -> Node {
+        if node === factor {
+            return 1
+        }
+        var mult = node as! Function
+        assert(mult.name == "*")
+        
+        var elements = mult.args.elements
+        for (i, e) in elements.enumerated() {
+            if e === factor {
+                elements.remove(at: i)
+                break
+            }
+        }
+        
+        return **elements
+    }
+
+    /**
+     Find the common terms of nodes in terms of multiplication.
+     It is assumed that the relationship b/w nodes is addition.
+     
+     - Note: 1 is not returned as a common factor.
+     - Parameter nodes: The nodes from which common terms are derived.
+     - Returns: Common factors of nodes excluding 1.
+     */
+    public static func commonFactors(_ nodes: [Node]) -> [Node] {
+        var nodes = nodes
+        
+        // Base case
+        if nodes.count == 0 {
+            return []
+        } else if nodes.count == 1 {
+            return nodes
+        }
+
+        // Deconstruct a node into its arguments if it is "*"
+        // For nodes other than "*", return the node itself.
+        func deconstruct(_ node: Node) -> [Node] {
+            if let mult = node as? Function, mult.name == "*" {
+                return mult.args.elements
+            }
+            return [node]
+        }
+        
+        // Common terms
+        var common = [Node]()
+
+        // Remove the first node from the list
+        let node = nodes.removeFirst()
+        
+        // If any of the nodes are 1, then the expression is not factorizable.
+        // e.g. a*b*c + 1 + b*c*d is not factorizable and will eventually cause stack overflow.
+        if node === 1 {
+            return []
+        }
+        
+        // Deconstruct the node into its operands(arguments)
+        let operands = deconstruct(node)
+        
+        // For each operand of the "*" node, check if it is present in
+        // all of the other nodes.
+        for o in operands {
+            var isCommon = true
+            for n in nodes {
+                let isFactor = (n as? Function)?.name == "*" && n.contains(where: { $0 === o }, depth: 1)
+                
+                // If one of the remaining nodes is not 'o' and does not contain 'o',
+                // we know that 'o' is not a common factor. Immediately exit the loop.
+                if !(isFactor || n === o) {
+                    isCommon = false
+                    break
+                }
+            }
+            
+            // If 'o' is a common factor, then we add 'o' to the common factor array,
+            // then factorize each term by 'o', and recursively factor what remains
+            // to find the rest of the factors.
+            if isCommon {
+                common.append(o)
+                nodes.insert(node, at: 0)
+                
+                // Factorize each node with 'o'
+                let remaining = nodes.map {factor($0, by: o)}
+                
+                // Find common terms of the remaining nodes, recursively.
+                let c = commonFactors(remaining)
+                common.append(contentsOf: c)
+                return common
+            }
+        }
+        
+        // If none of the operands in the first node is factorizable,
+        // then the expression itself is not factorizable.
+        return []
+    }
 
     /**
      - Parameters:
         - name: The name of the function
-        - attr: The attribute in question such as .commutaive
+        - attr: The attribute in question such as .commutative
      - Returns: Whether the function w/ the given name has the designated attribute
      */
     public static func has(attr: Attribute, _ name: String) -> Bool {
@@ -260,6 +396,7 @@ public class Operation: Equatable {
         case any = 100
         case numbers = 1000
         case booleans = 1001
+        case multivariate = 4000 // Takes in more than 1 argument
         case universal = 10000 // Takes in any # of args.
     }
 
@@ -351,12 +488,10 @@ public class Operation: Equatable {
             if f1.name == f2.name {
                 switch f1.name {
                 case "*":
-                    if f1.contains(where: isNumber, depth: 1) && f2.contains(where: isNumber, depth: 1) {
-                        let (n1, r1) = f1.args.split(by: isNumber)
-                        let (n2, r2) = f2.args.split(by: isNumber)
-                        if **r1 === **r2 {
-                            return **r1 * (**n1 + **n2)
-                        }
+                    let (n1, r1) = f1.args.split(by: isNumber)
+                    let (n2, r2) = f2.args.split(by: isNumber)
+                    if **r1 === **r2 {
+                        return **r1 * (**n1 + **n2)
                     }
                 default:
                     break
@@ -615,6 +750,11 @@ public class Operation: Equatable {
             let lb = nodes[0].evaluated!.doubleValue
             let ub = nodes[1].evaluated!.doubleValue
             return Double.random(in: lb...ub)
+        },
+        
+        // Algebraic manipulation (factorization, expansion)
+        .init("factor", [.any]) {
+            factor($0[0])
         },
 
         // List related operations
