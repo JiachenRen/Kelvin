@@ -817,6 +817,16 @@ public class Operation: Equatable {
             }
             return List(updated)
         },
+        .init("reduce", [.list, .any]) { nodes in
+            let list = nodes[0] as! List
+            let reduced = list.elements.reduce(nil) { (e1, e2) -> Node in
+                if e1 == nil {
+                    return e2
+                }
+                return nodes[1].replacingAnonymousArgs(with: [e1!, e2])
+            }
+            return reduced ?? List([])
+        },
 
         // Average
         .init("avg", [.list]) { nodes in

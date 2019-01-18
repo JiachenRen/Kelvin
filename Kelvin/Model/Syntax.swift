@@ -224,6 +224,7 @@ public struct Syntax {
         .init(for: "get", .infix),
         .init(for: "size", .prefix),
         .init(for: "map", .infix, operator: .init("|")),
+        .init(for: "reduce", .infix, operator: .init("~")),
         .init(for: "then", .infix, operator: .init(";", padding: .rightSide)),
         .init(for: "feed", .infix, operator: .init("->")),
         .init(for: "repeat", .infix, priority: .repeat, operator: .init("...", padding: .none)),

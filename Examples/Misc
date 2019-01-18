@@ -69,6 +69,7 @@ println {1, 2} + {3}
 def l1 = {2, 3, 7, x, log(a), g(x)}
 def f(x) = x^3 + 3x + 4
 println f(l1)
+del f
 
 # Combinations and permutations
 println(a ncr b)
@@ -76,3 +77,14 @@ println(a npr b)
 
 def l1 = ({1, 2, 3, 4, 5, 6} | (9 ncr $0))
 println l1
+
+def l1 = {a, b, c, d, f}
+print "l1 = "
+println l1
+
+println "l1 | $0 + k ~ f($0, $1)"
+println(l1 | $0 + k ~ f($0, $1))
+
+def f(a, b) = a + b
+println f(a,b)
+println (l1 | $0 + k ~ f($0, $1))
