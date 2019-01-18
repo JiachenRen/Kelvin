@@ -828,6 +828,14 @@ public class Operation: Equatable {
         .init("avg", [.universal]) { nodes in
             return ++nodes / nodes.count
         },
+        
+        // Combination and permutation
+        .init("npr", [.any, .any]) {
+            return $0[0]~! / ($0[0] - $0[1])~!
+        },
+        .init("ncr", [.any, .any]) {
+            return Function("npr", $0) / $0[1]~!
+        },
 
         // Consecutive execution, feed forward, flow control
         .init("then", [.universal]) { nodes in
@@ -927,5 +935,5 @@ fileprivate func %(_ a: Double, _ b: Double) -> Double {
 
 /// A very concise definition of factorial.
 fileprivate func factorial(_ n: Double) -> Double {
-    return n == 0 ? 1 : n * factorial(n - 1)
+    return n < 0 ? .nan : n == 0 ? 1 : n * factorial(n - 1)
 }

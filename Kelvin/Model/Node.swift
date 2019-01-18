@@ -131,6 +131,12 @@ public prefix func ++(_ args: [Node]) -> Node {
     return Function("+", args)
 }
 
+postfix operator ~!
+
+public postfix func ~!(_ arg: Node) -> Node{
+    return Function("factorial", [arg])
+}
+
 public func /(_ lhs: Node, _ rhs: Node) -> Node {
     return Function("/", [lhs, rhs])
 }
