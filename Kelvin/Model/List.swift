@@ -96,6 +96,21 @@ public struct List: Node, NaN {
 
         return (s, o)
     }
+    
+    /**
+     Combine this list with another that has the same dimension by performing
+     a binary operation on matching pairs of elements.
+     
+     - Parameters:
+        - list: The list to be joined with. Each individual elements are used as rhs of bin operation.
+        - operation: A binary operation.
+     - Returns: A new list resulting from self ⊗ list.
+     */
+    public func join(with list: List, by bin: String) -> List {
+        return List(elements.enumerated().map {
+            Function(bin, [$0.element, list.elements[$0.offset]])
+        })
+    }
 
     /**
      Sort the list by using the provided comparator.

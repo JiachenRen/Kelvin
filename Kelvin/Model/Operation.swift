@@ -230,9 +230,9 @@ public class Operation: Equatable {
     
     
     /// Factorizes the parent node; e.g. a*b+a*c becomes a*(b+c)
-    public static func factor(_ parent: Node) -> Node {
+    public static func factorize(_ parent: Node) -> Node {
         return parent.replacing(by: {
-            factor(($0 as! Function).args.elements)
+            factorize(($0 as! Function).args.elements)
         }) {
             ($0 as? Function)?.name == "+"
         }
@@ -243,12 +243,12 @@ public class Operation: Equatable {
      - Parameter nodes: The arguments of a summation function
      - Returns: The factorized form of arguments.
      */
-    public static func factor(_ nodes: [Node]) -> Node {
+    public static func factorize(_ nodes: [Node]) -> Node {
         var nodes = nodes
         let factors = commonFactors(nodes)
         for f in factors {
             nodes = nodes.map {
-                factor($0, by: f)
+                factorize($0, by: f)
             }
         }
         return **factors * ++nodes
@@ -263,7 +263,7 @@ public class Operation: Equatable {
         - factor: The factor used to factorize the node.
      - Returns: Given node with factor factorized out.
      */
-    private static func factor(_ node: Node, by factor: Node) -> Node {
+    private static func factorize(_ node: Node, by factor: Node) -> Node {
         if node === factor {
             return 1
         }
@@ -346,7 +346,7 @@ public class Operation: Equatable {
                 nodes.insert(node, at: 0)
                 
                 // Factorize each node with 'o'
-                let remaining = nodes.map {factor($0, by: o)}
+                let remaining = nodes.map {factorize($0, by: o)}
                 
                 // Find common terms of the remaining nodes, recursively.
                 let c = commonFactors(remaining)
@@ -500,6 +500,12 @@ public class Operation: Equatable {
 
             return nil
         },
+        .init("+", [.list, .list]) {
+            join(by: "+", $0[0], $0[1])
+        },
+        .init("+", [.list, .any]) {
+            map(by: "+", $0[0], $0[1])
+        },
 
         .init("-", [.number, .number]) {
             bin($0, -)
@@ -512,6 +518,12 @@ public class Operation: Equatable {
         },
         .init("-", [.any]) {
             -1 * $0[0]
+        },
+        .init("-", [.list, .list]) {
+            join(by: "-", $0[0], $0[1])
+        },
+        .init("-", [.list, .any]) {
+            map(by: "-", $0[0], $0[1])
         },
 
         .init("*", [.number, .number]) {
@@ -556,6 +568,12 @@ public class Operation: Equatable {
                 return nil
             }
         },
+        .init("*", [.list, .list]) {
+            join(by: "*", $0[0], $0[1])
+        },
+        .init("*", [.list, .any]) {
+            map(by: "*", $0[0], $0[1])
+        },
 
         .init("/", [.number, .number]) {
             bin($0, /)
@@ -566,10 +584,23 @@ public class Operation: Equatable {
             }
             return $0[0] * ($0[1] ^ -1)
         },
+        .init("/", [.list, .list]) {
+            join(by: "/", $0[0], $0[1])
+        },
+        .init("/", [.list, .any]) {
+            map(by: "/", $0[0], $0[1])
+        },
 
         .init("mod", [.number, .number]) {
             bin($0, %)
         },
+        .init("mod", [.list, .list]) {
+            join(by: "mod", $0[0], $0[1])
+        },
+        .init("mod", [.list, .any]) {
+            map(by: "mod", $0[0], $0[1])
+        },
+        
         .init("^", [.number, .number]) {
             bin($0, pow)
         },
@@ -607,6 +638,12 @@ public class Operation: Equatable {
             default: break
             }
             return nil
+        },
+        .init("^", [.list, .list]) {
+            join(by: "^", $0[0], $0[1])
+        },
+        .init("^", [.list, .any]) {
+            map(by: "^", $0[0], $0[1])
         },
 
 
@@ -754,7 +791,7 @@ public class Operation: Equatable {
         
         // Algebraic manipulation (factorization, expansion)
         .init("factor", [.any]) {
-            factor($0[0])
+            factorize($0[0])
         },
 
         // List related operations
@@ -842,6 +879,25 @@ public class Operation: Equatable {
 
 fileprivate let isNumber: PUnary = {
     $0 is NSNumber
+}
+
+fileprivate func join(by bin: String, _ l1: Node, _ l2: Node) -> Node {
+    let l1 = l1 as! List
+    let l2 = l2 as! List
+    
+    if l1.count != l2.count {
+        return "list dimension mismatch"
+    }
+    
+    return l1.join(with: l2, by: bin)
+}
+
+fileprivate func map(by bin: String, _ l: Node, _ n: Node) -> Node {
+    let l = l as! List
+    
+    let elements = l.elements.map {Function(bin, [$0, n])}
+    return List(elements)
+    
 }
 
 fileprivate func V(_ n: String) -> Variable {
