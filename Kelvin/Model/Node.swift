@@ -62,10 +62,35 @@ public protocol Node: CustomStringConvertible {
     func equals(_ node: Node) -> Bool
 }
 
-/// Interface with CustomStringConvertible.
 extension Node {
+    
+    /// Interface w/ CustomStringConvertible.
     public var description: String {
         return stringified
+    }
+    
+    /**
+     Replace anonymous closure arguments $0, $1, etc. w/ supplied arguments.
+     
+     - Parameter args: Replacements for anonymous closure args
+     - Returns: Node w/ closure args replaced w/ supplied args.
+     */
+    func replacingAnonymousArgs(with args: [Node]) -> Node {
+        return self.replacing(by: {n in
+            let v = n as! Variable
+            var name = v.name
+            name.removeFirst()
+            
+            // If the variable is an anonymous closure argument,
+            // replace it with the supplied argument.
+            if let i = Int(name) {
+                return args[i]
+            }
+            
+            return v
+        }) {
+            ($0 as? Variable)?.name.starts(with: "$") ?? false
+        }
     }
 }
 

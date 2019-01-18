@@ -32,7 +32,7 @@ del x
 println m
 
 # Or, you can do something crazy like this, all on a single line!
-def f() = ({1, 2, 3, x} | $ ^ 2 -> define(f(x), sum($)); f(12) -> $...5 | $ % 7 -> (sum($)!)° -> define(a, $ % 12345 / 3 * e); cos(log(a) ^ 2) * √((5!)!) * 360°)
+def f() = ({1, 2, 3, x} | $0 ^ 2 -> define(f(x), sum($0)); f(12) -> $0...5 | $0 % 7 -> (sum($0)!)° -> define(a, $0 % 12345 / 3 * e); cos(log(a) ^ 2) * √((5!)!) * 360°)
 println(f())
 del a
 
@@ -74,5 +74,5 @@ println f(l1)
 println(a ncr b)
 println(a npr b)
 
-def l1 = ({1, 2, 3, 4, 5, 6} | (9 ncr $))
+def l1 = ({1, 2, 3, 4, 5, 6} | (9 ncr $0))
 println l1

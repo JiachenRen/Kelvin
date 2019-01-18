@@ -812,10 +812,8 @@ public class Operation: Equatable {
         },
         .init("map", [.list, .any]) { nodes in
             let list = nodes[0] as! List
-            let updated = list.elements.map { element in
-                nodes[1].replacing(by: { _ in element }) {
-                    $0 === V("$")
-                }
+            let updated = list.elements.enumerated().map { (idx, e) in
+                nodes[1].replacingAnonymousArgs(with: [e, idx])
             }
             return List(updated)
         },
@@ -845,9 +843,7 @@ public class Operation: Equatable {
         },
         .init("feed", [.any, .any]) { nodes in
             let simplified = nodes[0].simplify()
-            return nodes.last!.replacing(by: { _ in simplified }) {
-                $0 === V("$")
-            }
+            return nodes.last!.replacingAnonymousArgs(with: [simplified])
         },
         .init("repeat", [.any, .number]) { nodes in
             let times = Int(nodes[1].evaluated!.doubleValue)
