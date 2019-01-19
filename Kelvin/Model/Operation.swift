@@ -220,38 +220,21 @@ public class Operation: Equatable {
     public static func simplifyCommutatively(_ nodes: [Node], by fun: String) -> Node {
         var nodes = nodes
         
-        func simplifyBidirectionally(_ nodes: [Node]) -> Node? {
-            // Make sure we are only taking in 2 arguments
-            assert(nodes.count == 2)
-            let forward = Function(fun, [nodes[0], nodes[1]])
-            let backward = Function(fun, [nodes[1], nodes[0]])
-            
-            let originals = [forward, backward]
-            
-            // Simplification could be forward or backward; in that case,
-            // perform simplification for both ways and compare them.
-            for bin in originals {
-                let simplified = bin.simplify()
-                
-                // If the junction of i and j can be simplified...
-                if simplified.complexity < bin.complexity {
-                    return simplified
-                }
-            }
-            
-            return nil
-        }
-        
         if nodes.count == 2 {
             
-            // Reverse the order of arguments and simplify again!
-            return Function(fun, nodes.reversed()).simplify()
+            // Base case.
+            return Function(fun, nodes).simplify()
         }
         
         for i in 0..<nodes.count - 1 {
             let n = nodes.remove(at: i)
             for j in i..<nodes.count {
-                if let simplified = simplifyBidirectionally([nodes[j], n]) {
+                
+                let bin = Function(fun, [nodes[j], n])
+                let simplified = bin.simplify()
+                
+                // If the junction of n and j can be simplified...
+                if simplified.complexity < bin.complexity {
                     nodes.remove(at: j)
                     nodes.append(simplified)
                     
