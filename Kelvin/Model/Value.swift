@@ -9,7 +9,7 @@
 import Foundation
 
 
-public protocol Value: Leaf {
+public protocol Value: LeafNode {
     var doubleValue: Double { get }
 }
 

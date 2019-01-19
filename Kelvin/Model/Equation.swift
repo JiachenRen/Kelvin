@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Equation: Node, NaN {
+public struct Equation: BinaryNode, NaN {
 
     /// The left hand side of the equation
     var lhs: Node
@@ -189,7 +189,7 @@ public struct Equation: Node, NaN {
     }
 
     /// Two equations are considered as identical if their operands are identical
-    /// either in the forward direction or backward directino
+    /// either in the forward direction or backward direction
     public func equals(_ node: Node) -> Bool {
         if let eq = node as? Equation {
             let forwardEquals = lhs === eq.lhs && rhs === eq.rhs
@@ -208,29 +208,6 @@ public struct Equation: Node, NaN {
         return lhs.complexity + rhs.complexity + 1
     }
 
-
-    /**
-     If either side contains the node, then return true
-     Else if self is node, return true, other wise return false.
-     
-     - Parameters:
-        - predicament: The condition for the matching node.
-        - depth: Search depth. Won't search for nodes beyond this designated depth.
-     - Returns: Whether the current node contains the target node.
-     */
-    public func contains(where predicament: PUnary, depth: Int) -> Bool {
-        if predicament(self) {
-            return true
-        } else if depth != 0 {
-            for n in [lhs, rhs] {
-                if n.contains(where: predicament, depth: depth - 1) {
-                    return true
-                }
-            }
-        }
-        return false
-    }
-
     /**
      Replace the designated nodes identical to the node provided with the replacement
      
@@ -243,12 +220,5 @@ public struct Equation: Node, NaN {
         copy.lhs = lhs.replacing(by: replace, where: predicament)
         copy.rhs = rhs.replacing(by: replace, where: predicament)
         return predicament(copy) ? replace(copy) : copy
-    }
-
-    /// Perform an action on each node in the tree.
-    public func forEach(_ body: (Node) -> ()) {
-        body(self)
-        lhs.forEach(body)
-        rhs.forEach(body)
     }
 }

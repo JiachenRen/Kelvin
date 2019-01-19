@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Variable: Leaf, NaN {
+public struct Variable: LeafNode, NaN {
 
     /// The characters that are allowed in the variable
     static let legalChars = "$abcdefghijklmnopqrstuvwxyz_"

@@ -179,6 +179,10 @@ public class Operation: Equatable {
                 switch argType {
                 case .any:
                     continue
+                case .leaf where !(arg is LeafNode):
+                    fallthrough
+                case .tuple where !(arg is Tuple):
+                    fallthrough
                 case .var where !(arg is Variable):
                     fallthrough
                 case .bool where !(arg is Bool):
@@ -419,6 +423,8 @@ public class Operation: Equatable {
         case list = 5
         case equation = 6
         case string = 7
+        case tuple = 8
+        case leaf = 9
         case any = 100
         case numbers = 1000
         case booleans = 1001
@@ -459,7 +465,8 @@ public class Operation: Equatable {
             "exec",
             "define",
             "def",
-            "del"
+            "del",
+            "if"
         ],
         .forwardCommutative: [
             "/",
@@ -820,14 +827,31 @@ public class Operation: Equatable {
             factorize($0[0])
         },
         
-        // List related operations
+        // Tuple
+        .init("tuple", [.leaf, .leaf]) {
+            Tuple($0[0], $0[1])
+        },
+        .init("get", [.tuple, .number]) { nodes in
+            let tuple = nodes[0] as! Tuple
+            let idx = Int(nodes[1].evaluated!.doubleValue)
+            switch idx {
+            case 0:
+                return tuple.lhs
+            case 1:
+                return tuple.rhs
+            default:
+                return "error: index out of bounds"
+            }
+        },
+        
+        // List operations
         .init("list", [.universal]) {
             List($0)
         },
         .init("get", [.list, .number]) { nodes in
             let list = nodes[0] as! List
             let idx = Int(nodes[1].evaluated!.doubleValue)
-            if idx >= list.count {
+            if idx >= list.count || idx < 0 {
                 return "error: index out of bounds"
             } else {
                 return list[idx]
@@ -854,7 +878,7 @@ public class Operation: Equatable {
             return reduced ?? List([])
         },
         
-        // Statistics
+        // Statistics, s stands for sample, p stands for population
         .init("avg", [.list]) { nodes in
             let l = (nodes[0] as! List).elements
             return ++l / l.count
@@ -865,7 +889,7 @@ public class Operation: Equatable {
         .init("ssx", [.list]) {
             return ssx($0[0] as! List)
         },
-        .init("sample_variance", [.list]) {
+        .init("s_variance", [.list]) {
             let list = $0[0] as! List
             let s = ssx(list)
             guard let n = s as? Double else {
@@ -876,7 +900,7 @@ public class Operation: Equatable {
             
             return n / (list.count - 1)
         },
-        .init("population_variance", [.list]) {
+        .init("p_variance", [.list]) {
             let list = $0[0] as! List
             let s = ssx(list)
             guard let n = s as? Double else {
@@ -885,11 +909,11 @@ public class Operation: Equatable {
             
             return n / list.count
         },
-        .init("sample_stdev", [.list]) {
-            return √Function("sample_variance", $0)
+        .init("s_stdev", [.list]) {
+            return √Function("s_variance", $0)
         },
-        .init("population_stdev", [.list]) {
-            return √Function("population_variance", $0)
+        .init("p_stdev", [.list]) {
+            return √Function("p_variance", $0)
         },
         
         // Combination and permutation
@@ -901,6 +925,15 @@ public class Operation: Equatable {
         },
         
         // Consecutive execution, feed forward, flow control
+        .init("if", [.any, .tuple]) { nodes in
+            let node = nodes[0].simplify()
+            guard let predicament = node as? Bool else {
+                return nil
+            }
+            let tuple = nodes[1] as! Tuple
+            
+            return (predicament ? tuple.lhs : tuple.rhs).simplify() // Should this be simplified?
+        },
         .init("then", [.universal]) { nodes in
             return nodes.map {
                 $0.simplify()

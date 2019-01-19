@@ -154,6 +154,8 @@ public struct Syntax {
         case definition     // :=
         case equation       // =
         case `repeat`       // repeat
+        case conditional    // conditional statements like if
+        case tuple          // (:)
         case or             // ||
         case and            // &&
         case equality       // ==, <, >, <=, >=
@@ -221,7 +223,7 @@ public struct Syntax {
         .init(for: "define", .infix, priority: .definition, operator: .init(":=", padding: .none)),
         .init(for: "def", .prefix, priority: .definition),
         .init(for: "del", .prefix),
-        .init(for: "get", .infix),
+        .init(for: "get", .infix, priority: .exponent, operator: .init("::", padding: .none)), // Preserve arguments?
         .init(for: "size", .prefix),
         .init(for: "map", .infix, operator: .init("|")),
         .init(for: "reduce", .infix, operator: .init("~")),
@@ -236,6 +238,8 @@ public struct Syntax {
         .init(for: "println", .prefix),
         .init(for: "compile", .prefix),
         .init(for: "npr", .infix),
-        .init(for: "ncr", .infix)
+        .init(for: "ncr", .infix),
+        .init(for: "tuple", .infix, priority: .tuple, operator: .init(":", padding: .bothSides)),
+        .init(for: "if", .infix, priority: .conditional, operator: .init("?", padding: .bothSides)),
     ]
 }

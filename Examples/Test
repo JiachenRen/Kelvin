@@ -12,3 +12,7 @@ del a
 
 println ((1 + (a - 1 - (b - 3)) + 4) == (-1 * b + a + 7))
 
+def bool = ((round random()...5...5)::4::3 -> $0 == 1 || $0 == 0)
+println bool == true
+
+println ({1, 2, 3} | $0 > 1 ? (true : false)) == {false, true, true}

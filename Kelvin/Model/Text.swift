@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension String: Leaf, NaN {
+extension String: LeafNode, NaN {
 
     public var stringified: String {
         return self

@@ -8,10 +8,10 @@
 
 import Foundation
 
-public protocol Leaf: Node {
+public protocol LeafNode: Node {
 }
 
-extension Leaf {
+extension LeafNode {
 
     /// Leaf nodes have a complexity of 1
     public var complexity: Int {

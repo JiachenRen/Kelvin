@@ -267,9 +267,19 @@ public class Compiler {
         parent = parent.replacing(by: { args($0) }) {
             name($0) == "list"
         }
+        
+        // Restore tuple() to (:)
+        parent = parent.replacing(by: {
+            let elements = args($0).elements
+            return Tuple(elements[0], elements[1])
+        }) {
+            name($0) == "tuple"
+        }
 
         // Restore equations
-        parent = parent.replacing(by: { Equation(lhs: args($0)[0], rhs: args($0)[1]) }) {
+        parent = parent.replacing(by: {
+            Equation(lhs: args($0)[0], rhs: args($0)[1])
+        }) {
             name($0) == "="
         }
 
