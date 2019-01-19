@@ -64,15 +64,8 @@ public struct List: Node, NaN {
     /// the same as {3,2,1}.
     /// - Returns: Whether the provided node is loosely identical to self.
     public func equals(_ node: Node) -> Bool {
-
-        func comparator(_ lhs: Node, _ rhs: Node) -> Bool {
-            return "\(lhs.stringified)" > "\(rhs.stringified)"
-        }
-
-        if let list = node as? List, list.elements.count == elements.count {
-            let l1 = sorted(by: comparator)
-            let l2 = list.sorted(by: comparator)
-            return List.strictlyEquals(l1, l2)
+        if let l = node as? List {
+            return List.strictlyEquals(l.ordered(), ordered())
         }
         return false
     }
@@ -120,6 +113,18 @@ public struct List: Node, NaN {
      */
     public func sorted(by comparator: PBinary) -> List {
         return List(elements.sorted(by: comparator))
+    }
+    
+    /**
+     Order the list according to their String
+     representations.
+     
+     - Returns: A new list w/ elements sorted in natural order.
+     */
+    public func ordered() -> List {
+        return sorted {(e1, e2) in
+            return e1.stringified > e2.stringified
+        }
     }
 
     /**

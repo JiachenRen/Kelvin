@@ -29,10 +29,16 @@ public struct Function: Node {
     var syntax: Syntax? {
         return Syntax.glossary[name]
     }
+    
+    /// Whether the function is commutative.
+    let isCommutative: Bool
 
     init(_ name: String, _ args: List) {
         self.name = name
-        self.args = args
+        
+        let isCommutative = Operation.has(attr: .commutative, name)
+        self.isCommutative = isCommutative
+        self.args = isCommutative ? args.ordered() : args
 
         flatten()
     }
@@ -222,10 +228,9 @@ public struct Function: Node {
         let elements = args.elements
         
         // Flatten commutative operations
-        if Operation.has(attr: .commutative, name) {
+        if isCommutative {
             var newArgs = [Node]()
             var changed = false
-
             elements.forEach { arg in
                 if let fun = arg as? Function, fun.name == name {
                     changed = true
@@ -237,7 +242,7 @@ public struct Function: Node {
 
             // Prevent stackoverflow due to recursive calling to args' setter
             if changed {
-                self = Function(name, newArgs)
+                self = Function(name, List(newArgs))
             }
         }
     }
@@ -248,9 +253,6 @@ public struct Function: Node {
     public func equals(_ node: Node) -> Bool {
         if let fun = node as? Function {
             if fun.name == name {
-                if Operation.has(attr: .commutative, name) {
-                    return fun.args === args
-                }
                 return List.strictlyEquals(args, fun.args)
             }
         }
