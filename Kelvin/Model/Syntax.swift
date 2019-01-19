@@ -152,8 +152,8 @@ public struct Syntax {
     public enum Priority: Int, Comparable {
         case execution = 1  // ;, >>
         case definition     // :=
-        case `repeat`       // repeat
         case equation       // =
+        case `repeat`       // repeat
         case or             // ||
         case and            // &&
         case equality       // ==, <, >, <=, >=

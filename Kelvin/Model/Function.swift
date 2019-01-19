@@ -16,22 +16,20 @@ public struct Function: Node {
 
     /// Complexity of the function is the complexity of the List of args + 1.
     public var complexity: Int {
-        return args.complexity + 1
+        return args.complexity
     }
 
     /// The name of the function
-    var name: String {
-        didSet {
-            // Update the definition of the function if the name changes.
-            resolveDefinition()
-        }
-    }
+    let name: String
 
     /// List of arguments that the function takes in.
     /// - Note: When the arguments change, the signature of the function
     /// also changes, potentially resulting in a different definition!
     var args: List {
         didSet {
+            // Flatten commutative operations
+            flatten()
+
             // Update the definition of the function because the signature changed!
             resolveDefinition()
         }
@@ -50,6 +48,7 @@ public struct Function: Node {
         self.name = name
         self.args = args
 
+        flatten()
         resolveDefinition()
     }
 
@@ -229,13 +228,10 @@ public struct Function: Node {
                 return s
             }
 
-            // If still didn't work, try commutative simplification.
-            let tmp = copy.flatten()
-
-            if tmp.args.count > 2 {
-                let after = Operation.simplifyCommutatively(tmp.args.elements, by: name)
-                return after.complexity < copy.complexity ? after : tmp
-            } else if let s = tmp.invoke()?.simplify() {
+            if copy.args.count > 2 {
+                let after = Operation.simplifyCommutatively(copy.args.elements, by: name)
+                return after.complexity < copy.complexity ? after : copy
+            } else if let s = copy.invoke()?.simplify() {
                 return s
             }
         }
@@ -266,27 +262,30 @@ public struct Function: Node {
      e.g. +(d,+(+(a,b),c)) becomes +(a,b,c,d)
      
      - Warning: Before invoking this function, the expression should be in addtion only form.
-                Under normal circumstances, don't use this function.
+     Under normal circumstances, don't use this function.
      */
-    public func flatten() -> Function {
-        var copy = arguments {
-            ($0 as? Function)?.flatten() ?? $0
-        } // Initial recursive call
+    public mutating func flatten() {
 
         // Flatten commutative operations
-        if Operation.has(attr: .commutative, copy.name) {
+        if Operation.has(attr: .commutative, name) {
             var newArgs = [Node]()
-            copy.args.elements.forEach { arg in
-                if let fun = arg as? Function, fun.name == copy.name {
+            var changed = false
+
+            args.elements.forEach { arg in
+                if var fun = arg as? Function, fun.name == name {
+                    fun.flatten()
                     newArgs.append(contentsOf: fun.args.elements)
+                    changed = true
                 } else {
                     newArgs.append(arg)
                 }
             }
-            copy.args.elements = newArgs
-        }
 
-        return copy
+            // Prevent stackoverflow due to recursive calling to args' setter
+            if changed {
+                args.elements = newArgs
+            }
+        }
     }
 
     /// Functions are equal to each other if their name and arguments are the same
@@ -306,8 +305,8 @@ public struct Function: Node {
 
     /**
      - Parameters:
-        - predicament: The condition for the matching node.
-        - depth: Search depth. Won't search for nodes beyond this designated depth.
+     - predicament: The condition for the matching node.
+     - depth: Search depth. Won't search for nodes beyond this designated depth.
      - Returns: Whether the current node contains the target node.
      */
     public func contains(where predicament: PUnary, depth: Int) -> Bool {
@@ -328,7 +327,7 @@ public struct Function: Node {
      
      - Parameter predicament: The condition that needs to be met for a node to be replaced
      - Parameter replace:   A function that takes the old node as input (and perhaps
-                            ignores it) and returns a node as replacement.
+     ignores it) and returns a node as replacement.
      */
     public func replacing(by replace: Unary, where predicament: PUnary) -> Node {
         var copy = self

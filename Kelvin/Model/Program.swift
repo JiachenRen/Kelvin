@@ -21,6 +21,11 @@ public class Program {
 
     var statements: [Node]
 
+    /// Get the absolute time
+    var currentTime: TimeInterval {
+        return Date().timeIntervalSince1970
+    }
+
     init(_ statements: [Node]) {
         self.statements = statements
     }
@@ -35,8 +40,11 @@ public class Program {
         logs = [Log]()
         outputs = [Node]()
 
+        /// Record start time
+        let startTime = currentTime
+
         if verbose {
-            print("starting...\n\nprogram execution log: ")
+            print(">>> starting...\n>>> timestamp: \(startTime)\n>>> begin execution log:\n")
         }
 
         statements.forEach {
@@ -72,13 +80,14 @@ public class Program {
         }
 
         if verbose {
-            print("program terminated.\n")
-            print("cumulative output:")
+            print(">>> end execution log.\n")
+            print(">>> program output:\n")
             print(outputs.map {
                 $0.stringified
             }.reduce("") {
                 $0 + $1
             }, terminator: "\n")
+            print(">>> program terminated in \(currentTime - startTime) seconds.")
         }
 
         // Clear all temporary variables, functions, and syntax definitions.
