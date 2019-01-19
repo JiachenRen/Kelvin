@@ -22,3 +22,6 @@ println avg(rolls2)
 
 print "Expected value of dice 3 rolls: "
 println avg(rolls3)
+
+# A function that approaches 1 as x approaches infinity.
+def f(x) = min(random()...x) + max(random()...x)

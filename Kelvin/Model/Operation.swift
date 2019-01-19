@@ -901,6 +901,32 @@ public class Operation: Equatable {
         .init("avg", [.list]) {
             return Function("sum", $0) / ($0[0] as! List).count
         },
+        .init("max", [.list]) {
+            return Function("max", ($0[0] as! List).elements)
+        },
+        .init("max", [.numbers]) {
+            let numbers = $0.map {$0.evaluated!.doubleValue}
+            var max: Double = -.infinity
+            for n in numbers {
+                if n > max {
+                    max = n
+                }
+            }
+            return max
+        },
+        .init("min", [.list]) {
+            return Function("min", ($0[0] as! List).elements)
+        },
+        .init("min", [.numbers]) {
+            let numbers = $0.map {$0.evaluated!.doubleValue}
+            var min: Double = .infinity
+            for n in numbers {
+                if n < min {
+                    min = n
+                }
+            }
+            return min
+        },
         .init("avg", [.universal]) { nodes in
             return ++nodes / nodes.count
         },
