@@ -23,15 +23,7 @@ public struct Function: Node {
     let name: String
 
     /// List of arguments that the function takes in.
-    /// - Note: When the arguments change, the signature of the function
-    /// also changes, potentially resulting in a different definition!
-    var args: List {
-        didSet {
-            
-            // Flatten commutative operations
-            flatten()
-        }
-    }
+    let args: List
 
     /// The syntactic rules of the function (looked up by the name)
     var syntax: Syntax? {
@@ -197,7 +189,8 @@ public struct Function: Node {
 
         // Simplify each argument, if requested.
         if !Operation.has(attr: .preservesArguments, name) {
-            copy.args = copy.args.simplify() as! List
+            let args = copy.args.simplify() as! List
+            copy = Function(name, args)
         }
 
         // If the operation can be performed on the given arguments, perform the operation.
@@ -218,11 +211,6 @@ public struct Function: Node {
         return copy
     }
 
-    /// Reverse the order of arguments.
-    private mutating func reverse() {
-        args.elements = args.elements.reversed()
-    }
-
     /**
      Unravel the binary operation tree.
      e.g. +(d,+(+(a,b),c)) becomes +(a,b,c,d)
@@ -230,18 +218,18 @@ public struct Function: Node {
      - Warning: Before invoking this function, the expression should be in addtion only form.
      Under normal circumstances, don't use this function.
      */
-    public mutating func flatten() {
-
+    private mutating func flatten() {
+        let elements = args.elements
+        
         // Flatten commutative operations
         if Operation.has(attr: .commutative, name) {
             var newArgs = [Node]()
             var changed = false
 
-            args.elements.forEach { arg in
-                if var fun = arg as? Function, fun.name == name {
-                    fun.flatten()
-                    newArgs.append(contentsOf: fun.args.elements)
+            elements.forEach { arg in
+                if let fun = arg as? Function, fun.name == name {
                     changed = true
+                    newArgs.append(contentsOf: fun.args.elements)
                 } else {
                     newArgs.append(arg)
                 }
@@ -249,7 +237,7 @@ public struct Function: Node {
 
             // Prevent stackoverflow due to recursive calling to args' setter
             if changed {
-                args.elements = newArgs
+                self = Function(name, newArgs)
             }
         }
     }
@@ -296,10 +284,10 @@ public struct Function: Node {
      ignores it) and returns a node as replacement.
      */
     public func replacing(by replace: Unary, where predicament: PUnary) -> Node {
-        var copy = self
-        copy.args.elements = copy.args.elements.map {
+        let elements = args.elements.map {
             $0.replacing(by: replace, where: predicament)
         }
+        let copy = Function(name, elements)
         return predicament(copy) ? replace(copy) : copy
     }
 

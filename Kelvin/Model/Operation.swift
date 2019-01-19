@@ -308,7 +308,7 @@ public class Operation: Equatable {
         if node === factor {
             return 1
         }
-        var mult = node as! Function
+        let mult = node as! Function
         assert(mult.name == "*")
         
         var elements = mult.args.elements
@@ -724,10 +724,10 @@ public class Operation: Equatable {
             case "nagate":
                 return fun.args[0]
             case "+":
-                fun.args.elements = fun.args.elements.map {
+                let elements = fun.args.elements.map {
                     $0 * -1
                 }
-                return fun
+                return Function(fun.name, elements)
             case "*":
                 var args = fun.args.elements
                 args.append(-1)
