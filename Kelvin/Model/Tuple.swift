@@ -8,12 +8,12 @@
 
 import Foundation
 
-struct Tuple: BinaryNode, NaN {
-    var complexity: Int {
+public struct Tuple: BinaryNode, NaN {
+    public var complexity: Int {
         return lhs.complexity + rhs.complexity + 1
     }
     
-    var stringified: String {
+    public var stringified: String {
         return "(\(lhs) : \(rhs))"
     }
     
@@ -28,11 +28,11 @@ struct Tuple: BinaryNode, NaN {
         self.rhs = v2
     }
     
-    func simplify() -> Node {
+    public func simplify() -> Node {
         return Tuple(lhs.simplify(), rhs.simplify())
     }
     
-    func equals(_ node: Node) -> Bool {
+    public func equals(_ node: Node) -> Bool {
         if let t = node as? Tuple {
             return lhs === t.lhs && rhs === t.rhs
         }
@@ -46,7 +46,7 @@ struct Tuple: BinaryNode, NaN {
      - Parameter replace:   A function that takes the old node as input (and perhaps
      ignores it) and returns a node as replacement.
      */
-    func replacing(by replace: (Node) -> Node, where predicament: (Node) -> Bool) -> Node {
+    public func replacing(by replace: (Node) -> Node, where predicament: (Node) -> Bool) -> Node {
         let t = Tuple(lhs.replacing(by: replace, where: predicament), rhs.replacing(by: replace, where: predicament))
         return predicament(t) ? replace(t) : t
     }

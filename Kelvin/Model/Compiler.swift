@@ -210,23 +210,16 @@ public class Compiler {
             expr = expr.replacingOccurrences(of: o.name, with: c)
         }
 
-        var keyword: String
-
         // Replace infix function names with operator
-        switch syntax.position {
-        case .prefix:
-            // "define a=b" becomes 𑅰a=b
-            keyword = "\(n) "
-        case .infix:
-            // "a and b" becomes "a𑅰b";
-            keyword = " \(n) "
-        case .postfix:
-            // "5 degrees" becomes "5𑅰"
-            // "a!" becomes "a𑅰"
-            keyword = " \(n)"
+        if let _ = try? Variable(n) {
+            let regex = try! NSRegularExpression(pattern: "\\b(\(n))\\b", options: .caseInsensitive)
+            let str = NSMutableString(string: expr)
+            let range = NSMakeRange(0, expr.count)
+            regex.replaceMatches(in: str, options: [], range: range, withTemplate: c)
+            return str as String
         }
-
-        return expr.replacingOccurrences(of: keyword, with: c)
+        
+        return expr
     }
 
     /**

@@ -249,21 +249,21 @@
 			children = (
 				1FFD8CD4218F52430004ECEB /* Compiler.swift */,
 				1F0CF2D421EEB69300E40086 /* Program.swift */,
+				1F2E82AB21966FC5005C3353 /* Operation.swift */,
+				1F0CF2C621EBA8C800E40086 /* Syntax.swift */,
 				1F2E82B32197416D005C3353 /* List.swift */,
 				1F2E82B121973FF7005C3353 /* Value.swift */,
 				1F0CF2C321EA420400E40086 /* Text.swift */,
-				1F2E82AB21966FC5005C3353 /* Operation.swift */,
 				1FE1697521F2D44A0006712C /* Tuple.swift */,
-				1F0CF2C621EBA8C800E40086 /* Syntax.swift */,
 				1F3974C421E633FD006D6DC2 /* Equation.swift */,
 				1F2E82B521974368005C3353 /* Variable.swift */,
 				1F2E82AD2197331F005C3353 /* Function.swift */,
 				1F3974BB21E3970F006D6DC2 /* Error.swift */,
 				1F3974C721E67627006D6DC2 /* Mode.swift */,
 				1F2E82AF2197338B005C3353 /* Node.swift */,
-				1F3974C021E3B761006D6DC2 /* NaN.swift */,
 				1FE1697C21F380CA0006712C /* BinaryNode.swift */,
 				1F3974BE21E3B741006D6DC2 /* LeafNode.swift */,
+				1F3974C021E3B761006D6DC2 /* NaN.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
