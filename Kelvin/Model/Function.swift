@@ -27,17 +27,11 @@ public struct Function: Node {
     /// also changes, potentially resulting in a different definition!
     var args: List {
         didSet {
+            
             // Flatten commutative operations
             flatten()
-
-            // Update the definition of the function because the signature changed!
-            resolveDefinition()
         }
     }
-
-    /// Operations contain definitions that define what the function does.
-    /// - Note: Operations only exists when the arguments match the requirements
-    var operations = [Operation]()
 
     /// The syntactic rules of the function (looked up by the name)
     var syntax: Syntax? {
@@ -49,23 +43,10 @@ public struct Function: Node {
         self.args = args
 
         flatten()
-        resolveDefinition()
     }
 
     init(_ name: String, _ args: [Node]) {
         self.init(name, List(args))
-    }
-
-    /**
-     Resolve the definition of the function. There are three types of definitions:
-     - binary: Pre-defined operations such as +, -, *, /
-     - unary: Pre-defined operations such as log, negate, etc.
-     - custom: user defined operations, such as a function f(x)
-     */
-    private mutating func resolveDefinition() {
-
-        // Match function with registered operations
-        self.operations = Operation.resolve(name, args: args.elements)
     }
 
     public var stringified: String {
@@ -174,10 +155,15 @@ public struct Function: Node {
         return false
     }
 
-    /// Performs the operation defined by the function on the arguments.
-    /// The first successful result acquired is returned.
-    func invoke() -> Node? {
-        for operation in operations {
+    /**
+     Resolve the operations associated w/ the function and then perform
+     perform them on the arguements.
+     
+     - Returns: The first successful result acquired by performing the
+                operations on the arguments.
+     */
+    public func invoke() -> Node? {
+        for operation in Operation.resolve(name, args: args.elements) {
             if let result = operation.def(args.elements) {
                 return result
             }
