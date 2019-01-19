@@ -224,7 +224,7 @@ public struct Syntax {
         .init(for: "def", .prefix, priority: .definition),
         .init(for: "del", .prefix),
         .init(for: "get", .infix, priority: .exponent, operator: .init("::", padding: .none)), // Preserve arguments?
-        .init(for: "size", .prefix),
+        .init(for: "size", .prefix, priority: .exponent),
         .init(for: "map", .infix, operator: .init("|")),
         .init(for: "reduce", .infix, operator: .init("~")),
         .init(for: "then", .infix, operator: .init(";", padding: .rightSide)),
@@ -233,6 +233,7 @@ public struct Syntax {
         .init(for: "copy", .infix, priority: .repeat),
         .init(for: "complexity", .prefix),
         .init(for: "round", .prefix, priority: .exponent),
+        .init(for: "int", .prefix, priority: .exponent),
         .init(for: "eval", .prefix),
         .init(for: "print", .prefix),
         .init(for: "println", .prefix),

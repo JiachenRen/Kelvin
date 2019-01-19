@@ -1,0 +1,24 @@
+def dice1() = round random(1,6)
+def dice2() = int random(1, 7)
+
+seeds(x) := round random(1, 6) ... x
+def dice3() = seeds(10)::int random(0, 9)
+
+# Roll dice 1 10000 times
+rolls1 := dice1()...10000
+
+# Roll dice 2 10000 times
+rolls2 := dice2()...10000
+
+# Roll dice 3 10000 times, but only randomly select 1000 values to count
+rolls3 := dice3()...1000
+
+# Find the average of the rollings
+print "Expected value of dice 1 rolls: "
+println avg(rolls1)
+
+print "Expected value of dice 2 rolls: "
+println avg(rolls2)
+
+print "Expected value of dice 3 rolls: "
+println avg(rolls3)

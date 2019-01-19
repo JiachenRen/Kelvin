@@ -811,8 +811,21 @@ public class Operation: Equatable {
         },
 
         // Summation
-        .init("sum", [.list]) { nodes in
-            return ++(nodes[0] as! List).elements
+        .init("sum", [.list]) {
+            let list = $0[0] as! List
+            var nSum: Double = 0
+            var nans = [Node]()
+            
+            for element in list.elements {
+                if element is Int {
+                    nSum += Double(element as! Int)
+                } else if element is Double {
+                    nSum += element as! Double
+                } else  {
+                    nans.append(element)
+                }
+            }
+            return ++nans + nSum
         },
         .init("sum", [.universal]) { nodes in
             return ++nodes
@@ -885,9 +898,8 @@ public class Operation: Equatable {
         },
 
         // Statistics, s stands for sample, p stands for population
-        .init("avg", [.list]) { nodes in
-            let l = (nodes[0] as! List).elements
-            return ++l / l.count
+        .init("avg", [.list]) {
+            return Function("sum", $0) / ($0[0] as! List).count
         },
         .init("avg", [.universal]) { nodes in
             return ++nodes / nodes.count

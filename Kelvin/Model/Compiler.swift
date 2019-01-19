@@ -378,16 +378,40 @@ public class Compiler {
 
         var segregated = [[Syntax.Encoding]]()
         var cur = prioritized[0].priority
-        var buf = [Syntax.Encoding]()
+        
+        // The operators are split into two groups, one of which containing binary
+        // operators while the other contains prefix and postfix operators.
+        var groupA = [Syntax.Encoding]()
+        var groupB = [Syntax.Encoding]()
+        
         prioritized.forEach {
+            
+            // For each cluster in the group, the operators are
+            // arranged according to their priority. The operators with
+            // higher priority are processed first.
             if $0.priority != cur {
                 cur = $0.priority
-                segregated.append(buf)
-                buf = [Syntax.Encoding]()
+                
+                // First add the prefix and postfix group, as they need to be
+                // processed first; then add the infix group
+                segregated.append(groupB)
+                segregated.append(groupA)
+                
+                // Clear groups bugger.
+                groupA = [Syntax.Encoding]()
+                groupB = [Syntax.Encoding]()
             }
-            buf.append($0.encoding)
+            
+            if $0.position == .infix {
+                groupA.append($0.encoding)
+            } else {
+                groupB.append($0.encoding)
+            }
         }
-        segregated.append(buf)
+        
+        // Add the remaining groups with lowest priority.
+        segregated.append(groupB)
+        segregated.append(groupA)
 
         var dict = OperatorReference()
         for operators in segregated {
