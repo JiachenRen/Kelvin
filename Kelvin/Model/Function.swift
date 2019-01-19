@@ -206,19 +206,11 @@ public struct Function: Node {
         if let s = copy.invoke()?.simplify() {
             return s
         } else if Operation.has(attr: .commutative, name) {
-            // If the function is commutative, then reverse the order or args.
-            copy.reverse()
-
-            // Try simplifying in the reserve order.
-            if let s = copy.invoke()?.simplify() {
-                return s
-            }
-
+            
+            // Try simplifying in the reserve order if the function is commutative
             if copy.args.count > 2 {
                 let after = Operation.simplifyCommutatively(copy.args.elements, by: name)
                 return after.complexity < copy.complexity ? after : copy
-            } else if let s = copy.invoke()?.simplify() {
-                return s
             }
         }
 
@@ -229,18 +221,6 @@ public struct Function: Node {
     /// Reverse the order of arguments.
     private mutating func reverse() {
         args.elements = args.elements.reversed()
-    }
-
-    /**
-     Perform batch operation on the list of arguments.
-     
-     - Parameter action: The action to be performed on the argument list.
-     - Returns: A new function with action performed on each argument
-     */
-    func arguments(do action: Unary) -> Function {
-        var copy = self
-        copy.args = action(copy.args) as! List
-        return copy
     }
 
     /**
