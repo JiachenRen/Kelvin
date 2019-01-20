@@ -9,7 +9,7 @@
 import Foundation
 
 // Variable/function definition and deletion
-let actionOperations: [Operation] = [
+let miscActions: [Operation] = [
     .init("def", [.equation]) { nodes in
         if let err = (nodes[0] as? Equation)?.define() {
             return err

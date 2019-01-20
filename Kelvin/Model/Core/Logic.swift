@@ -10,20 +10,20 @@ import Foundation
 
 // Boolean logic and, or
 let logicOperations: [Operation] = [
-    .init("and", [.bool, .bool]) { nodes in
-        nodes.map {
-            $0 as! Bool
+    .init("and", [.booleans]) {
+        for n in $0 {
+            if let b = n as? Bool, !b {
+                return false
             }
-            .reduce(true) {
-                $0 && $1
         }
+        return true
     },
-    .init("or", [.bool, .bool]) { nodes in
-        nodes.map {
-            $0 as! Bool
+    .init("or", [.booleans]) {
+        for n in $0 {
+            if let b = n as? Bool, b {
+                return true
             }
-            .reduce(false) {
-                $0 || $1
         }
+        return false
     },
 ]
