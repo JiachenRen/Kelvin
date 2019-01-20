@@ -44,6 +44,8 @@
 		1F0936FC21F518D000E707BD /* Double+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F321F5184400E707BD /* Double+Value.swift */; };
 		1F0936FD21F518D000E707BD /* Int+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F521F5186200E707BD /* Int+Value.swift */; };
 		1F0936FE21F518D000E707BD /* NSNumber+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F921F518BB00E707BD /* NSNumber+Value.swift */; };
+		1F09370121F51EC000E707BD /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09370021F51EC000E707BD /* Vector.swift */; };
+		1F09370221F51EDD00E707BD /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09370021F51EC000E707BD /* Vector.swift */; };
 		1F0CF2C421EA420400E40086 /* String+LeafNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* String+LeafNode.swift */; };
 		1F0CF2C521EA428000E40086 /* String+LeafNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* String+LeafNode.swift */; };
 		1F0CF2C721EBA8C800E40086 /* Syntax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C621EBA8C800E40086 /* Syntax.swift */; };
@@ -140,6 +142,7 @@
 		1F0936F521F5186200E707BD /* Int+Value.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Value.swift"; sourceTree = "<group>"; };
 		1F0936F721F5189500E707BD /* Bool+Value.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bool+Value.swift"; sourceTree = "<group>"; };
 		1F0936F921F518BB00E707BD /* NSNumber+Value.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSNumber+Value.swift"; sourceTree = "<group>"; };
+		1F09370021F51EC000E707BD /* Vector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vector.swift; sourceTree = "<group>"; };
 		1F0CF2C321EA420400E40086 /* String+LeafNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+LeafNode.swift"; sourceTree = "<group>"; };
 		1F0CF2C621EBA8C800E40086 /* Syntax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Syntax.swift; sourceTree = "<group>"; };
 		1F0CF2D221EEA74A00E40086 /* Misc */ = {isa = PBXFileReference; lastKnownFileType = text; path = Misc; sourceTree = "<group>"; };
@@ -260,6 +263,7 @@
 				1F2E82B32197416D005C3353 /* List.swift */,
 				1FE1697521F2D44A0006712C /* Tuple.swift */,
 				1F2E82B521974368005C3353 /* Variable.swift */,
+				1F09370021F51EC000E707BD /* Vector.swift */,
 			);
 			path = DataTypes;
 			sourceTree = "<group>";
@@ -538,6 +542,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F09370221F51EDD00E707BD /* Vector.swift in Sources */,
 				1F0936FB21F518D000E707BD /* Bool+Value.swift in Sources */,
 				1F0936FC21F518D000E707BD /* Double+Value.swift in Sources */,
 				1F0936FD21F518D000E707BD /* Int+Value.swift in Sources */,
@@ -615,6 +620,7 @@
 				1F0936E121F4EBBE00E707BD /* Conversion.swift in Sources */,
 				1F0936DA21F4E8A200E707BD /* Logic.swift in Sources */,
 				1F2E82B02197338B005C3353 /* Node.swift in Sources */,
+				1F09370121F51EC000E707BD /* Vector.swift in Sources */,
 				1F0936D321F4E69E00E707BD /* Actions.swift in Sources */,
 				1F0936F621F5186200E707BD /* Int+Value.swift in Sources */,
 				1F2E82B42197416D005C3353 /* List.swift in Sources */,

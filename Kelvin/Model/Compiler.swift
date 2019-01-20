@@ -78,10 +78,6 @@ public class Compiler {
             expr = replace(expr, "{", "}", "list(", ")")
         }
 
-        while expr.contains("[") {
-            expr = replace(expr, "[", "]", "vector(", ")")
-        }
-
         // Apply syntactic transformations before compilation (encoding)
         Syntax.lexicon.map {
                     $0.value
@@ -278,41 +274,95 @@ public class Compiler {
 
         return parent
     }
+    
+    /**
+     Find the start index of the prefix before square brackets or parenthesis.
+     e.g.
+     in "38+random()", the index of "r" is returned;
+     In "a+list[b]", index of "l" is returned b/c the brackets in this case constitutes a subscript.
+     In "34+(a+b)", nil is returned b/c "()" in "(a+b)" only denotes a parenthesis.
+     
+     - Parameters:
+        - lb: The index of the left bracket/parenthesis
+     - Returns: The start index of the subscript operand or the name of the function.
+     */
+    private static func indexOfPrefix(before lb: String.Index, in expr: String) -> String.Index? {
+        var prefixIdx = lb
+        while let b = expr.index(prefixIdx, offsetBy: -1, limitedBy: expr.startIndex) {
+            if symbols.contains(expr[b]) {
+                break
+            }
+            prefixIdx = b
+        }
+        
+        return prefixIdx == lb ? nil : prefixIdx
+    }
 
+    /**
+     Turn a properly encoded/formatted string that represents an expression into a parent node. Working from
+     inside out, the innermost parenthesis is identified and resolved; then, its content is extracted and resolved
+     recursively. This way, a complex expression is systematically broken down and resolved.
+     
+     - Parameters:
+        - expr: The expression to be resolved
+        - dict: An empty node reference dictionary [String: Node] that is populated as the expression is resolved.
+        - binOps: A dictionary that maps a binary operator reference to an operator encoding.
+     - Returns: The parent node that represents the expression.
+     */
     private static func resolve(_ expr: String, _ dict: inout NodeReference, _ binOps: OperatorReference) throws -> Node {
         var expr = expr
-
+        
+        // Store the resolved node in the reference dictionary, then update the expression
+        // by replacing the node w/ its reference.
+        func update(_ node: Node, _ r: ClosedRange<String.Index>, _ prefixIdx: String.Index?) {
+            let id = "\(Flag.node)\(dict.count)"
+            dict[id] = node
+            let left = String(expr[expr.startIndex..<(prefixIdx ?? r.lowerBound)])
+            let right = String(expr[expr.index(after: r.upperBound)...])
+            expr = left + id + right
+        }
+        
+        // Resolve functions and binary operations. Start from inside and work outside -
+        // first, identify the innermost parenthesis, process what's inside the parenthesis
+        // to generate a node. Then, the node is added to the NodeReference dictionary,
+        // and the innermost parenthesis along with its content is replaced with a string
+        // that maps to the node.
         while expr.contains("(") {
+            
+            // Find the range of the innermost pairing of parenthesis
             let r = innermost(expr, "(", ")")
-            var prefixIdx = r.lowerBound
-            var hasPrefix = false
-            while let b = expr.index(prefixIdx, offsetBy: -1, limitedBy: expr.startIndex) {
-                if symbols.contains(expr[b]) {
-                    break
-                }
-                prefixIdx = b
-                hasPrefix = true
-            }
+            
             let idx1 = expr.index(after: r.lowerBound)
             let idx2 = expr.index(before: r.upperBound)
-
+            
+            // If a prefix idx exists, what's inside the parenthesis are arguments to
+            // a function whose name is represented by the prefix.
+            let prefixIdx = indexOfPrefix(before: r.lowerBound, in: expr)
+            
             // Range inside parenthesis
             // A range isn't use here to avoid error caused by upperBound < lowerBound
             let ir = [idx1, idx2]
 
             var node: Node? = nil
-            if hasPrefix {
-                // In case of definitions like random()
+            
+            if let prefixIdx = prefixIdx {
+                
+                // In case of definitions like random(), where it takes in no arguments.
                 var name = String(expr[prefixIdx..<r.lowerBound])
                 if let bin = binOps[name] {
                     name = bin.description
                 }
 
+                // Remove trailing and padding white spaces around the name.
                 name = removeWhiteSpace(name)
 
                 if ir[0] == r.upperBound {
-                    node = Function(name, [Node]())
+                    
+                    // Function w/ no arguments.
+                    node = Function(name, [])
                 } else {
+                    
+                    // Recursively resolve the arguments of the function.
                     let nested = try resolve(String(expr[ir[0]...ir[1]]), &dict, binOps)
                     if let list = nested as? List {
                         node = Function(name, list.elements)
@@ -327,28 +377,72 @@ public class Compiler {
                 node = try resolve(String(expr[ir[0]...ir[1]]), &dict, binOps)
             }
 
-            let id = "\(Flag.node)\(dict.count)"
-            dict[id] = node
-            let left = String(expr[expr.startIndex..<prefixIdx])
-            let right = String(expr[expr.index(after: r.upperBound)...])
-            expr = left + id + right
+            // Update the expression.
+            update(node!, r, prefixIdx)
+        }
+        
+        // Resolve vectors and subscripts
+        while expr.contains("[") {
+            
+            // Find the range of the innermost pairing of square brackets.
+            let r = innermost(expr, "[", "]")
+            
+            if expr.index(after: r.lowerBound) == r.upperBound {
+                throw CompilerError.syntax(errMsg: "cannot subscript with []")
+            }
+            
+            // Find the range of string inside the brackets.
+            let insideR = expr.index(after: r.lowerBound)...expr.index(before: r.upperBound)
+            let inside = String(expr[insideR])
+            
+            // Recursively resolve the vector/subscript argument.
+            let sub = try resolve(inside, &dict, binOps)
+            
+            // If there is a prefix, the brackets denote a subscript;
+            // otherwise it denotes a vector.
+            let prefixIdx = indexOfPrefix(before: r.lowerBound, in: expr)
+            
+            var node: Node?
+            if let subscriptIdx = prefixIdx {
+                
+                // Subscript
+                let operandStr = String(expr[subscriptIdx..<r.lowerBound])
+                let operand = try resolve(operandStr, &dict, binOps)
+                node = Function("get", [operand, sub])
+            } else {
+                
+                // Vector
+                if let list = sub as? List {
+                    node = Vector(list.elements)
+                } else {
+                    node = Vector([sub])
+                }
+            }
+            
+            // Update the expression.
+            update(node!, r, prefixIdx)
         }
 
+        // Resolve lists.
         if expr.contains(",") {
             let nodes = try expr.split(separator: ",")
                     .map {
-                        String($0)
-                    }
-                    .map {
-                        try resolve($0, &dict, binOps)
+                        try resolve(String($0), &dict, binOps)
                     }
             return List(nodes)
         } else {
+            
+            // The base case of the recursion tree where there are no more
+            // square brackets, parentheses, functions, or lists.
             expr = removeWhiteSpace(expr)
 
+            // Try turning the expr into a node by first trying it as a node reference,
+            // then an integer, next a double, and finally a boolean.
             if let node = dict[expr] ?? Int(expr) ?? Double(expr) ?? Bool(expr) {
                 return node
             } else {
+                
+                // If none of the types above apply, then try to use it as a variable name.
                 return try Variable(expr)
             }
         }
