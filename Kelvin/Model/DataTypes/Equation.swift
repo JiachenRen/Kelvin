@@ -9,6 +9,10 @@
 import Foundation
 
 public struct Equation: BinaryNode, NaN {
+    
+    public var stringified: String {
+        return "\(lhs.stringified) \(mode.rawValue) \(rhs.stringified)"
+    }
 
     /// The left hand side of the equation
     var lhs: Node
@@ -170,21 +174,13 @@ public struct Equation: BinaryNode, NaN {
         return nil
     }
 
-    /// Perform an action on both sides of the equation
-    private func perform(_ action: Unary) -> Node {
-        var eq = self
-        eq.lhs = action(lhs)
-        eq.rhs = action(rhs)
-        return eq
-    }
-
     /**
      Swap left hand side and right and side of the equation
      e.g. a+b=c -> c=a+b
      
      - Returns: The equation with lhs and rhs swapped.
      */
-    func reversed() -> Node {
+    func reversed() -> Equation {
         return Equation(lhs: rhs, rhs: lhs)
     }
 
@@ -192,33 +188,8 @@ public struct Equation: BinaryNode, NaN {
     /// either in the forward direction or backward direction
     public func equals(_ node: Node) -> Bool {
         if let eq = node as? Equation {
-            let forwardEquals = lhs === eq.lhs && rhs === eq.rhs
-            let backwardEquals = lhs === eq.rhs && rhs === eq.lhs
-            return forwardEquals || backwardEquals
+            return equals(list: eq) || reversed().equals(list: eq)
         }
         return false
-    }
-
-    public var stringified: String {
-        return "\(lhs.stringified) \(mode.rawValue) \(rhs.stringified)"
-    }
-
-    /// Complexity of the equation is the sum of the complexity of both sides + 1.
-    public var complexity: Int {
-        return lhs.complexity + rhs.complexity + 1
-    }
-
-    /**
-     Replace the designated nodes identical to the node provided with the replacement
-     
-     - Parameter predicament: The condition that needs to be met for a node to be replaced
-     - Parameter replace:   A function that takes the old node as input (and perhaps
-     ignores it) and returns a node as replacement.
-     */
-    public func replacing(by replace: Unary, where predicament: PUnary) -> Node {
-        var copy = self
-        copy.lhs = lhs.replacing(by: replace, where: predicament)
-        copy.rhs = rhs.replacing(by: replace, where: predicament)
-        return predicament(copy) ? replace(copy) : copy
     }
 }

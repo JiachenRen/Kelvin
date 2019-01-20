@@ -8,8 +8,8 @@
 
 import Foundation
 
-public struct Function: Node {
-
+public struct Function: MutableListProtocol {
+    
     public var evaluated: Value? {
         return invoke()?.evaluated
     }
@@ -24,6 +24,18 @@ public struct Function: Node {
 
     /// List of arguments that the function takes in.
     let args: List
+    
+    /// Conform to MutableListProtocol by returning the list of arguments
+    /// as elements; since the function itself is immutable, a new function
+    /// is created every time the elements are changed.
+    var elements: [Node] {
+        get {
+            return args.elements
+        }
+        set {
+            self = Function(name, List(newValue))
+        }
+    }
 
     /// The syntactic rules of the function (looked up by the name)
     var syntax: Syntax? {
@@ -38,6 +50,8 @@ public struct Function: Node {
         
         let isCommutative = Operation.has(attr: .commutative, name)
         self.isCommutative = isCommutative
+        
+        // If the function is commutative, order its arguments.
         self.args = isCommutative ? args.ordered() : args
 
         flatten()
@@ -247,57 +261,15 @@ public struct Function: Node {
         }
     }
 
-    /// Functions are equal to each other if their name and arguments are the same
-    /// Commutative functions are equal to each other if they have the same elements -
-    /// that is, regardless of the order they are in.
+    /// Functions are equal to each other if their names and arguments are the same
     public func equals(_ node: Node) -> Bool {
         if let fun = node as? Function {
             if fun.name == name {
-                return List.strictlyEquals(args, fun.args)
-            }
-        }
-        return false
-    }
-
-    /**
-     - Parameters:
-     - predicament: The condition for the matching node.
-     - depth: Search depth. Won't search for nodes beyond this designated depth.
-     - Returns: Whether the current node contains the target node.
-     */
-    public func contains(where predicament: PUnary, depth: Int) -> Bool {
-        if predicament(self) {
-            return true
-        } else if depth != 0 {
-            for e in args.elements {
-                if e.contains(where: predicament, depth: depth - 1) {
+                if equals(list: fun as ListProtocol) {
                     return true
                 }
             }
         }
         return false
-    }
-
-    /**
-     Replace the designated nodes identical to the node provided with the replacement
-     
-     - Parameter predicament: The condition that needs to be met for a node to be replaced
-     - Parameter replace:   A function that takes the old node as input (and perhaps
-     ignores it) and returns a node as replacement.
-     */
-    public func replacing(by replace: Unary, where predicament: PUnary) -> Node {
-        let elements = args.elements.map {
-            $0.replacing(by: replace, where: predicament)
-        }
-        let copy = Function(name, elements)
-        return predicament(copy) ? replace(copy) : copy
-    }
-
-    /// Perform an action on each node in the tree.
-    public func forEach(_ body: (Node) -> ()) {
-        body(self)
-        for e in args.elements {
-            e.forEach(body)
-        }
     }
 }
