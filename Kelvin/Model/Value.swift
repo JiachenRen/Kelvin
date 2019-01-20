@@ -51,6 +51,10 @@ extension Double: Value {
     }
 }
 
+extension NSNumber: Value {
+    
+}
+
 extension Int: Value {
     public var doubleValue: Double {
         return Double(self)

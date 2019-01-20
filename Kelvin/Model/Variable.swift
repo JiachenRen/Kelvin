@@ -40,10 +40,7 @@ public struct Variable: LeafNode, NaN {
     /// Whether the variable represents a constant.
     /// e.g. pi, e
     var isConstant: Bool {
-        if let def = definition {
-            return def is Double
-        }
-        return false
+        return Variable.constants[name] != nil
     }
 
     public var evaluated: Value? {
