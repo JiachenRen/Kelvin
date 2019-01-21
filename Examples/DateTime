@@ -1,0 +1,2 @@
+a := time(); random()...10000; println("time = " & time() - a)
+println date()

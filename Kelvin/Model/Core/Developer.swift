@@ -77,6 +77,15 @@ let developerOperations: [Operation] = [
         Thread.sleep(forTimeInterval: $0[0].evaluated!.doubleValue)
         return "done"
     },
+    .init("measure", [.any, .int]) {
+        let n = $0[1] as! Int
+        let t = Date().timeIntervalSince1970
+        for _ in 0..<n {
+            let _ = $0[0].simplify()
+        }
+        let avg = (Date().timeIntervalSince1970 - t) / Double(n)
+        return Tuple("avg(s)", avg)
+    },
     .init("compile", [.string]) {
         do {
             return try Compiler.compile($0[0] as! String)

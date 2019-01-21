@@ -74,14 +74,14 @@ let unaryOperations: [Operation] = [
         var fun = $0[0] as! Function
         switch fun.name {
         case "nagate":
-            return fun.args[0]
+            return fun[0]
         case "+":
-            let elements = fun.args.elements.map {
+            let elements = fun.elements.map {
                 $0 * -1
             }
             return Function(fun.name, elements)
         case "*":
-            var args = fun.args.elements
+            var args = fun.elements
             args.append(-1)
             return *args
         default: break

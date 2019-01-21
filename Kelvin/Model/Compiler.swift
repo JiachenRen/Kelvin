@@ -10,7 +10,7 @@ import Foundation
 
 /**
  * Created by Jiachen on 19/05/2017.
- * Interprets mathematical expressions into nested operations
+ * Compiles mathematical expressions into a tree consisting of nodes.
  */
 public class Compiler {
     private static let squareBrackets = ["[", "]"]

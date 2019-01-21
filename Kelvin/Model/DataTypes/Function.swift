@@ -136,7 +136,7 @@ public struct Function: MutableListProtocol {
                     } else if p1 == p2 {
 
                         // Always parenthesize unary operations to disambiguate
-                        if fun.args.count == 1 {
+                        if fun.count == 1 {
                             return true
                         }
 
@@ -248,7 +248,7 @@ public struct Function: MutableListProtocol {
             elements.forEach { arg in
                 if let fun = arg as? Function, fun.name == name {
                     changed = true
-                    newArgs.append(contentsOf: fun.args.elements)
+                    newArgs.append(contentsOf: fun.elements)
                 } else {
                     newArgs.append(arg)
                 }

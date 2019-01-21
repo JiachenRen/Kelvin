@@ -21,6 +21,7 @@ extension Double: Value {
         
         // Use the proper scientific notation
         return "\(self)".replacingOccurrences(of: "e+", with: "E")
+            .replacingOccurrences(of: "e-", with: "*10^-")
     }
     
     /// If the double is an integer, convert it to an integer.

@@ -181,11 +181,10 @@ public class Operation: Equatable {
      - Returns: A list of operations with matching signature, sorted in order of increasing scope.
      */
     public static func resolve(for fun: Function) -> [Operation] {
-        let args = fun.args, name = fun.name
         
         // First find all operations w/ the given name.
         // If there are none, return an empty array.
-        guard let candidates = registered[name] else {
+        guard let candidates = registered[fun.name] else {
             return []
         }
         
@@ -197,29 +196,29 @@ public class Operation: Equatable {
             // Deal w/ function signature types that allow any # of args.
             if let first = signature.first {
                 switch first {
-                case .multivariate where args.count <= 1:
+                case .multivariate where fun.count <= 1:
                     break candLoop
                 case .multivariate:
                     fallthrough
                 case .universal:
-                    signature = [ArgumentType](repeating: .any, count: args.count)
+                    signature = [ArgumentType](repeating: .any, count: fun.count)
                 case .numbers:
-                    signature = [ArgumentType](repeating: .number, count: args.count)
+                    signature = [ArgumentType](repeating: .number, count: fun.count)
                 case .booleans:
-                    signature = [ArgumentType](repeating: .bool, count: args.count)
+                    signature = [ArgumentType](repeating: .bool, count: fun.count)
                 default: break
                 }
             }
 
             // Bail out if # of parameters does not match # of args.
-            if signature.count != args.count {
+            if signature.count != fun.count {
                 continue
             }
 
             // Make sure that each parameter is the required type
             for i in 0..<signature.count {
                 let argType = signature[i]
-                let arg = args[i]
+                let arg = fun[i]
                 switch argType {
                 case .any:
                     continue
@@ -325,16 +324,18 @@ public class Operation: Equatable {
      that is used later to find definitions.
      */
     enum ArgumentType: Int, Equatable {
-        case number = 0
-        case nan = 1
-        case `var` = 2
-        case `func` = 3
-        case bool = 4
-        case list = 5
-        case equation = 6
-        case string = 7
-        case tuple = 8
-        case leaf = 9
+        case int = 1
+        case double = 2
+        case number = 3
+        case nan = 4
+        case `var` = 5
+        case `func` = 6
+        case bool = 7
+        case list = 8
+        case equation = 9
+        case string = 10
+        case tuple = 11
+        case leaf = 12
         case any = 100
         case numbers = 1000
         case booleans = 1001

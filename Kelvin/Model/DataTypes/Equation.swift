@@ -108,7 +108,7 @@ public struct Equation: BinaryNode, NaN {
             return nil
         }
 
-        let args = fun.args.elements
+        let args = fun.elements
 
         // Check to make sure that every argument is a variable
         for arg in args {

@@ -11,7 +11,7 @@ import Foundation
 public struct Tuple: BinaryNode, NaN {
     
     public var stringified: String {
-        return "(\(lhs) : \(rhs))"
+        return "(\(lhs.stringified) : \(rhs.stringified))"
     }
     
     /// First value of the tuple

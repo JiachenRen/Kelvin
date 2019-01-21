@@ -24,6 +24,7 @@ let defaultConfiguration: [Operation.Attribute: [String]] = [
         "def",
         "del",
         "if",
+        "measure",
         
         // Functions that accepts anonymous arguments should preserve arguments.
         "feed",

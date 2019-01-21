@@ -23,7 +23,7 @@ let binaryOperations: [Operation] = [
         let fun = $0[1] as! Function
         switch fun.name {
         case "*":
-            var args = fun.args.elements
+            var args = fun.elements
             for (i, arg) in args.enumerated() {
                 if arg === $0[0] {
                     let a = args.remove(at: i)
@@ -100,8 +100,8 @@ let binaryOperations: [Operation] = [
     .init("*", [.any, .func]) {
         let fun = $0[1] as! Function
         switch fun.name {
-        case "^" where fun.args[0] === $0[0]:
-            return $0[0] ^ (fun.args[1] + 1)
+        case "^" where fun[0] === $0[0]:
+            return $0[0] ^ (fun[1] + 1)
         default:
             break
         }
@@ -187,7 +187,7 @@ let binaryOperations: [Operation] = [
         }
         switch fun.name {
         case "*":
-            let (nums, nans) = fun.args.split(by: isNumber)
+            let (nums, nans) = fun.split(by: isNumber)
             return (**nums ^ $0[1]) * (**nans ^ $0[1])
         case "^" where fun[0] is NSNumber:
             return (fun[0] ^ $0[1]) ^ fun[1]
@@ -201,8 +201,8 @@ let binaryOperations: [Operation] = [
     .init("^", [.number, .func]) {
         let fun = $0[1] as! Function
         switch fun.name {
-        case "*" where fun.args.contains(where: isNumber, depth: 1):
-            let (nums, nans) = fun.args.split(by: isNumber)
+        case "*" where fun.contains(where: isNumber, depth: 1):
+            let (nums, nans) = fun.split(by: isNumber)
             return ($0[0] ^ **nums) * ($0[0] ^ **nans)
         default: break
         }

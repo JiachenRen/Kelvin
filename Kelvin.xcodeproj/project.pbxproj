@@ -54,6 +54,7 @@
 		1F09371121F62BF700E707BD /* Loops in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371021F62BF700E707BD /* Loops */; };
 		1F09371521F64FC600E707BD /* Randomization in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371421F64FC600E707BD /* Randomization */; };
 		1F09371721F66C4B00E707BD /* Subscript in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371621F66C4B00E707BD /* Subscript */; };
+		1F09371921F672CD00E707BD /* DateTime in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371821F672CD00E707BD /* DateTime */; };
 		1F0CF2C421EA420400E40086 /* String+LeafNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* String+LeafNode.swift */; };
 		1F0CF2C521EA428000E40086 /* String+LeafNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* String+LeafNode.swift */; };
 		1F0CF2C721EBA8C800E40086 /* Syntax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C621EBA8C800E40086 /* Syntax.swift */; };
@@ -158,6 +159,7 @@
 		1F09371021F62BF700E707BD /* Loops */ = {isa = PBXFileReference; lastKnownFileType = text; path = Loops; sourceTree = "<group>"; };
 		1F09371421F64FC600E707BD /* Randomization */ = {isa = PBXFileReference; lastKnownFileType = text; path = Randomization; sourceTree = "<group>"; };
 		1F09371621F66C4B00E707BD /* Subscript */ = {isa = PBXFileReference; lastKnownFileType = text; path = Subscript; sourceTree = "<group>"; };
+		1F09371821F672CD00E707BD /* DateTime */ = {isa = PBXFileReference; lastKnownFileType = text; path = DateTime; sourceTree = "<group>"; };
 		1F0CF2C321EA420400E40086 /* String+LeafNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+LeafNode.swift"; sourceTree = "<group>"; };
 		1F0CF2C621EBA8C800E40086 /* Syntax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Syntax.swift; sourceTree = "<group>"; };
 		1F0CF2D221EEA74A00E40086 /* Misc */ = {isa = PBXFileReference; lastKnownFileType = text; path = Misc; sourceTree = "<group>"; };
@@ -309,6 +311,7 @@
 				1F09371421F64FC600E707BD /* Randomization */,
 				1F09371021F62BF700E707BD /* Loops */,
 				1F09371621F66C4B00E707BD /* Subscript */,
+				1F09371821F672CD00E707BD /* DateTime */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
@@ -539,6 +542,7 @@
 				1F09370F21F5800B00E707BD /* String in Resources */,
 				1F09370721F56F9C00E707BD /* Differentiation in Resources */,
 				1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */,
+				1F09371921F672CD00E707BD /* DateTime in Resources */,
 				1F0CF2D321EEA74A00E40086 /* Misc in Resources */,
 				1FE1697B21F2EC070006712C /* Conditionals in Resources */,
 				1F09371121F62BF700E707BD /* Loops in Resources */,

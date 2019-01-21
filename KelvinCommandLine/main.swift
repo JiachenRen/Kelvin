@@ -54,8 +54,8 @@ while true {
         
         // Compile and execute the input statement
         let parent = try Compiler.compile(input)
-        print("      # \(parent)")
-        print("      = \(parent.simplify())", terminator: "\n\n")
+        print("      # \(parent.stringified)")
+        print("      = \(parent.simplify().stringified)", terminator: "\n\n")
     } catch CompilerError.illegalArgument(let msg) {
         print("ERR >>> illegal argument: \(msg)")
     } catch CompilerError.syntax(let msg) {
