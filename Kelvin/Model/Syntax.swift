@@ -239,6 +239,7 @@ public struct Syntax {
         .init(for: "print", .prefix),
         .init(for: "println", .prefix),
         .init(for: "compile", .prefix),
+        .init(for: "run", .prefix),
         .init(for: "npr", .infix),
         .init(for: "ncr", .infix),
         .init(for: "tuple", .infix, priority: .tuple, operator: .init(":", padding: .bothSides)),

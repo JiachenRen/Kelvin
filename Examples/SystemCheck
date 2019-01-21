@@ -1,0 +1,4 @@
+# Run all Kelvin scripts and tests and do a pansystemic performance.
+def start_time = time()
+{"Misc", "Tests", "Probability", "Differentiation", "Conditionals", "Randomization", "DateTime", "Subscript", "Loops", "String", "Trigonometry"} | run($0)
+println "System check completed in " & (time() - start_time) & " seconds."

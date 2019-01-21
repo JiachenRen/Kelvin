@@ -77,8 +77,8 @@ public struct Variable: LeafNode, NaN {
         self.name = name
     }
 
-    /// Clear all variable definitions.
-    public static func clearDefinitions() {
+    /// Clear all variable definitions and reload all constants.
+    public static func restoreDefault() {
         definitions = constants.reduce(into: [:]) {
             $0[$1.key] = $1.value
         }

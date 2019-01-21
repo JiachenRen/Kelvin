@@ -77,6 +77,14 @@ let developerOperations: [Operation] = [
         Thread.sleep(forTimeInterval: $0[0].evaluated!.doubleValue)
         return "done"
     },
+    .init("run", [.string]) {
+        do {
+            try Program.compileAndRun($0[0] as! String, with: nil)
+        } catch let e {
+            return "\(e)"
+        }
+        return "done"
+    },
     .init("measure", [.any, .int]) {
         let n = $0[1] as! Int
         let t = Date().timeIntervalSince1970

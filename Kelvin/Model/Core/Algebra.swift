@@ -20,7 +20,7 @@ fileprivate class AlgebraEngine {
     /// Factorizes the parent node; e.g. a*b+a*c becomes a*(b+c)
     fileprivate static func factorize(_ parent: Node) -> Node {
         return parent.replacing(by: {
-            factorize(($0 as! Function).args.elements)
+            factorize(($0 as! Function).elements)
         }) {
             ($0 as? Function)?.name == "+"
         }
@@ -58,7 +58,7 @@ fileprivate class AlgebraEngine {
         let mult = node as! Function
         assert(mult.name == "*")
 
-        var elements = mult.args.elements
+        var elements = mult.elements
         for (i, e) in elements.enumerated() {
             if e === factor {
                 elements.remove(at: i)
@@ -91,7 +91,7 @@ fileprivate class AlgebraEngine {
         // For nodes other than "*", return the node itself.
         func deconstruct(_ node: Node) -> [Node] {
             if let mult = node as? Function, mult.name == "*" {
-                return mult.args.elements
+                return mult.elements
             }
             return [node]
         }

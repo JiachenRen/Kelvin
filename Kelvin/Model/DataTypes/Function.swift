@@ -62,7 +62,7 @@ public struct Function: MutableListProtocol {
     }
 
     public var stringified: String {
-        let r = args.elements.map {
+        let r = elements.map {
             $0.stringified
         }
         var n = " \(name) "
@@ -83,7 +83,7 @@ public struct Function: MutableListProtocol {
             let n = syntax.formatted
 
             switch syntax.position {
-            case .infix where args.count == 1:
+            case .infix where count == 1:
 
                 // Handle special case of -x.
                 let c = syntax.operator?.name ?? name
@@ -176,7 +176,7 @@ public struct Function: MutableListProtocol {
      */
     public func invoke() -> Node? {
         for operation in Operation.resolve(for: self) {
-            if let result = operation.def(args.elements) {
+            if let result = operation.def(elements) {
                 return result
             }
         }
@@ -221,8 +221,8 @@ public struct Function: MutableListProtocol {
         } else if Operation.has(attr: .commutative, name) {
             
             // Try simplifying in the reserve order if the function is commutative
-            if copy.args.count > 2 {
-                let after = Operation.simplifyCommutatively(copy.args.elements, by: name)
+            if copy.count > 2 {
+                let after = Operation.simplifyCommutatively(copy.elements, by: name)
                 return after.complexity < copy.complexity ? after : copy
             }
         }
@@ -239,7 +239,7 @@ public struct Function: MutableListProtocol {
      Under normal circumstances, don't use this function.
      */
     private mutating func flatten() {
-        let elements = args.elements
+        let elements = self.elements
         
         // Flatten commutative operations
         if isCommutative {

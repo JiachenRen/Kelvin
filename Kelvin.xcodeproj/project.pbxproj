@@ -55,6 +55,9 @@
 		1F09371521F64FC600E707BD /* Randomization in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371421F64FC600E707BD /* Randomization */; };
 		1F09371721F66C4B00E707BD /* Subscript in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371621F66C4B00E707BD /* Subscript */; };
 		1F09371921F672CD00E707BD /* DateTime in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371821F672CD00E707BD /* DateTime */; };
+		1F09371B21F67FDD00E707BD /* SystemCheck in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371A21F67FDD00E707BD /* SystemCheck */; };
+		1F09371D21F684D500E707BD /* Scope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09371C21F684D500E707BD /* Scope.swift */; };
+		1F09371E21F684EC00E707BD /* Scope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09371C21F684D500E707BD /* Scope.swift */; };
 		1F0CF2C421EA420400E40086 /* String+LeafNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* String+LeafNode.swift */; };
 		1F0CF2C521EA428000E40086 /* String+LeafNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* String+LeafNode.swift */; };
 		1F0CF2C721EBA8C800E40086 /* Syntax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C621EBA8C800E40086 /* Syntax.swift */; };
@@ -86,7 +89,7 @@
 		1F3974C621E6341C006D6DC2 /* Equation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974C421E633FD006D6DC2 /* Equation.swift */; };
 		1F3974C821E67627006D6DC2 /* Mode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974C721E67627006D6DC2 /* Mode.swift */; };
 		1F3974C921E6765A006D6DC2 /* Mode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974C721E67627006D6DC2 /* Mode.swift */; };
-		1FE1697321F28F1E0006712C /* Test in Resources */ = {isa = PBXBuildFile; fileRef = 1FE1697221F28F1E0006712C /* Test */; };
+		1FE1697321F28F1E0006712C /* Tests in Resources */ = {isa = PBXBuildFile; fileRef = 1FE1697221F28F1E0006712C /* Tests */; };
 		1FE1697621F2D44A0006712C /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Tuple.swift */; };
 		1FE1697721F2D5D40006712C /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Tuple.swift */; };
 		1FE1697B21F2EC070006712C /* Conditionals in Resources */ = {isa = PBXBuildFile; fileRef = 1FE1697A21F2EC070006712C /* Conditionals */; };
@@ -160,6 +163,8 @@
 		1F09371421F64FC600E707BD /* Randomization */ = {isa = PBXFileReference; lastKnownFileType = text; path = Randomization; sourceTree = "<group>"; };
 		1F09371621F66C4B00E707BD /* Subscript */ = {isa = PBXFileReference; lastKnownFileType = text; path = Subscript; sourceTree = "<group>"; };
 		1F09371821F672CD00E707BD /* DateTime */ = {isa = PBXFileReference; lastKnownFileType = text; path = DateTime; sourceTree = "<group>"; };
+		1F09371A21F67FDD00E707BD /* SystemCheck */ = {isa = PBXFileReference; lastKnownFileType = text; path = SystemCheck; sourceTree = "<group>"; };
+		1F09371C21F684D500E707BD /* Scope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scope.swift; sourceTree = "<group>"; };
 		1F0CF2C321EA420400E40086 /* String+LeafNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+LeafNode.swift"; sourceTree = "<group>"; };
 		1F0CF2C621EBA8C800E40086 /* Syntax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Syntax.swift; sourceTree = "<group>"; };
 		1F0CF2D221EEA74A00E40086 /* Misc */ = {isa = PBXFileReference; lastKnownFileType = text; path = Misc; sourceTree = "<group>"; };
@@ -177,7 +182,7 @@
 		1F3974C021E3B761006D6DC2 /* NaN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaN.swift; sourceTree = "<group>"; };
 		1F3974C421E633FD006D6DC2 /* Equation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Equation.swift; sourceTree = "<group>"; };
 		1F3974C721E67627006D6DC2 /* Mode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mode.swift; sourceTree = "<group>"; };
-		1FE1697221F28F1E0006712C /* Test */ = {isa = PBXFileReference; lastKnownFileType = text; path = Test; sourceTree = "<group>"; };
+		1FE1697221F28F1E0006712C /* Tests */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tests; sourceTree = "<group>"; };
 		1FE1697521F2D44A0006712C /* Tuple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tuple.swift; sourceTree = "<group>"; };
 		1FE1697A21F2EC070006712C /* Conditionals */ = {isa = PBXFileReference; lastKnownFileType = text; path = Conditionals; sourceTree = "<group>"; };
 		1FE1697C21F380CA0006712C /* BinaryNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryNode.swift; sourceTree = "<group>"; };
@@ -302,10 +307,11 @@
 			isa = PBXGroup;
 			children = (
 				1F0CF2D221EEA74A00E40086 /* Misc */,
-				1FE1697221F28F1E0006712C /* Test */,
+				1FE1697221F28F1E0006712C /* Tests */,
 				1FE1697A21F2EC070006712C /* Conditionals */,
 				1F0936BD21F3A54800E707BD /* Probability */,
 				1F09370E21F5800B00E707BD /* String */,
+				1F09371A21F67FDD00E707BD /* SystemCheck */,
 				1F09370621F56F9C00E707BD /* Differentiation */,
 				1F09370A21F57B0200E707BD /* Trigonometry */,
 				1F09371421F64FC600E707BD /* Randomization */,
@@ -406,6 +412,7 @@
 				1F3974BB21E3970F006D6DC2 /* Error.swift */,
 				1F3974C721E67627006D6DC2 /* Mode.swift */,
 				1F2E82AB21966FC5005C3353 /* Operation.swift */,
+				1F09371C21F684D500E707BD /* Scope.swift */,
 				1F0CF2D421EEB69300E40086 /* Program.swift */,
 				1F0CF2C621EBA8C800E40086 /* Syntax.swift */,
 			);
@@ -537,9 +544,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1FE1697321F28F1E0006712C /* Test in Resources */,
+				1FE1697321F28F1E0006712C /* Tests in Resources */,
 				1F09371521F64FC600E707BD /* Randomization in Resources */,
 				1F09370F21F5800B00E707BD /* String in Resources */,
+				1F09371B21F67FDD00E707BD /* SystemCheck in Resources */,
 				1F09370721F56F9C00E707BD /* Differentiation in Resources */,
 				1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */,
 				1F09371921F672CD00E707BD /* DateTime in Resources */,
@@ -574,6 +582,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F09371E21F684EC00E707BD /* Scope.swift in Sources */,
 				1F09370521F5618200E707BD /* Calculus.swift in Sources */,
 				1F09370221F51EDD00E707BD /* Vector.swift in Sources */,
 				1F0936FB21F518D000E707BD /* Bool+Value.swift in Sources */,
@@ -646,6 +655,7 @@
 				1F0CF2D521EEB69300E40086 /* Program.swift in Sources */,
 				1F0936C321F3C13100E707BD /* Statistics.swift in Sources */,
 				1F0CF2C721EBA8C800E40086 /* Syntax.swift in Sources */,
+				1F09371D21F684D500E707BD /* Scope.swift in Sources */,
 				1FFD8CA5218F50850004ECEB /* ViewController.swift in Sources */,
 				1F0936FA21F518BB00E707BD /* NSNumber+Value.swift in Sources */,
 				1F0936D721F4E80A00E707BD /* List & Tuple.swift in Sources */,

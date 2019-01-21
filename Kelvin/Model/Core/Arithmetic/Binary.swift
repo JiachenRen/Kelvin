@@ -50,8 +50,8 @@ let binaryOperations: [Operation] = [
         if f1.name == f2.name {
             switch f1.name {
             case "*":
-                let (n1, r1) = f1.args.split(by: isNumber)
-                let (n2, r2) = f2.args.split(by: isNumber)
+                let (n1, r1) = f1.split(by: isNumber)
+                let (n2, r2) = f2.split(by: isNumber)
                 if **r1 === **r2 {
                     return **r1 * (**n1 + **n2)
                 }
@@ -113,8 +113,8 @@ let binaryOperations: [Operation] = [
 
         if f1.name == f2.name {
             switch f1.name {
-            case "^" where f1.args[0] === f2.args[0]:
-                return f1.args[0] ^ (f1.args[1] + f2.args[1])
+            case "^" where f1[0] === f2[0]:
+                return f1[0] ^ (f1[1] + f2[1])
             default:
                 break
             }
