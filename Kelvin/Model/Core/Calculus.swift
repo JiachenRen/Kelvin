@@ -16,6 +16,14 @@ let calculusOperations: [Operation] = [
 
 fileprivate class CalculusEngine {
     
+    /**
+     Take the (partial) derivative of node n w/ respect to variable v.
+     
+     - Parameters:
+        - n: The node to be differentiated
+        - v: The variable for which the derivative is taken with respect to.
+     - Returns: The derivative of n w/ respect to v.
+     */
     fileprivate static func derivative(of n: Node, withRespectTo v: Variable) -> Node? {
         if let v1 = n as? Variable {
             
@@ -67,9 +75,13 @@ fileprivate class CalculusEngine {
             } else {
                 switch fun.name {
                 case "+":
+                    
+                    // d/dx [f(x) + g(x) + ...] = d/dx(g(x)) + d/dx(g(x)) + ...
                     let smallKahunas = derivative(of: fun.elements, withRespectTo: v)
                     return ++smallKahunas
                 case "*":
+                    
+                    // d/dx [f(x) * g(x) * ...] = d/dx(f(x)) * g(x) + d/dx(g(x)) * f(x) + ...
                     var nodes = [Node]()
                     for (i, kahuna) in fun.elements.enumerated() {
                         var j = fun.elements
