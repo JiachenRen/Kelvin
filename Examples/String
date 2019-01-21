@@ -1,0 +1,4 @@
+# String concatenation
+println "you " & "are " & "a " & "pig!"
+
+println (random()...10 ~ $0 & $1)

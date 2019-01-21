@@ -19,12 +19,16 @@ let defaultConfiguration: [Operation.Attribute: [String]] = [
     .preservesArguments: [
         "complexity",
         "repeat",
-        "feed",
         "exec",
         "define",
         "def",
         "del",
-        "if"
+        "if",
+        
+        // Functions that accepts anonymous arguments should preserve arguments.
+        "feed",
+        "map",
+        "reduce"
     ],
     .forwardCommutative: [
         "/",

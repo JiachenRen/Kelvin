@@ -153,12 +153,13 @@ public struct Syntax {
         case execution = 1  // ;, >>
         case definition     // :=
         case equation       // =
-        case `repeat`       // repeat
+        case `repeat`       // ...
         case conditional    // conditional statements like if
         case tuple          // (:)
         case or             // ||
         case and            // &&
         case equality       // ==, <, >, <=, >=
+        case concat         // &
         case addition       // +,-
         case product        // *,/
         case exponent       // ^
@@ -242,5 +243,6 @@ public struct Syntax {
         .init(for: "ncr", .infix),
         .init(for: "tuple", .infix, priority: .tuple, operator: .init(":", padding: .bothSides)),
         .init(for: "if", .infix, priority: .conditional, operator: .init("?", padding: .bothSides)),
+        .init(for: "concat", .infix, priority: .concat, operator: .init("&", padding: .bothSides)),
     ]
 }

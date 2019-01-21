@@ -42,6 +42,12 @@ public struct Variable: LeafNode, NaN {
     var isConstant: Bool {
         return Variable.constants[name] != nil
     }
+    
+    /// Anonymous arguments are replaced by their callers
+    /// with supplied expressions.
+    var isAnonymous: Bool {
+        return name.starts(with: "$")
+    }
 
     public var evaluated: Value? {
         return definition?.evaluated

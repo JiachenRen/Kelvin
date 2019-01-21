@@ -39,7 +39,12 @@ let developerOperations: [Operation] = [
     .init("copy", [.any, .number]) { nodes in
         return Function("repeat", nodes)
     },
-
+    
+    // String concatenation
+    .init("concat", [.any, .any]) {
+        return "\($0[0])\($0[1])"
+    },
+    
     // Developer/debug functions, program input/output, compilation
     .init("complexity", [.any]) {
         $0[0].complexity

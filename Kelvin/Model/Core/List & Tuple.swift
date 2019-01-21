@@ -43,21 +43,25 @@ let listAndTupleOperations: [Operation] = [
     .init("size", [.list]) {
         return ($0[0] as! List).count
     },
-    .init("map", [.list, .any]) { nodes in
-        let list = nodes[0] as! List
+    .init("map", [.any, .any]) { nodes in
+        guard let list = nodes[0].simplify() as? List else {
+            return nil
+        }
         let updated = list.elements.enumerated().map { (idx, e) in
             nodes[1].replacingAnonymousArgs(with: [e, idx])
         }
-        return List(updated)
+        return List(updated).simplify()
     },
-    .init("reduce", [.list, .any]) { nodes in
-        let list = nodes[0] as! List
+    .init("reduce", [.any, .any]) { nodes in
+        guard let list = nodes[0].simplify() as? List else {
+            return nil
+        }
         let reduced = list.elements.reduce(nil) { (e1, e2) -> Node in
             if e1 == nil {
                 return e2
             }
             return nodes[1].replacingAnonymousArgs(with: [e1!, e2])
         }
-        return reduced ?? List([])
+        return reduced?.simplify() ?? List([])
     },
 ]
