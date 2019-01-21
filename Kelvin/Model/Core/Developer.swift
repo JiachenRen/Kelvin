@@ -45,6 +45,18 @@ let developerOperations: [Operation] = [
         return "\($0[0])\($0[1])"
     },
     
+    // String subscript
+    .init("get", [.string, .number]) {
+        guard let s = $0[0] as? String, let n = $0[1] as? Int else {
+            return nil
+        }
+        if n >= s.count || n < 0{
+            return "error: string index out of bounds"
+        } else {
+            return "\(s[n])"
+        }
+    },
+    
     // Developer/debug functions, program input/output, compilation
     .init("complexity", [.any]) {
         $0[0].complexity

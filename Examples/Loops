@@ -1,0 +1,12 @@
+# Generate a list containing numbers from 1 to 100, store it into l1
+i := 0
+l1 := (i := i + 1; i)...100
+
+# Define a function of f in terms of a and b
+def f(a, b) = a + b
+
+# Reduce the list using f as a binary function, then store it into x
+x := (l1 ~ f($0, $1))
+
+println "l1 = " & l1
+println "x  = " & x

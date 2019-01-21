@@ -175,7 +175,7 @@ public struct Function: MutableListProtocol {
                 operations on the arguments.
      */
     public func invoke() -> Node? {
-        for operation in Operation.resolve(name, args: args.elements) {
+        for operation in Operation.resolve(for: self) {
             if let result = operation.def(args.elements) {
                 return result
             }

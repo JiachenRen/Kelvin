@@ -17,7 +17,9 @@ let probabilityOperations: [Operation] = [
     .init("random", [.number, .number]) { nodes in
         let lb = nodes[0].evaluated!.doubleValue
         let ub = nodes[1].evaluated!.doubleValue
-        return Double.random(in: lb...ub)
+        let i = min(lb, ub)
+        let j = max(lb, ub)
+        return Double.random(in: i...j)
     },
 
     // Combination and permutation

@@ -150,7 +150,7 @@ public struct Syntax {
     }
 
     public enum Priority: Int, Comparable {
-        case execution = 1  // ;, >>
+        case execution = 1  // ;, ->
         case definition     // :=
         case equation       // =
         case `repeat`       // ...
@@ -221,7 +221,7 @@ public struct Syntax {
         .init(for: "equals", .infix, priority: .equality, operator: .init("==")),
         .init(for: "and", .infix, priority: .and, operator: .init("&&")),
         .init(for: "or", .infix, priority: .or, operator: .init("||")),
-        .init(for: "define", .infix, priority: .definition, operator: .init(":=", padding: .none)),
+        .init(for: "define", .infix, priority: .definition, operator: .init(":=", padding: .bothSides)),
         .init(for: "def", .prefix, priority: .definition),
         .init(for: "del", .prefix),
         .init(for: "get", .infix, priority: .exponent, operator: .init("::", padding: .none)), // Preserve arguments?
