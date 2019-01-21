@@ -78,16 +78,17 @@ public class Compiler {
             expr = replace(expr, "{", "}", "list(", ")")
         }
 
+        // Sort syntactic definitions by compilation priority
+        let syntacticDefinitions = Syntax.lexicon.map {
+                $0.value
+            }.sorted {
+                $0.compilationPriority > $1.compilationPriority
+            }
+        
         // Apply syntactic transformations before compilation (encoding)
-        Syntax.lexicon.map {
-                    $0.value
-                }
-                .sorted {
-                    $0.compilationPriority > $1.compilationPriority
-                }
-                .forEach {
-                    expr = applySyntax($0, for: expr)
-                }
+        for def in syntacticDefinitions {
+            expr = applySyntax(def, for: expr)
+        }
 
         // Format the expression for compilation
         format(&expr)

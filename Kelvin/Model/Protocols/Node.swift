@@ -175,3 +175,51 @@ public func /(_ lhs: Node, _ rhs: Node) -> Node {
 public prefix func -(_ arg: Node) -> Node {
     return Function("negate", [arg])
 }
+
+public func sin(_ arg: Node) -> Node {
+    return Function("sin", [arg])
+}
+
+public func cos(_ arg: Node) -> Node {
+    return Function("cos", [arg])
+}
+
+public func tan(_ arg: Node) -> Node {
+    return Function("tan", [arg])
+}
+
+public func atan(_ arg: Node) -> Node {
+    return Function("atan", [arg])
+}
+
+public func acos(_ arg: Node) -> Node {
+    return Function("acos", [arg])
+}
+
+public func asin(_ arg: Node) -> Node {
+    return Function("asin", [arg])
+}
+
+public func tanh(_ arg: Node) -> Node {
+    return Function("tanh", [arg])
+}
+
+public func cosh(_ arg: Node) -> Node {
+    return Function("cosh", [arg])
+}
+
+public func sinh(_ arg: Node) -> Node {
+    return Function("sinh", [arg])
+}
+
+public func log(_ arg: Node) -> Node {
+    return Function("log", [arg])
+}
+
+public func ln(_ arg: Node) -> Node {
+    return Function("ln", [arg])
+}
+
+public func sign(_ arg: Node) -> Node {
+    return Function("sign", [arg])
+}

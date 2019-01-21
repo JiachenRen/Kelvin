@@ -1,0 +1,19 @@
+# Define f as a function of x, y, z
+def f(x, y, z) = x(x, y, z) + y(x, y, z) + z(x, y, z)
+
+# define x, y, z as functions of u, s, t
+def x(u, s, t) = u^2 + s * cos(t)
+def y(u, s, t) = t^s + ln(u) / atan(s)
+def z(u, s, t) = u + s / t ^ abs(u)
+
+# Partial differentiation
+def df_du = derivative(f(u, s, t), u)
+def df_ds = derivative(f(u, s, t), s)
+def df_dt = derivative(f(u, s, t), t)
+
+print "df/du = "
+println df_du
+print "df/ds = "
+println df_ds
+print "df/dt = "
+println df_dt

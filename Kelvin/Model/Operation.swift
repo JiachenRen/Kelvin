@@ -37,7 +37,8 @@ public class Operation: Equatable {
         miscActions,
         listAndTupleOperations,
         equalityOperations,
-        conversionOperations
+        conversionOperations,
+        calculusOperations
     ].flatMap {
         $0
     }

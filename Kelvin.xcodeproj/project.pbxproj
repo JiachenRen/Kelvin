@@ -46,6 +46,9 @@
 		1F0936FE21F518D000E707BD /* NSNumber+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F921F518BB00E707BD /* NSNumber+Value.swift */; };
 		1F09370121F51EC000E707BD /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09370021F51EC000E707BD /* Vector.swift */; };
 		1F09370221F51EDD00E707BD /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09370021F51EC000E707BD /* Vector.swift */; };
+		1F09370421F54E6200E707BD /* Calculus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09370321F54E6200E707BD /* Calculus.swift */; };
+		1F09370521F5618200E707BD /* Calculus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09370321F54E6200E707BD /* Calculus.swift */; };
+		1F09370721F56F9C00E707BD /* Differentiation in Resources */ = {isa = PBXBuildFile; fileRef = 1F09370621F56F9C00E707BD /* Differentiation */; };
 		1F0CF2C421EA420400E40086 /* String+LeafNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* String+LeafNode.swift */; };
 		1F0CF2C521EA428000E40086 /* String+LeafNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* String+LeafNode.swift */; };
 		1F0CF2C721EBA8C800E40086 /* Syntax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C621EBA8C800E40086 /* Syntax.swift */; };
@@ -143,6 +146,8 @@
 		1F0936F721F5189500E707BD /* Bool+Value.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bool+Value.swift"; sourceTree = "<group>"; };
 		1F0936F921F518BB00E707BD /* NSNumber+Value.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSNumber+Value.swift"; sourceTree = "<group>"; };
 		1F09370021F51EC000E707BD /* Vector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vector.swift; sourceTree = "<group>"; };
+		1F09370321F54E6200E707BD /* Calculus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calculus.swift; sourceTree = "<group>"; };
+		1F09370621F56F9C00E707BD /* Differentiation */ = {isa = PBXFileReference; lastKnownFileType = text; path = Differentiation; sourceTree = "<group>"; };
 		1F0CF2C321EA420400E40086 /* String+LeafNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+LeafNode.swift"; sourceTree = "<group>"; };
 		1F0CF2C621EBA8C800E40086 /* Syntax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Syntax.swift; sourceTree = "<group>"; };
 		1F0CF2D221EEA74A00E40086 /* Misc */ = {isa = PBXFileReference; lastKnownFileType = text; path = Misc; sourceTree = "<group>"; };
@@ -218,6 +223,7 @@
 			children = (
 				1F0936C921F4E26700E707BD /* Arithmetic */,
 				1F0936C221F3C13100E707BD /* Statistics.swift */,
+				1F09370321F54E6200E707BD /* Calculus.swift */,
 				1F0936CD21F4E36300E707BD /* Probability.swift */,
 				1F0936DC21F4EADE00E707BD /* Algebra.swift */,
 				1F0936D921F4E8A200E707BD /* Logic.swift */,
@@ -287,6 +293,7 @@
 				1FE1697221F28F1E0006712C /* Test */,
 				1FE1697A21F2EC070006712C /* Conditionals */,
 				1F0936BD21F3A54800E707BD /* Probability */,
+				1F09370621F56F9C00E707BD /* Differentiation */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
@@ -513,6 +520,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1FE1697321F28F1E0006712C /* Test in Resources */,
+				1F09370721F56F9C00E707BD /* Differentiation in Resources */,
 				1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */,
 				1F0CF2D321EEA74A00E40086 /* Misc in Resources */,
 				1FE1697B21F2EC070006712C /* Conditionals in Resources */,
@@ -542,6 +550,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F09370521F5618200E707BD /* Calculus.swift in Sources */,
 				1F09370221F51EDD00E707BD /* Vector.swift in Sources */,
 				1F0936FB21F518D000E707BD /* Bool+Value.swift in Sources */,
 				1F0936FC21F518D000E707BD /* Double+Value.swift in Sources */,
@@ -599,6 +608,7 @@
 				1FFD8CD5218F52430004ECEB /* Compiler.swift in Sources */,
 				1F3974C121E3B761006D6DC2 /* NaN.swift in Sources */,
 				1F3974BC21E3970F006D6DC2 /* Error.swift in Sources */,
+				1F09370421F54E6200E707BD /* Calculus.swift in Sources */,
 				1F0936F421F5184400E707BD /* Double+Value.swift in Sources */,
 				1FFD8CA8218F50850004ECEB /* Kelvin.xcdatamodeld in Sources */,
 				1F0936CE21F4E36300E707BD /* Probability.swift in Sources */,
