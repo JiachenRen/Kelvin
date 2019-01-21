@@ -142,7 +142,7 @@ public class Compiler {
     private static func encodeStrings(_ expr: inout String, dict: inout NodeReference) {
 
         // Regex for matching string inside double quotes
-        let regex = try! NSRegularExpression(pattern: "([\"'])(\\\\?.)*?\\1", options: NSRegularExpression.Options.caseInsensitive)
+        let regex = try! NSRegularExpression(pattern: "([\"])(\\\\?.)*?\\1", options: NSRegularExpression.Options.caseInsensitive)
 
         var count = 0
         while true {
@@ -741,8 +741,8 @@ public class Compiler {
             throw CompilerError.syntax(errMsg: "[] mismatch in \(expr)")
         } else if expr == "" {
             throw CompilerError.illegalArgument(errMsg: "Give me some juice!")
-        } else if num(expr, char: "'") % 2 != 0 {
-            throw CompilerError.syntax(errMsg: "'' mismatch in \(expr)")
+        } else if num(expr, char: "\"") % 2 != 0 {
+            throw CompilerError.syntax(errMsg: "\" mismatch in \(expr)")
         }
     }
 

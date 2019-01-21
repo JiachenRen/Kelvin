@@ -244,5 +244,6 @@ public struct Syntax {
         .init(for: "tuple", .infix, priority: .tuple, operator: .init(":", padding: .bothSides)),
         .init(for: "if", .infix, priority: .conditional, operator: .init("?", padding: .bothSides)),
         .init(for: "concat", .infix, priority: .concat, operator: .init("&", padding: .bothSides)),
+        .init(for: "derivative", .infix, priority: .exponent, operator: .init("'", padding: .bothSides)),
     ]
 }

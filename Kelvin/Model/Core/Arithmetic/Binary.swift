@@ -91,6 +91,9 @@ let binaryOperations: [Operation] = [
     .init("*", [.number, .number]) {
         bin($0, *)
     },
+    .init("*", [.any, .any]) {
+        $0[0] === $0[1] ? $0[0] ^ 2 : nil
+    },
     .init("*", [.var, .var]) {
         $0[0] === $0[1] ? $0[0] ^ 2 : nil
     },
@@ -179,14 +182,19 @@ let binaryOperations: [Operation] = [
         $0[0] === 0 ? 0 : nil
     },
     .init("^", [.func, .number]) {
-        let fun = $0[0] as! Function
+        guard let fun = $0[0] as? Function, fun.contains(where: isNumber, depth: 1) else {
+            return nil
+        }
         switch fun.name {
         case "*":
-            if fun.contains(where: isNumber, depth: 1) {
-                let (nums, nans) = fun.args.split(by: isNumber)
-                return (**nums ^ $0[1]) * (**nans ^ $0[1])
-            }
-        default: break
+            let (nums, nans) = fun.args.split(by: isNumber)
+            return (**nums ^ $0[1]) * (**nans ^ $0[1])
+        case "^" where fun[0] is NSNumber:
+            return (fun[0] ^ $0[1]) ^ fun[1]
+        case "^" where fun[1] is NSNumber:
+            return fun[0] ^ (fun[1] * $0[1])
+        default:
+            break
         }
         return nil
     },

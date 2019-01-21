@@ -11,9 +11,13 @@ def df_du = derivative(f(u, s, t), u)
 def df_ds = derivative(f(u, s, t), s)
 def df_dt = derivative(f(u, s, t), t)
 
-print "df/du = "
-println df_du
-print "df/ds = "
-println df_ds
-print "df/dt = "
-println df_dt
+println "df/du = " & df_du
+println "df/ds = " & df_ds
+println "df/dt = " & df_dt
+
+def g(x) = x^3 + ln(cos(x))*sin(x)
+
+# Shorthand for first derivative
+println g(x ^ 2) ' x
+
+

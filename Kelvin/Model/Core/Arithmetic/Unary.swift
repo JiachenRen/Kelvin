@@ -88,7 +88,7 @@ let unaryOperations: [Operation] = [
         }
         return nil
     },
-    .init("negate", [.var]) {
+    .init("negate", [.any]) {
         $0[0] * -1
     },
     .init("sqrt", [.number]) {
