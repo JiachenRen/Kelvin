@@ -67,6 +67,16 @@ let developerOperations: [Operation] = [
     .init("exit", []) { _ in
         exit(0)
     },
+    .init("date", []) { _ in
+        return "\(Date())"
+    },
+    .init("time", []) { _ in
+        return Date().timeIntervalSince1970
+    },
+    .init("delay", [.number]) {
+        Thread.sleep(forTimeInterval: $0[0].evaluated!.doubleValue)
+        return "done"
+    },
     .init("compile", [.string]) {
         do {
             return try Compiler.compile($0[0] as! String)

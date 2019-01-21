@@ -94,8 +94,8 @@ let unaryOperations: [Operation] = [
     .init("sqrt", [.number]) {
         u($0, sqrt)
     },
-    .init("sqrt", [.any]) {
-        $0[0] ^ (1 / 2)
+    .init("sqrt", [.any]) {nodes in
+        nodes[0] ^ (0.5)
     },
     .init("sign", [.number]) {
         let n = $0[0].evaluated!.doubleValue
