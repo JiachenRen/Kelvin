@@ -522,21 +522,29 @@ public class Compiler {
         }
         return dict
     }
-
-    private static func parenthesize(_ expr: inout String, _ ops: [Character], _ rp: Dictionary<Character, String>) {
-        func firstIndex() -> String.Index? {
-            var first: String.Index? = nil
-            ops.forEach { operator_ in
-                if let idx = expr.firstIndex(of: operator_) {
-                    if first == nil || idx < first! {
-                        first = idx
-                    }
+    /**
+     Find the index of the first appearance of any of the operators.
+     e.g. in a+b-c, first index returns index of "+", then next time, after
+     "+" is parenthesized, index for "-" is returned.
+     
+     - Parameter operators: A group of operators with same priority.
+     - Returns: The first index of any of the operators, if there is one.
+     */
+    private static func firstIndex(of operators: [Character], in expr: String) -> String.Index? {
+        var first: String.Index? = nil
+        operators.forEach { operator_ in
+            if let idx = expr.firstIndex(of: operator_) {
+                if first == nil || idx < first! {
+                    first = idx
                 }
             }
-            return first
         }
+        return first
+    }
 
-        while let idx = firstIndex() {
+    private static func parenthesize(_ expr: inout String, _ ops: [Character], _ rp: Dictionary<Character, String>) {
+
+        while let idx = firstIndex(of: ops, in: expr) {
             let idx_ = expr.index(after: idx)
             let _idx = expr.index(before: idx)
             var left: String?, right: String?
@@ -546,15 +554,39 @@ public class Compiler {
 
             // To the right of binary operator
             if expr[idx_] == "(" {
+                
+                // a + (...)
                 end = find(expr, start: idx_, close: ")")!
                 right = String(expr[idx_...end])
             } else if expr[idx_] == "{" {
+                
+                // a + {...}
                 end = find(expr, start: idx_, close: "}")!
                 right = String(expr[idx_...end])
+            } else if expr[idx_] == "[" {
+                
+                // a + [...], in this case, [] denotes a vector.
+                end = find(expr, start: idx_, close: "]")!
+                right = String(expr[idx_...end])
             } else if let p = expr.index(r.upperBound, offsetBy: 1, limitedBy: expr.index(before: expr.endIndex)), expr[p] == "(" {
+                
+                // a + func(...), the right hand side is a function
                 end = find(expr, start: p, close: ")")!
                 right = String(expr[idx_...end])
+            } else if let p = expr.index(r.upperBound, offsetBy: 1, limitedBy: expr.index(before: expr.endIndex)), expr[p] == "[" {
+                
+                // a + matrix[a][b][... the right hand side is a (chained) subscript.
+                end = find(expr, start: p, close: "]")!
+                while let m = expr.index(end, offsetBy: 1, limitedBy: expr.index(before: expr.endIndex)) {
+                    if expr[m] != "[" {
+                        break
+                    }
+                    end = find(expr, start: m, close: "]")!
+                }
+                right = String(expr[idx_...end])
             } else {
+                
+                // a + b?, right hand side is a variable, or no right hand side.
                 if idx_ <= r.upperBound {
                     let rop = String(expr[idx_...r.upperBound])
                     right = rop
@@ -564,7 +596,11 @@ public class Compiler {
 
             // To the left of binary operator
             if expr[_idx] == ")" {
+                
+                // (a - c) + b or func(a) + b. First find the index of the open parenthesis.
                 begin = find(expr, end: _idx, open: "(")!
+                
+                // Then, check if there is a prefix before the open index.
                 while let b = expr.index(begin, offsetBy: -1, limitedBy: expr.startIndex) {
                     if symbols.contains(expr[b]) {
                         break
@@ -572,10 +608,40 @@ public class Compiler {
                     begin = b
                 }
                 left = String(expr[begin..._idx])
+            }else if expr[_idx] == "]" {
+                
+                // [a, b, c] + d or matrix[a][b][...] + c. Find the open square bracket that pairs with _idx
+                begin = find(expr, end: _idx, open: "[")!
+                
+                // Then, trace to the beginning of all chaining squarebrackets.
+                while var b = expr.index(begin, offsetBy: -1, limitedBy: expr.startIndex) {
+                    if expr[b] == "]" {
+                        begin = find(expr, end: b, open: "[")!
+                        continue
+                    } else if symbols.contains(expr[b]) {
+                        break
+                    } else {
+                        
+                        // We've arrived as the beginning index of all chaining brackets, check if a
+                        // prefix is present. If it is, set 'begin' to the start index of prefix.
+                        while let k = expr.index(b, offsetBy: -1, limitedBy: expr.startIndex) {
+                            if symbols.contains(expr[k]) {
+                                break
+                            }
+                            b = k
+                        }
+                        begin = b
+                    }
+                }
+                left = String(expr[begin..._idx])
             } else if expr[_idx] == "}" {
+                
+                // {...} + a
                 begin = find(expr, end: _idx, open: "{")!
                 left = String(expr[begin..._idx])
             } else {
+                
+                // A pain old variable.
                 if r.lowerBound <= _idx {
                     let lop = String(expr[r.lowerBound..._idx])
                     left = lop
