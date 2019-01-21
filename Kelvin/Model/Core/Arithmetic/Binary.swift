@@ -94,12 +94,11 @@ let binaryOperations: [Operation] = [
     .init("*", [.var, .var]) {
         $0[0] === $0[1] ? $0[0] ^ 2 : nil
     },
-    .init("*", [.var, .func]) {
+    .init("*", [.any, .func]) {
         let fun = $0[1] as! Function
-        let v = $0[0] as! Variable
         switch fun.name {
-        case "^" where fun.args[0] === v:
-            return v ^ (fun.args[1] + 1)
+        case "^" where fun.args[0] === $0[0]:
+            return $0[0] ^ (fun.args[1] + 1)
         default:
             break
         }

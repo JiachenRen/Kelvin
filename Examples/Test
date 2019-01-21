@@ -41,3 +41,4 @@ del f
 del l1
 
 println ({1, 2, 3, 4, 5, 6} | (9 ncr $0)) == {9, 36, 84, 126, 126, 84}
+println tan(x) * sec(x) * csc(x) * cos(x) ^ 2 == 1

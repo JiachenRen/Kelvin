@@ -40,6 +40,9 @@ let unaryOperations: [Operation] = [
     .init("tan", [.number]) {
         u($0, tan)
     },
+    .init("tan", [.any]) {
+        sin($0[0]) / cos($0[0])
+    },
     .init("atan", [.number]) {
         u($0, atan)
     },
