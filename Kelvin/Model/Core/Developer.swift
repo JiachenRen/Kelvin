@@ -9,6 +9,27 @@
 import Foundation
 
 let developerOperations: [Operation] = [
+    
+    // C like syntactic shorthand
+    .init("++", [.var]) {
+        $0[0] +== 1
+    },
+    .init("--", [.var]) {
+        $0[0] -== 1
+    },
+    .init("+=", [.var, .any]) {
+        assign($0[1], to: $0[0], by: +)
+    },
+    .init("-=", [.var, .any]) {
+        assign($0[1], to: $0[0], by: -)
+    },
+    .init("*=", [.var, .any]) {
+        assign($0[1], to: $0[0], by: *)
+    },
+    .init("/=", [.var, .any]) {
+        assign($0[1], to: $0[0], by: /)
+    },
+    
     // Consecutive execution, feed forward, flow control
     .init("if", [.any, .tuple]) { nodes in
         let node = nodes[0].simplify()
@@ -106,3 +127,9 @@ let developerOperations: [Operation] = [
         }
     }
 ]
+
+fileprivate func assign(_ value: Node, to node: Node, by bin: Binary) -> Node {
+    assert(node is Variable)
+    Equation(lhs: node, rhs: bin(node, value)).define()
+    return node
+}

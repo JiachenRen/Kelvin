@@ -163,6 +163,7 @@ public struct Syntax {
         case addition       // +,-
         case product        // *,/
         case exponent       // ^
+        case mutation       // ++, --
 
         public static func <(lhs: Priority, rhs: Priority) -> Bool {
             return lhs.rawValue < rhs.rawValue
@@ -209,6 +210,12 @@ public struct Syntax {
         .init(for: "/", .infix, priority: .product, operator: .init("/")),
         .init(for: "mod", .infix, priority: .product, operator: .init("%")),
         .init(for: "^", .infix, priority: .exponent, operator: .init("^")),
+        .init(for: "++", .postfix, priority: .mutation, operator: .init("++")),
+        .init(for: "--", .postfix, priority: .mutation, operator: .init("--")),
+        .init(for: "+=", .infix, priority: .mutation, operator: .init("+=")),
+        .init(for: "-=", .infix, priority: .mutation, operator: .init("-=")),
+        .init(for: "*=", .infix, priority: .mutation, operator: .init("*=")),
+        .init(for: "/=", .infix, priority: .mutation, operator: .init("/=")),
         .init(for: "sqrt", .prefix, priority: .exponent, operator: .init("√", padding: .none)),
         .init(for: "degrees", .postfix, priority: .exponent, operator: .init("°", padding: .none)),
         .init(for: "factorial", .postfix, priority: .exponent, operator: .init("!", padding: .none)),

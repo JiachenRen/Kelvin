@@ -11,6 +11,9 @@ import Foundation
 // Unary operation
 public typealias Unary = (Node) -> Node
 
+// Binary operation
+public typealias Binary = (Node, Node) -> Node
+
 /// Unary predicament
 public typealias PUnary = (Node) -> Bool
 
@@ -154,6 +157,42 @@ public prefix func ++(_ args: [Node]) -> Node {
         return args[0]
     }
     return Function("+", args)
+}
+
+postfix operator ++
+
+public postfix func ++(_ arg: Node) -> Node {
+    return Function("++", [arg])
+}
+
+postfix operator --
+
+public postfix func --(_ arg: Node) -> Node {
+    return Function("--", [arg])
+}
+
+infix operator +==
+
+public func +==(_ lhs: Node, _ rhs: Node) -> Node {
+    return Function("+=", [lhs, rhs])
+}
+
+infix operator -==
+
+public func -==(_ lhs: Node, _ rhs: Node) -> Node {
+    return Function("-=", [lhs, rhs])
+}
+
+infix operator *==
+
+public func *==(_ lhs: Node, _ rhs: Node) -> Node {
+    return Function("*=", [lhs, rhs])
+}
+
+infix operator /==
+
+public func /==(_ lhs: Node, _ rhs: Node) -> Node {
+    return Function("/=", [lhs, rhs])
 }
 
 postfix operator ~!

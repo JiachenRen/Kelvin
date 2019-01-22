@@ -88,7 +88,8 @@ public struct Equation: BinaryNode, NaN {
      
      - Returns: An error if the definition is unsuccessful.
      */
-    func define() -> Node? {
+    @discardableResult
+    public func define() -> Node? {
         if mode != .equals {
             // Only an equality can be used for definition.
             return "inequality '\(mode)' cannot be used for definition"
@@ -102,7 +103,14 @@ public struct Equation: BinaryNode, NaN {
                 // By calling rhs.simplify(), the following behavior is ensured:
                 // Suppose the statement "define a = f(x)".
                 // When the statement is executed, the value of "f(x)" instead of "f(x) is returned.
-                Variable.define(v.name, rhs.simplify())
+                let def = rhs.simplify()
+                
+                // Check if variable is used within its own initial value
+                // to prevent circular definition.
+                if def.contains(where: {$0 === v}, depth: Int.max) {
+                    return "error: circular definition"
+                }
+                Variable.define(v.name, def)
             }
 
             return nil

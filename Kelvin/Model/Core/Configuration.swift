@@ -29,7 +29,16 @@ let defaultConfiguration: [Operation.Attribute: [String]] = [
         // Functions that accepts anonymous arguments should preserve arguments.
         "feed",
         "map",
-        "reduce"
+        "reduce",
+        
+        // Mutating functions should preserve arguments.
+        // Thus x += 1 won't become ... += 1
+        "++",
+        "--",
+        "+=",
+        "-=",
+        "*=",
+        "/="
     ],
     .forwardCommutative: [
         "/",
