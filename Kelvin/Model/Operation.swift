@@ -32,7 +32,6 @@ public class Operation: Equatable {
         statOperations,
         probabilityOperations,
         algebraicOperations,
-        logicOperations,
         developerOperations,
         listAndTupleOperations,
         equalityOperations,
