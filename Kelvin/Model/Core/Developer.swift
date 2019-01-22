@@ -10,6 +10,46 @@ import Foundation
 
 let developerOperations: [Operation] = [
     
+    // Boolean logic and, or
+    .init("and", [.booleans]) {
+        for n in $0 {
+            if let b = n as? Bool, !b {
+                return false
+            }
+        }
+        return true
+    },
+    .init("or", [.booleans]) {
+        for n in $0 {
+            if let b = n as? Bool, b {
+                return true
+            }
+        }
+        return false
+    },
+    
+    // Variable/function definition and deletion
+    .init("def", [.equation]) { nodes in
+        guard let eq = nodes[0] as? Equation else {
+            return "cannot use \(nodes[0].stringified) as definition."
+        }
+        if let err = eq.define() {
+            return err
+        }
+        return eq.lhs
+    },
+    .init("define", [.any, .any]) { nodes in
+        return Function("def", [Equation(lhs: nodes[0], rhs: nodes[1])])
+    },
+    .init("del", [.var]) { nodes in
+        if let v = nodes[0] as? Variable {
+            Variable.delete(v.name)
+            Operation.remove(v.name)
+            return "deleted '\(v.stringified)'"
+        }
+        return nil
+    },
+    
     // C like syntactic shorthand
     .init("++", [.var]) {
         $0[0] +== 1

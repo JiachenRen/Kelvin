@@ -34,7 +34,6 @@ public class Operation: Equatable {
         algebraicOperations,
         logicOperations,
         developerOperations,
-        miscActions,
         listAndTupleOperations,
         equalityOperations,
         conversionOperations,

@@ -45,3 +45,12 @@ println tan(x) * sec(x) * csc(x) * cos(x) ^ 2 == 1
 println (2 * x * a) ^ 2 == 4 * (x * a) ^ 2
 println (2 ^ x) ^ 3 == 8 ^ x
 println (x ^ 2) ^ 3 == x ^ 6
+
+def x = 100
+x += √x
+println x == 110
+
+def a = 0
+a++
+println (a += x) == 111
+println (a := a % 11) == 1

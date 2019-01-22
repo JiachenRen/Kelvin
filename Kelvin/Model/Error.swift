@@ -15,3 +15,7 @@ public enum CompilerError: Error {
     case syntax(errMsg: String)
     case error(onLine: Int, _ err: Error)
 }
+
+public enum ExecutionError: Error {
+    case general(errMsg: String)
+}

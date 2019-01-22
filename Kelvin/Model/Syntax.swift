@@ -151,7 +151,7 @@ public struct Syntax {
 
     public enum Priority: Int, Comparable {
         case execution = 1  // ;, ->
-        case definition     // :=
+        case assignment     // :=, +=, -=, *=, /=
         case equation       // =
         case `repeat`       // ...
         case conditional    // conditional statements like if
@@ -163,7 +163,8 @@ public struct Syntax {
         case addition       // +,-
         case product        // *,/
         case exponent       // ^
-        case mutation       // ++, --
+        case derivative     // '
+        case attached       // ++, --, !, °, prefix and postfix
 
         public static func <(lhs: Priority, rhs: Priority) -> Bool {
             return lhs.rawValue < rhs.rawValue
@@ -210,16 +211,16 @@ public struct Syntax {
         .init(for: "/", .infix, priority: .product, operator: .init("/")),
         .init(for: "mod", .infix, priority: .product, operator: .init("%")),
         .init(for: "^", .infix, priority: .exponent, operator: .init("^")),
-        .init(for: "++", .postfix, priority: .mutation, operator: .init("++")),
-        .init(for: "--", .postfix, priority: .mutation, operator: .init("--")),
-        .init(for: "+=", .infix, priority: .mutation, operator: .init("+=")),
-        .init(for: "-=", .infix, priority: .mutation, operator: .init("-=")),
-        .init(for: "*=", .infix, priority: .mutation, operator: .init("*=")),
-        .init(for: "/=", .infix, priority: .mutation, operator: .init("/=")),
-        .init(for: "sqrt", .prefix, priority: .exponent, operator: .init("√", padding: .none)),
-        .init(for: "degrees", .postfix, priority: .exponent, operator: .init("°", padding: .none)),
-        .init(for: "factorial", .postfix, priority: .exponent, operator: .init("!", padding: .none)),
-        .init(for: "pct", .postfix, priority: .exponent),
+        .init(for: "++", .postfix, priority: .attached, operator: .init("++", padding: .rightSide)),
+        .init(for: "--", .postfix, priority: .attached, operator: .init("--", padding: .rightSide)),
+        .init(for: "+=", .infix, priority: .assignment, operator: .init("+=")),
+        .init(for: "-=", .infix, priority: .assignment, operator: .init("-=")),
+        .init(for: "*=", .infix, priority: .assignment, operator: .init("*=")),
+        .init(for: "/=", .infix, priority: .assignment, operator: .init("/=")),
+        .init(for: "sqrt", .prefix, priority: .attached, operator: .init("√", padding: .none)),
+        .init(for: "degrees", .postfix, priority: .attached, operator: .init("°", padding: .none)),
+        .init(for: "factorial", .postfix, priority: .attached, operator: .init("!", padding: .none)),
+        .init(for: "pct", .postfix, priority: .attached),
         .init(for: "=", .infix, priority: .equation, operator: .init("=")),
         .init(for: "<", .infix, priority: .equality, operator: .init("<")),
         .init(for: ">", .infix, priority: .equality, operator: .init(">")),
@@ -228,11 +229,11 @@ public struct Syntax {
         .init(for: "equals", .infix, priority: .equality, operator: .init("==")),
         .init(for: "and", .infix, priority: .and, operator: .init("&&")),
         .init(for: "or", .infix, priority: .or, operator: .init("||")),
-        .init(for: "define", .infix, priority: .definition, operator: .init(":=", padding: .bothSides)),
-        .init(for: "def", .prefix, priority: .definition),
+        .init(for: "define", .infix, priority: .assignment, operator: .init(":=", padding: .bothSides)),
+        .init(for: "def", .prefix, priority: .assignment),
         .init(for: "del", .prefix),
-        .init(for: "get", .infix, priority: .exponent, operator: .init("::", padding: .none)), // Preserve arguments?
-        .init(for: "size", .prefix, priority: .exponent),
+        .init(for: "get", .infix, priority: .attached, operator: .init("::", padding: .none)), // Preserve arguments?
+        .init(for: "size", .prefix, priority: .attached),
         .init(for: "map", .infix, operator: .init("|")),
         .init(for: "reduce", .infix, operator: .init("~")),
         .init(for: "then", .infix, operator: .init(";", padding: .rightSide)),
@@ -240,8 +241,8 @@ public struct Syntax {
         .init(for: "repeat", .infix, priority: .repeat, operator: .init("...", padding: .none)),
         .init(for: "copy", .infix, priority: .repeat),
         .init(for: "complexity", .prefix),
-        .init(for: "round", .prefix, priority: .exponent),
-        .init(for: "int", .prefix, priority: .exponent),
+        .init(for: "round", .prefix, priority: .attached),
+        .init(for: "int", .prefix, priority: .attached),
         .init(for: "eval", .prefix),
         .init(for: "print", .prefix),
         .init(for: "println", .prefix),
@@ -252,6 +253,6 @@ public struct Syntax {
         .init(for: "tuple", .infix, priority: .tuple, operator: .init(":", padding: .bothSides)),
         .init(for: "if", .infix, priority: .conditional, operator: .init("?", padding: .bothSides)),
         .init(for: "concat", .infix, priority: .concat, operator: .init("&", padding: .bothSides)),
-        .init(for: "derivative", .infix, priority: .exponent, operator: .init("'", padding: .bothSides)),
+        .init(for: "derivative", .infix, priority: .derivative, operator: .init("'", padding: .bothSides)),
     ]
 }
