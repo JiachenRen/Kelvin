@@ -95,7 +95,7 @@ public class Compiler {
 
         // Convert all binary operations to functions with parameters.
         // i.e. a+b becomes &?(a,b)
-        let binOps = binaryToFunction(&expr)
+        let binOps = try binaryToFunction(&expr)
 
         // Construct operation tree
         let parent = try resolve(expr, &dict, binOps)
@@ -200,7 +200,7 @@ public class Compiler {
     private static func applySyntax(_ syntax: Syntax, for expr: String) -> String {
         var expr = expr
         let c = "\(syntax.encoding)"
-        let n = syntax.commonName
+        var n = syntax.commonName
 
         // Replace operators with their code
         if let o = syntax.operator {
@@ -209,7 +209,17 @@ public class Compiler {
 
         // Replace infix function names with operator
         if let _ = try? Variable(n) {
-            let regex = try! NSRegularExpression(pattern: "\\b(\(n))\\b", options: .caseInsensitive)
+            
+            switch syntax.position {
+            case .infix:
+                n = "\\s\(n)\\s"
+            case .prefix:
+                n = "\\b\(n)\\s"
+            case .postfix:
+                n = "\\s\(n)\\b"
+            }
+            
+            let regex = try! NSRegularExpression(pattern: n, options: .caseInsensitive)
             let str = NSMutableString(string: expr)
             let range = NSMakeRange(0, expr.count)
             regex.replaceMatches(in: str, options: [], range: range, withTemplate: c)
@@ -465,21 +475,21 @@ public class Compiler {
         return expr
     }
 
-    private static func binaryToFunction(_ expr: inout String) -> OperatorReference {
-        let operators = Syntax.lexicon.values
-        let prioritized = operators.sorted {
+    private static func binaryToFunction(_ expr: inout String) throws -> OperatorReference {
+        let syntaxes = Syntax.lexicon.values
+        let sorted = syntaxes.sorted {
             $0.priority > $1.priority
         }
 
-        var segregated = [[Syntax.Encoding]]()
-        var cur = prioritized[0].priority
+        var prioritized = [[Syntax]]()
+        var cur = sorted[0].priority
         
         // The operators are split into two groups, one of which containing binary
         // operators while the other contains prefix and postfix operators.
-        var groupA = [Syntax.Encoding]()
-        var groupB = [Syntax.Encoding]()
+        var groupA = [Syntax]()
+        var groupB = [Syntax]()
         
-        prioritized.forEach {
+        sorted.forEach {
             
             // For each cluster in the group, the operators are
             // arranged according to their priority. The operators with
@@ -489,36 +499,34 @@ public class Compiler {
                 
                 // First add the prefix and postfix group, as they need to be
                 // processed first; then add the infix group
-                segregated.append(groupB)
-                segregated.append(groupA)
+                prioritized.append(groupB)
+                prioritized.append(groupA)
                 
                 // Clear groups bugger.
-                groupA = [Syntax.Encoding]()
-                groupB = [Syntax.Encoding]()
+                groupA = [Syntax]()
+                groupB = [Syntax]()
             }
             
             if $0.position == .infix {
-                groupA.append($0.encoding)
+                groupA.append($0)
             } else {
-                groupB.append($0.encoding)
+                groupB.append($0)
             }
         }
         
         // Add the remaining groups with lowest priority.
-        segregated.append(groupB)
-        segregated.append(groupA)
+        prioritized.append(groupB)
+        prioritized.append(groupA)
 
         var dict = OperatorReference()
-        for operators in segregated {
+        for syntaxes in prioritized {
             var d = Dictionary<Character, String>()
-            operators.forEach {
+            syntaxes.forEach {
                 let id = "\(Flag.operator)\(dict.count)"
-                dict[id] = $0
-                d[$0] = id
+                dict[id] = $0.encoding
+                d[$0.encoding] = id
             }
-            parenthesize(&expr, operators.map {
-                $0
-            }, d)
+            try parenthesize(&expr, syntaxes, d)
         }
         return dict
     }
@@ -530,21 +538,19 @@ public class Compiler {
      - Parameter operators: A group of operators with same priority.
      - Returns: The first index of any of the operators, if there is one.
      */
-    private static func firstIndex(of operators: [Character], in expr: String) -> String.Index? {
-        var first: String.Index? = nil
-        operators.forEach { operator_ in
-            if let idx = expr.firstIndex(of: operator_) {
-                if first == nil || idx < first! {
-                    first = idx
-                }
+    private static func firstIndex(of encodings: [Syntax.Encoding], in expr: String) -> String.Index? {
+        for (idx, c) in expr.enumerated() {
+            if encodings.contains(c) {
+                return expr.index(expr.startIndex, offsetBy: idx)
             }
         }
-        return first
+        return nil
     }
 
-    private static func parenthesize(_ expr: inout String, _ ops: [Character], _ rp: Dictionary<Character, String>) {
-
-        while let idx = firstIndex(of: ops, in: expr) {
+    private static func parenthesize(_ expr: inout String, _ syntaxes: [Syntax], _ rp: Dictionary<Character, String>) throws {
+        let operators = syntaxes.map {$0.encoding}
+        
+        while let idx = firstIndex(of: operators, in: expr) {
             let idx_ = expr.index(after: idx)
             let _idx = expr.index(before: idx)
             var left: String?, right: String?
@@ -653,13 +659,31 @@ public class Compiler {
             let rRight = String(expr[expr.index(after: end)...])
             let id = rp[expr[idx]]!
 
+            let syntax = Syntax.lexicon[expr[idx]]!
             var args = ""
+            var error: String?
             if let l = left, let r = right {
+                if syntax.position != .infix {
+                    error = "infix"
+                }
                 args = "\(l),\(r)"
             } else if let r = right {
+                if syntax.position != .prefix {
+                    error = "prefix"
+                }
                 args = "\(r)"
             } else if let l = left {
+                if syntax.position != .postfix {
+                    error = "postfix"
+                }
                 args = "\(l)"
+            }
+            
+            if let e = error {
+                let n = syntax.commonName
+                let o = syntax.operator?.name ?? ""
+                let msg = "\(n), i.e. '\(o)' cannot be used as a/an \(e) operator"
+                throw CompilerError.syntax(errMsg: msg)
             }
 
             expr = rLeft + "\(id)(\(args))" + rRight
