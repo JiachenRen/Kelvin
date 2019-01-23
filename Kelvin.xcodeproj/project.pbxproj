@@ -54,6 +54,7 @@
 		1F09371B21F67FDD00E707BD /* SystemCheck in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371A21F67FDD00E707BD /* SystemCheck */; };
 		1F09371D21F684D500E707BD /* Scope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09371C21F684D500E707BD /* Scope.swift */; };
 		1F09371E21F684EC00E707BD /* Scope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09371C21F684D500E707BD /* Scope.swift */; };
+		1F0A90DF21F7E94200432B17 /* ErrorHandling in Resources */ = {isa = PBXBuildFile; fileRef = 1F0A90DE21F7E94200432B17 /* ErrorHandling */; };
 		1F0CF2C421EA420400E40086 /* String+LeafNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* String+LeafNode.swift */; };
 		1F0CF2C521EA428000E40086 /* String+LeafNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* String+LeafNode.swift */; };
 		1F0CF2C721EBA8C800E40086 /* Syntax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C621EBA8C800E40086 /* Syntax.swift */; };
@@ -159,6 +160,7 @@
 		1F09371821F672CD00E707BD /* DateTime */ = {isa = PBXFileReference; lastKnownFileType = text; path = DateTime; sourceTree = "<group>"; };
 		1F09371A21F67FDD00E707BD /* SystemCheck */ = {isa = PBXFileReference; lastKnownFileType = text; path = SystemCheck; sourceTree = "<group>"; };
 		1F09371C21F684D500E707BD /* Scope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scope.swift; sourceTree = "<group>"; };
+		1F0A90DE21F7E94200432B17 /* ErrorHandling */ = {isa = PBXFileReference; lastKnownFileType = text; path = ErrorHandling; sourceTree = "<group>"; };
 		1F0CF2C321EA420400E40086 /* String+LeafNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+LeafNode.swift"; sourceTree = "<group>"; };
 		1F0CF2C621EBA8C800E40086 /* Syntax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Syntax.swift; sourceTree = "<group>"; };
 		1F0CF2D221EEA74A00E40086 /* Misc */ = {isa = PBXFileReference; lastKnownFileType = text; path = Misc; sourceTree = "<group>"; };
@@ -310,6 +312,7 @@
 				1F09371021F62BF700E707BD /* Loops */,
 				1F09371621F66C4B00E707BD /* Subscript */,
 				1F09371821F672CD00E707BD /* DateTime */,
+				1F0A90DE21F7E94200432B17 /* ErrorHandling */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
@@ -544,6 +547,7 @@
 				1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */,
 				1F09371921F672CD00E707BD /* DateTime in Resources */,
 				1F0CF2D321EEA74A00E40086 /* Misc in Resources */,
+				1F0A90DF21F7E94200432B17 /* ErrorHandling in Resources */,
 				1FE1697B21F2EC070006712C /* Conditionals in Resources */,
 				1F09371121F62BF700E707BD /* Loops in Resources */,
 				1F09371721F66C4B00E707BD /* Subscript in Resources */,

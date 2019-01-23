@@ -11,7 +11,7 @@ import Foundation
 public struct Function: MutableListProtocol {
     
     public var evaluated: Value? {
-        return invoke()?.evaluated
+        return (try? invoke())??.evaluated
     }
 
     /// Complexity of the function is the complexity of the List of args + 1.
@@ -174,9 +174,9 @@ public struct Function: MutableListProtocol {
      - Returns: The first successful result acquired by performing the
                 operations on the arguments.
      */
-    public func invoke() -> Node? {
+    public func invoke() throws -> Node? {
         for operation in Operation.resolve(for: self) {
-            if let result = operation.def(elements) {
+            if let result = try operation.def(elements) {
                 return result
             }
         }
@@ -190,12 +190,12 @@ public struct Function: MutableListProtocol {
      
      - Returns: a node representing the simplified(computed) value of the function.
      */
-    public func simplify() -> Node {
+    public func simplify() throws -> Node {
 
         // Make a copy of self.
         var copy = self
 
-        // If the function's name begins with "$", the compiler to preserves it once
+        // If the function's name begins with "$", the compiler preserves it once
         // This enables functions to be used as an input type.
         // Suppose we have "repeat(random(), 5)", it only execute random 1 once
         // and copy the value 5 times to create the list, say {0.1, 0.1, 0.1, 0.1, 0.1};
@@ -209,20 +209,20 @@ public struct Function: MutableListProtocol {
 
         // Simplify each argument, if requested.
         if !Operation.has(attr: .preservesArguments, name) {
-            let args = copy.args.simplify() as! List
+            let args = try copy.args.simplify() as! List
             copy = Function(name, args)
         }
 
         // If the operation can be performed on the given arguments, perform the operation.
         // Then, the result of the operation is simplified;
         // otherwise returns a copy of the original function with each argument simplified.
-        if let s = copy.invoke()?.simplify() {
+        if let s = try copy.invoke()?.simplify() {
             return s
         } else if Operation.has(attr: .commutative, name) {
             
             // Try simplifying in the reserve order if the function is commutative
             if copy.count > 2 {
-                let after = Operation.simplifyCommutatively(copy.elements, by: name)
+                let after = try Operation.simplifyCommutatively(copy.elements, by: name)
                 return after.complexity < copy.complexity ? after : copy
             }
         }

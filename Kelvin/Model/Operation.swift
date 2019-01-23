@@ -8,7 +8,7 @@
 
 import Foundation
 
-typealias Definition = ([Node]) -> Node?
+typealias Definition = ([Node]) throws -> Node?
 
 /// Numerical unary operation
 typealias NUnary = (Double) -> Double
@@ -79,7 +79,7 @@ public class Operation: Equatable {
 
             // The original com. op. w/ signature and def. reversed.
             let op = Operation(operation.name, operation.signature.reversed()) {
-                return operation.def($0.reversed())
+                return try operation.def($0.reversed())
             }
             return op
         }
@@ -262,13 +262,13 @@ public class Operation: Equatable {
      - Parameter fun: A function that performs binary simplification.
      - Returns: A node resulting from the simplification.
      */
-    public static func simplifyCommutatively(_ nodes: [Node], by fun: String) -> Node {
+    public static func simplifyCommutatively(_ nodes: [Node], by fun: String) throws -> Node {
         var nodes = nodes
 
         if nodes.count == 2 {
 
             // Base case.
-            return Function(fun, nodes).simplify()
+            return try Function(fun, nodes).simplify()
         }
 
         for i in 0..<nodes.count - 1 {
@@ -276,7 +276,7 @@ public class Operation: Equatable {
             for j in i..<nodes.count {
 
                 let bin = Function(fun, [nodes[j], n])
-                let simplified = bin.simplify()
+                let simplified = try bin.simplify()
 
                 // If the junction of n and j can be simplified...
                 if simplified.complexity < bin.complexity {
@@ -284,7 +284,7 @@ public class Operation: Equatable {
                     nodes.append(simplified)
 
                     // Commutatively simplify the updated list of nodes
-                    return simplifyCommutatively(nodes, by: fun)
+                    return try simplifyCommutatively(nodes, by: fun)
                 }
             }
 

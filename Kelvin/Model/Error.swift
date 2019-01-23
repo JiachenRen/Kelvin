@@ -17,5 +17,7 @@ public enum CompilerError: Error {
 }
 
 public enum ExecutionError: Error {
+    static let indexOutOfBounds = ExecutionError.general(errMsg: "index out of bounds")
+    static let dimensionMismatch = ExecutionError.general(errMsg: "dimension mismatch")
     case general(errMsg: String)
 }

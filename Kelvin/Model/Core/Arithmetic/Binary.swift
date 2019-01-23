@@ -31,7 +31,7 @@ let binaryOperations: [Operation] = [
                         continue
                     }
                     let n = args[0] + 1
-                    let s = n.simplify()
+                    let s = try n.simplify()
                     if s.complexity < n.complexity {
                         return s * $0[0]
                     } else {
@@ -63,7 +63,7 @@ let binaryOperations: [Operation] = [
         return nil
     },
     .init("+", [.list, .list]) {
-        join(by: "+", $0[0], $0[1])
+        try join(by: "+", $0[0], $0[1])
     },
     .init("+", [.list, .any]) {
         map(by: "+", $0[0], $0[1])
@@ -82,7 +82,7 @@ let binaryOperations: [Operation] = [
         -1 * $0[0]
     },
     .init("-", [.list, .list]) {
-        join(by: "-", $0[0], $0[1])
+        try join(by: "-", $0[0], $0[1])
     },
     .init("-", [.list, .any]) {
         map(by: "-", $0[0], $0[1])
@@ -133,7 +133,7 @@ let binaryOperations: [Operation] = [
         }
     },
     .init("*", [.list, .list]) {
-        join(by: "*", $0[0], $0[1])
+        try join(by: "*", $0[0], $0[1])
     },
     .init("*", [.list, .any]) {
         map(by: "*", $0[0], $0[1])
@@ -149,7 +149,7 @@ let binaryOperations: [Operation] = [
         return $0[0] * ($0[1] ^ -1)
     },
     .init("/", [.list, .list]) {
-        join(by: "/", $0[0], $0[1])
+        try join(by: "/", $0[0], $0[1])
     },
     .init("/", [.list, .any]) {
         map(by: "/", $0[0], $0[1])
@@ -159,7 +159,7 @@ let binaryOperations: [Operation] = [
         bin($0, %)
     },
     .init("mod", [.list, .list]) {
-        join(by: "mod", $0[0], $0[1])
+        try join(by: "mod", $0[0], $0[1])
     },
     .init("mod", [.list, .any]) {
         map(by: "mod", $0[0], $0[1])
@@ -209,7 +209,7 @@ let binaryOperations: [Operation] = [
         return nil
     },
     .init("^", [.list, .list]) {
-        join(by: "^", $0[0], $0[1])
+        try join(by: "^", $0[0], $0[1])
     },
     .init("^", [.list, .any]) {
         map(by: "^", $0[0], $0[1])
@@ -230,15 +230,11 @@ fileprivate func bin(_ nodes: [Node], _ binary: NBinary) -> Double {
             }!
 }
 
-fileprivate func join(by bin: String, _ l1: Node, _ l2: Node) -> Node {
+fileprivate func join(by bin: String, _ l1: Node, _ l2: Node) throws -> Node {
     let l1 = l1 as! List
     let l2 = l2 as! List
 
-    if l1.count != l2.count {
-        return "list dimension mismatch"
-    }
-
-    return l1.join(with: l2, by: bin)
+    return try l1.join(with: l2, by: bin)
 }
 
 fileprivate func map(by bin: String, _ l: Node, _ n: Node) -> Node {

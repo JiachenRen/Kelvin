@@ -19,10 +19,12 @@ while true {
         // Compile and execute the input statement
         let parent = try Compiler.compile(input)
         print("      # \(parent.stringified)")
-        print("      = \(parent.simplify().stringified)", terminator: "\n\n")
+        print("      = \(try parent.simplify().stringified)", terminator: "\n\n")
     } catch CompilerError.illegalArgument(let msg) {
-        print("ERR >>> illegal argument: \(msg)")
+        print("ERR >>> illegal argument: \(msg)", terminator: "\n\n")
     } catch CompilerError.syntax(let msg) {
-        print("ERR >>> syntax: \(msg)")
+        print("ERR >>> syntax: \(msg)", terminator: "\n\n")
+    } catch ExecutionError.general(let msg) {
+        print("ERR >>> \(msg)", terminator: "\n\n")
     }
 }

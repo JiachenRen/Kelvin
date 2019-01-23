@@ -45,7 +45,8 @@ public class Program {
     }
     
     /// Compile and run the file w/ the given file name under /Examples directory
-    public static func compileAndRun(_ fileName: String, with config: Configuration?) throws {
+    @discardableResult
+    public static func compileAndRun(_ fileName: String, with config: Configuration?) throws -> Output? {
         do {
             var content = ""
             do {
@@ -58,7 +59,7 @@ public class Program {
                     content = try String(contentsOf: URL(fileURLWithPath: fileName, relativeTo: baseURL))
                 } catch let r {
                     print(">>> \(r);\n>>> file not found - abort.")
-                    return
+                    return nil
                 }
             }
             let t = Date().timeIntervalSince1970
@@ -68,18 +69,20 @@ public class Program {
             if let c = config {
                 program.config = c
             }
-            program.run()
+            return try program.run()
         } catch CompilerError.error(let line, let err) {
             print(">>> error on line \(line): \(err)")
             print(">>> abort.")
         }
+        
+        return nil
     }
 
     /// Execute the program and produce an output.
     /// - Parameter verbose: Whether to use verbose mode
     /// - Returns: A tuple consisting of program execution log and cumulative output.
     @discardableResult
-    public func run() -> Output {
+    public func run() throws -> Output {
 
         // Clear logs and outputs before program execution.
         logs = [Log]()
@@ -100,9 +103,9 @@ public class Program {
 
         vPrint(">>> starting...\n>>> timestamp: \(startTime)\n>>> begin program execution log:\n")
     
-        statements.forEach {
+        try statements.forEach {
             // Execute the statement and add it to logs
-            let result = $0.simplify()
+            let result = try $0.simplify()
 
             // Create log
             let log = Log(input: $0, output: result)

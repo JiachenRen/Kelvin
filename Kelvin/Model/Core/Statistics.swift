@@ -47,11 +47,11 @@ let statOperations: [Operation] = [
         return ++nodes / nodes.count
     },
     .init("ssx", [.list]) {
-        return ssx($0[0] as! List)
+        return try ssx($0[0] as! List)
     },
     .init("variance", [.list]) {
         let list = $0[0] as! List
-        let s = ssx(list)
+        let s = try ssx(list)
         guard let n = s as? Double else {
             // If we cannot calculate sum of difference squared,
             // return the error message.
@@ -64,7 +64,7 @@ let statOperations: [Operation] = [
         ])
     },
     .init("stdev", [.list]) { nodes in
-        let vars = Function("variance", nodes).simplify()
+        let vars = try Function("variance", nodes).simplify()
 
         guard let elements = (vars as? List)?.elements else {
 
@@ -109,11 +109,11 @@ let statOperations: [Operation] = [
 ]
 
 /// Sum of difference squared.
-fileprivate func ssx(_ list: List) -> Node {
+fileprivate func ssx(_ list: List) throws -> Node {
     let nodes = list.elements
     for e in nodes {
         if !(e is NSNumber) {
-            return "every element in the list must be a number."
+            throw ExecutionError.general(errMsg: "every element in the list must be a number.")
         }
     }
 

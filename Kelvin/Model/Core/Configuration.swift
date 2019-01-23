@@ -25,11 +25,13 @@ let defaultConfiguration: [Operation.Attribute: [String]] = [
         "del",
         "if",
         "measure",
+        "try",
         
         // Functions that accepts anonymous arguments should preserve arguments.
         "feed",
         "map",
         "reduce",
+        "filter",
         
         // Mutating functions should preserve arguments.
         // Thus x += 1 won't become ... += 1

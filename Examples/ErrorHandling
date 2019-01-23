@@ -1,0 +1,5 @@
+msg1 := (try ({1, 2, 3} zip {1, 2}) : "an error has occurred.")
+msg2 := (try ({1, 2, 3} zip {1, 2}))
+
+println msg1
+println msg2

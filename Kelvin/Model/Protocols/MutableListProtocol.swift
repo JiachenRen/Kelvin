@@ -34,10 +34,10 @@ extension MutableListProtocol {
      
      - Returns: A copy of the list with each element simplified.
      */
-    public func simplify() -> Node {
+    public func simplify() throws -> Node {
         var copy = self
-        copy.elements = elements.map {
-            $0.simplify()
+        copy.elements = try elements.map {
+            try $0.simplify()
         }
         return copy
     }

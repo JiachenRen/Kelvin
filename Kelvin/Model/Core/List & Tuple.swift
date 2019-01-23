@@ -23,7 +23,7 @@ let listAndTupleOperations: [Operation] = [
         case 1:
             return tuple.rhs
         default:
-            return "error: index out of bounds"
+            throw ExecutionError.indexOutOfBounds
         }
     },
 
@@ -35,7 +35,7 @@ let listAndTupleOperations: [Operation] = [
         let list = nodes[0] as! List
         let idx = Int(nodes[1].evaluated!.doubleValue)
         if idx >= list.count || idx < 0 {
-            return "error: index out of bounds"
+            throw ExecutionError.indexOutOfBounds
         } else {
             return list[idx]
         }
@@ -44,16 +44,16 @@ let listAndTupleOperations: [Operation] = [
         return ($0[0] as! List).count
     },
     .init("map", [.any, .any]) { nodes in
-        guard let list = nodes[0].simplify() as? List else {
+        guard let list = try nodes[0].simplify() as? List else {
             return nil
         }
         let updated = list.elements.enumerated().map { (idx, e) in
             nodes[1].replacingAnonymousArgs(with: [e, idx])
         }
-        return List(updated).simplify()
+        return try List(updated).simplify()
     },
     .init("reduce", [.any, .any]) { nodes in
-        guard let list = nodes[0].simplify() as? List else {
+        guard let list = try nodes[0].simplify() as? List else {
             return nil
         }
         let reduced = list.elements.reduce(nil) { (e1, e2) -> Node in
@@ -62,6 +62,28 @@ let listAndTupleOperations: [Operation] = [
             }
             return nodes[1].replacingAnonymousArgs(with: [e1!, e2])
         }
-        return reduced?.simplify() ?? List([])
+        return try reduced?.simplify() ?? List([])
     },
+    .init("filter", [.any, .any]) { nodes in
+        guard let list = try nodes[0].simplify() as? List else {
+            return nil
+        }
+        let updated = try list.elements.enumerated().map {(idx, e) in
+                nodes[1].replacingAnonymousArgs(with: [e, idx])
+            }.enumerated().map {(idx, predicate) in
+                if let b = try predicate.simplify() as? Bool {
+                    return b ? idx : nil
+                }
+                throw ExecutionError.general(errMsg: "predicate must be a boolean")
+            }.compactMap {
+                $0 == nil ? nil: list[$0!]
+            }
+        return List(updated)
+    },
+    .init("zip", [.list, .list]) {
+        if let l1 = $0[0] as? List, let l2 = $0[1] as? List {
+            return try l1.join(with: l2)
+        }
+        return nil
+    }
 ]

@@ -35,7 +35,7 @@ let probabilityOperations: [Operation] = [
         if let i = Int(exactly: $0[0].evaluated!.doubleValue) {
             return factorial(Double(i))
         }
-        return "can only perform factorial on an integer"
+        throw ExecutionError.general(errMsg: "can only perform factorial on an integer")
     },
 ]
 

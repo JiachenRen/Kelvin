@@ -39,7 +39,7 @@ public protocol Node: CustomStringConvertible {
 
     /// Simplify the node.
     /// TODO: Implement Log
-    func simplify() -> Node
+    func simplify() throws -> Node
 
     /// Perform an action on each node in the tree.
     func forEach(_ body: (Node) -> ())

@@ -43,14 +43,21 @@ public struct List: MutableListProtocol, NaN {
      Combine this list with another that has the same dimension by performing
      a binary operation on matching pairs of elements.
      
+     - Note: The two lists must have the same length!
      - Parameters:
         - list: The list to be joined with. Each individual elements are used as rhs of bin operation.
         - operation: A binary operation.
      - Returns: A new list resulting from self ⊗ list.
      */
-    public func join(with list: List, by bin: String) -> List {
+    public func join(with list: List, by bin: String? = nil) throws -> List {
+        if count != list.count {
+            throw ExecutionError.dimensionMismatch
+        }
         return List(elements.enumerated().map {
-            Function(bin, [$0.element, list.elements[$0.offset]])
+            if let b = bin {
+                return Function(b, [$0.element, list[$0.offset]])
+            }
+            return List($0.element, list[$0.offset])
         })
     }
 

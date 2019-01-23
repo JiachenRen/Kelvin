@@ -38,12 +38,12 @@ public struct Equation: BinaryNode, NaN {
         self.rhs = rhs
     }
 
-    public func simplify() -> Node {
+    public func simplify() throws -> Node {
         var eq = self
 
         // Simplify left and right side.
-        eq.lhs = lhs.simplify()
-        eq.rhs = rhs.simplify()
+        eq.lhs = try lhs.simplify()
+        eq.rhs = try rhs.simplify()
 
         // After simplification, lhs = rhs, equation is always true.
         if mode.rawValue.contains("=") && eq.lhs === eq.rhs {
@@ -88,11 +88,11 @@ public struct Equation: BinaryNode, NaN {
      
      - Returns: An error if the definition is unsuccessful.
      */
-    @discardableResult
-    public func define() -> Node? {
+    public func define() throws {
         if mode != .equals {
             // Only an equality can be used for definition.
-            return "inequality '\(mode)' cannot be used for definition"
+            let msg = "inequality '\(mode)' cannot be used for definition"
+            throw ExecutionError.general(errMsg: msg)
         }
 
         guard let fun = lhs as? Function else {
@@ -103,17 +103,19 @@ public struct Equation: BinaryNode, NaN {
                 // By calling rhs.simplify(), the following behavior is ensured:
                 // Suppose the statement "define a = f(x)".
                 // When the statement is executed, the value of "f(x)" instead of "f(x) is returned.
-                let def = rhs.simplify()
+                let def = try rhs.simplify()
                 
                 // Check if variable is used within its own initial value
                 // to prevent circular definition.
                 if def.contains(where: {$0 === v}, depth: Int.max) {
-                    return "error: circular definition"
+                    throw ExecutionError.general(errMsg: "circular definition")
                 }
                 Variable.define(v.name, def)
+                return
             }
-
-            return nil
+            
+            let msg = "left hand side of definition must be a variable/function"
+            throw ExecutionError.general(errMsg: msg)
         }
 
         let args = fun.elements
@@ -121,7 +123,8 @@ public struct Equation: BinaryNode, NaN {
         // Check to make sure that every argument is a variable
         for arg in args {
             if !(arg is Variable) {
-                return "error: function signature should only contain variables"
+                let msg = "function signature should only contain variables"
+                throw ExecutionError.general(errMsg: msg)
             }
         }
 
@@ -164,7 +167,7 @@ public struct Equation: BinaryNode, NaN {
             }
 
             // Revert changes made to the variable names
-            return template.replacing(by: {
+            return try template.replacing(by: {
                         var mod = $0 as! Variable
                         mod.name.removeFirst()
                         return mod
@@ -178,8 +181,6 @@ public struct Equation: BinaryNode, NaN {
 
         // Register parametric operation
         Operation.register(op)
-
-        return nil
     }
 
     /**
