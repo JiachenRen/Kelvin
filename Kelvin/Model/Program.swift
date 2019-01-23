@@ -37,45 +37,43 @@ public class Program {
     }
     
     private func vPrint(_ s: Any) {
-        print(s)
+        if config.verbose {
+            print(s)
+        }
     }
     
     private func vPrint(_ s: Any, terminator t: String) {
-        print(s, terminator: t)
+        if config.verbose {
+            print(s, terminator: t)
+        }
     }
     
     /// Compile and run the file w/ the given file name under /Examples directory
     @discardableResult
-    public static func compileAndRun(_ fileName: String, with config: Configuration?) throws -> Output? {
+    public static func compileAndRun(_ fileName: String, with config: Configuration?) throws -> Output {
+        var content = ""
         do {
-            var content = ""
+            print(">>> trying relative URL to examples...")
+            let url = URL(fileURLWithPath: fileName, relativeTo: baseURL)
+            content = try String(contentsOf: url)
+            print(">>> loading contents of \(fileName)")
+        } catch let e {
+            print(">>> \(e);\n>>> resolving absolute URL...")
             do {
-                print(">>> loading contents of absolute URL...")
                 content = try String(contentsOf: URL(fileURLWithPath: fileName))
-            } catch let e {
-                print(">>> \(e);\n>>> trying relative URL to examples...")
-                
-                do {
-                    content = try String(contentsOf: URL(fileURLWithPath: fileName, relativeTo: baseURL))
-                } catch let r {
-                    print(">>> \(r);\n>>> file not found - abort.")
-                    return nil
-                }
+                print(">>> loading contents of \(fileName)")
+            } catch {
+                throw ExecutionError.general(errMsg: "file not found - abort.")
             }
-            let t = Date().timeIntervalSince1970
-            print(">>> compiling...")
-            let program = try Compiler.compile(document: content)
-            print(">>> compilation successful in \(Date().timeIntervalSince1970 - t) seconds.")
-            if let c = config {
-                program.config = c
-            }
-            return try program.run()
-        } catch CompilerError.error(let line, let err) {
-            print(">>> error on line \(line): \(err)")
-            print(">>> abort.")
         }
-        
-        return nil
+        let t = Date().timeIntervalSince1970
+        print(">>> compiling...")
+        let program = try Compiler.compile(document: content)
+        print(">>> compilation successful in \(Date().timeIntervalSince1970 - t) seconds.")
+        if let c = config {
+            program.config = c
+        }
+        return try program.run()
     }
 
     /// Execute the program and produce an output.

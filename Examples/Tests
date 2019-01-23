@@ -54,3 +54,5 @@ def a = 0
 a++
 println (a += x) == 111
 println (a := a % 11) == 1
+println !(!true || false) == true
+println (a xor b) == (b && !a || a && !b)

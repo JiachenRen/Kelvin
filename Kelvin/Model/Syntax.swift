@@ -104,6 +104,45 @@ public struct Syntax {
         // Register the syntax in glossary and lexicon
         lexicon[syntax.encoding] = syntax
         glossary[syntax.commonName] = syntax
+        
+        disambiguated = disambiguate()
+    }
+    
+    /**
+     Some operations have ambiguous definitions. i.e., they use the same
+     operator, but have different associativity.
+     e.g. '!', when used as a prefix, means "not" while the same operator used
+     as a postfix, say in 'a!', it means factorial.
+     This function finds all ambiguous syntaxes.
+     */
+    public static var disambiguated: [String: [Syntax]] = {
+        return disambiguate()
+    }()
+    
+    private static func disambiguate() -> [String: [Syntax]] {
+        var dict = [String: [Syntax]]()
+        var d = [String: [Position: Syntax]]()
+        for syntax in lexicon.values {
+            if let o = syntax.operator?.name {
+                if var p = d[o] {
+                    let pos = syntax.position
+                    if p[pos] != nil {
+                        let msg = "duplicate syntax definition for operator \(o) w/ associativity of \(pos)"
+                        fatalError(msg)
+                    } else {
+                        p[pos] = syntax
+                        
+                        dict.updateValue(Array(p.values), forKey: o)
+                        d.updateValue(p, forKey: o)
+                    }
+                    
+                } else {
+                    let m: [Position: Syntax] = [syntax.position: syntax]
+                    d[o] = m
+                }
+            }
+        }
+        return dict
     }
 
     /// Reset to syntactic definitions for operations by
@@ -158,6 +197,7 @@ public struct Syntax {
         case tuple          // (:)
         case or             // ||
         case and            // &&
+        case xor            // ^^
         case equality       // ==, <, >, <=, >=
         case concat         // &
         case addition       // +,-
@@ -207,6 +247,7 @@ public struct Syntax {
     private static let defaultDefinitions: [Syntax] = [
         .init(for: "+", .infix, priority: .addition, operator: .init("+")),
         .init(for: "-", .infix, priority: .addition, operator: .init("-")),
+        .init(for: "negate", .prefix, priority: .attached, operator: .init("-", padding: .none)),
         .init(for: "*", .infix, priority: .product, operator: .init("*")),
         .init(for: "/", .infix, priority: .product, operator: .init("/")),
         .init(for: "mod", .infix, priority: .product, operator: .init("%")),
@@ -229,6 +270,8 @@ public struct Syntax {
         .init(for: "equals", .infix, priority: .equality, operator: .init("==")),
         .init(for: "and", .infix, priority: .and, operator: .init("&&")),
         .init(for: "or", .infix, priority: .or, operator: .init("||")),
+        .init(for: "xor", .infix, priority: .xor, operator: .init("^^")),
+        .init(for: "not", .prefix, priority: .attached, operator: .init("!", padding: .none)),
         .init(for: "define", .infix, priority: .assignment, operator: .init(":=", padding: .bothSides)),
         .init(for: "def", .prefix, priority: .assignment),
         .init(for: "del", .prefix),

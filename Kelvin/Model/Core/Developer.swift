@@ -11,6 +11,7 @@ import Foundation
 let developerOperations: [Operation] = [
     
     // Boolean logic and, or
+    // - Todo: Implement boolean logic simplification
     .init("and", [.booleans]) {
         for n in $0 {
             if let b = n as? Bool, !b {
@@ -26,6 +27,12 @@ let developerOperations: [Operation] = [
             }
         }
         return false
+    },
+    .init("xor", [.any, .any]) {
+        (!!$0[0] &&& $0[1]) ||| ($0[0] &&& !!$0[1])
+    },
+    .init("not", [.bool]) {
+        !($0[0] as! Bool)
     },
     
     // Variable/function definition and deletion
@@ -134,6 +141,23 @@ let developerOperations: [Operation] = [
     },
     .init("delay", [.number]) {
         Thread.sleep(forTimeInterval: $0[0].evaluated!.doubleValue)
+        return "done"
+    },
+    .init("run", [.string, .string]) {
+        let flag = $0[0] as! String
+        let filePath = $0[1] as! String
+        switch flag {
+        case "-c":
+            return List(try Program.compileAndRun(filePath, with: Program.Configuration(
+                verbose: false,
+                scope: .useCurrent,
+                retentionPolicy: .restore)).outputs
+                .filter {$0 !== "\n"})
+        case "-v":
+            try Program.compileAndRun(filePath, with: nil)
+        default:
+            throw ExecutionError.general(errMsg: "invalid configuration \(flag)")
+        }
         return "done"
     },
     .init("run", [.string]) {

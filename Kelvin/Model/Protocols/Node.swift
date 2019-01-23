@@ -195,6 +195,24 @@ public func /==(_ lhs: Node, _ rhs: Node) -> Node {
     return Function("/=", [lhs, rhs])
 }
 
+infix operator &&&
+
+public func &&&(_ lhs: Node, _ rhs: Node) -> Node {
+    return Function("and", [lhs, rhs])
+}
+
+infix operator |||
+
+public func |||(_ lhs: Node, _ rhs: Node) -> Node {
+    return Function("or", [lhs, rhs])
+}
+
+prefix operator !!
+
+public prefix func !!(_ arg: Node) -> Node {
+    return Function("not", [arg])
+}
+
 postfix operator ~!
 
 public postfix func ~!(_ arg: Node) -> Node{

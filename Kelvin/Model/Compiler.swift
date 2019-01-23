@@ -199,12 +199,21 @@ public class Compiler {
      */
     private static func applySyntax(_ syntax: Syntax, for expr: String) -> String {
         var expr = expr
-        let c = "\(syntax.encoding)"
+        var c = syntax.encoding
         var n = syntax.commonName
 
         // Replace operators with their code
-        if let o = syntax.operator {
-            expr = expr.replacingOccurrences(of: o.name, with: c)
+        if let o = syntax.operator?.name {
+            
+            // If there exists multiple definitions of the same operator,
+            // use the encoding for the most prioritized definition
+            // in terms of associative property.
+            if let disambiguated = Syntax.disambiguated[o] {
+                c = disambiguated.sorted {
+                    $0.priority > $1.priority
+                }.first!.encoding
+            }
+            expr = expr.replacingOccurrences(of: o, with: "\(c)")
         }
 
         // Replace infix function names with operator
@@ -222,7 +231,7 @@ public class Compiler {
             let regex = try! NSRegularExpression(pattern: n, options: .caseInsensitive)
             let str = NSMutableString(string: expr)
             let range = NSMakeRange(0, expr.count)
-            regex.replaceMatches(in: str, options: [], range: range, withTemplate: c)
+            regex.replaceMatches(in: str, options: [], range: range, withTemplate: "\(c)")
             return str as String
         }
         
@@ -520,13 +529,13 @@ public class Compiler {
 
         var dict = OperatorReference()
         for syntaxes in prioritized {
-            var d = Dictionary<Character, String>()
+            var precedenceGrp = Dictionary<Character, String>()
             syntaxes.forEach {
                 let id = "\(Flag.operator)\(dict.count)"
                 dict[id] = $0.encoding
-                d[$0.encoding] = id
+                precedenceGrp[$0.encoding] = id
             }
-            try parenthesize(&expr, syntaxes, d)
+            try parenthesize(&expr, syntaxes, precedenceGrp)
         }
         return dict
     }
@@ -538,19 +547,27 @@ public class Compiler {
      - Parameter operators: A group of operators with same priority.
      - Returns: The first index of any of the operators, if there is one.
      */
-    private static func firstIndex(of encodings: [Syntax.Encoding], in expr: String) -> String.Index? {
-        for (idx, c) in expr.enumerated() {
-            if encodings.contains(c) {
-                return expr.index(expr.startIndex, offsetBy: idx)
+    private static func firstIndex(
+        from startIdx: String.Index,
+        of encodings: [Syntax.Encoding: String],
+        in expr: String
+        ) -> String.Index? {
+        for (i, c) in expr[startIdx..<expr.endIndex].enumerated() {
+            if encodings[c] != nil {
+                return expr.index(startIdx, offsetBy: i)
             }
         }
         return nil
     }
 
-    private static func parenthesize(_ expr: inout String, _ syntaxes: [Syntax], _ rp: Dictionary<Character, String>) throws {
-        let operators = syntaxes.map {$0.encoding}
+    private static func parenthesize(
+        _ expr: inout String,
+        _ syntaxes: [Syntax],
+        _ precedenceGrp: [Syntax.Encoding: String]
+        ) throws {
         
-        while let idx = firstIndex(of: operators, in: expr) {
+        var curIdx = expr.startIndex
+        while let idx = firstIndex(from: curIdx, of: precedenceGrp, in: expr) {
             let idx_ = expr.index(after: idx)
             let _idx = expr.index(before: idx)
             var left: String?, right: String?
@@ -655,39 +672,73 @@ public class Compiler {
                 begin = r.lowerBound
             }
 
+            let syntax = Syntax.lexicon[expr[idx]]!
+            let (args, correctedEncoding: e) = try resolveAssociativity(syntax, left, right)
+            
             let rLeft = String(expr[..<begin])
             let rRight = String(expr[expr.index(after: end)...])
-            let id = rp[expr[idx]]!
-
-            let syntax = Syntax.lexicon[expr[idx]]!
+            let encoding = e ?? expr[idx]
+            
+            if let id = precedenceGrp[encoding] {
+                expr = rLeft + "\(id)(\(args))" + rRight
+            } else {
+                
+                // The current interpretation of the operation does not fit its precedence group!
+                // Change the binary operator encoding to the correct one!
+                // The corrected encoding will be parenthesized later.
+                expr = "\(expr[..<idx])\(encoding)\(expr[expr.index(after: idx)...])"
+                curIdx = expr.index(after: curIdx)
+            }
+        }
+    }
+    
+    private static func resolveAssociativity(
+        _ syntax: Syntax,
+        _ left: String?,
+        _ right: String?
+        ) throws -> (String, correctedEncoding: Syntax.Encoding?) {
+        
+        func fun(_ s: Syntax) throws -> String {
             var args = ""
             var error: String?
             if let l = left, let r = right {
-                if syntax.position != .infix {
+                if s.position != .infix {
                     error = "infix"
                 }
                 args = "\(l),\(r)"
             } else if let r = right {
-                if syntax.position != .prefix {
+                if s.position != .prefix {
                     error = "prefix"
                 }
                 args = "\(r)"
             } else if let l = left {
-                if syntax.position != .postfix {
+                if s.position != .postfix {
                     error = "postfix"
                 }
                 args = "\(l)"
             }
             
             if let e = error {
-                let n = syntax.commonName
-                let o = syntax.operator?.name ?? ""
+                let n = s.commonName
+                let o = s.operator?.name ?? ""
                 let msg = "\(n), i.e. '\(o)' cannot be used as a/an \(e) operator"
                 throw CompilerError.syntax(errMsg: msg)
             }
-
-            expr = rLeft + "\(id)(\(args))" + rRight
+            
+            return args
         }
+        
+        if let o = syntax.operator?.name  {
+            if let arr = Syntax.disambiguated[o] {
+                for s in arr {
+                    if let i = try? fun(s) {
+                        return (i, s.encoding)
+                    }
+                }
+            }
+        }
+        
+        return (try fun(syntax), nil)
     }
 
     private static func replace(_ expr: inout String, of target: String, with replacement: String) {
@@ -710,23 +761,6 @@ public class Compiler {
 
         // Add another layer of parenthesis to prevent an error
         expr = "(\(expr))"
-
-        // When naturally writing mathematic expressions, we tend to write
-        // 3*-x instead of 3*(-x), etc.
-        // This corrects the format to make it consistent.
-        let candidates = "([*/^<>,".map {
-            Syntax.glossary[String($0)]?.encoding ?? $0
-        }
-        for c in candidates {
-            let target = "\(c)\(Syntax.glossary["-"]!.encoding)"
-            while expr.contains(target) {
-                let r = expr.range(of: target)!
-                let m = expr.index(before: r.upperBound)
-                let bin = binRange(expr, m)
-                let e = expr[m...bin.upperBound]
-                replace(&expr, of: "\(c)\(e)", with: "\(c)(0\(e))")
-            }
-        }
 
         func fixCoefficientShorthand(_ symbol: Character, _ digit: Character) {
             let indices = findIndices(of: "\(symbol)\(digit)", in: expr)
