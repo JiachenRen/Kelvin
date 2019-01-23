@@ -10,10 +10,10 @@ import Foundation
 
 /// Errors that occur during the compilation phase such as any bad syntax or
 /// an incorrect number of arguments supplied to reserved binary/unary operations
-public enum CompilerError: Error {
+indirect public enum CompilerError: Error {
     case illegalArgument(errMsg: String)
     case syntax(errMsg: String)
-    case error(onLine: Int, _ err: Error)
+    case error(onLine: Int, _ err: CompilerError)
 }
 
 public enum ExecutionError: Error {

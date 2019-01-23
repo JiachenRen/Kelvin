@@ -128,8 +128,8 @@ public class Compiler {
             do {
                 let node = try compile(line)
                 statements.append(node)
-            } catch let e {
-                throw CompilerError.error(onLine: i + 1, e)
+            } catch let e where e is CompilerError {
+                throw CompilerError.error(onLine: i + 1, e as! CompilerError)
             }
         }
 
@@ -616,22 +616,9 @@ public class Compiler {
                 }
                 end = r.upperBound
             }
-
-            // To the left of binary operator
-            if expr[_idx] == ")" {
-                
-                // (a - c) + b or func(a) + b. First find the index of the open parenthesis.
-                begin = find(expr, end: _idx, open: "(")!
-                
-                // Then, check if there is a prefix before the open index.
-                while let b = expr.index(begin, offsetBy: -1, limitedBy: expr.startIndex) {
-                    if symbols.contains(expr[b]) {
-                        break
-                    }
-                    begin = b
-                }
-                left = String(expr[begin..._idx])
-            }else if expr[_idx] == "]" {
+            
+            var anchor = _idx
+            if expr[_idx] == "]" {
                 
                 // [a, b, c] + d or matrix[a][b][...] + c. Find the open square bracket that pairs with _idx
                 begin = find(expr, end: _idx, open: "[")!
@@ -657,12 +644,31 @@ public class Compiler {
                     }
                 }
                 left = String(expr[begin..._idx])
-            } else if expr[_idx] == "}" {
+                if let i = expr.index(begin, offsetBy: -1, limitedBy: expr.startIndex) {
+                    anchor = i
+                }
+            }
+
+            // To the left of binary operator
+            if expr[anchor] == ")" {
+                
+                // (a - c) + b or func(a) + b. First find the index of the open parenthesis.
+                begin = find(expr, end: anchor, open: "(")!
+                
+                // Then, check if there is a prefix before the open index.
+                while let b = expr.index(begin, offsetBy: -1, limitedBy: expr.startIndex) {
+                    if symbols.contains(expr[b]) {
+                        break
+                    }
+                    begin = b
+                }
+                left = String(expr[begin..._idx])
+            } else if expr[anchor] == "}" {
                 
                 // {...} + a
-                begin = find(expr, end: _idx, open: "{")!
+                begin = find(expr, end: anchor, open: "{")!
                 left = String(expr[begin..._idx])
-            } else {
+            } else if anchor == _idx { // If the anchor hasn't been moved due to subscripts...
                 
                 // A pain old variable.
                 if r.lowerBound <= _idx {

@@ -10,11 +10,33 @@ import Foundation
 
 let calculusOperations: [Operation] = [
     .init("derivative", [.any, .var]) {
-        return CalculusEngine.derivative(of: $0[0], withRespectTo: $0[1] as! Variable)
+        CalculusEngine.derivative(of: $0[0], withRespectTo: $0[1] as! Variable)
+    },
+    .init("derivative", [.any, .var, .number]) {
+        try CalculusEngine.derivative(of: $0[0], withRespectTo: $0[1] as! Variable, $0[2] as! Int)
     },
 ]
 
 fileprivate class CalculusEngine {
+    
+    /**
+     Take the nth derivative of node n.
+     - Parameters:
+        - v: The variable with respect to which the derivative is taken.
+        - nth: Nth derivative.
+     - Returns: The nth derivative of n, if taken successfully.
+     */
+    fileprivate static func derivative(of n: Node, withRespectTo v: Variable, _ nth: Int) throws -> Node? {
+        var n = n
+        for i in 0..<nth {
+            if let d = derivative(of: n, withRespectTo: v) {
+                n = try d.simplify()
+            } else {
+                return i == 0 ? nil : Function("derivative", [n, v, nth - i])
+            }
+        }
+        return n
+    }
     
     /**
      Take the (partial) derivative of node n w/ respect to variable v.

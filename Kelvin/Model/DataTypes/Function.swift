@@ -88,7 +88,7 @@ public struct Function: MutableListProtocol {
                 // Handle special case of -x.
                 let c = syntax.operator?.name ?? name
                 return "\(c)\(r[0])"
-            case .infix:
+            case .infix where args.count == 2 || isCommutative:
                 if let s = r.enumerated().reduce(nil, { (a, c) -> String in
                     let (i, b) = c
                     let p = usesParenthesis(forNodeAtIndex: i)

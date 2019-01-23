@@ -24,6 +24,15 @@ while true {
         print("ERR >>> illegal argument: \(msg)", terminator: "\n\n")
     } catch CompilerError.syntax(let msg) {
         print("ERR >>> syntax: \(msg)", terminator: "\n\n")
+    } catch CompilerError.error(onLine: let n, let err) {
+        switch err {
+        case .syntax(let msg):
+            print("ERR >>> syntax error on line \(n): \(msg)", terminator: "\n\n")
+        case .illegalArgument(let msg):
+            print("ERR >>> illegal argument on line \(n): \(msg)", terminator: "\n\n")
+        default:
+            print("ERR >>> unexpected error on line \(n): \(err)", terminator: "\n\n")
+        }
     } catch ExecutionError.general(let msg) {
         print("ERR >>> \(msg)", terminator: "\n\n")
     }
