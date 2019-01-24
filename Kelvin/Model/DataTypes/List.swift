@@ -82,4 +82,20 @@ public struct List: MutableListProtocol, NaN {
             return e1.stringified > e2.stringified
         }
     }
+    
+    /**
+     Convert every element in the list into a double.
+     An error is thrown if not all the elements in the list is a double.
+     */
+    public func convertToDoubles() throws -> [Double] {
+        return try elements.map {
+            if let d = $0.evaluated?.doubleValue {
+                return d
+            }
+            let msg = "conversion failed - every element must be a number"
+            throw ExecutionError.general(errMsg: msg)
+            }.sorted {
+                $0 < $1
+        }
+    }
 }

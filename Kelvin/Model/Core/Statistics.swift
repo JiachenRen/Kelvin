@@ -106,7 +106,74 @@ let statOperations: [Operation] = [
     .init("sum", [.universal]) { nodes in
         return ++nodes
     },
+    
+    // IQR, 5 number summary
+    .init("fiveNSummary", [.list]) {
+        let list = try ($0[0] as! List).convertToDoubles()
+        return try fiveNSummary(list)
+    },
+    .init("iqr", [.list]) {
+        let list = try ($0[0] as! List).convertToDoubles()
+        let stat = quartiles(list)
+        return stat.q3 - stat.q1
+    },
+    .init("median", [.list]) {
+        let list = try ($0[0] as! List).convertToDoubles()
+        let (m, _) = median(list)
+        return m
+    }
 ]
+
+
+
+fileprivate func fiveNSummary(_ list: [Double]) throws -> Node {
+    let c = list.count
+    if c == 0 {
+        throw ExecutionError.general(errMsg: "cannot perform summary statistics on empty list.")
+    }
+    
+    let min = list.first!
+    let max = list.last!
+
+    let m = quartiles(list)
+    
+    let summary: [Tuple] = [
+        .init("min", min),
+        .init("q1", m.q1),
+        .init("median", m.m),
+        .init("q3", m.q3),
+        .init("max", max)
+    ]
+    
+    return List(summary)
+}
+
+fileprivate func quartiles(_ numbers: [Double]) -> (q1: Double, m: Double, q3: Double) {
+    let (m, i) = median(numbers)
+    var l = numbers, r = numbers
+    let idx = i ?? numbers.count / 2
+    l = Array(numbers.prefix(upTo: idx))
+    r = Array(numbers.suffix(from: idx + 1))
+
+    let (q1, _) = median(l)
+    let (q3, _) = median(r)
+    return (q1, m, q3)
+}
+
+fileprivate func median(_ numbers: [Double]) -> (Double, idx: Int?) {
+    let c = numbers.count
+    if c == 0 {
+        return (.nan, nil)
+    }
+    
+    if c % 2 == 0 {
+        let m = ((numbers[c / 2] + numbers[c / 2 - 1])) / 2
+        return (m, nil)
+    } else {
+        let i = c / 2
+        return (numbers[i], i)
+    }
+}
 
 /// Sum of difference squared.
 fileprivate func ssx(_ list: List) throws -> Node {

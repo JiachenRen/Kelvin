@@ -323,17 +323,17 @@ public class Operation: Equatable {
      */
     enum ArgumentType: Int, Equatable {
         case int = 1
-        case double = 2
-        case number = 3
-        case nan = 4
-        case `var` = 5
-        case `func` = 6
-        case bool = 7
-        case list = 8
-        case equation = 9
-        case string = 10
-        case tuple = 11
-        case leaf = 12
+        case double
+        case number
+        case nan
+        case `var`
+        case `func`
+        case bool
+        case list
+        case equation
+        case string
+        case tuple
+        case leaf
         case any = 100
         case numbers = 1000
         case booleans = 1001

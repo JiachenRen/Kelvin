@@ -1,0 +1,11 @@
+# Five number summary
+println (fiveNSummary({1, 3, 7, 9, 11, 12, 17}) | $0::1)
+
+def l1 = {1,1,2,2,3,3,3,4,2,6,9,49,107}
+println fiveNSummary(l1)
+
+# Inter-quartile range
+println iqr(l1)
+
+# Median
+println median(l1)

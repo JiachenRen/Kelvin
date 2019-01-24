@@ -56,3 +56,7 @@ println (a += x) == 111
 println (a := a % 11) == 1
 println !(!true || false) == true
 println (a xor b) == (b && !a || a && !b)
+println (fiveNSummary({1, 3, 7, 9, 11, 12, 17}) | $0::1) == {1, 3, 9, 12, 17}
+
+def l1 = {1, 1, 2, 2, 3, 3, 3, 4, 2, 6, 9, 49, 107}
+println size(l1) == 13
