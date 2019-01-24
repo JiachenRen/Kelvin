@@ -20,4 +20,5 @@ def g(x) = x^3 + ln(cos(x))*sin(x)
 # Shorthand for first derivative
 println g(x ^ 2) ' x
 
-
+# Preliminary implicit differentiation
+println derivative(x^2+f(x)*x,x)

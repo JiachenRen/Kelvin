@@ -9,15 +9,52 @@
 import Foundation
 
 let calculusOperations: [Operation] = [
-    .init("derivative", [.any, .var]) {
+    .init(CalculusEngine.derivative, [.any, .var]) {
         CalculusEngine.derivative(of: $0[0], withRespectTo: $0[1] as! Variable)
     },
-    .init("derivative", [.any, .var, .number]) {
+    .init(CalculusEngine.derivative, [.any, .var, .number]) {
         try CalculusEngine.derivative(of: $0[0], withRespectTo: $0[1] as! Variable, $0[2] as! Int)
     },
+    .init(CalculusEngine.impDif, [.equation, .var, .var]) {
+        let eq = $0[0] as! Equation
+        let dv = $0[1] as! Variable
+        let iv = $0[2] as! Variable
+        return try CalculusEngine.implicitDifferentiation(eq, dependentVar: dv, independentVar: iv)
+    }
 ]
 
 fileprivate class CalculusEngine {
+    
+    fileprivate static let derivative = "derivative"
+    fileprivate static let impDif = "impDif"
+    
+    /**
+     Implicit differentiation using concepts of partial derivatives in multivariable calculus.
+     
+     let x = independent var;
+     let y = f(x) -> dependent var;
+     suppose we have x ^ 2 + 2x + 3yx = y^2;
+     define a function, F(x, y) = x ^ 2 + 2x + 3yx - y^2 = 0;
+     Fx = ∂F/∂x, Fy = ∂F/∂y;
+     thus we arrive at dy/dx = -Fx / Fy.
+     
+     - Parameters:
+     - eq: An equation that defines the relationship b/w the dependent var and the independent var.
+     - dependentVar: The dependent variable (x)
+     - independentVar: The independent variable (y)
+     - Returns: dy/dx - the result of the implicit differentiation
+     */
+    fileprivate static func implicitDifferentiation(
+        _ eq: Equation,
+        dependentVar dv: Variable,
+        independentVar iv: Variable) throws -> Node? {
+        
+        let f = try (eq.lhs - eq.rhs).simplify()
+        let fx = derivative(of: f, withRespectTo: dv) ?? Function(derivative, [f, dv])
+        let fy = derivative(of: f, withRespectTo: iv) ?? Function(derivative, [f, iv])
+        
+        return -fx / fy
+    }
     
     /**
      Take the nth derivative of node n.
@@ -32,7 +69,7 @@ fileprivate class CalculusEngine {
             if let d = derivative(of: n, withRespectTo: v) {
                 n = try d.simplify()
             } else {
-                return i == 0 ? nil : Function("derivative", [n, v, nth - i])
+                return i == 0 ? nil : Function(derivative, [n, v, nth - i])
             }
         }
         return n
@@ -108,7 +145,7 @@ fileprivate class CalculusEngine {
                     for (i, kahuna) in fun.elements.enumerated() {
                         var j = fun.elements
                         j.remove(at: i)
-                        j.append(Function("derivative", [kahuna, v]))
+                        j.append(Function(derivative, [kahuna, v]))
                         nodes.append(**j)
                     }
                     
@@ -123,7 +160,7 @@ fileprivate class CalculusEngine {
                     assert(fun.count == 2)
                     let base = fun[0]
                     let exp = fun[1]
-                    let k = Function("derivative", [ln(base) * exp, v])
+                    let k = Function(derivative, [ln(base) * exp, v])
                     return k * fun
                 default:
                     break
@@ -137,7 +174,7 @@ fileprivate class CalculusEngine {
     
     fileprivate static func derivative(of nodes: [Node], withRespectTo v: Variable) -> [Node] {
         return nodes.map {
-            Function("derivative", [$0, v])
+            Function(derivative, [$0, v])
         }
     }
 }

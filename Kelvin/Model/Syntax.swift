@@ -298,9 +298,9 @@ public struct Syntax {
         .init(for: "try", .prefix),
         .init(for: "npr", .infix),
         .init(for: "ncr", .infix),
-        .init(for: "tuple", .infix, priority: .tuple, operator: .init(":", padding: .bothSides)),
-        .init(for: "if", .infix, priority: .conditional, operator: .init("?", padding: .bothSides)),
-        .init(for: "concat", .infix, priority: .concat, operator: .init("&", padding: .bothSides)),
-        .init(for: "derivative", .infix, priority: .derivative, operator: .init("'", padding: .bothSides)),
+        .init(for: "tuple", .infix, priority: .tuple, operator: .init(":")),
+        .init(for: "if", .infix, priority: .conditional, operator: .init("?")),
+        .init(for: "concat", .infix, priority: .concat, operator: .init("&")),
+        .init(for: "derivative", .infix, priority: .derivative, operator: .init("'", padding: .none)),
     ]
 }
