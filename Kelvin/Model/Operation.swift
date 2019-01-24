@@ -120,11 +120,12 @@ public class Operation: Equatable {
         operations.append(contentsOf: conjugates)
         var dict = [String: [Operation]]()
         for operation in operations {
-            if var arr = dict[operation.name] {
+            let name = operation.name
+            if var arr = dict[name] {
                 arr.append(operation)
-                dict.updateValue(arr, forKey: operation.name)
+                dict.updateValue(arr, forKey: name)
             } else {
-                dict[operation.name] = [operation]
+                dict[name] = [operation]
             }
         }
         

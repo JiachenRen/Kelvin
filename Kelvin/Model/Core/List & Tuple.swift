@@ -74,7 +74,7 @@ let listAndTupleOperations: [Operation] = [
                 if let b = try predicate.simplify() as? Bool {
                     return b ? idx : nil
                 }
-                throw ExecutionError.general(errMsg: "predicate must be a boolean")
+                throw ExecutionError.predicateException
             }.compactMap {
                 $0 == nil ? nil: list[$0!]
             }
@@ -83,6 +83,32 @@ let listAndTupleOperations: [Operation] = [
     .init("zip", [.list, .list]) {
         if let l1 = $0[0] as? List, let l2 = $0[1] as? List {
             return try l1.join(with: l2)
+        }
+        return nil
+    },
+    .init("append", [.list, .list]) {
+        if let l1 = $0[0] as? List, let l2 = $0[1] as? List {
+            let elements = [l1.elements, l2.elements].flatMap {$0}
+            return List(elements)
+        }
+        return nil
+    },
+    .init("append", [.list, .any]) {
+        if let l1 = $0[0] as? List {
+            let elements = [l1.elements, [$0[1]]].flatMap {$0}
+            return List(elements)
+        }
+        return nil
+    },
+    .init("sort", [.list, .any]) {nodes in
+        if let l1 = nodes[0] as? List {
+            return try l1.sorted {
+                let predicate = try nodes[1].replacingAnonymousArgs(with: [$0, $1]).simplify()
+                if let b = predicate as? Bool {
+                    return b
+                }
+                throw ExecutionError.predicateException
+            }
         }
         return nil
     }

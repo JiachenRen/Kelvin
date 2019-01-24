@@ -108,23 +108,45 @@ let statOperations: [Operation] = [
     },
     
     // IQR, 5 number summary
-    .init("fiveNSummary", [.list]) {
+    .init("sum5n", [.list]) {
         let list = try ($0[0] as! List).convertToDoubles()
         return try fiveNSummary(list)
     },
     .init("iqr", [.list]) {
         let list = try ($0[0] as! List).convertToDoubles()
-        let stat = quartiles(list)
+        let stat = try quartiles(list)
         return stat.q3 - stat.q1
     },
     .init("median", [.list]) {
         let list = try ($0[0] as! List).convertToDoubles()
         let (m, _) = median(list)
         return m
+    },
+    .init("outliers", [.list]) {
+        let list = try ($0[0] as! List).convertToDoubles()
+        return try outliers(list)
     }
 ]
 
-
+fileprivate func outliers(_ list: [Double]) throws -> List {
+    let stats = try quartiles(list)
+    let iqr = stats.q3 - stats.q1
+    let ut = stats.q3 + 1.5 * iqr
+    let lt = stats.q1 - 1.5 * iqr
+    
+    let leOutliers = list.filter {
+        $0 < lt
+    }
+    
+    let ueOutliers = list.filter {
+        $0 > ut
+    }
+    
+    return List([
+        Tuple("lower end", List(leOutliers)),
+        Tuple("upper end", List(ueOutliers))
+    ])
+}
 
 fileprivate func fiveNSummary(_ list: [Double]) throws -> Node {
     let c = list.count
@@ -135,7 +157,7 @@ fileprivate func fiveNSummary(_ list: [Double]) throws -> Node {
     let min = list.first!
     let max = list.last!
 
-    let m = quartiles(list)
+    let m = try quartiles(list)
     
     let summary: [Tuple] = [
         .init("min", min),
@@ -148,10 +170,15 @@ fileprivate func fiveNSummary(_ list: [Double]) throws -> Node {
     return List(summary)
 }
 
-fileprivate func quartiles(_ numbers: [Double]) -> (q1: Double, m: Double, q3: Double) {
+fileprivate func quartiles(_ numbers: [Double]) throws -> (q1: Double, m: Double, q3: Double) {
+    let c = numbers.count
+    if c == 0 {
+        throw ExecutionError.general(errMsg: "cannot perform summary statistics on empty list.")
+    }
+    
     let (m, i) = median(numbers)
     var l = numbers, r = numbers
-    let idx = i ?? numbers.count / 2
+    let idx = i ?? c / 2
     l = Array(numbers.prefix(upTo: idx))
     r = Array(numbers.suffix(from: idx + 1))
 

@@ -281,6 +281,8 @@ public struct Syntax {
         .init(for: "reduce", .infix, operator: .init("~")),
         .init(for: "filter", .infix, operator: .init("|?")),
         .init(for: "zip", .infix, operator: .init("><")),
+        .init(for: "append", .infix, operator: .init("++")),
+        .init(for: "sort", .infix, operator: .init(">?")),
         .init(for: "then", .infix, operator: .init(";", padding: .rightSide)),
         .init(for: "feed", .infix, operator: .init("->")),
         .init(for: "repeat", .infix, priority: .repeat, operator: .init("...", padding: .none)),

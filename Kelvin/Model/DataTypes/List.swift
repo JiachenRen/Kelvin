@@ -67,8 +67,8 @@ public struct List: MutableListProtocol, NaN {
      - Parameter comparator: A binary function that compares two nodes.
      - Returns: A new list containing the original elements in sorted order
      */
-    public func sorted(by comparator: PBinary) -> List {
-        return List(elements.sorted(by: comparator))
+    public func sorted(by comparator: (Node, Node) throws -> Bool) rethrows -> List {
+        return List(try elements.sorted(by: comparator))
     }
     
     /**

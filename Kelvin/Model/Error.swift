@@ -19,5 +19,6 @@ indirect public enum CompilerError: Error {
 public enum ExecutionError: Error {
     static let indexOutOfBounds = ExecutionError.general(errMsg: "index out of bounds")
     static let dimensionMismatch = ExecutionError.general(errMsg: "dimension mismatch")
+    static let predicateException = ExecutionError.general(errMsg: "predicate must be a boolean")
     case general(errMsg: String)
 }
