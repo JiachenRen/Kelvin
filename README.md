@@ -42,6 +42,7 @@ Based on Java Algebra System's powerful engine, Kelvin is a powerful programming
   - *Variance*
   - *Std. deviation*
   - *Five-number summary, IQR*
+  - *Outliers*
   
 - [ ] Two variable statistics
 - [ ] Distributions
@@ -67,8 +68,8 @@ Based on Java Algebra System's powerful engine, Kelvin is a powerful programming
 - [ ] Addition/subtraction
 
 ### List math/operations
-- [x] Zip, map, reduce, and filter w/ anonymous closure arguments.
-- [ ] Sort
+- [x] Zip, map, and reduce w/ anonymous closure arguments.
+- [x] Sort, filter, and append
 - [x] Chained subscript access
 - [x] Size
 
