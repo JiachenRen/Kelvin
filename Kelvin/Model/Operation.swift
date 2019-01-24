@@ -36,7 +36,8 @@ public class Operation: Equatable {
         listAndTupleOperations,
         equalityOperations,
         conversionOperations,
-        calculusOperations
+        calculusOperations,
+        vectorOperations
     ].flatMap {
         $0
     }
@@ -229,7 +230,11 @@ public class Operation: Equatable {
                     fallthrough
                 case .bool where !(arg is Bool):
                     fallthrough
+                case .vec where !(arg is Vector):
+                    fallthrough
                 case .list where !(arg is List):
+                    fallthrough
+                case .iterable where !(arg is MutableListProtocol):
                     fallthrough
                 case .number where !(arg is NSNumber):
                     fallthrough
@@ -330,10 +335,12 @@ public class Operation: Equatable {
         case `var`
         case `func`
         case bool
-        case list
         case equation
         case string
+        case vec
+        case list
         case tuple
+        case iterable
         case leaf
         case any = 100
         case numbers = 1000

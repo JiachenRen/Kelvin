@@ -146,6 +146,10 @@ fileprivate func outliers(_ list: [Double]) throws -> List {
         Tuple("lower end", List(leOutliers)),
         Tuple("upper end", List(ueOutliers))
     ])
+    
+    // TODO: Confidence interval, margin of error.
+    // Margin of error = z-score (from confidence interval) * stdev of sampling dist.
+    // Confidence interval = estimate +/- margin of error.
 }
 
 fileprivate func fiveNSummary(_ list: [Double]) throws -> Node {

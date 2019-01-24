@@ -21,4 +21,12 @@ public enum ExecutionError: Error {
     static let dimensionMismatch = ExecutionError.general(errMsg: "dimension mismatch")
     static let predicateException = ExecutionError.general(errMsg: "predicate must be a boolean")
     case general(errMsg: String)
+    
+    static func invalidDT(_ invalid: String) -> ExecutionError {
+        return ExecutionError.general(errMsg: "invalid data type '\(invalid)'")
+    }
+    
+    static func inconvertibleDT(from d1: String, to d2: String) -> ExecutionError {
+        return ExecutionError.general(errMsg: "cannot convert \(d1) to \(d2)")
+    }
 }

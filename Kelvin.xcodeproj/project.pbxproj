@@ -60,6 +60,10 @@
 		1F0A90E521F93DCE00432B17 /* Statistics in Resources */ = {isa = PBXBuildFile; fileRef = 1F0A90E421F93DCE00432B17 /* Statistics */; };
 		1F0A90E721F97B5000432B17 /* String+Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E621F97B5000432B17 /* String+Regex.swift */; };
 		1F0A90E821F97B7200432B17 /* String+Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E621F97B5000432B17 /* String+Regex.swift */; };
+		1F0A90EA21FA0EF600432B17 /* DataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E921FA0EF600432B17 /* DataType.swift */; };
+		1F0A90EB21FA10D800432B17 /* DataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E921FA0EF600432B17 /* DataType.swift */; };
+		1F0A90ED21FA27E700432B17 /* Vector & Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90EC21FA27E700432B17 /* Vector & Matrix.swift */; };
+		1F0A90EE21FA2A5C00432B17 /* Vector & Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90EC21FA27E700432B17 /* Vector & Matrix.swift */; };
 		1F0CF2C421EA420400E40086 /* String+LeafNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* String+LeafNode.swift */; };
 		1F0CF2C521EA428000E40086 /* String+LeafNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* String+LeafNode.swift */; };
 		1F0CF2C721EBA8C800E40086 /* Syntax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C621EBA8C800E40086 /* Syntax.swift */; };
@@ -169,6 +173,8 @@
 		1F0A90E121F8C32B00432B17 /* String+Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Colors.swift"; sourceTree = "<group>"; };
 		1F0A90E421F93DCE00432B17 /* Statistics */ = {isa = PBXFileReference; lastKnownFileType = text; path = Statistics; sourceTree = "<group>"; };
 		1F0A90E621F97B5000432B17 /* String+Regex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Regex.swift"; sourceTree = "<group>"; };
+		1F0A90E921FA0EF600432B17 /* DataType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataType.swift; sourceTree = "<group>"; };
+		1F0A90EC21FA27E700432B17 /* Vector & Matrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Vector & Matrix.swift"; sourceTree = "<group>"; };
 		1F0CF2C321EA420400E40086 /* String+LeafNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+LeafNode.swift"; sourceTree = "<group>"; };
 		1F0CF2C621EBA8C800E40086 /* Syntax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Syntax.swift; sourceTree = "<group>"; };
 		1F0CF2D221EEA74A00E40086 /* Misc */ = {isa = PBXFileReference; lastKnownFileType = text; path = Misc; sourceTree = "<group>"; };
@@ -249,6 +255,7 @@
 				1F0936DC21F4EADE00E707BD /* Algebra.swift */,
 				1F0936D021F4E45900E707BD /* Developer.swift */,
 				1F0936D621F4E80A00E707BD /* List & Tuple.swift */,
+				1F0A90EC21FA27E700432B17 /* Vector & Matrix.swift */,
 				1F0936DE21F4EB7A00E707BD /* Equality.swift */,
 				1F0936E021F4EBBE00E707BD /* Conversion.swift */,
 				1F0936E521F4ED2300E707BD /* Configuration.swift */,
@@ -424,6 +431,7 @@
 				1F0936EE21F5132200E707BD /* Protocols */,
 				1FFD8CD4218F52430004ECEB /* Compiler.swift */,
 				1F3974BB21E3970F006D6DC2 /* Error.swift */,
+				1F0A90E921FA0EF600432B17 /* DataType.swift */,
 				1F3974C721E67627006D6DC2 /* Mode.swift */,
 				1F2E82AB21966FC5005C3353 /* Operation.swift */,
 				1F09371C21F684D500E707BD /* Scope.swift */,
@@ -598,6 +606,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F0A90EE21FA2A5C00432B17 /* Vector & Matrix.swift in Sources */,
+				1F0A90EB21FA10D800432B17 /* DataType.swift in Sources */,
 				1F0A90E821F97B7200432B17 /* String+Regex.swift in Sources */,
 				1F0A90E321F8C3C100432B17 /* String+Colors.swift in Sources */,
 				1F09371E21F684EC00E707BD /* Scope.swift in Sources */,
@@ -651,6 +661,7 @@
 				1FE1697D21F380CA0006712C /* BinaryNode.swift in Sources */,
 				1F2E82B221973FF7005C3353 /* Value.swift in Sources */,
 				1F2E82B621974368005C3353 /* Variable.swift in Sources */,
+				1F0A90EA21FA0EF600432B17 /* DataType.swift in Sources */,
 				1F0936CB21F4E2A300E707BD /* Unary.swift in Sources */,
 				1F0936EC21F5058B00E707BD /* ListProtocol.swift in Sources */,
 				1F0936E621F4ED2300E707BD /* Configuration.swift in Sources */,
@@ -677,6 +688,7 @@
 				1FFD8CA5218F50850004ECEB /* ViewController.swift in Sources */,
 				1F0936FA21F518BB00E707BD /* NSNumber+Value.swift in Sources */,
 				1F0936D721F4E80A00E707BD /* List & Tuple.swift in Sources */,
+				1F0A90ED21FA27E700432B17 /* Vector & Matrix.swift in Sources */,
 				1F3974C821E67627006D6DC2 /* Mode.swift in Sources */,
 				1FFD8CA3218F50850004ECEB /* AppDelegate.swift in Sources */,
 				1F0936E121F4EBBE00E707BD /* Conversion.swift in Sources */,

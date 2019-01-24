@@ -203,6 +203,7 @@ public struct Syntax {
         case addition       // +,-
         case product        // *,/
         case exponent       // ^
+        case coersion       // as
         case derivative     // '
         case attached       // ++, --, !, °, prefix and postfix
 
@@ -302,5 +303,6 @@ public struct Syntax {
         .init(for: "if", .infix, priority: .conditional, operator: .init("?")),
         .init(for: "concat", .infix, priority: .concat, operator: .init("&")),
         .init(for: "derivative", .infix, priority: .derivative, operator: .init("'", padding: .none)),
+        .init(for: "as", .infix, priority: .coersion, operator: .init("!!")),
     ]
 }

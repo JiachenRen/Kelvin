@@ -28,6 +28,14 @@ public struct List: MutableListProtocol, NaN {
     init(_ elements: Node...) {
         self.init(elements)
     }
+    
+    init?(_ node: Node) {
+        if let list = node as? ListProtocol {
+            self.elements = list.elements
+        } else {
+            return nil
+        }
+    }
 
     /// The ordering of the list does not matter, i.e. {1,2,3} is considered
     /// the same as {3,2,1}.

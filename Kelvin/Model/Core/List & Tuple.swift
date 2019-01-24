@@ -9,6 +9,48 @@
 import Foundation
 
 let listAndTupleOperations: [Operation] = [
+    
+    .init("+", [.list, .list]) {
+        try join(by: "+", $0[0], $0[1])
+    },
+    .init("+", [.list, .any]) {
+        map(by: "+", $0[0], $0[1])
+    },
+    
+    .init("-", [.list, .list]) {
+        try join(by: "-", $0[0], $0[1])
+    },
+    .init("-", [.list, .any]) {
+        map(by: "-", $0[0], $0[1])
+    },
+    
+    .init("*", [.list, .list]) {
+        try join(by: "*", $0[0], $0[1])
+    },
+    .init("*", [.list, .any]) {
+        map(by: "*", $0[0], $0[1])
+    },
+    
+    .init("/", [.list, .list]) {
+        try join(by: "/", $0[0], $0[1])
+    },
+    .init("/", [.list, .any]) {
+        map(by: "/", $0[0], $0[1])
+    },
+    
+    .init("^", [.list, .list]) {
+        try join(by: "^", $0[0], $0[1])
+    },
+    .init("^", [.list, .any]) {
+        map(by: "^", $0[0], $0[1])
+    },
+    
+    .init("mod", [.list, .list]) {
+        try join(by: "mod", $0[0], $0[1])
+    },
+    .init("mod", [.list, .any]) {
+        map(by: "mod", $0[0], $0[1])
+    },
 
     // Tuple operations
     .init("tuple", [.leaf, .leaf]) {
@@ -44,13 +86,14 @@ let listAndTupleOperations: [Operation] = [
         return ($0[0] as! List).count
     },
     .init("map", [.any, .any]) { nodes in
-        guard let list = try nodes[0].simplify() as? List else {
+        guard var list = try nodes[0].simplify() as? MutableListProtocol else {
             return nil
         }
         let updated = list.elements.enumerated().map { (idx, e) in
             nodes[1].replacingAnonymousArgs(with: [e, idx])
         }
-        return try List(updated).simplify()
+        list.elements = updated
+        return try list.simplify()
     },
     .init("reduce", [.any, .any]) { nodes in
         guard let list = try nodes[0].simplify() as? List else {
@@ -113,3 +156,19 @@ let listAndTupleOperations: [Operation] = [
         return nil
     }
 ]
+
+fileprivate func join(by bin: String, _ l1: Node, _ l2: Node) throws -> Node {
+    let l1 = l1 as! List
+    let l2 = l2 as! List
+    
+    return try l1.join(with: l2, by: bin)
+}
+
+fileprivate func map(by bin: String, _ l: Node, _ n: Node) -> Node {
+    let l = l as! List
+    
+    let elements = l.elements.map {
+        Function(bin, [$0, n])
+    }
+    return List(elements)
+}

@@ -754,7 +754,6 @@ public class Compiler {
     /**
      Formats the raw String to prepare it for the formulation into a Function instance.
      For instance, the call to formatCoefficients("x+2x^2+3x+4") would return "x+2*x^2+3*x+4"
-     PS: "-x" becomes = "(0-x)"
      
      - Parameter expr: the expression to have coefficients and negative sign formatted
      */
