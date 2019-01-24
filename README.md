@@ -24,12 +24,11 @@ Based on Java Algebra System's powerful engine, Kelvin is a powerful programming
 
 ### Calculus
 - [x] Differentiation
-  - *Partial derivatives*
   - *Logarithmic differentiation*
   - *nth derivative*
-  - [ ] Multivariate differentiation
-    - [ ] Implicit differentiation
-    - [ ] Gradient
+  - *Multivariate (Calculus III)*
+    - Partial derivatives
+    - Implicit differentiation
     - [ ] Directional differentiation
   
 - [ ] Integration
