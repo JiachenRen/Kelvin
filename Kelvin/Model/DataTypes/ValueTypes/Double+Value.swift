@@ -20,7 +20,7 @@ extension Double: Value {
     public var stringified: String {
         
         // Use the proper scientific notation
-        return "\(self)".replacingOccurrences(of: "e+", with: "E")
+        return "\(self)".replacingOccurrences(of: "e+", with: "*10^")
             .replacingOccurrences(of: "e-", with: "*10^-")
     }
     

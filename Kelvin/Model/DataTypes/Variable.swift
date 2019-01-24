@@ -10,9 +10,6 @@ import Foundation
 
 public struct Variable: LeafNode, NaN {
 
-    /// The characters that are allowed in the variable
-    static let legalChars = "$abcdefghijklmnopqrstuvwxyz_"
-
     static var definitions: [String: Node] = {
         constants.reduce(into: [:]) {
             $0[$1.key] = $1.value
@@ -28,6 +25,8 @@ public struct Variable: LeafNode, NaN {
     /// The name of the variable
     var name: String
 
+    public static let validationRegex = Regex(pattern: "^[a-zA-Z_$]+[a-zA-Z_\\d]*$")
+    
     public var stringified: String {
         return name
     }
@@ -61,17 +60,8 @@ public struct Variable: LeafNode, NaN {
     init(_ name: String) throws {
 
         // Check if the variable name is valid
-        for ch in name {
-            let isDigit = Int("\(ch)") != nil
-            if !Variable.legalChars.contains(ch) && !isDigit {
-                // Check if the variable contains illegal characters
-                let msg = "illegal variable name '\(name)'; character '\(ch)' is not allowed."
-                throw CompilerError.syntax(errMsg: msg)
-            } else if Int("\(name.first!)") != nil {
-                // Check if the variable starts with a number
-                let msg = "illegal variable name '\(name)'; cannot begin with a number"
-                throw CompilerError.syntax(errMsg: msg)
-            }
+        if !(name ~ Variable.validationRegex) {
+            throw CompilerError.syntax(errMsg: "illegal variable name '\(name)'")
         }
 
         self.name = name

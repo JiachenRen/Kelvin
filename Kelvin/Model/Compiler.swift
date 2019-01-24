@@ -768,34 +768,11 @@ public class Compiler {
         // Add another layer of parenthesis to prevent an error
         expr = "(\(expr))"
 
-        func fixCoefficientShorthand(_ symbol: Character, _ digit: Character) {
-            let indices = findIndices(of: "\(symbol)\(digit)", in: expr)
-            for i in indices {
-                var a = expr.index(after: i)
-                let limit = expr.index(before: expr.endIndex)
-                while let b = expr.index(a, offsetBy: 1, limitedBy: limit) {
-                    a = b
-                    let ch = String(expr[a])
-                    if "\(Variable.legalChars)(".contains(ch) {
-                        expr.insert(Syntax.glossary["*"]!.encoding, at: a)
-                        break
-                    } else if !"\(digits).".contains(ch) {
-                        break
-                    }
-                }
-            }
-        }
-
-        // Fix shorthand syntax of variable coefficients.
-        // This can be really tricky:
-        // "f1()" should be seen as a function whereas "3(x)" should be seen as "3*x"
-        // "arg3er" should be seen as "arg3*er"
-        // "3a*4x" should be converted to "3*a*4*x"
-        symbols.forEach { s in
-            digits.forEach {
-                fixCoefficientShorthand(s, $0)
-            }
-        }
+        // Apply implied multiplicity
+        // f1() should be seen as a function whereas 3(x) = 3*x
+        // 3a*4x = 3*a*4*x, +3(x+b) = 3*(x+b), (a+b)(a-b) = (a+b)*(a-b)
+        let e = Syntax.glossary["*"]!.encoding
+        expr = expr.replacingOccurrences(of: "\\b(\\d+|\\))([a-zA-Z_$]+|\\()", with: "$1\(e)$2", options: .regularExpression)
     }
 
     /**
