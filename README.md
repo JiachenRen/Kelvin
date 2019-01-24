@@ -14,13 +14,23 @@ Based on Java Algebra System's powerful engine, Kelvin is a powerful programming
 ### Algebra
 - [x] Commutative simplification
 - [x] Preliminary factorization
-  
+- [ ] Expand expressions
+- [ ] Complete the square
+- [ ] Exponential simplification
+- [ ] Solve
+  - [ ] Numerical solve
+  - [ ] Zeros
+  - [ ] Algebraic solve
 
 ### Calculus
 - [x] Differentiation
   - *Partial derivatives*
   - *Logarithmic differentiation*
   - *nth derivative*
+  - [ ] Multivariate differentiation
+    - [ ] Implicit differentiation
+    - [ ] Gradient
+    - [ ] Directional differentiation
   
 - [ ] Integration
 
@@ -31,6 +41,20 @@ Based on Java Algebra System's powerful engine, Kelvin is a powerful programming
   - *Sum of difference squared*
   - *Variance*
   - *Std. deviation*
+  - *Five-number summary, IQR*
+  
+- [ ] Two variable statistics
+- [ ] Distributions
+  - [ ] Normal Cdf/Pdf
+  - [ ] Inverse Normal
+  - [ ] Binomial Cdf/Pdf
+  - [ ] Geometric Cdf/Pdf
+- [ ] Regression
+  - [ ] Linear
+  - [ ] Quadratic, cubic, quartic, power
+  - [ ] Exponential/logarithmic
+  - [ ] Sinusoidal
+  - [ ] Logistic
 
 ### Probability
 - [x] Permutation/combination
@@ -38,10 +62,15 @@ Based on Java Algebra System's powerful engine, Kelvin is a powerful programming
 
 ### Vector/Matrix
 - [x] Compilation
+- [ ] Dot product
+- [ ] Cross Product
+- [ ] Addition/subtraction
 
 ### List math/operations
 - [x] Zip, map, reduce, and filter w/ anonymous closure arguments.
+- [ ] Sort
 - [x] Chained subscript access
+- [x] Size
 
 ### Boolean logic
 - [x] Basic boolean operators
