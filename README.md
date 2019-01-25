@@ -11,6 +11,9 @@ Based on Java Algebra System's powerful engine, Kelvin is a powerful programming
   - *Division*
   - *Exponentiation*
 
+- [ ] Fraction
+- [ ] Exact vs. approximate
+
 ### Algebra
 - [x] Commutative simplification
 - [x] Preliminary factorization
@@ -29,7 +32,8 @@ Based on Java Algebra System's powerful engine, Kelvin is a powerful programming
   - *Multivariate (Calculus III)*
     - Partial derivatives
     - Implicit differentiation
-    - [ ] Directional differentiation
+    - Directional differentiation
+    - Gradient
   
 - [ ] Integration
 
@@ -62,9 +66,10 @@ Based on Java Algebra System's powerful engine, Kelvin is a powerful programming
 
 ### Vector/Matrix
 - [x] Compilation
-- [ ] Dot product
+- [x] Dot product
 - [ ] Cross Product
-- [ ] Addition/subtraction
+- [ ] Subscript access
+- [x] Addition/subtraction
 
 ### List math/operations
 - [x] Zip, map, and reduce w/ anonymous closure arguments.
@@ -105,3 +110,6 @@ Based on Java Algebra System's powerful engine, Kelvin is a powerful programming
 - [x] System
   - *Precise date & time (down to nano seconds)*
   - *Performance measurement*
+- [x] Scope management
+  - Lock/unlock variables
+  - Save/restore
