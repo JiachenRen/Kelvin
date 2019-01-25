@@ -18,7 +18,22 @@ println "df/dt = " & df_dt
 def g(x) = x^3 + ln(cos(x))*sin(x)
 
 # Shorthand for first derivative
-println g(x ^ 2) ' x
+println g(x ^ 2)'x
+
+println derivative(x ^ 2 + f(x) * x, x)
 
 # Preliminary implicit differentiation
-println derivative(x^2+f(x)*x,x)
+println "\nImplicit differentiation: "
+println impDif(y ^ 2 + y * x ^ 2 = y ^ 3 + y * x * b + y * x * a, x, y)
+
+# Gradient of a function
+println "\nGradient: "
+def f(x, y, z) = z + x ^ 2 + x * 3 + log(y) ^ 2 * 4
+println grad(f(x, y, z), {x, y, z})
+
+def f(x, y, z) = y * 2 + x ^ 2 - z * 4
+println f(x, y, z) grad {x, y, z}
+
+# Directional differentiation
+println "\nDirectional differentiation:"
+println dirDif(f(x, y, z), [a, b, c], {x, y, z})

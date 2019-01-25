@@ -304,5 +304,6 @@ public struct Syntax {
         .init(for: "concat", .infix, priority: .concat, operator: .init("&")),
         .init(for: "derivative", .infix, priority: .derivative, operator: .init("'", padding: .none)),
         .init(for: "as", .infix, priority: .coersion, operator: .init("!!")),
+        .init(for: "grad", .infix, priority: .derivative, operator: .init("∇")),
     ]
 }

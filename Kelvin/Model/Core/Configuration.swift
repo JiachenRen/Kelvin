@@ -33,6 +33,11 @@ let defaultConfiguration: [Operation.Attribute: [String]] = [
         "reduce",
         "filter",
         
+        CalculusEngine.derivative,
+        CalculusEngine.implicitDifferentiation,
+        CalculusEngine.gradient,
+        CalculusEngine.directionalDifferentiation,
+        
         // Mutating functions should preserve arguments.
         // Thus x += 1 won't become ... += 1
         "++",

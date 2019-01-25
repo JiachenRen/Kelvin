@@ -1,0 +1,11 @@
+# Find the unit vector
+println unitVec([a, b, c])
+
+# Find the magnitude of the vector
+println mag([a, b, c])
+
+# Dot product
+println [a, b] * [c, d]
+
+# Vector addition/subtraction
+println [a, b, c] + [d, f, g]

@@ -8,11 +8,20 @@
 
 import Foundation
 
-struct Vector: MutableListProtocol, NaN {
+public struct Vector: MutableListProtocol, NaN {
     
     var elements: [Node]
     
-    var stringified: String {
+    var magnitude: Node {
+        return √(++elements.map {$0 ^ 2})
+    }
+    
+    var unitVector: Vector {
+        let mag = magnitude
+        return Vector(elements.map {$0 / mag})
+    }
+    
+    public var stringified: String {
         let e = elements.reduce(nil) {
             $0 == nil ? $1 : "\($0!), \($1)"
         } ?? ""
@@ -31,7 +40,7 @@ struct Vector: MutableListProtocol, NaN {
         }
     }
     
-    func equals(_ node: Node) -> Bool {
+    public func equals(_ node: Node) -> Bool {
         if let v = node as? Vector {
             return equals(list: v)
         }

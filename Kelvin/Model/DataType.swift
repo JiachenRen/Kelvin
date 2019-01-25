@@ -8,10 +8,14 @@
 
 import Foundation
 
-enum DataType: String {
+enum DataType: String, CustomStringConvertible {
     case string
     case list
     case number
     case variable
     case vector
+    
+    var description: String {
+        return rawValue
+    }
 }

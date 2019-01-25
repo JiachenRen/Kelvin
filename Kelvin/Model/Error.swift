@@ -29,4 +29,8 @@ public enum ExecutionError: Error {
     static func inconvertibleDT(from d1: String, to d2: String) -> ExecutionError {
         return ExecutionError.general(errMsg: "cannot convert \(d1) to \(d2)")
     }
+    
+    static func incompatibleList(_ requiredType: DataType) -> ExecutionError {
+        return ExecutionError.general(errMsg: "every element in the list must be a \(requiredType)")
+    }
 }

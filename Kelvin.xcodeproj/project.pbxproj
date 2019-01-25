@@ -44,7 +44,7 @@
 		1F09370221F51EDD00E707BD /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09370021F51EC000E707BD /* Vector.swift */; };
 		1F09370421F54E6200E707BD /* Calculus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09370321F54E6200E707BD /* Calculus.swift */; };
 		1F09370521F5618200E707BD /* Calculus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09370321F54E6200E707BD /* Calculus.swift */; };
-		1F09370721F56F9C00E707BD /* Differentiation in Resources */ = {isa = PBXBuildFile; fileRef = 1F09370621F56F9C00E707BD /* Differentiation */; };
+		1F09370721F56F9C00E707BD /* Calculus in Resources */ = {isa = PBXBuildFile; fileRef = 1F09370621F56F9C00E707BD /* Calculus */; };
 		1F09370B21F57B0200E707BD /* Trigonometry in Resources */ = {isa = PBXBuildFile; fileRef = 1F09370A21F57B0200E707BD /* Trigonometry */; };
 		1F09370F21F5800B00E707BD /* String in Resources */ = {isa = PBXBuildFile; fileRef = 1F09370E21F5800B00E707BD /* String */; };
 		1F09371121F62BF700E707BD /* Loops in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371021F62BF700E707BD /* Loops */; };
@@ -95,6 +95,7 @@
 		1F3974C621E6341C006D6DC2 /* Equation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974C421E633FD006D6DC2 /* Equation.swift */; };
 		1F3974C821E67627006D6DC2 /* Mode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974C721E67627006D6DC2 /* Mode.swift */; };
 		1F3974C921E6765A006D6DC2 /* Mode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974C721E67627006D6DC2 /* Mode.swift */; };
+		1F645FC021FAA1260096AD1C /* Vector in Resources */ = {isa = PBXBuildFile; fileRef = 1F645FBF21FAA1260096AD1C /* Vector */; };
 		1FE1697321F28F1E0006712C /* Tests in Resources */ = {isa = PBXBuildFile; fileRef = 1FE1697221F28F1E0006712C /* Tests */; };
 		1FE1697621F2D44A0006712C /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Tuple.swift */; };
 		1FE1697721F2D5D40006712C /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Tuple.swift */; };
@@ -160,7 +161,7 @@
 		1F0936F921F518BB00E707BD /* NSNumber+Value.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSNumber+Value.swift"; sourceTree = "<group>"; };
 		1F09370021F51EC000E707BD /* Vector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vector.swift; sourceTree = "<group>"; };
 		1F09370321F54E6200E707BD /* Calculus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calculus.swift; sourceTree = "<group>"; };
-		1F09370621F56F9C00E707BD /* Differentiation */ = {isa = PBXFileReference; lastKnownFileType = text; path = Differentiation; sourceTree = "<group>"; };
+		1F09370621F56F9C00E707BD /* Calculus */ = {isa = PBXFileReference; lastKnownFileType = text; path = Calculus; sourceTree = "<group>"; };
 		1F09370A21F57B0200E707BD /* Trigonometry */ = {isa = PBXFileReference; lastKnownFileType = text; path = Trigonometry; sourceTree = "<group>"; };
 		1F09370E21F5800B00E707BD /* String */ = {isa = PBXFileReference; lastKnownFileType = text; path = String; sourceTree = "<group>"; };
 		1F09371021F62BF700E707BD /* Loops */ = {isa = PBXFileReference; lastKnownFileType = text; path = Loops; sourceTree = "<group>"; };
@@ -192,6 +193,7 @@
 		1F3974C021E3B761006D6DC2 /* NaN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaN.swift; sourceTree = "<group>"; };
 		1F3974C421E633FD006D6DC2 /* Equation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Equation.swift; sourceTree = "<group>"; };
 		1F3974C721E67627006D6DC2 /* Mode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mode.swift; sourceTree = "<group>"; };
+		1F645FBF21FAA1260096AD1C /* Vector */ = {isa = PBXFileReference; lastKnownFileType = text; path = Vector; sourceTree = "<group>"; };
 		1FE1697221F28F1E0006712C /* Tests */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tests; sourceTree = "<group>"; };
 		1FE1697521F2D44A0006712C /* Tuple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tuple.swift; sourceTree = "<group>"; };
 		1FE1697A21F2EC070006712C /* Conditionals */ = {isa = PBXFileReference; lastKnownFileType = text; path = Conditionals; sourceTree = "<group>"; };
@@ -330,12 +332,13 @@
 				1F0936BD21F3A54800E707BD /* Probability */,
 				1F09370E21F5800B00E707BD /* String */,
 				1F09371A21F67FDD00E707BD /* SystemCheck */,
-				1F09370621F56F9C00E707BD /* Differentiation */,
+				1F09370621F56F9C00E707BD /* Calculus */,
 				1F09370A21F57B0200E707BD /* Trigonometry */,
 				1F09371421F64FC600E707BD /* Randomization */,
 				1F09371021F62BF700E707BD /* Loops */,
 				1F09371621F66C4B00E707BD /* Subscript */,
 				1F09371821F672CD00E707BD /* DateTime */,
+				1F645FBF21FAA1260096AD1C /* Vector */,
 				1F0A90DE21F7E94200432B17 /* ErrorHandling */,
 				1F0A90E421F93DCE00432B17 /* Statistics */,
 			);
@@ -570,7 +573,7 @@
 				1F09371521F64FC600E707BD /* Randomization in Resources */,
 				1F09370F21F5800B00E707BD /* String in Resources */,
 				1F09371B21F67FDD00E707BD /* SystemCheck in Resources */,
-				1F09370721F56F9C00E707BD /* Differentiation in Resources */,
+				1F09370721F56F9C00E707BD /* Calculus in Resources */,
 				1F0A90E521F93DCE00432B17 /* Statistics in Resources */,
 				1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */,
 				1F09371921F672CD00E707BD /* DateTime in Resources */,
@@ -578,6 +581,7 @@
 				1F0A90DF21F7E94200432B17 /* ErrorHandling in Resources */,
 				1FE1697B21F2EC070006712C /* Conditionals in Resources */,
 				1F09371121F62BF700E707BD /* Loops in Resources */,
+				1F645FC021FAA1260096AD1C /* Vector in Resources */,
 				1F09371721F66C4B00E707BD /* Subscript in Resources */,
 				1F0936BE21F3A54800E707BD /* Probability in Resources */,
 				1FFD8CAD218F50870004ECEB /* Main.storyboard in Resources */,

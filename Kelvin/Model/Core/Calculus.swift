@@ -10,23 +10,124 @@ import Foundation
 
 let calculusOperations: [Operation] = [
     .init(CalculusEngine.derivative, [.any, .var]) {
-        CalculusEngine.derivative(of: $0[0], withRespectTo: $0[1] as! Variable)
+        let v = $0[1] as! Variable
+        Scope.withholdAccess(to: v)
+        let dv = CalculusEngine.derivative(
+            of: try $0[0].simplify(),
+            withRespectTo: v)
+        Scope.releaseRestrictions()
+        return dv
     },
     .init(CalculusEngine.derivative, [.any, .var, .number]) {
-        try CalculusEngine.derivative(of: $0[0], withRespectTo: $0[1] as! Variable, $0[2] as! Int)
+        let v = $0[1] as! Variable
+        Scope.withholdAccess(to: v)
+        let dnv = try CalculusEngine.derivative(
+            of: $0[0].simplify(),
+            withRespectTo: v,
+            try $0[2].simplify() as! Int)
+        Scope.releaseRestrictions()
+        return dnv
     },
-    .init(CalculusEngine.impDif, [.equation, .var, .var]) {
-        let eq = $0[0] as! Equation
+    .init(CalculusEngine.implicitDifferentiation, [.any, .var, .var]) {
         let dv = $0[1] as! Variable
         let iv = $0[2] as! Variable
-        return try CalculusEngine.implicitDifferentiation(eq, dependentVar: dv, independentVar: iv)
+        Scope.withholdAccess(to: dv, iv)
+        guard let eq = try $0[0].simplify() as? Equation else {
+            let msg = "left hand side of implicit differentiation must be an equation"
+            throw ExecutionError.general(errMsg: msg)
+        }
+        let r = try CalculusEngine.implicitDifferentiation(
+            eq,
+            dependentVar: dv,
+            independentVar: iv)
+        Scope.releaseRestrictions()
+        return r
+    },
+    .init(CalculusEngine.gradient, [.func, .list]) {
+        let vars = try ($0[1] as! List).elements.map {
+            (n: Node) -> Variable in
+            if let v = n as? Variable {
+                return v
+            }
+            throw ExecutionError.incompatibleList(.variable)
+        }
+        
+        Scope.withholdAccess(to: vars)
+        let grad = CalculusEngine.gradient(
+            of: $0[0] as! Function,
+            independentVars: vars)
+        Scope.releaseRestrictions()
+        return grad
+    },
+    .init(CalculusEngine.directionalDifferentiation, [.func, .any, .list]) {
+        let vars = try ($0[2] as! List).elements.map {
+            (n: Node) -> Variable in
+            if let v = n as? Variable {
+                return v
+            }
+            throw ExecutionError.incompatibleList(.variable)
+        }
+        
+        guard let dir = try $0[1].simplify() as? Vector else {
+            throw ExecutionError.general(errMsg: "direction must be a vector")
+        }
+        
+        Scope.withholdAccess(to: vars)
+        let grad = try CalculusEngine.directionalDifferentiation(
+            of: $0[0] as! Function,
+            direction: dir,
+            independentVars: vars)
+        Scope.releaseRestrictions()
+        return grad
     }
 ]
 
-fileprivate class CalculusEngine {
+public class CalculusEngine {
     
-    fileprivate static let derivative = "derivative"
-    fileprivate static let impDif = "impDif"
+    public static let derivative = "derivative"
+    public static let implicitDifferentiation = "impDif"
+    public static let directionalDifferentiation = "dirDif"
+    public static let gradient = "grad"
+    
+    /**
+     The directional derivative del _(u)f(x_0,y_0,z_0) is the rate at which the function f(x,y,z)
+     changes at a point (x_0,y_0,z_0) in the direction u.
+     It is a vector form of the usual derivative, and can be defined as
+     del _(u)f = del f·(u)/(|u|)
+
+     - Parameters:
+        - fun: A multivariate function of 2, 3, or more independent variables.
+        - direction: The direction in which we are interested in finding the function's rate of change. (u)
+        - independentVars: A list denoting the independent variables of the function.
+     - Returns: A vector function of n variables that computes the rate at
+                which the function is changing in the direction of u.
+     */
+    public static func directionalDifferentiation(
+        of fun: Function,
+        direction: Vector,
+        independentVars vars: [Variable]) throws -> Vector {
+        
+        let unitVec = direction.unitVector
+        let grad = gradient(of: fun, independentVars: vars)
+        return try grad.perform(*, with: unitVec)
+    }
+    
+    /**
+     The gradient of a function is the multivariable version of the derivative.
+     Suppose we have a function, f(x1,x2,...xn), the gradient of function f
+     is a vector of n dimension with the definition v = [∂f/∂x1, ∂f/∂x2, ..., ∂f/∂xn].
+     
+     Find more about the definition of a gradient:
+     https://math.oregonstate.edu/home/programs/undergrad/CalculusQuestStudyGuides/vcalc/grad/grad.html
+     
+     - Parameters:
+        - fun: A multivariate function of 2, 3, or more independent variables.
+        - independentVars: A list denoting the independent variables of the function.
+     - Returns: The gradient vector of the function.
+     */
+    public static func gradient(of fun: Function, independentVars vars: [Variable]) -> Vector {
+        return Vector(vars.map {derivative(of: fun, withRespectTo: $0) ?? Function(CalculusEngine.derivative, [fun, $0])})
+    }
     
     /**
      Implicit differentiation using concepts of partial derivatives in multivariable calculus.
@@ -44,7 +145,7 @@ fileprivate class CalculusEngine {
      - independentVar: The independent variable (y)
      - Returns: dy/dx - the result of the implicit differentiation
      */
-    fileprivate static func implicitDifferentiation(
+    public static func implicitDifferentiation(
         _ eq: Equation,
         dependentVar dv: Variable,
         independentVar iv: Variable) throws -> Node? {
@@ -63,7 +164,7 @@ fileprivate class CalculusEngine {
         - nth: Nth derivative.
      - Returns: The nth derivative of n, if taken successfully.
      */
-    fileprivate static func derivative(of n: Node, withRespectTo v: Variable, _ nth: Int) throws -> Node? {
+    public static func derivative(of n: Node, withRespectTo v: Variable, _ nth: Int) throws -> Node? {
         var n = n
         for i in 0..<nth {
             if let d = derivative(of: n, withRespectTo: v) {
@@ -83,7 +184,7 @@ fileprivate class CalculusEngine {
         - v: The variable for which the derivative is taken with respect to.
      - Returns: The derivative of n w/ respect to v.
      */
-    fileprivate static func derivative(of n: Node, withRespectTo v: Variable) -> Node? {
+    public static func derivative(of n: Node, withRespectTo v: Variable) -> Node? {
         if let v1 = n as? Variable {
             
             // Irrelevant variables are treated as constants.
@@ -172,7 +273,7 @@ fileprivate class CalculusEngine {
     }
 
     
-    fileprivate static func derivative(of nodes: [Node], withRespectTo v: Variable) -> [Node] {
+    public static func derivative(of nodes: [Node], withRespectTo v: Variable) -> [Node] {
         return nodes.map {
             Function(derivative, [$0, v])
         }

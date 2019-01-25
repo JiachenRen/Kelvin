@@ -15,6 +15,7 @@ public struct Scope {
     
     private var definitions: [String: Node]
     private var operations: [String: [Operation]]
+    private static var restricted = [String: Node]()
     
     init(_ definitions: [String: Node], _ operations: [String: [Operation]]) {
         self.definitions = definitions
@@ -52,5 +53,29 @@ public struct Scope {
     @discardableResult
     public static func popLast() -> Scope {
         return stack.removeLast()
+    }
+    
+    /**
+     Temporarily withhold any attempts to access the variable.
+     */
+    public static func withholdAccess(to vars: Variable...) {
+        vars.forEach {v in
+            let n = v.name
+            if let def = Variable.definitions[n] {
+                restricted[n] = def
+                Variable.definitions.removeValue(forKey: n)
+            }
+        }
+    }
+    
+    public static func withholdAccess(to vars: [Variable]) {
+        vars.forEach {withholdAccess(to: $0)}
+    }
+    
+    public static func releaseRestrictions() {
+        for (key, value) in restricted {
+            Variable.define(key, value)
+        }
+        restricted.removeAll()
     }
 }

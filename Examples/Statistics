@@ -9,3 +9,6 @@ println iqr(l1)
 
 # Median
 println median(l1)
+
+# Outliers
+println outliers(l1)

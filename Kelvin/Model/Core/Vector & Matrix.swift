@@ -32,5 +32,11 @@ let vectorOperations: [Operation] = [
         let vec2 = $0[1] as! Vector
         
         return try vec1.perform(*, with: vec2)
+    },
+    .init("unitVec", [.vec]) {
+        return ($0[0] as! Vector).unitVector
+    },
+    .init("mag", [.vec]) {
+        return ($0[0] as! Vector).magnitude
     }
 ]
