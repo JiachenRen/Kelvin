@@ -94,6 +94,17 @@ let developerOperations: [Operation] = [
         let simplified = try nodes[0].simplify()
         return nodes.last!.replacingAnonymousArgs(with: [simplified])
     },
+    .init("replace", [.any, .any]) { nodes in
+        let simplified = try nodes[0].simplify()
+        guard let eq = nodes[1] as? Equation else {
+            return nil
+        }
+        let target = try eq.lhs.simplify()
+        let replacement = try eq.rhs.simplify()
+        return simplified.replacing(by: {_ in replacement}) {
+            $0 === target
+        }
+    },
     .init("repeat", [.any, .number]) { nodes in
         let times = Int(nodes[1].evaluated!.doubleValue)
         var elements = [Node]()

@@ -293,6 +293,7 @@ public struct Keyword {
         .init(for: "sort", .infix, operator: .init(">?")),
         .init(for: "then", .infix, operator: .init(";", padding: .rightSide)),
         .init(for: "feed", .infix, operator: .init("->")),
+        .init(for: "replace", .infix, operator: .init("<<")),
         .init(for: "repeat", .infix, precedence: .repeat, operator: .init("...", padding: .none)),
         .init(for: "copy", .infix, precedence: .repeat),
         .init(for: "complexity", .prefix),

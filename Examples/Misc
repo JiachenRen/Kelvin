@@ -88,3 +88,4 @@ println(l1 | $0 + k ~ f($0, $1))
 def f(a, b) = a + b
 println f(a,b)
 println (l1 | $0 + k ~ f($0, $1))
+println ((x ^ 3)'x << x = 3)

@@ -68,3 +68,7 @@ println f1(x) == f1(x)
 println (a)(b)(c-d) == a*b*(c-d)
 println f(b)x == f(b)*x
 println 3x3(a) == 3*x3(a)
+
+# Test replace
+del x
+println ((x ^ 3)'x << x = 3) == 27
