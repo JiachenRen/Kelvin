@@ -19,7 +19,7 @@ public class Compiler {
 
     /// Symbols from binary operators, shorthands, and syntactic sugars.
     private static var symbols: String {
-        let operators = Syntax.lexicon
+        let operators = Keyword.encodings
                 .keys.reduce("") {
             "\($0)\($1)"
         }
@@ -32,7 +32,7 @@ public class Compiler {
     }
 
     /// A dictionary that maps a operator reference to its encoding.
-    typealias OperatorReference = Dictionary<String, Syntax.Encoding>
+    typealias OperatorReference = Dictionary<String, Keyword.Encoding>
 
     /// A dictionary that maps a node reference to a node value.
     typealias NodeReference = Dictionary<String, Node>
@@ -41,10 +41,10 @@ public class Compiler {
     private class Flag {
 
         /// Denotes a reference to a node.
-        static let node = Syntax.Encoder.next()
+        static let node = Keyword.Encoder.next()
 
         /// Denotes a reference to an operator.
-        static let `operator` = Syntax.Encoder.next()
+        static let `operator` = Keyword.Encoder.next()
     }
 
     /// Used to restore escape characters to their original form
@@ -78,8 +78,8 @@ public class Compiler {
             expr = replace(expr, "{", "}", "list(", ")")
         }
 
-        // Sort syntactic definitions by compilation priority
-        let syntacticDefinitions = Syntax.lexicon.map {
+        // Sort syntactic definitions by compilation precedence
+        let syntacticDefinitions = Keyword.encodings.map {
                 $0.value
             }.sorted {
                 $0.compilationPriority > $1.compilationPriority
@@ -87,7 +87,7 @@ public class Compiler {
         
         // Apply syntactic transformations before compilation (encoding)
         for def in syntacticDefinitions {
-            expr = applySyntax(def, for: expr)
+            expr = encodeKeyword(def, for: expr)
         }
 
         // Format the expression for compilation
@@ -193,24 +193,22 @@ public class Compiler {
      Replace common names and operators with their encodings.
      
      - Parameters:
-        - syntax: The syntax to be applied
-        - expr: The string on which the syntax is applied.
-     - Returns: The expression w/ the syntax applied.
+        - keyword: The keyword to be encoded
      */
-    private static func applySyntax(_ syntax: Syntax, for expr: String) -> String {
+    private static func encodeKeyword(_ keyword: Keyword, for expr: String) -> String {
         var expr = expr
-        var c = syntax.encoding
-        var n = syntax.commonName
+        var c = keyword.encoding
+        var n = keyword.name
 
         // Replace operators with their code
-        if let o = syntax.operator?.name {
+        if let o = keyword.operator?.name {
             
             // If there exists multiple definitions of the same operator,
             // use the encoding for the most prioritized definition
             // in terms of associative property.
-            if let disambiguated = Syntax.disambiguated[o] {
+            if let disambiguated = Keyword.disambiguated[o] {
                 c = disambiguated.sorted {
-                    $0.priority > $1.priority
+                    $0.precedence > $1.precedence
                 }.first!.encoding
             }
             expr = expr.replacingOccurrences(of: o, with: "\(c)")
@@ -219,7 +217,7 @@ public class Compiler {
         // Replace infix function names with operator
         if let _ = try? Variable(n) {
             
-            switch syntax.position {
+            switch keyword.associativity {
             case .infix:
                 n = "\\s\(n)\\s"
             case .prefix:
@@ -261,13 +259,13 @@ public class Compiler {
         // Replace functions generated from syntactic sugars with their
         // corrected names.
         parent = parent.replacing(by: {
-            let syntax = Syntax.lexicon[Syntax.Encoding(name($0)!)]!
-            return Function(syntax.commonName, args($0))
+            let keyword = Keyword.encodings[Keyword.Encoding(name($0)!)]!
+            return Function(keyword.name, args($0))
         }) {
             // If the name of the function is an encoding key,
             // Replace it with its common name.
             if let name = name($0), name.count == 1 {
-                return Syntax.lexicon[Syntax.Encoding(name)] != nil
+                return Keyword.encodings[Keyword.Encoding(name)] != nil
             }
             return false
         }
@@ -485,26 +483,26 @@ public class Compiler {
     }
 
     private static func binaryToFunction(_ expr: inout String) throws -> OperatorReference {
-        let syntaxes = Syntax.lexicon.values
-        let sorted = syntaxes.sorted {
-            $0.priority > $1.priority
+        let keywords = Keyword.encodings.values
+        let sorted = keywords.sorted {
+            $0.precedence > $1.precedence
         }
 
-        var prioritized = [[Syntax]]()
-        var cur = sorted[0].priority
+        var prioritized = [[Keyword]]()
+        var cur = sorted[0].precedence
         
         // The operators are split into two groups, one of which containing binary
         // operators while the other contains prefix and postfix operators.
-        var groupA = [Syntax]()
-        var groupB = [Syntax]()
+        var groupA = [Keyword]()
+        var groupB = [Keyword]()
         
         sorted.forEach {
             
             // For each cluster in the group, the operators are
-            // arranged according to their priority. The operators with
-            // higher priority are processed first.
-            if $0.priority != cur {
-                cur = $0.priority
+            // arranged according to their precedence. The operators with
+            // higher precedence are processed first.
+            if $0.precedence != cur {
+                cur = $0.precedence
                 
                 // First add the prefix and postfix group, as they need to be
                 // processed first; then add the infix group
@@ -512,30 +510,30 @@ public class Compiler {
                 prioritized.append(groupA)
                 
                 // Clear groups bugger.
-                groupA = [Syntax]()
-                groupB = [Syntax]()
+                groupA = [Keyword]()
+                groupB = [Keyword]()
             }
             
-            if $0.position == .infix {
+            if $0.associativity == .infix {
                 groupA.append($0)
             } else {
                 groupB.append($0)
             }
         }
         
-        // Add the remaining groups with lowest priority.
+        // Add the remaining groups with lowest precedence.
         prioritized.append(groupB)
         prioritized.append(groupA)
 
         var dict = OperatorReference()
-        for syntaxes in prioritized {
+        for keywords in prioritized {
             var precedenceGrp = Dictionary<Character, String>()
-            syntaxes.forEach {
+            keywords.forEach {
                 let id = "\(Flag.operator)\(dict.count)"
                 dict[id] = $0.encoding
                 precedenceGrp[$0.encoding] = id
             }
-            try parenthesize(&expr, syntaxes, precedenceGrp)
+            try parenthesize(&expr, keywords, precedenceGrp)
         }
         return dict
     }
@@ -544,12 +542,12 @@ public class Compiler {
      e.g. in a+b-c, first index returns index of "+", then next time, after
      "+" is parenthesized, index for "-" is returned.
      
-     - Parameter operators: A group of operators with same priority.
+     - Parameter operators: A group of operators with same precedence.
      - Returns: The first index of any of the operators, if there is one.
      */
     private static func firstIndex(
         from startIdx: String.Index,
-        of encodings: [Syntax.Encoding: String],
+        of encodings: [Keyword.Encoding: String],
         in expr: String
         ) -> String.Index? {
         for (i, c) in expr[startIdx..<expr.endIndex].enumerated() {
@@ -562,8 +560,8 @@ public class Compiler {
 
     private static func parenthesize(
         _ expr: inout String,
-        _ syntaxes: [Syntax],
-        _ precedenceGrp: [Syntax.Encoding: String]
+        _ keywords: [Keyword],
+        _ precedenceGrp: [Keyword.Encoding: String]
         ) throws {
         
         var curIdx = expr.startIndex
@@ -678,8 +676,8 @@ public class Compiler {
                 begin = r.lowerBound
             }
 
-            let syntax = Syntax.lexicon[expr[idx]]!
-            let (args, correctedEncoding: e) = try resolveAssociativity(syntax, left, right)
+            let keyword = Keyword.encodings[expr[idx]]!
+            let (args, correctedEncoding: e) = try resolveAssociativity(keyword, left, right)
             
             let rLeft = String(expr[..<begin])
             let rRight = String(expr[expr.index(after: end)...])
@@ -699,33 +697,33 @@ public class Compiler {
     }
     
     private static func resolveAssociativity(
-        _ syntax: Syntax,
+        _ keyword: Keyword,
         _ left: String?,
         _ right: String?
-        ) throws -> (String, correctedEncoding: Syntax.Encoding?) {
+        ) throws -> (String, correctedEncoding: Keyword.Encoding?) {
         
-        func fun(_ s: Syntax) throws -> String {
+        func fun(_ s: Keyword) throws -> String {
             var args = ""
             var error: String?
             if let l = left, let r = right {
-                if s.position != .infix {
+                if s.associativity != .infix {
                     error = "infix"
                 }
                 args = "\(l),\(r)"
             } else if let r = right {
-                if s.position != .prefix {
+                if s.associativity != .prefix {
                     error = "prefix"
                 }
                 args = "\(r)"
             } else if let l = left {
-                if s.position != .postfix {
+                if s.associativity != .postfix {
                     error = "postfix"
                 }
                 args = "\(l)"
             }
             
             if let e = error {
-                let n = s.commonName
+                let n = s.name
                 let o = s.operator?.name ?? ""
                 let msg = "\(n), i.e. '\(o)' cannot be used as a/an \(e) operator"
                 throw CompilerError.syntax(errMsg: msg)
@@ -734,8 +732,8 @@ public class Compiler {
             return args
         }
         
-        if let o = syntax.operator?.name  {
-            if let arr = Syntax.disambiguated[o] {
+        if let o = keyword.operator?.name  {
+            if let arr = Keyword.disambiguated[o] {
                 for s in arr {
                     if let i = try? fun(s) {
                         return (i, s.encoding)
@@ -744,7 +742,7 @@ public class Compiler {
             }
         }
         
-        return (try fun(syntax), nil)
+        return (try fun(keyword), nil)
     }
 
     private static func replace(_ expr: inout String, of target: String, with replacement: String) {
@@ -770,7 +768,7 @@ public class Compiler {
         // Apply implied multiplicity
         // f1() should be seen as a function whereas 3(x) = 3*x
         // 3a*4x = 3*a*4*x, +3(x+b) = 3*(x+b), (a+b)(a-b) = (a+b)*(a-b)
-        let e = Syntax.glossary["*"]!.encoding
+        let e = Keyword.glossary["*"]!.encoding
         expr = expr.replacingOccurrences(of: "\\b(\\d+|\\))([a-zA-Z_$]+|\\()", with: "$1\(e)$2", options: .regularExpression)
     }
 

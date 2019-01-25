@@ -140,7 +140,7 @@ public class Program {
         }, terminator: "\n")
         vPrint(">>> program terminated in \(currentTime - startTime) seconds.")
 
-        // Clear all temporary variables, functions, and syntax definitions.
+        // Clear all temporary variables, functions, and keyword definitions.
         switch config.retentionPolicy {
         case .restore:
             Scope.restore()

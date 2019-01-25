@@ -38,8 +38,8 @@ public struct Function: MutableListProtocol {
     }
 
     /// The syntactic rules of the function (looked up by the name)
-    var syntax: Syntax? {
-        return Syntax.glossary[name]
+    var keyword: Keyword? {
+        return Keyword.glossary[name]
     }
     
     /// Whether the function is commutative.
@@ -76,17 +76,17 @@ public struct Function: MutableListProtocol {
             return "\(name)(\(l ?? ""))"
         }
 
-        if let syntax = self.syntax {
+        if let keyword = self.keyword {
 
             // Determine which form of the function to use;
             // there are three options: shorthand, operator, or default.
-            let n = syntax.formatted
+            let n = keyword.formatted
 
-            switch syntax.position {
+            switch keyword.associativity {
             case .infix where count == 1:
 
                 // Handle special case of -x.
-                let c = syntax.operator?.name ?? name
+                let c = keyword.operator?.name ?? name
                 return "\(c)\(r[0])"
             case .infix where args.count == 2 || isCommutative:
                 if let s = r.enumerated().reduce(nil, { (a, c) -> String in
@@ -117,7 +117,7 @@ public struct Function: MutableListProtocol {
      Whether the child node should be enveloped in parenthesis when printing.
      If the parent and the child are both commutative and have the same name,
      then the parenthesis for the child is omitted; otherwise if the child's
-     priority is larger than that of the parent, the parenthesis is also omitted.
+     precedence is larger than that of the parent, the parenthesis is also omitted.
      
      - Note: Parentheses only apply to infix operations.
      - Parameter idx: The index of the child.
@@ -126,12 +126,12 @@ public struct Function: MutableListProtocol {
     private func usesParenthesis(forNodeAtIndex idx: Int) -> Bool {
         let child = args[idx]
         if let fun = child as? Function {
-            if let p1 = fun.syntax?.priority {
-                if let p2 = syntax?.priority {
+            if let p1 = fun.keyword?.precedence {
+                if let p2 = keyword?.precedence {
                     if p1 < p2 {
 
                         // e.g. (a + b) * c
-                        // If the child's priority is lower, a parenthesis is always needed.
+                        // If the child's precedence is lower, a parenthesis is always needed.
                         return true
                     } else if p1 == p2 {
 
@@ -141,7 +141,7 @@ public struct Function: MutableListProtocol {
                         }
 
                         // e.g. a + b - c
-                        // If the child is on the left and has the same priority,
+                        // If the child is on the left and has the same precedence,
                         // a parenthesis is not needed.
                         if idx != 0 {
                             if Operation.has(attr: .forwardCommutative, name) {
