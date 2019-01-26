@@ -72,7 +72,7 @@ Based on Java Algebra System's powerful engine, Kelvin is a powerful programming
   - [ ] Subscript access
   - [x] Addition/subtraction
 
-- [ ] Matrix
+- [x] Matrix
   - [ ] Conversion from list/matrix
   - [ ] Determinant
   - [ ] Identity
