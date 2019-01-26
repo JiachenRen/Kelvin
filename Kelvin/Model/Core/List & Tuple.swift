@@ -89,23 +89,23 @@ let listAndTupleOperations: [Operation] = [
         guard var list = try nodes[0].simplify() as? MutableListProtocol else {
             return nil
         }
-        let updated = list.elements.enumerated().map { (idx, e) in
-            nodes[1].replacingAnonymousArgs(with: [e, idx])
+        let updated = try list.elements.enumerated().map { (idx, e) in
+            try nodes[1].replacingAnonymousArgs(with: [e, idx]).simplify()
         }
         list.elements = updated
-        return try list.simplify()
+        return list
     },
     .init("reduce", [.any, .any]) { nodes in
         guard let list = try nodes[0].simplify() as? List else {
             return nil
         }
-        let reduced = list.elements.reduce(nil) { (e1, e2) -> Node in
+        let reduced = try list.elements.reduce(nil) { (e1, e2) -> Node in
             if e1 == nil {
                 return e2
             }
-            return nodes[1].replacingAnonymousArgs(with: [e1!, e2])
+            return try nodes[1].replacingAnonymousArgs(with: [e1!, e2]).simplify()
         }
-        return try reduced?.simplify() ?? List([])
+        return reduced ?? List([])
     },
     .init("filter", [.any, .any]) { nodes in
         guard let list = try nodes[0].simplify() as? List else {

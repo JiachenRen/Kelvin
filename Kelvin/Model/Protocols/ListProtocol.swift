@@ -99,4 +99,8 @@ extension ListProtocol {
         }
         return true
     }
+    
+    public func map(by unary: (Node) throws -> Node) rethrows -> [Node] {
+        return try elements.map(unary)
+    }
 }

@@ -9,7 +9,7 @@
 import Foundation
 
 public struct Matrix: MutableListProtocol, NaN {
-    
+
     public var stringified: String {
         let r = rows.reduce(nil) {
             return $0 == nil ? $1.stringified : $0!.stringified + ", " + $1.stringified
@@ -32,7 +32,6 @@ public struct Matrix: MutableListProtocol, NaN {
         get {
             return rows[idx]
         }
-        
         set {
            rows[idx] = newValue
         }
@@ -44,7 +43,6 @@ public struct Matrix: MutableListProtocol, NaN {
                 self.rows = rows
                 return
             }
-            fatalError()
         }
         get {
             return self.rows
@@ -177,7 +175,6 @@ public struct Matrix: MutableListProtocol, NaN {
                 }
             }
         }
-        
     }
     
 }

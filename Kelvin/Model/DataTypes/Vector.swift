@@ -49,9 +49,12 @@ public struct Vector: MutableListProtocol, NaN {
     
     /**
      Perform an operation with another vector.
-     e.g. [a b] dot [c d] = [a*c b*d]
+     e.g. [a b] + [c d] = [a+c b+d]
+     
+     - Warning: Do not use * and / as it would cause confusion with
+     the definition of dot product!
      */
-    func perform(_ operation: Binary, with vec: Vector) throws -> Vector {
+    public func perform(_ operation: Binary, with vec: Vector) throws -> Vector {
         if vec.count != count {
             throw ExecutionError.dimensionMismatch
         }
@@ -64,12 +67,33 @@ public struct Vector: MutableListProtocol, NaN {
     }
     
     /**
+     Calculate the dot product of this vector with the target vector.
+     u1 = <a1, b1, c1, ...n1>,
+     u2 = <a2, b2, c2, ...n2>,
+     u1 • u2 = a1 * a2 + b1 * b2 + ... + n1 * n2.
+     */
+    public func dot(with vec: Vector) throws -> Node {
+        if vec.count != count {
+            throw ExecutionError.dimensionMismatch
+        }
+        
+        return zip(elements, vec.elements).map {
+            $0 * $1
+        }.reduce(0) {
+            $0 + $1
+        }
+    }
+    
+    /**
      Perform cross product with target vector.
      [a b] cross [c d] = [a*c b*d]
      
-     // TODO: Implement
+     - Note: This is a generalized algorithm for vector cross product.
+     Not only does it work for
      */
-    func cross(with vec: Vector) throws -> Vector {
+    public func cross(with vec: Vector) throws -> Vector {
         throw ExecutionError.general(errMsg: "not implemented")
     }
+    
+    
 }
