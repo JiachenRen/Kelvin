@@ -86,14 +86,35 @@ public struct Vector: MutableListProtocol, NaN {
     
     /**
      Perform cross product with target vector.
-     [a b] cross [c d] = [a*c b*d]
      
-     - Note: This is a generalized algorithm for vector cross product.
-     Not only does it work for
+     - Note: Only works for vectors of two or three dimensions.
      */
     public func cross(with vec: Vector) throws -> Vector {
-        throw ExecutionError.general(errMsg: "not implemented")
+        if count != vec.count {
+            throw ExecutionError.dimensionMismatch
+        } else if count == 2 {
+            return try appending(0)
+                .cross(with: vec.appending(0))
+        } else if count != 3 {
+            let msg = "can only calculate cross product of vectors of dimension 2, 3"
+            throw ExecutionError.general(errMsg: msg)
+        }
+        
+        let i = vec[2] * self[1] - vec[1] * self[2]
+        let j = vec[0] * self[2] - vec[2] * self[0]
+        let k = vec[1] * self[0] - vec[0] * self[1]
+        return Vector([i, j, k])
     }
     
+    public func appending(_ element: Node) -> Vector {
+        var copy = self
+        copy.elements.append(element)
+        return copy
+    }
     
+    public func truncatingLast() -> Vector {
+        var copy = self
+        copy.elements.removeLast()
+        return copy
+    }
 }

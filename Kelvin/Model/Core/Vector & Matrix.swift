@@ -24,6 +24,9 @@ let vectorOperations: [Operation] = [
     .init("dotP", [.vec, .vec]) {
         try v($0[0]).dot(with: v($0[1]))
     },
+    .init("crossP", [.vec, .vec]) {
+        try v($0[0]).cross(with: v($0[1]))
+    },
     .init("*", [.vec, .number]) { nodes in
         Vector(v(nodes[0]).map {$0 * nodes[1]})
     },
