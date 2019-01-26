@@ -47,8 +47,8 @@ extension LeafNode {
      - Parameter replace:   A function that takes the old node as input (and perhaps
      ignores it) and returns a node as replacement.
      */
-    public func replacing(by replace: Unary, where predicament: PUnary) -> Node {
-        return predicament(self) ? replace(self) : self
+    public func replacing(by replace: (Node) throws -> Node, where predicament: PUnary) rethrows -> Node {
+        return predicament(self) ? try replace(self) : self
     }
 
 }

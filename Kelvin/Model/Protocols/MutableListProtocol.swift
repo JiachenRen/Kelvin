@@ -21,12 +21,12 @@ extension MutableListProtocol {
      - Parameter replace:   A function that takes the old node as input (and perhaps
      ignores it) and returns a node as replacement.
      */
-    public func replacing(by replace: Unary, where predicament: PUnary) -> Node {
+    public func replacing(by replace: (Node) throws -> Node, where predicament: PUnary) rethrows -> Node {
         var copy = self
-        copy.elements = copy.elements.map { element in
-            return element.replacing(by: replace, where: predicament)
+        copy.elements = try copy.elements.map { element in
+            return try element.replacing(by: replace, where: predicament)
         }
-        return predicament(copy) ? replace(copy) : copy
+        return predicament(copy) ? try replace(copy) : copy
     }
     
     /**

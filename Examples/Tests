@@ -72,3 +72,6 @@ println 3x3(a) == 3*x3(a)
 # Test replace
 del x
 println ((x ^ 3)'x << x = 3) == 27
+
+# Test matrix
+println [[1, 3], [1, 2]][1][1] == 2

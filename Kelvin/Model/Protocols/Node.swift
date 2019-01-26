@@ -59,7 +59,7 @@ public protocol Node: CustomStringConvertible {
      - Parameter replace:   A function that takes the old node as input (and perhaps
                             ignores it) and returns a node as replacement.
      */
-    func replacing(by replace: Unary, where predicament: PUnary) -> Node
+    func replacing(by replace: (Node) throws -> Node, where predicament: PUnary) rethrows -> Node
 
     /// - Returns: Whether the provided node is identical with self.
     func equals(_ node: Node) -> Bool

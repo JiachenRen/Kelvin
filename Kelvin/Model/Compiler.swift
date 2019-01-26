@@ -101,7 +101,7 @@ public class Compiler {
         let parent = try resolve(expr, &dict, binOps)
 
         // Restore encodings to their original form.
-        return decode(parent)
+        return try decode(parent)
     }
 
     /**
@@ -245,7 +245,7 @@ public class Compiler {
      - Parameter parent: The parent node to have DTs restored.
      - Returns: The parent node with DTs restored.
      */
-    private static func decode(_ parent: Node) -> Node {
+    private static func decode(_ parent: Node) throws -> Node {
         var parent = parent
 
         func name(_ node: Node) -> String? {
@@ -289,7 +289,27 @@ public class Compiler {
         }) {
             name($0) == "="
         }
-
+        
+        // Infer matrices
+        parent = try parent.replacing(by: {
+            let vec = $0 as! Vector
+            var isMatrix = true
+            let vectors = vec.elements.map {(v) -> Vector? in
+                if let vec = v as? Vector {
+                    return vec
+                }
+                isMatrix = false
+                return nil
+            }
+            
+            if isMatrix {
+                return try Matrix(vectors.compactMap {$0})
+            }
+            return vec
+        }) {
+            $0 is Vector && $0.contains(where: {$0 is Vector}, depth: 1)
+        }
+        
         return parent
     }
     
@@ -537,6 +557,7 @@ public class Compiler {
         }
         return dict
     }
+    
     /**
      Find the index of the first appearance of any of the operators.
      e.g. in a+b-c, first index returns index of "+", then next time, after

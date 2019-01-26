@@ -73,8 +73,8 @@ let listAndTupleOperations: [Operation] = [
     .init("list", [.universal]) {
         List($0)
     },
-    .init("get", [.list, .number]) { nodes in
-        let list = nodes[0] as! List
+    .init("get", [.iterable, .number]) { nodes in
+        let list = nodes[0] as! ListProtocol
         let idx = Int(nodes[1].evaluated!.doubleValue)
         if idx >= list.count || idx < 0 {
             throw ExecutionError.indexOutOfBounds
@@ -82,8 +82,8 @@ let listAndTupleOperations: [Operation] = [
             return list[idx]
         }
     },
-    .init("size", [.list]) {
-        return ($0[0] as! List).count
+    .init("size", [.iterable]) {
+        return ($0[0] as! ListProtocol).count
     },
     .init("map", [.any, .any]) { nodes in
         guard var list = try nodes[0].simplify() as? MutableListProtocol else {
