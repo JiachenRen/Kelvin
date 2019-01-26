@@ -42,6 +42,27 @@ let vectorOperations: [Operation] = [
 ]
 
 let matrixOperations: [Operation] = [
+    .init("+", [.matrix, .matrix]) {
+        try m($0[0]).perform(+, with: m($0[1]))
+    },
+    .init("+", [.matrix, .any]) { nodes in
+        m(nodes[0]).performOnEach {$0 + nodes[1]}
+    },
+    .init("-", [.matrix, .matrix]) {
+        try m($0[0]).perform(-, with: m($0[1]))
+    },
+    .init("-", [.matrix, .any]) { nodes in
+        m(nodes[0]).performOnEach {$0 - nodes[1]}
+    },
+    .init("*", [.matrix, .any]) { nodes in
+        m(nodes[0]).performOnEach {$0 * nodes[1]}
+    },
+    .init("/", [.matrix, .any]) { nodes in
+        m(nodes[0]).performOnEach {$0 / nodes[1]}
+    },
+    .init("mult", [.matrix, .matrix]) {
+        try m($0[0]).mult(m($0[1]))
+    },
     .init("det", [.matrix]) {
         return try m($0[0]).determinant()
     },
@@ -50,6 +71,12 @@ let matrixOperations: [Operation] = [
     },
     .init("mat", [.int]) {
         Matrix(i($0[0]))
+    },
+    .init("idMat", [.int]) {
+        Matrix.identityMatrix(i($0[0]))
+    },
+    .init("invert", [.matrix]) {
+        m($0[0]).inverted
     }
 ]
 

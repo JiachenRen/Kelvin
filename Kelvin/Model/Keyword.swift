@@ -315,6 +315,7 @@ public struct Keyword {
         .init(for: "grad", .infix, precedence: .derivative, operator: .init("∇")),
         .init(for: "det", .prefix, precedence: .attached),
         .init(for: "dotP", .infix, precedence: .product, operator: .init("•")),
-        .init(for: "crossP", .infix, precedence: .product, operator: .init("×"))
+        .init(for: "crossP", .infix, precedence: .product, operator: .init("×")),
+        .init(for: "mult", .infix, precedence: .product, operator: .init("**"))
     ]
 }

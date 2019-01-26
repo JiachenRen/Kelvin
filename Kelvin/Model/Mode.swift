@@ -12,7 +12,7 @@ public struct Mode {
     static var shared: Mode = Mode()
 
     // The rounding mode.
-    var rounding: Rounding = .exact
+    var rounding: Rounding = .approximate
 }
 
 public enum Rounding {

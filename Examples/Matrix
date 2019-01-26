@@ -14,6 +14,7 @@ println m3x3x2[1][2][0]
 
 # Get the determinant of matrix
 println (det [[a, b, c], [x, y, z], [i, q, k]])
+println (det [[5, 8, 11], [8, 13, 18], [11, 18, 25]])
 
 # Matrix generation
 # Generate a 3 x 3 matrix
@@ -25,3 +26,17 @@ println mat(4, 5)
 # Creating a random 3 x 3 matrix (The syntax is WILD!)
 def r_mat = (mat(3) | ($0 | random()))
 println r_mat
+
+# Matrix multiplication
+println [[1, 2], [2, 3], [3, 4]] ** [[1, 2, 3], [2, 3, 4]] == [[5, 8, 11], [8, 13, 18], [11, 18, 25]]
+println [[1, 2, 3], [2, 3, 4]] ** [[1, 2], [2, 3], [3, 4]] == [[14, 20], [20, 29]]
+
+# A * Ia = Ia * A = A
+def m1 = [[5, 8, 11], [8, 13, 18], [11, 18, 25]] ** idMat(3)
+println m1
+
+# Identity matrix
+println idMat(3)
+
+# Invert matrix
+println invert(m1)
