@@ -40,3 +40,10 @@ let vectorOperations: [Operation] = [
         return ($0[0] as! Vector).magnitude
     }
 ]
+
+let matrixOperations: [Operation] = [
+    .init("det", [.matrix]) {
+        let mat = $0[0] as! Matrix
+        return try mat.determinant()
+    }
+]

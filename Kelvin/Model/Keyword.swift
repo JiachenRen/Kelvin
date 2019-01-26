@@ -313,5 +313,6 @@ public struct Keyword {
         .init(for: "derivative", .infix, precedence: .derivative, operator: .init("'", padding: .none)),
         .init(for: "as", .infix, precedence: .coersion, operator: .init("!!")),
         .init(for: "grad", .infix, precedence: .derivative, operator: .init("∇")),
+        .init(for: "det", .prefix, precedence: .attached)
     ]
 }

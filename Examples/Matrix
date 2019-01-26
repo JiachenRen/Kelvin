@@ -11,3 +11,7 @@ def m3x3x2 = [[[1, 4], [2, 7], [3, 4]], [[1, 4], [2, 7], [3, 4]], [[1, 4], [2, 7
 #                                                         ^
 # get the highlighted element (prints 3)
 println m3x3x2[1][2][0]
+
+# Get the determinant of matrix
+
+println (det [[a, b, c], [x, y, z], [i, q, k]])

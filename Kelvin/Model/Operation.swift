@@ -37,7 +37,8 @@ public class Operation: Equatable {
         equalityOperations,
         conversionOperations,
         calculusOperations,
-        vectorOperations
+        vectorOperations,
+        matrixOperations
     ].flatMap {
         $0
     }
@@ -232,6 +233,8 @@ public class Operation: Equatable {
                     fallthrough
                 case .vec where !(arg is Vector):
                     fallthrough
+                case .matrix where !(arg is Matrix):
+                    fallthrough
                 case .list where !(arg is List):
                     fallthrough
                 case .iterable where !(arg is MutableListProtocol):
@@ -338,6 +341,7 @@ public class Operation: Equatable {
         case equation
         case string
         case vec
+        case matrix
         case list
         case tuple
         case iterable
