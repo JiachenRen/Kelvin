@@ -38,6 +38,11 @@ let conversionOperations: [Operation] = [
                 return vec
             }
             try bailOut()
+        case .matrix:
+            if let list = nodes[0] as? ListProtocol {
+                return try Matrix(list)
+            }
+            try bailOut()
         default:
             break
         }

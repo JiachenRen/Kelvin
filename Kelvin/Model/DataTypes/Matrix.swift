@@ -41,6 +41,29 @@ public struct Matrix: MutableListProtocol, NaN {
         }
     }
     
+    init(_ list: ListProtocol) throws {
+        if list.count == 0 {
+            throw ExecutionError.general(errMsg: "cannot create matrix from empty list")
+        }
+        var rows = [Row]()
+        var isProperMatrix = true
+        for e in list.elements {
+            if let row = Vector(e) {
+                rows.append(row)
+            } else {
+                isProperMatrix = false
+                break
+            }
+        }
+        
+        if !isProperMatrix {
+            rows = [Row]()
+            rows.append(Vector(list)!)
+        }
+        
+        try self.init(rows)
+    }
+    
     init(_ rows: [Row]) throws {
         self.rows = rows
         if rows.count < 1 || rows.first!.count < 1 {
