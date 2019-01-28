@@ -48,8 +48,9 @@ Based on Java Algebra System's powerful engine, Kelvin is a powerful programming
   - *Outliers*
   
 - [ ] Two variable statistics
-- [ ] Distributions
-  - [ ] Normal Cdf/Pdf
+- [x] Distributions
+  - [x] Normal Cdf (-∞ to x, from lb to ub, from lb to ub with μ and σ)
+  - [ ] Normal Pdf
   - [ ] Inverse Normal
   - [ ] Binomial Cdf/Pdf
   - [ ] Geometric Cdf/Pdf
