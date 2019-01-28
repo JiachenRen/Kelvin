@@ -146,6 +146,11 @@ let statOperations: [Operation] = [
     .init("randNorm", [.number, .number, .int]) {
         let elements = randNorm(μ: $0[0]≈!, σ: $0[1]≈!, n: $0[2] as! Int)
         return List(elements)
+    },
+    .init("invNorm", [.number, .number, .number]) {
+        let stdev = $0[2]≈!
+        let mean = $0[1]≈!
+        return try invNorm($0[0]≈!) * stdev + mean
     }
 ]
 
@@ -256,7 +261,7 @@ fileprivate func ssx(_ list: List) throws -> Node {
 }
 
 /// A lightweight algorithm for calculating cummulative distribution frequency.
-public func normCdf(_ x: Double) -> Double {
+fileprivate func normCdf(_ x: Double) -> Double {
     var L: Double, K: Double, w: Double
     
     // Constants
@@ -282,7 +287,7 @@ public func normCdf(_ x: Double) -> Double {
     - to: Upper bound
  - Returns: Cummulative distribution frequency from lowerbound to upperbound.
  */
-public func normCdf(from lb: Double, to ub: Double) -> Double {
+fileprivate func normCdf(from lb: Double, to ub: Double) -> Double {
     return normCdf(ub) - normCdf(lb)
 }
 
@@ -297,11 +302,11 @@ public func normCdf(from lb: Double, to ub: Double) -> Double {
     - σ: Standard deviation
  - Returns: Cummulative distribution frequency from lowerbound to upperbound.
  */
-public func normCdf(from lb: Double, to ub: Double, μ: Double, σ: Double) -> Double {
+fileprivate func normCdf(from lb: Double, to ub: Double, μ: Double, σ: Double) -> Double {
     return normCdf((ub - μ) / σ) - normCdf((lb - μ) / σ)
 }
 
-public func randNorm(μ: Double, σ: Double, n: Int) -> [Double] {
+fileprivate func randNorm(μ: Double, σ: Double, n: Int) -> [Double] {
     let gaussianDist = GaussianDistribution(
         randomSource: GKRandomSource(),
         mean: Float(μ),
@@ -311,7 +316,7 @@ public func randNorm(μ: Double, σ: Double, n: Int) -> [Double] {
     }
 }
 
-class GaussianDistribution {
+fileprivate class GaussianDistribution {
     private let randomSource: GKRandomSource
     let mean: Float
     let deviation: Float
@@ -333,4 +338,74 @@ class GaussianDistribution {
         // Convert z1 from the Standard Normal Distribution to our Normal Distribution
         return z1 * deviation + mean
     }
+}
+
+/**
+ Convert an area representing cummulative distribution frequency to its
+ corresponding standard deviation. Of course I didn't come up with this
+ beast myself!
+ 
+ - Credit: https://stackedboxes.org/2017/05/01/acklams-normal-quantile-function/
+ */
+fileprivate func invNorm(_ p: Double) throws -> Double {
+    if p >= 1 || p <= 0  {
+        throw ExecutionError.invalidDomain(0, 1)
+    }
+    
+    let a1 = -39.69683028665376
+    let a2 = 220.9460984245205
+    let a3 = -275.9285104469687
+    let a4 = 138.3577518672690
+    let a5 = -30.66479806614716
+    let a6 = 2.50662827745
+    
+    let b1 = -54.47609879822406
+    let b2 = 161.5858368580409
+    let b3 = -155.6989798598866
+    let b4 = 66.80131188771972
+    let b5 = -13.2806815528
+    
+    let c1 = -0.007784894002430293
+    let c2 = -0.3223964580411365
+    let c3 = -2.400758277161838
+    let c4 = -2.549732539343734
+    let c5 = 4.374664141464968
+    let c6 = 2.93816398269
+    
+    let d1 = 0.007784695709041462
+    let d2 = 0.3224671290700398
+    let d3 = 2.445134137142996
+    let d4 = 3.754408661907416
+    
+    let p_low =  0.02425
+    let p_high = 1 - p_low
+    var q: Double, r: Double, e: Double, u: Double
+    var x = 0.0
+    
+    // Rational approximation for lower region.
+    if (0 < p && p < p_low) {
+        q = sqrt(-2 * log(p))
+        x = (((((c1 * q + c2) * q + c3) * q + c4) * q + c5) * q + c6) / ((((d1 * q + d2) * q + d3) * q + d4) * q + 1)
+    }
+    
+    // Rational approximation for central region.
+    if (p_low <= p && p <= p_high) {
+        q = p - 0.5
+        r = q * q
+        x = (((((a1 * r + a2) * r + a3) * r + a4) * r + a5) * r + a6) * q / (((((b1 * r + b2) * r + b3) * r + b4) * r + b5) * r + 1)
+    }
+    
+    // Rational approximation for upper region.
+    if (p_high < p && p < 1) {
+        q = sqrt(-2 * log(1 - p))
+        x = -(((((c1 * q + c2) * q + c3) * q + c4) * q + c5) * q + c6) / ((((d1 * q + d2) * q + d3) * q + d4) * q + 1)
+    }
+    
+    if 0 < p && p < 1 {
+        e = 0.5 * erfc(-x / sqrt(2)) - p
+        u = e * sqrt(2 * .pi) * exp(x * x / 2)
+        x = x - u / (1 + x * u / 2)
+    }
+    
+    return x
 }

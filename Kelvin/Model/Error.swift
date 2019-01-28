@@ -33,4 +33,8 @@ public enum ExecutionError: Error {
     static func incompatibleList(_ requiredType: DataType) -> ExecutionError {
         return ExecutionError.general(errMsg: "every element in the list must be a \(requiredType)")
     }
+    
+    static func invalidDomain(_ lb: Double, _ ub: Double) -> ExecutionError {
+        return ExecutionError.general(errMsg: "invalid domain - input must be between \(lb) and \(ub)")
+    }
 }
