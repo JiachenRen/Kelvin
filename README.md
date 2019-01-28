@@ -68,13 +68,15 @@ Based on Java Algebra System's powerful engine, Kelvin is a powerful programming
 - [x] Vector
   - [x] Compilation
   - [x] Dot product
-  - [ ] Cross Product
-  - [ ] Subscript access
+  - [x] Cross Product
+  - [x] Subscript access
   - [x] Addition/subtraction
+  - [ ] Directional angle
+  - [ ] Angle between
 
 - [x] Matrix
   - [x] Conversion from list/matrix
-  - [ ] Determinant
+  - [x] Determinant
   - [ ] Identity
   - [ ] Multiplication
   - [ ] Addition/Subtraction
