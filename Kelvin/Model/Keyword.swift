@@ -209,7 +209,8 @@ public struct Keyword {
         case or             // ||
         case and            // &&
         case xor            // ^^
-        case equality       // ==, <, >, <=, >=
+        case equality       // ==, !=
+        case relational     // <, >, <=, >=
         case concat         // &
         case addition       // +,-
         case product        // *,/
@@ -275,11 +276,12 @@ public struct Keyword {
         .init(for: .factorial, associativity: .postfix, precedence: .attached, operator: .init("!", padding: .none)),
         .init(for: .percent, associativity: .postfix, precedence: .attached),
         .init(for: .equates, associativity: .infix, precedence: .equation, operator: .init("=")),
-        .init(for: .lessThan, associativity: .infix, precedence: .equality, operator: .init("<")),
-        .init(for: .greaterThan, associativity: .infix, precedence: .equality, operator: .init(">")),
-        .init(for: .greaterThanOrEquals, associativity: .infix, precedence: .equality, operator: .init(">=")),
-        .init(for: .lessThanOrEquals, associativity: .infix, precedence: .equality, operator: .init("<=")),
+        .init(for: .lessThan, associativity: .infix, precedence: .relational, operator: .init("<")),
+        .init(for: .greaterThan, associativity: .infix, precedence: .relational, operator: .init(">")),
+        .init(for: .greaterThanOrEquals, associativity: .infix, precedence: .relational, operator: .init(">=")),
+        .init(for: .lessThanOrEquals, associativity: .infix, precedence: .relational, operator: .init("<=")),
         .init(for: .equals, associativity: .infix, precedence: .equality, operator: .init("==")),
+        .init(for: .notEquals, associativity: .infix, precedence: .equality, operator: .init("!=")),
         .init(for: .and, associativity: .infix, precedence: .and, operator: .init("&&")),
         .init(for: .or, associativity: .infix, precedence: .or, operator: .init("||")),
         .init(for: .xor, associativity: .infix, precedence: .xor, operator: .init("^^")),

@@ -28,4 +28,7 @@ let equalityOperations: [Operation] = [
     .binary(.equals, [.any, .any]) {
         $0 === $1
     },
+    .binary(.notEquals, [.any, .any]) {
+        $0 !== $1
+    }
 ]

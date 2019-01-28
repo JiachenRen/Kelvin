@@ -139,8 +139,11 @@ public extension String {
     public static let invertMatrix = "invert"
     
     // Equality
-    public static let equates = "="
     public static let equals = "=="
+    public static let notEquals = "!="
+    
+    // Relational
+    public static let equates = "="
     public static let greaterThan = ">"
     public static let lessThan = "<"
     public static let greaterThanOrEquals = ">="
