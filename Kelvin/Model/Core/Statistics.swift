@@ -125,6 +125,22 @@ let statOperations: [Operation] = [
     .unary("outliers", [.list]) {
         let list = try ($0 as! List).convertToDoubles()
         return try outliers(list)
+    },
+    
+    // Distribution
+    // normCdf from -∞ to x
+    .unary("normCdf", [.number]) {
+        normCdf($0≈!)
+    },
+    
+    // normCdf from a to b, centered at zero with stdev of 1
+    .binary("normCdf", [.number, .number]) {
+        normCdf(from: $0≈!, to: $1≈!)
+    },
+    // normCdf from a to b, centered at zero with stdev of 1
+    .init("normCdf", [.number, .number, .number, .number]) {
+        let args: [Double] = $0.map {$0≈!}
+        return normCdf(from: args[0], to: args[1], μ: args[2], σ: args[3])
     }
 ]
 
@@ -232,4 +248,50 @@ fileprivate func ssx(_ list: List) throws -> Node {
             .reduce(0) { (a: Double, b: Double) in
                 return a + b
             }
+}
+
+/// A lightweight algorithm for calculating cummulative distribution frequency.
+public func normCdf(_ x: Double) -> Double {
+    var L: Double, K: Double, w: Double
+    
+    // Constants
+    let a1 = 0.31938153, a2 = -0.356563782, a3 = 1.781477937
+    let a4 = -1.821255978, a5 = 1.330274429
+    
+    L = fabs(x)
+    K = 1.0 / (1.0 + 0.2316419 * L)
+    w = 1.0 - 1.0 / sqrt(2 * .pi) * exp(-L * L / 2) * (a1 * K + a2 * K * K + a3 * pow(K, 3) + a4 * pow(K, 4) + a5 * pow(K, 5))
+    
+    if (x < 0 ){
+        w = 1.0 - w
+    }
+    return w
+}
+
+/**
+ Cummulative distribution frequency from lower bound to upper bound,
+ where the normal curve is centered at zero with stdev of 1.
+ 
+ - Parameters:
+    - from: Lower bound
+    - to: Upper bound
+ - Returns: Cummulative distribution frequency from lowerbound to upperbound.
+ */
+public func normCdf(from lb: Double, to ub: Double) -> Double {
+    return normCdf(ub) - normCdf(lb)
+}
+
+/**
+ Cummulative distribution frequency from lower bound to upper bound,
+ where the normal curve is centered at μ with stdev of σ.
+ 
+ - Parameters:
+    - from: Lower bound
+    - to: Upper bound
+    - μ: mean
+    - σ: Standard deviation
+ - Returns: Cummulative distribution frequency from lowerbound to upperbound.
+ */
+public func normCdf(from lb: Double, to ub: Double, μ: Double, σ: Double) -> Double {
+    return normCdf((ub - μ) / σ) - normCdf((lb - μ) / σ)
 }

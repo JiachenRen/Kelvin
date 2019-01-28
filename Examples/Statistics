@@ -12,3 +12,10 @@ println median(l1)
 
 # Outliers
 println outliers(l1)
+
+# Mark -- Distribution
+
+# Normal cummulative distribution frequency
+println normCdf(-inf, 7, 45, 21)
+println normCdf(-1, 1)
+println normCdf(0)
