@@ -15,13 +15,13 @@ rolls3 := dice3()...1000
 
 # Find the average of the rollings
 print "Expected value of dice 1 rolls: "
-println avg(rolls1)
+println mean(rolls1)
 
 print "Expected value of dice 2 rolls: "
-println avg(rolls2)
+println mean(rolls2)
 
 print "Expected value of dice 3 rolls: "
-println avg(rolls3)
+println mean(rolls3)
 
 # A function that approaches 1 as x approaches infinity.
 def f(x) = min(random()...x) + max(random()...x)

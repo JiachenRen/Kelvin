@@ -7,10 +7,11 @@
 //
 
 import Foundation
+import GameKit
 
 let statOperations: [Operation] = [
     // Statistics, s stands for sample, p stands for population
-    .unary("avg", [.list]) {
+    .unary("mean", [.list]) {
         return Function("sum", [$0]) / ($0 as! List).count
     },
     .unary("max", [.list]) {
@@ -43,7 +44,7 @@ let statOperations: [Operation] = [
         }
         return min
     },
-    .init("avg", [.universal]) { nodes in
+    .init("mean", [.universal]) { nodes in
         return ++nodes / nodes.count
     },
     .unary("ssx", [.list]) {
@@ -141,6 +142,10 @@ let statOperations: [Operation] = [
     .init("normCdf", [.number, .number, .number, .number]) {
         let args: [Double] = $0.map {$0≈!}
         return normCdf(from: args[0], to: args[1], μ: args[2], σ: args[3])
+    },
+    .init("randNorm", [.number, .number, .int]) {
+        let elements = randNorm(μ: $0[0]≈!, σ: $0[1]≈!, n: $0[2] as! Int)
+        return List(elements)
     }
 ]
 
@@ -235,7 +240,7 @@ fileprivate func ssx(_ list: List) throws -> Node {
         $0≈!
     }
 
-    // Calculate avg.
+    // Calculate average.
     let sum: Double = numbers.reduce(0) {
         $0 + $1
     }
@@ -294,4 +299,38 @@ public func normCdf(from lb: Double, to ub: Double) -> Double {
  */
 public func normCdf(from lb: Double, to ub: Double, μ: Double, σ: Double) -> Double {
     return normCdf((ub - μ) / σ) - normCdf((lb - μ) / σ)
+}
+
+public func randNorm(μ: Double, σ: Double, n: Int) -> [Double] {
+    let gaussianDist = GaussianDistribution(
+        randomSource: GKRandomSource(),
+        mean: Float(μ),
+        deviation: Float(σ))
+    return [Double](repeating: 0, count: n).map {_ in
+        Double(gaussianDist.nextFloat())
+    }
+}
+
+class GaussianDistribution {
+    private let randomSource: GKRandomSource
+    let mean: Float
+    let deviation: Float
+    
+    init(randomSource: GKRandomSource, mean: Float, deviation: Float) {
+        precondition(deviation >= 0)
+        self.randomSource = randomSource
+        self.mean = mean
+        self.deviation = deviation
+    }
+    
+    func nextFloat() -> Float {
+        guard deviation > 0 else { return mean }
+        
+        let x1 = randomSource.nextUniform() // A random number between 0 and 1
+        let x2 = randomSource.nextUniform() // A random number between 0 and 1
+        let z1 = sqrt(-2 * log(x1)) * cos(2 * Float.pi * x2) // z1 is normally distributed
+        
+        // Convert z1 from the Standard Normal Distribution to our Normal Distribution
+        return z1 * deviation + mean
+    }
 }
