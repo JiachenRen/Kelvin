@@ -21,7 +21,7 @@ public struct Keyword {
     public typealias Encoding = Character
 
     /// The custom operator for a keyword. For example,
-    /// the infix keyword "mod" could have an operator of "%"
+    /// the infix keyword .mod could have an operator of "%"
     var `operator`: Operator?
 
     /// The associative property of the operator, either prefix, postfix, or infix
@@ -84,7 +84,7 @@ public struct Keyword {
 
     fileprivate init(
         for name: String,
-        _ associativity: Associativity,
+        associativity: Associativity,
         precedence: Precedence = .execution,
         operator: Operator? = nil) {
         self.name = name
@@ -97,12 +97,16 @@ public struct Keyword {
     /// Adds a custom defined keyword to encodings and glossary collections.
     public static func define(
         for name: String,
-        _ associativity: Associativity,
+        associativity: Associativity,
         precedence: Precedence = .execution,
         operator: Operator? = nil) {
 
         // Create the keyword
-        let keyword = Keyword(for: name, associativity, precedence: precedence, operator: `operator`)
+        let keyword = Keyword(
+            for: name,
+            associativity: associativity,
+            precedence: precedence,
+            operator: `operator`)
 
         // Make sure the encoding is currently unassigned and the name is available
         assert(Keyword.encodings[keyword.encoding] == nil)
@@ -118,7 +122,7 @@ public struct Keyword {
     /**
      Some operations have ambiguous definitions. i.e., they use the same
      operator, but have different associativity.
-     e.g. '!', when used as a prefix, means "not" while the same operator used
+     e.g. '!', when used as a prefix, means .not while the same operator used
      as a postfix, say in 'a!', it means factorial.
      This function finds all ambiguous keyword operators.
      */
@@ -253,69 +257,69 @@ public struct Keyword {
 
     /// Default keywords
     private static let defaultDefinitions: [Keyword] = [
-        .init(for: "+", .infix, precedence: .addition, operator: .init("+")),
-        .init(for: "-", .infix, precedence: .addition, operator: .init("-")),
-        .init(for: "negate", .prefix, precedence: .attached, operator: .init("-", padding: .none)),
-        .init(for: "*", .infix, precedence: .product, operator: .init("*")),
-        .init(for: "/", .infix, precedence: .product, operator: .init("/")),
-        .init(for: "mod", .infix, precedence: .product, operator: .init("%")),
-        .init(for: "^", .infix, precedence: .exponent, operator: .init("^")),
-        .init(for: "++", .postfix, precedence: .attached, operator: .init("++", padding: .rightSide)),
-        .init(for: "--", .postfix, precedence: .attached, operator: .init("--", padding: .rightSide)),
-        .init(for: "+=", .infix, precedence: .assignment, operator: .init("+=")),
-        .init(for: "-=", .infix, precedence: .assignment, operator: .init("-=")),
-        .init(for: "*=", .infix, precedence: .assignment, operator: .init("*=")),
-        .init(for: "/=", .infix, precedence: .assignment, operator: .init("/=")),
-        .init(for: "sqrt", .prefix, precedence: .attached, operator: .init("√", padding: .none)),
-        .init(for: "degrees", .postfix, precedence: .attached, operator: .init("°", padding: .none)),
-        .init(for: "factorial", .postfix, precedence: .attached, operator: .init("!", padding: .none)),
-        .init(for: "pct", .postfix, precedence: .attached),
-        .init(for: "=", .infix, precedence: .equation, operator: .init("=")),
-        .init(for: "<", .infix, precedence: .equality, operator: .init("<")),
-        .init(for: ">", .infix, precedence: .equality, operator: .init(">")),
-        .init(for: ">=", .infix, precedence: .equality, operator: .init(">=")),
-        .init(for: "<=", .infix, precedence: .equality, operator: .init("<=")),
-        .init(for: "equals", .infix, precedence: .equality, operator: .init("==")),
-        .init(for: "and", .infix, precedence: .and, operator: .init("&&")),
-        .init(for: "or", .infix, precedence: .or, operator: .init("||")),
-        .init(for: "xor", .infix, precedence: .xor, operator: .init("^^")),
-        .init(for: "not", .prefix, precedence: .attached, operator: .init("!", padding: .none)),
-        .init(for: "define", .infix, precedence: .assignment, operator: .init(":=", padding: .bothSides)),
-        .init(for: "def", .prefix, precedence: .assignment),
-        .init(for: "del", .prefix),
-        .init(for: "get", .infix, precedence: .attached, operator: .init("::", padding: .none)), // Preserve arguments?
-        .init(for: "size", .prefix, precedence: .attached),
-        .init(for: "map", .infix, operator: .init("|")),
-        .init(for: "reduce", .infix, operator: .init("~")),
-        .init(for: "filter", .infix, operator: .init("|?")),
-        .init(for: "zip", .infix, operator: .init("><")),
-        .init(for: "append", .infix, operator: .init("++")),
-        .init(for: "sort", .infix, operator: .init(">?")),
-        .init(for: "then", .infix, operator: .init(";", padding: .rightSide)),
-        .init(for: "feed", .infix, operator: .init("->")),
-        .init(for: "replace", .infix, operator: .init("<<")),
-        .init(for: "repeat", .infix, precedence: .repeat, operator: .init("...", padding: .none)),
-        .init(for: "copy", .infix, precedence: .repeat),
-        .init(for: "complexity", .prefix),
-        .init(for: "round", .prefix, precedence: .attached),
-        .init(for: "int", .prefix, precedence: .attached),
-        .init(for: "eval", .prefix),
-        .init(for: "print", .prefix),
-        .init(for: "println", .prefix),
-        .init(for: "compile", .prefix),
-        .init(for: "run", .prefix),
-        .init(for: "try", .prefix),
-        .init(for: "npr", .infix),
-        .init(for: "ncr", .infix),
-        .init(for: "tuple", .infix, precedence: .tuple, operator: .init(":")),
-        .init(for: "if", .infix, precedence: .conditional, operator: .init("?")),
-        .init(for: "concat", .infix, precedence: .concat, operator: .init("&")),
-        .init(for: "derivative", .infix, precedence: .derivative, operator: .init("'", padding: .none)),
-        .init(for: "as", .infix, precedence: .coersion, operator: .init("!!")),
-        .init(for: "grad", .infix, precedence: .derivative, operator: .init("∇")),
-        .init(for: "det", .prefix, precedence: .attached),
-        .init(for: "dotP", .infix, precedence: .product, operator: .init("•")),
-        .init(for: "crossP", .infix, precedence: .product, operator: .init("×")),
-        .init(for: "mult", .infix, precedence: .product, operator: .init("**"))
+        .init(for: .add, associativity: .infix, precedence: .addition, operator: .init("+")),
+        .init(for: .sub, associativity: .infix, precedence: .addition, operator: .init("-")),
+        .init(for: .negate, associativity: .prefix, precedence: .attached, operator: .init("-", padding: .none)),
+        .init(for: .mult, associativity: .infix, precedence: .product, operator: .init("*")),
+        .init(for: .div, associativity: .infix, precedence: .product, operator: .init("/")),
+        .init(for: .mod, associativity: .infix, precedence: .product, operator: .init("%")),
+        .init(for: .exp, associativity: .infix, precedence: .exponent, operator: .init("^")),
+        .init(for: .increment, associativity: .postfix, precedence: .attached, operator: .init("++", padding: .rightSide)),
+        .init(for: .decrement, associativity: .postfix, precedence: .attached, operator: .init("--", padding: .rightSide)),
+        .init(for: .mutatingAdd, associativity: .infix, precedence: .assignment, operator: .init("+=")),
+        .init(for: .mutatingSub, associativity: .infix, precedence: .assignment, operator: .init("-=")),
+        .init(for: .mutatingMult, associativity: .infix, precedence: .assignment, operator: .init("*=")),
+        .init(for: .mutatingDiv, associativity: .infix, precedence: .assignment, operator: .init("/=")),
+        .init(for: .sqrt, associativity: .prefix, precedence: .attached, operator: .init("√", padding: .none)),
+        .init(for: .degrees, associativity: .postfix, precedence: .attached, operator: .init("°", padding: .none)),
+        .init(for: .factorial, associativity: .postfix, precedence: .attached, operator: .init("!", padding: .none)),
+        .init(for: .percent, associativity: .postfix, precedence: .attached),
+        .init(for: .equates, associativity: .infix, precedence: .equation, operator: .init("=")),
+        .init(for: .lessThan, associativity: .infix, precedence: .equality, operator: .init("<")),
+        .init(for: .greaterThan, associativity: .infix, precedence: .equality, operator: .init(">")),
+        .init(for: .greaterThanOrEquals, associativity: .infix, precedence: .equality, operator: .init(">=")),
+        .init(for: .lessThanOrEquals, associativity: .infix, precedence: .equality, operator: .init("<=")),
+        .init(for: .equals, associativity: .infix, precedence: .equality, operator: .init("==")),
+        .init(for: .and, associativity: .infix, precedence: .and, operator: .init("&&")),
+        .init(for: .or, associativity: .infix, precedence: .or, operator: .init("||")),
+        .init(for: .xor, associativity: .infix, precedence: .xor, operator: .init("^^")),
+        .init(for: .not, associativity: .prefix, precedence: .attached, operator: .init("!", padding: .none)),
+        .init(for: .define, associativity: .infix, precedence: .assignment, operator: .init(":=", padding: .bothSides)),
+        .init(for: .def, associativity: .prefix, precedence: .assignment),
+        .init(for: .del, associativity: .prefix),
+        .init(for: .get, associativity: .infix, precedence: .attached, operator: .init("::", padding: .none)), // Preserve arguments?
+        .init(for: .size, associativity: .prefix, precedence: .attached),
+        .init(for: .map, associativity: .infix, operator: .init("|")),
+        .init(for: .reduce, associativity: .infix, operator: .init("~")),
+        .init(for: .filter, associativity: .infix, operator: .init("|?")),
+        .init(for: .zip, associativity: .infix, operator: .init("><")),
+        .init(for: .append, associativity: .infix, operator: .init("++")),
+        .init(for: .sort, associativity: .infix, operator: .init(">?")),
+        .init(for: .then, associativity: .infix, operator: .init(";", padding: .rightSide)),
+        .init(for: .feed, associativity: .infix, operator: .init("->")),
+        .init(for: .replace, associativity: .infix, operator: .init("<<")),
+        .init(for: .repeat, associativity: .infix, precedence: .repeat, operator: .init("...", padding: .none)),
+        .init(for: .copy, associativity: .infix, precedence: .repeat),
+        .init(for: .complexity, associativity: .prefix),
+        .init(for: .round, associativity: .prefix, precedence: .attached),
+        .init(for: .int, associativity: .prefix, precedence: .attached),
+        .init(for: .eval, associativity: .prefix),
+        .init(for: .print, associativity: .prefix),
+        .init(for: .println, associativity: .prefix),
+        .init(for: .compile, associativity: .prefix),
+        .init(for: .run, associativity: .prefix),
+        .init(for: .try, associativity: .prefix),
+        .init(for: .npr, associativity: .infix),
+        .init(for: .ncr, associativity: .infix),
+        .init(for: .tuple, associativity: .infix, precedence: .tuple, operator: .init(":")),
+        .init(for: .if, associativity: .infix, precedence: .conditional, operator: .init("?")),
+        .init(for: .concat, associativity: .infix, precedence: .concat, operator: .init("&")),
+        .init(for: .derivative, associativity: .infix, precedence: .derivative, operator: .init("'", padding: .none)),
+        .init(for: .as, associativity: .infix, precedence: .coersion, operator: .init("!!")),
+        .init(for: .gradient, associativity: .infix, precedence: .derivative, operator: .init("∇")),
+        .init(for: .determinant, associativity: .prefix, precedence: .attached),
+        .init(for: .dotProduct, associativity: .infix, precedence: .product, operator: .init("•")),
+        .init(for: .crossProduct, associativity: .infix, precedence: .product, operator: .init("×")),
+        .init(for: .matrixMultiplication, associativity: .infix, precedence: .product, operator: .init("**"))
     ]
 }

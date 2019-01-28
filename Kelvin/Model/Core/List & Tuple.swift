@@ -10,58 +10,58 @@ import Foundation
 
 let listAndTupleOperations: [Operation] = [
     
-    .init("+", [.list, .list]) {
-        try join(by: "+", $0[0], $0[1])
+    .init(.add, [.list, .list]) {
+        try join(by: .add, $0[0], $0[1])
     },
-    .init("+", [.list, .any]) {
-        map(by: "+", $0[0], $0[1])
-    },
-    
-    .init("-", [.list, .list]) {
-        try join(by: "-", $0[0], $0[1])
-    },
-    .init("-", [.list, .any]) {
-        map(by: "-", $0[0], $0[1])
+    .init(.add, [.list, .any]) {
+        map(by: .add, $0[0], $0[1])
     },
     
-    .init("*", [.list, .list]) {
-        try join(by: "*", $0[0], $0[1])
+    .init(.sub, [.list, .list]) {
+        try join(by: .sub, $0[0], $0[1])
     },
-    .init("*", [.list, .any]) {
-        map(by: "*", $0[0], $0[1])
-    },
-    
-    .init("/", [.list, .list]) {
-        try join(by: "/", $0[0], $0[1])
-    },
-    .init("/", [.list, .any]) {
-        map(by: "/", $0[0], $0[1])
+    .init(.sub, [.list, .any]) {
+        map(by: .sub, $0[0], $0[1])
     },
     
-    .init("^", [.list, .list]) {
-        try join(by: "^", $0[0], $0[1])
+    .init(.mult, [.list, .list]) {
+        try join(by: .mult, $0[0], $0[1])
     },
-    .init("^", [.list, .any]) {
-        map(by: "^", $0[0], $0[1])
+    .init(.mult, [.list, .any]) {
+        map(by: .mult, $0[0], $0[1])
     },
-    .binary("^", [.any, .list]) {
+    
+    .init(.div, [.list, .list]) {
+        try join(by: .div, $0[0], $0[1])
+    },
+    .init(.div, [.list, .any]) {
+        map(by: .div, $0[0], $0[1])
+    },
+    
+    .init(.exp, [.list, .list]) {
+        try join(by: .exp, $0[0], $0[1])
+    },
+    .init(.exp, [.list, .any]) {
+        map(by: .exp, $0[0], $0[1])
+    },
+    .binary(.exp, [.any, .list]) {
         let list = $1 as! List
         let baseList = List([Double](repeating: $0≈!, count: list.count))
-        return try join(by: "^", baseList, list)
+        return try join(by: .exp, baseList, list)
     },
     
-    .init("mod", [.list, .list]) {
-        try join(by: "mod", $0[0], $0[1])
+    .init(.mod, [.list, .list]) {
+        try join(by: .mod, $0[0], $0[1])
     },
-    .init("mod", [.list, .any]) {
-        map(by: "mod", $0[0], $0[1])
+    .init(.mod, [.list, .any]) {
+        map(by: .mod, $0[0], $0[1])
     },
 
     // Tuple operations
-    .init("tuple", [.leaf, .leaf]) {
+    .init(.tuple, [.leaf, .leaf]) {
         Tuple($0[0], $0[1])
     },
-    .init("get", [.tuple, .number]) { nodes in
+    .init(.get, [.tuple, .number]) { nodes in
         let tuple = nodes[0] as! Tuple
         let idx = Int(nodes[1]≈!)
         switch idx {
@@ -75,10 +75,10 @@ let listAndTupleOperations: [Operation] = [
     },
 
     // List operations
-    .init("list", [.universal]) {
+    .init(.list, [.universal]) {
         List($0)
     },
-    .init("get", [.iterable, .number]) { nodes in
+    .init(.get, [.iterable, .number]) { nodes in
         let list = nodes[0] as! ListProtocol
         let idx = Int(nodes[1]≈!)
         if idx >= list.count || idx < 0 {
@@ -87,10 +87,10 @@ let listAndTupleOperations: [Operation] = [
             return list[idx]
         }
     },
-    .init("size", [.iterable]) {
+    .init(.size, [.iterable]) {
         return ($0[0] as! ListProtocol).count
     },
-    .init("map", [.any, .any]) { nodes in
+    .init(.map, [.any, .any]) { nodes in
         guard var list = try nodes[0].simplify() as? MutableListProtocol else {
             return nil
         }
@@ -100,7 +100,7 @@ let listAndTupleOperations: [Operation] = [
         list.elements = updated
         return list
     },
-    .init("reduce", [.any, .any]) { nodes in
+    .init(.reduce, [.any, .any]) { nodes in
         guard let list = try nodes[0].simplify() as? List else {
             return nil
         }
@@ -112,7 +112,7 @@ let listAndTupleOperations: [Operation] = [
         }
         return reduced ?? List([])
     },
-    .init("filter", [.any, .any]) { nodes in
+    .init(.filter, [.any, .any]) { nodes in
         guard let list = try nodes[0].simplify() as? List else {
             return nil
         }
@@ -128,27 +128,27 @@ let listAndTupleOperations: [Operation] = [
             }
         return List(updated)
     },
-    .init("zip", [.list, .list]) {
+    .init(.zip, [.list, .list]) {
         if let l1 = $0[0] as? List, let l2 = $0[1] as? List {
             return try l1.join(with: l2)
         }
         return nil
     },
-    .init("append", [.list, .list]) {
+    .init(.append, [.list, .list]) {
         if let l1 = $0[0] as? List, let l2 = $0[1] as? List {
             let elements = [l1.elements, l2.elements].flatMap {$0}
             return List(elements)
         }
         return nil
     },
-    .init("append", [.list, .any]) {
+    .init(.append, [.list, .any]) {
         if let l1 = $0[0] as? List {
             let elements = [l1.elements, [$0[1]]].flatMap {$0}
             return List(elements)
         }
         return nil
     },
-    .init("sort", [.list, .any]) {nodes in
+    .init(.sort, [.list, .any]) {nodes in
         if let l1 = nodes[0] as? List {
             return try l1.sorted {
                 let predicate = try nodes[1].replacingAnonymousArgs(with: [$0, $1]).simplify()

@@ -29,7 +29,7 @@ public class Operation: Equatable {
     public static let defaults: [Operation] = [
         binaryOperations,
         unaryOperations,
-        statOperations,
+        Stat.operations,
         probabilityOperations,
         algebraicOperations,
         developerOperations,

@@ -9,26 +9,26 @@
 import Foundation
 
 let calculusOperations: [Operation] = [
-    .binary(CalculusEngine.derivative, [.any, .var]) {
+    .binary(.derivative, [.any, .var]) {
         let v = $1 as! Variable
         Scope.withholdAccess(to: v)
-        let dv = CalculusEngine.derivative(
+        let dv = Calculus.derivative(
             of: try $0.simplify(),
             withRespectTo: v)
         Scope.releaseRestrictions()
         return dv
     },
-    .init(CalculusEngine.derivative, [.any, .var, .number]) {
+    .init(.derivative, [.any, .var, .number]) {
         let v = $0[1] as! Variable
         Scope.withholdAccess(to: v)
-        let dnv = try CalculusEngine.derivative(
+        let dnv = try Calculus.derivative(
             of: $0[0].simplify(),
             withRespectTo: v,
             try $0[2].simplify() as! Int)
         Scope.releaseRestrictions()
         return dnv
     },
-    .init(CalculusEngine.implicitDifferentiation, [.any, .var, .var]) {
+    .init(.implicitDifferentiation, [.any, .var, .var]) {
         let dv = $0[1] as! Variable
         let iv = $0[2] as! Variable
         Scope.withholdAccess(to: dv, iv)
@@ -36,14 +36,14 @@ let calculusOperations: [Operation] = [
             let msg = "left hand side of implicit differentiation must be an equation"
             throw ExecutionError.general(errMsg: msg)
         }
-        let r = try CalculusEngine.implicitDifferentiation(
+        let r = try Calculus.implicitDifferentiation(
             eq,
             dependentVar: dv,
             independentVar: iv)
         Scope.releaseRestrictions()
         return r
     },
-    .binary(CalculusEngine.gradient, [.func, .list]) {
+    .binary(.gradient, [.func, .list]) {
         let vars = try ($1 as! List).elements.map {
             (n: Node) -> Variable in
             if let v = n as? Variable {
@@ -53,13 +53,13 @@ let calculusOperations: [Operation] = [
         }
         
         Scope.withholdAccess(to: vars)
-        let grad = CalculusEngine.gradient(
+        let grad = Calculus.gradient(
             of: $0 as! Function,
             independentVars: vars)
         Scope.releaseRestrictions()
         return grad
     },
-    .init(CalculusEngine.directionalDifferentiation, [.func, .any, .list]) {
+    .init(.directionalDifferentiation, [.func, .any, .list]) {
         let vars = try ($0[2] as! List).elements.map {
             (n: Node) -> Variable in
             if let v = n as? Variable {
@@ -73,7 +73,7 @@ let calculusOperations: [Operation] = [
         }
         
         Scope.withholdAccess(to: vars)
-        let grad = try CalculusEngine.directionalDifferentiation(
+        let grad = try Calculus.directionalDifferentiation(
             of: $0[0] as! Function,
             direction: dir,
             independentVars: vars)
@@ -82,12 +82,7 @@ let calculusOperations: [Operation] = [
     }
 ]
 
-public class CalculusEngine {
-    
-    public static let derivative = "derivative"
-    public static let implicitDifferentiation = "impDif"
-    public static let directionalDifferentiation = "dirDif"
-    public static let gradient = "grad"
+public class Calculus {
     
     /**
      The directional derivative del _(u)f(x_0,y_0,z_0) is the rate at which the function f(x,y,z)
@@ -126,7 +121,7 @@ public class CalculusEngine {
      - Returns: The gradient vector of the function.
      */
     public static func gradient(of fun: Function, independentVars vars: [Variable]) -> Vector {
-        return Vector(vars.map {derivative(of: fun, withRespectTo: $0) ?? Function(CalculusEngine.derivative, [fun, $0])})
+        return Vector(vars.map {derivative(of: fun, withRespectTo: $0) ?? Function(.derivative, [fun, $0])})
     }
     
     /**
@@ -151,8 +146,8 @@ public class CalculusEngine {
         independentVar iv: Variable) throws -> Node? {
         
         let f = try (eq.lhs - eq.rhs).simplify()
-        let fx = derivative(of: f, withRespectTo: dv) ?? Function(derivative, [f, dv])
-        let fy = derivative(of: f, withRespectTo: iv) ?? Function(derivative, [f, iv])
+        let fx = derivative(of: f, withRespectTo: dv) ?? Function(.derivative, [f, dv])
+        let fy = derivative(of: f, withRespectTo: iv) ?? Function(.derivative, [f, iv])
         
         return -fx / fy
     }
@@ -170,7 +165,7 @@ public class CalculusEngine {
             if let d = derivative(of: n, withRespectTo: v) {
                 n = try d.simplify()
             } else {
-                return i == 0 ? nil : Function(derivative, [n, v, nth - i])
+                return i == 0 ? nil : Function(.derivative, [n, v, nth - i])
             }
         }
         return n
@@ -197,7 +192,7 @@ public class CalculusEngine {
                 let o = fun[0]
                 switch fun.name {
                 case "log":
-                    bigKahuna = 1 / o * log(try! Variable("e"))
+                    bigKahuna = 1 / o * log("e"&)
                 case "ln":
                     bigKahuna = 1 / fun[0]
                 case "cos":
@@ -246,7 +241,7 @@ public class CalculusEngine {
                     for (i, kahuna) in fun.elements.enumerated() {
                         var j = fun.elements
                         j.remove(at: i)
-                        j.append(Function(derivative, [kahuna, v]))
+                        j.append(Function(.derivative, [kahuna, v]))
                         nodes.append(**j)
                     }
                     
@@ -261,7 +256,7 @@ public class CalculusEngine {
                     assert(fun.count == 2)
                     let base = fun[0]
                     let exp = fun[1]
-                    let k = Function(derivative, [ln(base) * exp, v])
+                    let k = Function(.derivative, [ln(base) * exp, v])
                     return k * fun
                 default:
                     break
@@ -275,7 +270,7 @@ public class CalculusEngine {
     
     public static func derivative(of nodes: [Node], withRespectTo v: Variable) -> [Node] {
         return nodes.map {
-            Function(derivative, [$0, v])
+            Function(.derivative, [$0, v])
         }
     }
 }

@@ -10,22 +10,22 @@ import Foundation
 
 // Equality, inequality, and equations
 let equalityOperations: [Operation] = [
-    .binary("=", [.any, .any]) {
+    .binary(.equates, [.any, .any]) {
         Equation(lhs: $0, rhs: $1)
     },
-    .binary("<", [.any, .any]) {
+    .binary(.lessThan, [.any, .any]) {
         Equation(lhs: $0, rhs: $1, mode: .lessThan)
     },
-    .binary(">", [.any, .any]) {
+    .binary(.greaterThan, [.any, .any]) {
         Equation(lhs: $0, rhs: $1, mode: .greaterThan)
     },
-    .binary(">=", [.any, .any]) {
+    .binary(.greaterThanOrEquals, [.any, .any]) {
         Equation(lhs: $0, rhs: $1, mode: .greaterThanOrEquals)
     },
-    .binary("<=", [.any, .any]) {
+    .binary(.lessThanOrEquals, [.any, .any]) {
         Equation(lhs: $0, rhs: $1, mode: .lessThanOrEquals)
     },
-    .binary("equals", [.any, .any]) {
+    .binary(.equals, [.any, .any]) {
         $0 === $1
     },
 ]

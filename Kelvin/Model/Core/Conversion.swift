@@ -9,15 +9,15 @@
 import Foundation
 
 let conversionOperations: [Operation] = [
-    .unary("degrees", [.any]) {
-        $0 / 180 * (try! Variable("pi"))
+    .unary(.degrees, [.any]) {
+        $0 / 180 * ("pi"&)
     },
-    .unary("pct", [.any]) {
+    .unary(.percent, [.any]) {
         $0 / 100
     },
     
     // TODO: Implement all possible type coersions.
-    .binary("as", [.any, .var]) {
+    .binary(.as, [.any, .var]) {
         let n = $1 as! Variable, c = $0
         guard let dt = DataType(rawValue: n.name) else {
             throw ExecutionError.invalidDT(n.name)

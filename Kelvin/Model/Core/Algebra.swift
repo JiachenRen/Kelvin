@@ -10,7 +10,7 @@ import Foundation
 
 /// Algebraic operations (factorization, expansion)
 let algebraicOperations: [Operation] = [
-    .unary("factor", [.any]) {
+    .unary(.factorize, [.any]) {
         AlgebraEngine.factorize($0)
     },
 ]
@@ -22,7 +22,7 @@ fileprivate class AlgebraEngine {
         return parent.replacing(by: {
             factorize(($0 as! Function).elements)
         }) {
-            ($0 as? Function)?.name == "+"
+            ($0 as? Function)?.name == .add
         }
     }
 
@@ -56,7 +56,7 @@ fileprivate class AlgebraEngine {
             return 1
         }
         let mult = node as! Function
-        assert(mult.name == "*")
+        assert(mult.name == .mult)
 
         var elements = mult.elements
         for (i, e) in elements.enumerated() {
@@ -90,7 +90,7 @@ fileprivate class AlgebraEngine {
         // Deconstruct a node into its arguments if it is "*"
         // For nodes other than "*", return the node itself.
         func deconstruct(_ node: Node) -> [Node] {
-            if let mult = node as? Function, mult.name == "*" {
+            if let mult = node as? Function, mult.name == .mult {
                 return mult.elements
             }
             return [node]
@@ -116,7 +116,7 @@ fileprivate class AlgebraEngine {
         for o in operands {
             var isCommon = true
             for n in nodes {
-                let isFactor = (n as? Function)?.name == "*" && n.contains(where: { $0 === o }, depth: 1)
+                let isFactor = (n as? Function)?.name == .mult && n.contains(where: { $0 === o }, depth: 1)
 
                 // If one of the remaining nodes is not 'o' and does not contain 'o',
                 // we know that 'o' is not a common factor. Immediately exit the loop.

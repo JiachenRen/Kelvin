@@ -10,77 +10,77 @@ import Foundation
 
 let unaryOperations: [Operation] = [
     // Basic unary transcendental functions
-    .unary("log", [.number]) {
+    .unary(.log, [.number]) {
         u($0, log10)
     },
-    .unary("log2", [.number]) {
+    .unary(.log2, [.number]) {
         u($0, log2)
     },
-    .unary("ln", [.number]) {
+    .unary(.ln, [.number]) {
         u($0, log)
     },
-    .unary("cos", [.number]) {
+    .unary(.cos, [.number]) {
         u($0, cos)
     },
-    .unary("acos", [.number]) {
+    .unary(.acos, [.number]) {
         u($0, acos)
     },
-    .unary("cosh", [.number]) {
+    .unary(.cosh, [.number]) {
         u($0, cosh)
     },
-    .unary("sin", [.number]) {
+    .unary(.sin, [.number]) {
         u($0, sin)
     },
-    .unary("asin", [.number]) {
+    .unary(.asin, [.number]) {
         u($0, asin)
     },
-    .unary("sinh", [.number]) {
+    .unary(.sinh, [.number]) {
         u($0, sinh)
     },
-    .unary("tan", [.number]) {
+    .unary(.tan, [.number]) {
         u($0, tan)
     },
-    .unary("tan", [.any]) {
+    .unary(.tan, [.any]) {
         sin($0) / cos($0)
     },
-    .unary("atan", [.number]) {
+    .unary(.atan, [.number]) {
         u($0, atan)
     },
-    .unary("tanh", [.number]) {
+    .unary(.tanh, [.number]) {
         u($0, tanh)
     },
-    .unary("sec", [.any]) {
+    .unary(.sec, [.any]) {
         1 / cos($0)
     },
-    .unary("csc", [.any]) {
+    .unary(.csc, [.any]) {
         1 / sin($0)
     },
-    .unary("cot", [.any]) {
+    .unary(.cot, [.any]) {
         1 / tan($0)
     },
-    .unary("abs", [.number]) {
+    .unary(.abs, [.number]) {
         u($0, abs)
     },
-    .unary("int", [.number]) {
+    .unary(.int, [.number]) {
         u($0, floor)
     },
-    .unary("round", [.number]) {
+    .unary(.round, [.number]) {
         u($0, round)
     },
-    .unary("negate", [.number]) {
+    .unary(.negate, [.number]) {
         u($0, -)
     },
-    .unary("negate", [.func]) {node in
+    .unary(.negate, [.func]) {node in
         var fun = node as! Function
         switch fun.name {
-        case "nagate":
+        case .negate:
             return fun[0]
-        case "+":
+        case .add:
             let elements = fun.elements.map {
                 $0 * -1
             }
             return Function(fun.name, elements)
-        case "*":
+        case .mult:
             var args = fun.elements
             args.append(-1)
             return *args
@@ -88,16 +88,16 @@ let unaryOperations: [Operation] = [
         }
         return nil
     },
-    .unary("negate", [.any]) {
+    .unary(.negate, [.any]) {
         $0 * -1
     },
-    .unary("sqrt", [.number]) {
+    .unary(.sqrt, [.number]) {
         u($0, sqrt)
     },
-    .unary("sqrt", [.any]) {
+    .unary(.sqrt, [.any]) {
         $0 ^ (0.5)
     },
-    .unary("sign", [.number]) {
+    .unary(.sign, [.number]) {
         let n = $0≈!
         return n == 0 ? Double.nan : n > 0 ? 1 : -1
     }

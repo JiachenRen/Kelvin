@@ -10,19 +10,19 @@ import Foundation
 
 let binaryOperations: [Operation] = [
     // Basic binary arithmetic
-    .binary("+", [.number, .number]) {
+    .binary(.add, [.number, .number]) {
         bin($0, $1, +)
     },
-    .binary("+", [.any, .any]) {
+    .binary(.add, [.any, .any]) {
         $0 === $1 ? 2 * $0 : nil
     },
-    .binary("+", [.number, .nan]) {
+    .binary(.add, [.number, .nan]) {
         $0 === 0 ? $1 : nil
     },
-    .binary("+", [.any, .func]) {
+    .binary(.add, [.any, .func]) {
         let fun = $1 as! Function
         switch fun.name {
-        case "*":
+        case .mult:
             var args = fun.elements
             for (i, arg) in args.enumerated() {
                 if arg === $0 {
@@ -43,13 +43,13 @@ let binaryOperations: [Operation] = [
         }
         return nil
     },
-    .binary("+", [.func, .func]) {
+    .binary(.add, [.func, .func]) {
         let f1 = $0 as! Function
         let f2 = $1 as! Function
 
         if f1.name == f2.name {
             switch f1.name {
-            case "*":
+            case .mult:
                 let (n1, r1) = f1.split(by: isNumber)
                 let (n2, r2) = f2.split(by: isNumber)
                 if **r1 === **r2 {
@@ -64,42 +64,42 @@ let binaryOperations: [Operation] = [
     },
     
 
-    .binary("-", [.number, .number]) {
+    .binary(.sub, [.number, .number]) {
         bin($0, $1, -)
     },
-    .binary("-", [.any, .any]) {
+    .binary(.sub, [.any, .any]) {
         if $0 === $1 {
             return 0
         }
         return $0 + -$1
     },
-    .unary("-", [.any]) {
+    .unary(.sub, [.any]) {
         -1 * $0
     },
 
-    .binary("*", [.number, .number]) {
+    .binary(.mult, [.number, .number]) {
         bin($0, $1, *)
     },
-    .binary("*", [.any, .any]) {
+    .binary(.mult, [.any, .any]) {
         $0 === $1 ? $0 ^ 2 : nil
     },
-    .binary("*", [.any, .func]) {
+    .binary(.mult, [.any, .func]) {
         let fun = $1 as! Function
         switch fun.name {
-        case "^" where fun[0] === $0:
+        case .exp where fun[0] === $0:
             return $0 ^ (fun[1] + 1)
         default:
             break
         }
         return nil
     },
-    .binary("*", [.func, .func]) {
+    .binary(.mult, [.func, .func]) {
         let f1 = $0 as! Function
         let f2 = $1 as! Function
 
         if f1.name == f2.name {
             switch f1.name {
-            case "^" where f1[0] === f2[0]:
+            case .exp where f1[0] === f2[0]:
                 return f1[0] ^ (f1[1] + f2[1])
             default:
                 break
@@ -107,7 +107,7 @@ let binaryOperations: [Operation] = [
         }
         return nil
     },
-    .binary("*", [.any, .int]) {
+    .binary(.mult, [.any, .int]) {
         let n = $1 as! Int
         switch n {
         case 0:
@@ -119,24 +119,24 @@ let binaryOperations: [Operation] = [
         }
     },
 
-    .binary("/", [.number, .number]) {
+    .binary(.div, [.number, .number]) {
         bin($0, $1, /)
     },
-    .binary("/", [.any, .any]) {
+    .binary(.div, [.any, .any]) {
         if $0 === $1 {
             return 1
         }
         return $0 * ($1 ^ -1)
     },
 
-    .binary("mod", [.number, .number]) {
+    .binary(.mod, [.number, .number]) {
         bin($0, $1, %)
     },
 
-    .binary("^", [.number, .number]) {
+    .binary(.exp, [.number, .number]) {
         bin($0, $1, pow)
     },
-    .binary("^", [.nan, .int]) {
+    .binary(.exp, [.nan, .int]) {
         let n = $1 as! Int
         switch n {
         case 0: return 1
@@ -145,30 +145,30 @@ let binaryOperations: [Operation] = [
         }
         return nil
     },
-    .binary("^", [.number, .nan]) {(lhs, _) in
+    .binary(.exp, [.number, .nan]) {(lhs, _) in
         lhs === 0 ? 0 : nil
     },
-    .binary("^", [.func, .number]) {
+    .binary(.exp, [.func, .number]) {
         guard let fun = $0 as? Function, fun.contains(where: isNumber, depth: 1) else {
             return nil
         }
         switch fun.name {
-        case "*":
+        case .mult:
             let (nums, nans) = fun.split(by: isNumber)
             return (**nums ^ $1) * (**nans ^ $1)
-        case "^" where fun[0] is NSNumber:
+        case .exp where fun[0] is NSNumber:
             return (fun[0] ^ $1) ^ fun[1]
-        case "^" where fun[1] is NSNumber:
+        case .exp where fun[1] is NSNumber:
             return fun[0] ^ (fun[1] * $1)
         default:
             break
         }
         return nil
     },
-    .binary("^", [.number, .func]) {
+    .binary(.exp, [.number, .func]) {
         let fun = $1 as! Function
         switch fun.name {
-        case "*" where fun.contains(where: isNumber, depth: 1):
+        case .mult where fun.contains(where: isNumber, depth: 1):
             let (nums, nans) = fun.split(by: isNumber)
             return ($0 ^ **nums) * ($0 ^ **nans)
         default: break

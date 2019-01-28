@@ -11,10 +11,10 @@ import Foundation
 let probabilityOperations: [Operation] = [
 
     // Random number generation
-    .init("random", []) { _ in
+    .init(.random, []) { _ in
         return Double.random(in: 0...1)
     },
-    .binary("random", [.number, .number]) {
+    .binary(.random, [.number, .number]) {
         let lb = $0≈!
         let ub = $1≈!
         let i = min(lb, ub)
@@ -23,15 +23,15 @@ let probabilityOperations: [Operation] = [
     },
 
     // Combination and permutation
-    .binary("npr", [.any, .any]) {
+    .binary(.npr, [.any, .any]) {
         return $0~! / ($0 - $1)~!
     },
-    .binary("ncr", [.any, .any]) {
-        return Function("npr", [$0, $1]) / $1~!
+    .binary(.ncr, [.any, .any]) {
+        return Function(.npr, [$0, $1]) / $1~!
     },
 
     // Factorial
-    .unary("factorial", [.number]) {
+    .unary(.factorial, [.number]) {
         if let i = Int(exactly: $0≈!) {
             return factorial(Double(i))
         }

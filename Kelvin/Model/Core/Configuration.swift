@@ -11,45 +11,45 @@ import Foundation
 /// Default configurations for built-in operations.
 let defaultConfiguration: [Operation.Attribute: [String]] = [
     .commutative: [
-        "*",
-        "+",
-        "and",
-        "or"
+        .mult,
+        .add,
+        .and,
+        .or
     ],
     .preservesArguments: [
-        "complexity",
-        "repeat",
-        "exec",
-        "define",
-        "def",
-        "del",
-        "if",
-        "measure",
-        "try",
+        .complexity,
+        .repeat,
+        .then,
+        .define,
+        .def,
+        .del,
+        .if,
+        .measure,
+        .try,
         
         // Functions that accepts anonymous arguments should preserve arguments.
-        "feed",
-        "replace",
-        "map",
-        "reduce",
-        "filter",
+        .feed,
+        .replace,
+        .map,
+        .reduce,
+        .filter,
         
-        CalculusEngine.derivative,
-        CalculusEngine.implicitDifferentiation,
-        CalculusEngine.gradient,
-        CalculusEngine.directionalDifferentiation,
+        .derivative,
+        .implicitDifferentiation,
+        .gradient,
+        .directionalDifferentiation,
         
         // Mutating functions should preserve arguments.
         // Thus x += 1 won't become ... += 1
-        "++",
-        "--",
-        "+=",
-        "-=",
-        "*=",
-        "/="
+        .increment,
+        .decrement,
+        .mutatingAdd,
+        .mutatingSub,
+        .mutatingMult,
+        .mutatingDiv
     ],
     .forwardCommutative: [
-        "/",
-        "-"
+        .div,
+        .sub
     ]
 ]

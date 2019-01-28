@@ -9,73 +9,73 @@
 import Foundation
 
 let vectorOperations: [Operation] = [
-    .binary("+", [.vec, .vec]) {
+    .binary(.add, [.vec, .vec]) {
         try v($0).perform(+, with: v($1))
     },
-    .binary("+", [.vec, .number]) {(lhs, rhs) in
+    .binary(.add, [.vec, .number]) {(lhs, rhs) in
         Vector(v(lhs).map {$0 + rhs})
     },
-    .binary("-", [.vec, .vec]) {
+    .binary(.sub, [.vec, .vec]) {
         try v($0).perform(-, with: v($1))
     },
-    .binary("-", [.vec, .number]) {(lhs, rhs) in
+    .binary(.sub, [.vec, .number]) {(lhs, rhs) in
         Vector(v(lhs).map {$0 - rhs})
     },
-    .binary("dotP", [.vec, .vec]) {
+    .binary(.dotProduct, [.vec, .vec]) {
         try v($0).dot(with: v($1))
     },
-    .binary("crossP", [.vec, .vec]) {
+    .binary(.crossProduct, [.vec, .vec]) {
         try v($0).cross(with: v($1))
     },
-    .binary("*", [.vec, .number]) {(lhs, rhs) in
+    .binary(.mult, [.vec, .number]) {(lhs, rhs) in
         Vector(v(lhs).map {$0 * rhs})
     },
-    .binary("/", [.vec, .number]) {(lhs, rhs) in
+    .binary(.div, [.vec, .number]) {(lhs, rhs) in
         Vector(v(lhs).map {$0 / rhs})
     },
-    .unary("unitVec", [.vec]) {
+    .unary(.unitVector, [.vec]) {
         return v($0).unitVector
     },
-    .unary("mag", [.vec]) {
+    .unary(.magnitude, [.vec]) {
         return v($0).magnitude
     }
 ]
 
 let matrixOperations: [Operation] = [
-    .binary("+", [.matrix, .matrix]) {
+    .binary(.add, [.matrix, .matrix]) {
         try m($0).perform(+, with: m($1))
     },
-    .binary("+", [.matrix, .any]) {(lhs, rhs) in
+    .binary(.add, [.matrix, .any]) {(lhs, rhs) in
         m(lhs).performOnEach {$0 + rhs}
     },
-    .binary("-", [.matrix, .matrix]) {
+    .binary(.sub, [.matrix, .matrix]) {
         try m($0).perform(-, with: m($1))
     },
-    .binary("-", [.matrix, .any]) {(lhs, rhs) in
+    .binary(.sub, [.matrix, .any]) {(lhs, rhs) in
         m(lhs).performOnEach {$0 - rhs}
     },
-    .binary("*", [.matrix, .any]) {(lhs, rhs) in
+    .binary(.mult, [.matrix, .any]) {(lhs, rhs) in
         m(lhs).performOnEach {$0 * rhs}
     },
-    .binary("/", [.matrix, .any]) {(lhs, rhs) in
+    .binary(.div, [.matrix, .any]) {(lhs, rhs) in
         m(lhs).performOnEach {$0 / rhs}
     },
-    .binary("mult", [.matrix, .matrix]) {
+    .binary(.matrixMultiplication, [.matrix, .matrix]) {
         try m($0).mult(m($1))
     },
-    .unary("det", [.matrix]) {
+    .unary(.determinant, [.matrix]) {
         return try m($0).determinant()
     },
-    .binary("mat", [.int, .int]) {
+    .binary(.createMatrix, [.int, .int]) {
         Matrix(rows: i($0), cols: i($1))
     },
-    .unary("mat", [.int]) {
+    .unary(.createMatrix, [.int]) {
         Matrix(i($0))
     },
-    .unary("idMat", [.int]) {
+    .unary(.identityMatrix, [.int]) {
         Matrix.identityMatrix(i($0))
     },
-    .unary("invert", [.matrix]) {
+    .unary(.invertMatrix, [.matrix]) {
         m($0).inverted
     }
 ]
