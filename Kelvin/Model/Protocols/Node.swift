@@ -292,3 +292,9 @@ postfix operator ≈!
 public postfix func ≈!(_ node: Node) -> Double {
     return (node≈)!
 }
+
+postfix operator &
+
+public postfix func &(_ str: String) -> Variable {
+    return try! Variable(str)
+}

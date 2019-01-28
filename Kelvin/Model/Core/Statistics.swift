@@ -48,11 +48,11 @@ let statOperations: [Operation] = [
         return ++nodes / nodes.count
     },
     .unary("ssx", [.list]) {
-        return try ssx($0 as! List)
+        return try ssx(($0 as! List).convertToDoubles())
     },
     .unary("variance", [.list]) {
         let list = $0 as! List
-        let s = try ssx(list)
+        let s = try ssx(list.convertToDoubles())
         guard let n = s as? Double else {
             // If we cannot calculate sum of difference squared,
             // return the error message.
@@ -151,6 +151,12 @@ let statOperations: [Operation] = [
         let stdev = $0[2]≈!
         let mean = $0[1]≈!
         return try invNorm($0[0]≈!) * stdev + mean
+    },
+    .unary("normPdf", [.any]) {
+        return normPdf($0)
+    },
+    .init("normPdf", [.any, .any, .any]) {
+        return normPdf($0[0], μ: $0[1], σ: $0[2])
     }
 ]
 
@@ -233,23 +239,13 @@ fileprivate func median(_ numbers: [Double]) -> (Double, idx: Int?) {
 }
 
 /// Sum of difference squared.
-fileprivate func ssx(_ list: List) throws -> Node {
-    let nodes = list.elements
-    for e in nodes {
-        if !(e is NSNumber) {
-            throw ExecutionError.general(errMsg: "every element in the list must be a number.")
-        }
-    }
-
-    let numbers: [Double] = nodes.map {
-        $0≈!
-    }
+fileprivate func ssx(_ numbers: [Double]) throws -> Node {
 
     // Calculate average.
     let sum: Double = numbers.reduce(0) {
         $0 + $1
     }
-    let avg: Double = sum / Double(nodes.count)
+    let avg: Double = sum / Double(numbers.count)
 
     // Sum of squared differences
     return numbers.map {
@@ -304,6 +300,21 @@ fileprivate func normCdf(from lb: Double, to ub: Double) -> Double {
  */
 fileprivate func normCdf(from lb: Double, to ub: Double, μ: Double, σ: Double) -> Double {
     return normCdf((ub - μ) / σ) - normCdf((lb - μ) / σ)
+}
+
+/**
+ Normal probability density function.
+ Definition: 1 / √(2π) * e ^ (-1 / 2) ^ 2
+ */
+fileprivate func normPdf(_ x: Node) -> Node {
+    return 1 / √(2 * "pi"&) * ("e"& ^ ((-1 / 2) * (x ^ 2)))
+}
+
+/**
+ normalPdf(x,μ,σ)=1 / σ * normalPdf((x−μ) / σ)
+ */
+fileprivate func normPdf(_ x: Node, μ: Node, σ: Node) -> Node {
+    return 1 / σ * normPdf((x - μ) / σ)
 }
 
 fileprivate func randNorm(μ: Double, σ: Double, n: Int) -> [Double] {

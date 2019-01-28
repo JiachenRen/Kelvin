@@ -44,6 +44,11 @@ let listAndTupleOperations: [Operation] = [
     .init("^", [.list, .any]) {
         map(by: "^", $0[0], $0[1])
     },
+    .binary("^", [.any, .list]) {
+        let list = $1 as! List
+        let baseList = List([Double](repeating: $0≈!, count: list.count))
+        return try join(by: "^", baseList, list)
+    },
     
     .init("mod", [.list, .list]) {
         try join(by: "mod", $0[0], $0[1])
