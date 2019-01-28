@@ -11,16 +11,16 @@ import Foundation
 /// Algebraic operations (factorization, expansion)
 let algebraicOperations: [Operation] = [
     .unary(.factorize, [.any]) {
-        AlgebraEngine.factorize($0)
+        try AlgebraEngine.factorize($0)
     },
 ]
 
 fileprivate class AlgebraEngine {
 
     /// Factorizes the parent node; e.g. a*b+a*c becomes a*(b+c)
-    fileprivate static func factorize(_ parent: Node) -> Node {
-        return parent.replacing(by: {
-            factorize(($0 as! Function).elements)
+    fileprivate static func factorize(_ parent: Node) throws -> Node {
+        return try parent.replacing(by: {
+            try factorize(($0 as! Function).elements)
         }) {
             ($0 as? Function)?.name == .add
         }
@@ -31,15 +31,52 @@ fileprivate class AlgebraEngine {
      - Parameter nodes: The arguments of a summation function
      - Returns: The factorized form of arguments.
      */
-    fileprivate static func factorize(_ nodes: [Node]) -> Node {
+    fileprivate static func factorize(_ nodes: [Node]) throws -> Node {
         var nodes = nodes
-        let factors = commonFactors(nodes)
-        for f in factors {
-            nodes = nodes.map {
-                factorize($0, by: f)
-            }
+        if nodes.count == 0 {
+            throw ExecutionError.unexpectedError
+        } else if nodes.count == 1 {
+            return nodes.first!
         }
-        return **factors * ++nodes
+        
+        var factorizedForms = [Node]()
+        
+        // For each permutation of two distinct nodes in the pool,
+        // find their common factors (if there is any)
+        for i in 0..<nodes.count {
+            let n1 = nodes.remove(at: i)
+            for j in i..<nodes.count {
+                let n2 = nodes.remove(at: j)
+                let factors = commonFactors([n1, n2])
+                
+                // For each common factor, factorize n1 and n2 by the common factor,
+                // simplify (if possible), then add the factored form back into the pool
+                // for further factorization.
+                for f in factors {
+                    let a = factorize(n1, by: f)
+                    let b = factorize(n2, by: f)
+                    let fab = try factorize(a + b)
+                        .simplify()
+                    
+                    var pool = nodes
+                    pool.append(f * fab)
+                    
+                    // Recursively factor the updated nodes pool, then choose
+                    // the simpliest permutation of the recursively factorized forms
+                    // and add it to the list of factorized forms at this level.
+                    factorizedForms.append(try factorize(pool))
+                }
+                nodes.insert(n2, at: j)
+            }
+            nodes.insert(n1, at: i)
+        }
+        
+        // Return the simplest permutation of all factorized forms.
+        return try factorizedForms.map {
+            try $0.simplify()
+        }.sorted {
+            $0.complexity < $1.complexity
+        }.first ?? ++nodes
     }
 
     /**

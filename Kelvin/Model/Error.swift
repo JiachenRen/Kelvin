@@ -20,6 +20,8 @@ public enum ExecutionError: Error {
     static let indexOutOfBounds = ExecutionError.general(errMsg: "index out of bounds")
     static let dimensionMismatch = ExecutionError.general(errMsg: "dimension mismatch")
     static let predicateException = ExecutionError.general(errMsg: "predicate must be a boolean")
+    static let unexpectedError = ExecutionError.general(errMsg: "an unexpected error has occurred")
+    
     case general(errMsg: String)
     
     static func invalidDT(_ invalid: String) -> ExecutionError {
