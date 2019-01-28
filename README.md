@@ -50,6 +50,7 @@ Based on Java Algebra System's powerful engine, Kelvin is a powerful programming
 - [ ] Two variable statistics
 - [x] Distributions
   - [x] Normal Cdf (-∞ to x, from lb to ub, from lb to ub with μ and σ)
+  - [x] Random normal distribution (randNorm)
   - [ ] Normal Pdf
   - [ ] Inverse Normal
   - [ ] Binomial Cdf/Pdf
