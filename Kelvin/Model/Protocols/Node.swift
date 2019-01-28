@@ -280,3 +280,15 @@ public func ln(_ arg: Node) -> Node {
 public func sign(_ arg: Node) -> Node {
     return Function("sign", [arg])
 }
+
+postfix operator ≈
+
+public postfix func ≈(_ node: Node) -> Double? {
+    return node.evaluated?.doubleValue
+}
+
+postfix operator ≈!
+
+public postfix func ≈!(_ node: Node) -> Double {
+    return (node≈)!
+}

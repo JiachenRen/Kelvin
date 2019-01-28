@@ -97,7 +97,7 @@ public struct List: MutableListProtocol, NaN {
      */
     public func convertToDoubles() throws -> [Double] {
         return try elements.map {
-            if let d = $0.evaluated?.doubleValue {
+            if let d = $0≈ {
                 return d
             }
             let msg = "conversion failed - every element must be a number"

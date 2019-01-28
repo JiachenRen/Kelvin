@@ -9,74 +9,74 @@
 import Foundation
 
 let vectorOperations: [Operation] = [
-    .init("+", [.vec, .vec]) {
-        try v($0[0]).perform(+, with: v($0[1]))
+    .binary("+", [.vec, .vec]) {
+        try v($0).perform(+, with: v($1))
     },
-    .init("+", [.vec, .number]) { nodes in
-        Vector(v(nodes[0]).map {$0 + nodes[1]})
+    .binary("+", [.vec, .number]) {(lhs, rhs) in
+        Vector(v(lhs).map {$0 + rhs})
     },
-    .init("-", [.vec, .vec]) {
-        try v($0[0]).perform(-, with: v($0[1]))
+    .binary("-", [.vec, .vec]) {
+        try v($0).perform(-, with: v($1))
     },
-    .init("-", [.vec, .number]) { nodes in
-        Vector(v(nodes[0]).map {$0 - nodes[1]})
+    .binary("-", [.vec, .number]) {(lhs, rhs) in
+        Vector(v(lhs).map {$0 - rhs})
     },
-    .init("dotP", [.vec, .vec]) {
-        try v($0[0]).dot(with: v($0[1]))
+    .binary("dotP", [.vec, .vec]) {
+        try v($0).dot(with: v($1))
     },
-    .init("crossP", [.vec, .vec]) {
-        try v($0[0]).cross(with: v($0[1]))
+    .binary("crossP", [.vec, .vec]) {
+        try v($0).cross(with: v($1))
     },
-    .init("*", [.vec, .number]) { nodes in
-        Vector(v(nodes[0]).map {$0 * nodes[1]})
+    .binary("*", [.vec, .number]) {(lhs, rhs) in
+        Vector(v(lhs).map {$0 * rhs})
     },
-    .init("/", [.vec, .number]) { nodes in
-        Vector(v(nodes[0]).map {$0 / nodes[1]})
+    .binary("/", [.vec, .number]) {(lhs, rhs) in
+        Vector(v(lhs).map {$0 / rhs})
     },
-    .init("unitVec", [.vec]) {
-        return v($0[0]).unitVector
+    .unary("unitVec", [.vec]) {
+        return v($0).unitVector
     },
-    .init("mag", [.vec]) {
-        return v($0[0]).magnitude
+    .unary("mag", [.vec]) {
+        return v($0).magnitude
     }
 ]
 
 let matrixOperations: [Operation] = [
-    .init("+", [.matrix, .matrix]) {
-        try m($0[0]).perform(+, with: m($0[1]))
+    .binary("+", [.matrix, .matrix]) {
+        try m($0).perform(+, with: m($1))
     },
-    .init("+", [.matrix, .any]) { nodes in
-        m(nodes[0]).performOnEach {$0 + nodes[1]}
+    .binary("+", [.matrix, .any]) {(lhs, rhs) in
+        m(lhs).performOnEach {$0 + rhs}
     },
-    .init("-", [.matrix, .matrix]) {
-        try m($0[0]).perform(-, with: m($0[1]))
+    .binary("-", [.matrix, .matrix]) {
+        try m($0).perform(-, with: m($1))
     },
-    .init("-", [.matrix, .any]) { nodes in
-        m(nodes[0]).performOnEach {$0 - nodes[1]}
+    .binary("-", [.matrix, .any]) {(lhs, rhs) in
+        m(lhs).performOnEach {$0 - rhs}
     },
-    .init("*", [.matrix, .any]) { nodes in
-        m(nodes[0]).performOnEach {$0 * nodes[1]}
+    .binary("*", [.matrix, .any]) {(lhs, rhs) in
+        m(lhs).performOnEach {$0 * rhs}
     },
-    .init("/", [.matrix, .any]) { nodes in
-        m(nodes[0]).performOnEach {$0 / nodes[1]}
+    .binary("/", [.matrix, .any]) {(lhs, rhs) in
+        m(lhs).performOnEach {$0 / rhs}
     },
-    .init("mult", [.matrix, .matrix]) {
-        try m($0[0]).mult(m($0[1]))
+    .binary("mult", [.matrix, .matrix]) {
+        try m($0).mult(m($1))
     },
-    .init("det", [.matrix]) {
-        return try m($0[0]).determinant()
+    .unary("det", [.matrix]) {
+        return try m($0).determinant()
     },
-    .init("mat", [.int, .int]) {
-        Matrix(rows: i($0[0]), cols: i($0[1]))
+    .binary("mat", [.int, .int]) {
+        Matrix(rows: i($0), cols: i($1))
     },
-    .init("mat", [.int]) {
-        Matrix(i($0[0]))
+    .unary("mat", [.int]) {
+        Matrix(i($0))
     },
-    .init("idMat", [.int]) {
-        Matrix.identityMatrix(i($0[0]))
+    .unary("idMat", [.int]) {
+        Matrix.identityMatrix(i($0))
     },
-    .init("invert", [.matrix]) {
-        m($0[0]).inverted
+    .unary("invert", [.matrix]) {
+        m($0).inverted
     }
 ]
 

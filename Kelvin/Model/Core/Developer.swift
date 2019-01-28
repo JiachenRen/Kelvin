@@ -28,26 +28,26 @@ let developerOperations: [Operation] = [
         }
         return false
     },
-    .init("xor", [.any, .any]) {
-        (!!$0[0] &&& $0[1]) ||| ($0[0] &&& !!$0[1])
+    .binary("xor", [.any, .any]) {
+        (!!$0 &&& $1) ||| ($0 &&& !!$1)
     },
-    .init("not", [.bool]) {
-        !($0[0] as! Bool)
+    .unary("not", [.bool]) {
+        !($0 as! Bool)
     },
     
     // Variable/function definition and deletion
-    .init("def", [.equation]) { nodes in
-        guard let eq = nodes[0] as? Equation else {
-            throw ExecutionError.general(errMsg: "cannot use \(nodes[0].stringified) as definition.") 
+    .unary("def", [.equation]) {
+        guard let eq = $0 as? Equation else {
+            throw ExecutionError.general(errMsg: "cannot use \($0.stringified) as definition.")
         }
         try eq.define()
         return eq.lhs
     },
-    .init("define", [.any, .any]) { nodes in
-        return Function("def", [Equation(lhs: nodes[0], rhs: nodes[1])])
+    .binary("define", [.any, .any]) {
+        return Function("def", [Equation(lhs: $0, rhs: $1)])
     },
-    .init("del", [.var]) { nodes in
-        if let v = nodes[0] as? Variable {
+    .unary("del", [.var]) {
+        if let v = $0 as? Variable {
             Variable.delete(v.name)
             Operation.remove(v.name)
             return "deleted '\(v.stringified)'"
@@ -56,32 +56,32 @@ let developerOperations: [Operation] = [
     },
     
     // C like syntactic shorthand
-    .init("++", [.var]) {
-        $0[0] +== 1
+    .unary("++", [.var]) {
+        $0 +== 1
     },
-    .init("--", [.var]) {
-        $0[0] -== 1
+    .unary("--", [.var]) {
+        $0 -== 1
     },
-    .init("+=", [.var, .any]) {
-        try assign($0[1], to: $0[0], by: +)
+    .binary("+=", [.var, .any]) {
+        try assign($1, to: $0, by: +)
     },
-    .init("-=", [.var, .any]) {
-        try assign($0[1], to: $0[0], by: -)
+    .binary("-=", [.var, .any]) {
+        try assign($1, to: $0, by: -)
     },
-    .init("*=", [.var, .any]) {
-        try assign($0[1], to: $0[0], by: *)
+    .binary("*=", [.var, .any]) {
+        try assign($1, to: $0, by: *)
     },
-    .init("/=", [.var, .any]) {
-        try assign($0[1], to: $0[0], by: /)
+    .binary("/=", [.var, .any]) {
+        try assign($1, to: $0, by: /)
     },
     
     // Consecutive execution, feed forward, flow control
-    .init("if", [.any, .tuple]) { nodes in
-        let node = try nodes[0].simplify()
+    .binary("if", [.any, .tuple]) {
+        let node = try $0.simplify()
         guard let predicament = node as? Bool else {
             return nil
         }
-        let tuple = nodes[1] as! Tuple
+        let tuple = $1 as! Tuple
 
         return try (predicament ? tuple.lhs : tuple.rhs).simplify() // Should this be simplified?
     },
@@ -90,13 +90,13 @@ let developerOperations: [Operation] = [
             try $0.simplify()
         }.last
     },
-    .init("feed", [.any, .any]) { nodes in
-        let simplified = try nodes[0].simplify()
-        return nodes.last!.replacingAnonymousArgs(with: [simplified])
+    .binary("feed", [.any, .any]) {
+        let simplified = try $0.simplify()
+        return $1.replacingAnonymousArgs(with: [simplified])
     },
-    .init("replace", [.any, .any]) { nodes in
-        let simplified = try nodes[0].simplify()
-        guard let eq = nodes[1] as? Equation else {
+    .binary("replace", [.any, .any]) {
+        let simplified = try $0.simplify()
+        guard let eq = $1 as? Equation else {
             return nil
         }
         let target = try eq.lhs.simplify()
@@ -105,26 +105,26 @@ let developerOperations: [Operation] = [
             $0 === target
         }
     },
-    .init("repeat", [.any, .number]) { nodes in
-        let times = Int(nodes[1].evaluated!.doubleValue)
+    .binary("repeat", [.any, .number]) {(lhs, rhs) in
+        let times = Int(rhs≈!)
         var elements = [Node]()
         (0..<times).forEach { _ in
-            elements.append(nodes[0])
+            elements.append(lhs)
         }
         return List(elements)
     },
-    .init("copy", [.any, .number]) { nodes in
-        return Function("repeat", nodes)
+    .init("copy", [.any, .number]) {
+        return Function("repeat", $0)
     },
     
     // String concatenation
-    .init("concat", [.any, .any]) {
-        return "\($0[0])\($0[1])"
+    .binary("concat", [.any, .any]) {
+        return "\($0)\($1)"
     },
     
     // String subscript
-    .init("get", [.string, .number]) {
-        guard let s = $0[0] as? String, let n = $0[1] as? Int else {
+    .binary("get", [.string, .number]) {
+        guard let s = $0 as? String, let n = $1 as? Int else {
             return nil
         }
         if n >= s.count || n < 0{
@@ -135,11 +135,11 @@ let developerOperations: [Operation] = [
     },
     
     // Developer/debug functions, program input/output, compilation
-    .init("complexity", [.any]) {
-        $0[0].complexity
+    .unary("complexity", [.any]) {
+        $0.complexity
     },
-    .init("eval", [.any]) {
-        try $0[0].simplify()
+    .unary("eval", [.any]) {
+        try $0.simplify()
     },
     .init("exit", []) { _ in
         exit(0)
@@ -150,13 +150,13 @@ let developerOperations: [Operation] = [
     .init("time", []) { _ in
         Date().timeIntervalSince1970
     },
-    .init("delay", [.number]) {
-        Thread.sleep(forTimeInterval: $0[0].evaluated!.doubleValue)
+    .unary("delay", [.number]) {
+        Thread.sleep(forTimeInterval: $0≈!)
         return "done"
     },
-    .init("run", [.string, .string]) {
-        let flag = $0[0] as! String
-        let filePath = $0[1] as! String
+    .binary("run", [.string, .string]) {
+        let flag = $0 as! String
+        let filePath = $1 as! String
         switch flag {
         case "-c":
             return List(try Program.compileAndRun(filePath, with: Program.Configuration(
@@ -171,21 +171,21 @@ let developerOperations: [Operation] = [
         }
         return "done"
     },
-    .init("run", [.string]) {
-        try Program.compileAndRun($0[0] as! String, with: nil)
+    .unary("run", [.string]) {
+        try Program.compileAndRun($0 as! String, with: nil)
         return "done"
     },
-    .init("try", [.tuple]) {
-        let tuple = $0[0] as! Tuple
+    .unary("try", [.tuple]) {
+        let tuple = $0 as! Tuple
         do {
             return try tuple.lhs.simplify()
         } catch {
             return try tuple.rhs.simplify()
         }
     },
-    .init("try", [.any]) {
+    .unary("try", [.any]) {
         do {
-            return try $0[0].simplify()
+            return try $0.simplify()
         } catch ExecutionError.general(let msg) {
             return msg
         } catch CompilerError.illegalArgument(let msg) {
@@ -194,17 +194,17 @@ let developerOperations: [Operation] = [
             return msg
         }
     },
-    .init("measure", [.any, .int]) {
-        let n = $0[1] as! Int
+    .binary("measure", [.any, .int]) {
+        let n = $1 as! Int
         let t = Date().timeIntervalSince1970
         for _ in 0..<n {
-            let _ = try $0[0].simplify()
+            let _ = try $0.simplify()
         }
         let avg = (Date().timeIntervalSince1970 - t) / Double(n)
         return Tuple("avg(s)", avg)
     },
-    .init("compile", [.string]) {
-        try Compiler.compile($0[0] as! String)
+    .unary("compile", [.string]) {
+        try Compiler.compile($0 as! String)
     }
 ]
 

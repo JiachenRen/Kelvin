@@ -10,8 +10,8 @@ import Foundation
 
 /// Algebraic operations (factorization, expansion)
 let algebraicOperations: [Operation] = [
-    .init("factor", [.any]) {
-        AlgebraEngine.factorize($0[0])
+    .unary("factor", [.any]) {
+        AlgebraEngine.factorize($0)
     },
 ]
 

@@ -11,28 +11,28 @@ import Foundation
 let probabilityOperations: [Operation] = [
 
     // Random number generation
-    .init("random", []) { nodes in
+    .init("random", []) { _ in
         return Double.random(in: 0...1)
     },
-    .init("random", [.number, .number]) { nodes in
-        let lb = nodes[0].evaluated!.doubleValue
-        let ub = nodes[1].evaluated!.doubleValue
+    .binary("random", [.number, .number]) {
+        let lb = $0≈!
+        let ub = $1≈!
         let i = min(lb, ub)
         let j = max(lb, ub)
         return Double.random(in: i...j)
     },
 
     // Combination and permutation
-    .init("npr", [.any, .any]) {
-        return $0[0]~! / ($0[0] - $0[1])~!
+    .binary("npr", [.any, .any]) {
+        return $0~! / ($0 - $1)~!
     },
-    .init("ncr", [.any, .any]) {
-        return Function("npr", $0) / $0[1]~!
+    .binary("ncr", [.any, .any]) {
+        return Function("npr", [$0, $1]) / $1~!
     },
 
     // Factorial
-    .init("factorial", [.number]) {
-        if let i = Int(exactly: $0[0].evaluated!.doubleValue) {
+    .unary("factorial", [.number]) {
+        if let i = Int(exactly: $0≈!) {
             return factorial(Double(i))
         }
         throw ExecutionError.general(errMsg: "can only perform factorial on an integer")

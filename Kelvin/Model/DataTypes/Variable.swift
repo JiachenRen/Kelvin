@@ -54,7 +54,7 @@ public struct Variable: LeafNode, NaN {
 
     /// Variables have a complexity of 2.
     public var complexity: Int {
-        return 2
+        return 3
     }
 
     init(_ name: String) throws {

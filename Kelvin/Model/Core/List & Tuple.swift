@@ -58,7 +58,7 @@ let listAndTupleOperations: [Operation] = [
     },
     .init("get", [.tuple, .number]) { nodes in
         let tuple = nodes[0] as! Tuple
-        let idx = Int(nodes[1].evaluated!.doubleValue)
+        let idx = Int(nodes[1]≈!)
         switch idx {
         case 0:
             return tuple.lhs
@@ -75,7 +75,7 @@ let listAndTupleOperations: [Operation] = [
     },
     .init("get", [.iterable, .number]) { nodes in
         let list = nodes[0] as! ListProtocol
-        let idx = Int(nodes[1].evaluated!.doubleValue)
+        let idx = Int(nodes[1]≈!)
         if idx >= list.count || idx < 0 {
             throw ExecutionError.indexOutOfBounds
         } else {

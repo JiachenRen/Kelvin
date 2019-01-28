@@ -9,11 +9,11 @@
 import Foundation
 
 let calculusOperations: [Operation] = [
-    .init(CalculusEngine.derivative, [.any, .var]) {
-        let v = $0[1] as! Variable
+    .binary(CalculusEngine.derivative, [.any, .var]) {
+        let v = $1 as! Variable
         Scope.withholdAccess(to: v)
         let dv = CalculusEngine.derivative(
-            of: try $0[0].simplify(),
+            of: try $0.simplify(),
             withRespectTo: v)
         Scope.releaseRestrictions()
         return dv
@@ -43,8 +43,8 @@ let calculusOperations: [Operation] = [
         Scope.releaseRestrictions()
         return r
     },
-    .init(CalculusEngine.gradient, [.func, .list]) {
-        let vars = try ($0[1] as! List).elements.map {
+    .binary(CalculusEngine.gradient, [.func, .list]) {
+        let vars = try ($1 as! List).elements.map {
             (n: Node) -> Variable in
             if let v = n as? Variable {
                 return v
@@ -54,7 +54,7 @@ let calculusOperations: [Operation] = [
         
         Scope.withholdAccess(to: vars)
         let grad = CalculusEngine.gradient(
-            of: $0[0] as! Function,
+            of: $0 as! Function,
             independentVars: vars)
         Scope.releaseRestrictions()
         return grad

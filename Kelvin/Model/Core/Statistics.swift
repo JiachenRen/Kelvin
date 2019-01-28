@@ -10,15 +10,15 @@ import Foundation
 
 let statOperations: [Operation] = [
     // Statistics, s stands for sample, p stands for population
-    .init("avg", [.list]) {
-        return Function("sum", $0) / ($0[0] as! List).count
+    .unary("avg", [.list]) {
+        return Function("sum", [$0]) / ($0 as! List).count
     },
-    .init("max", [.list]) {
-        return Function("max", ($0[0] as! List).elements)
+    .unary("max", [.list]) {
+        return Function("max", ($0 as! List).elements)
     },
     .init("max", [.numbers]) {
         let numbers = $0.map {
-            $0.evaluated!.doubleValue
+            $0≈!
         }
         var max: Double = -.infinity
         for n in numbers {
@@ -28,12 +28,12 @@ let statOperations: [Operation] = [
         }
         return max
     },
-    .init("min", [.list]) {
-        return Function("min", ($0[0] as! List).elements)
+    .unary("min", [.list]) {
+        return Function("min", ($0 as! List).elements)
     },
     .init("min", [.numbers]) {
         let numbers = $0.map {
-            $0.evaluated!.doubleValue
+            $0≈!
         }
         var min: Double = .infinity
         for n in numbers {
@@ -46,11 +46,11 @@ let statOperations: [Operation] = [
     .init("avg", [.universal]) { nodes in
         return ++nodes / nodes.count
     },
-    .init("ssx", [.list]) {
-        return try ssx($0[0] as! List)
+    .unary("ssx", [.list]) {
+        return try ssx($0 as! List)
     },
-    .init("variance", [.list]) {
-        let list = $0[0] as! List
+    .unary("variance", [.list]) {
+        let list = $0 as! List
         let s = try ssx(list)
         guard let n = s as? Double else {
             // If we cannot calculate sum of difference squared,
@@ -76,7 +76,7 @@ let statOperations: [Operation] = [
                     $0 as! Tuple
                 }
                 .map {
-                    $0.rhs.evaluated!.doubleValue
+                    $0≈!
                 }
 
         let stdevs = vs.map(sqrt)
@@ -87,8 +87,8 @@ let statOperations: [Operation] = [
     },
 
     // Summation
-    .init("sum", [.list]) {
-        let list = $0[0] as! List
+    .unary("sum", [.list]) {
+        let list = $0 as! List
         var nSum: Double = 0
         var nans = [Node]()
 
@@ -108,22 +108,22 @@ let statOperations: [Operation] = [
     },
     
     // IQR, 5 number summary
-    .init("sum5n", [.list]) {
-        let list = try ($0[0] as! List).convertToDoubles()
+    .unary("sum5n", [.list]) {
+        let list = try ($0 as! List).convertToDoubles()
         return try fiveNSummary(list)
     },
-    .init("iqr", [.list]) {
-        let list = try ($0[0] as! List).convertToDoubles()
+    .unary("iqr", [.list]) {
+        let list = try ($0 as! List).convertToDoubles()
         let stat = try quartiles(list)
         return stat.q3 - stat.q1
     },
-    .init("median", [.list]) {
-        let list = try ($0[0] as! List).convertToDoubles()
+    .unary("median", [.list]) {
+        let list = try ($0 as! List).convertToDoubles()
         let (m, _) = median(list)
         return m
     },
-    .init("outliers", [.list]) {
-        let list = try ($0[0] as! List).convertToDoubles()
+    .unary("outliers", [.list]) {
+        let list = try ($0 as! List).convertToDoubles()
         return try outliers(list)
     }
 ]
@@ -216,7 +216,7 @@ fileprivate func ssx(_ list: List) throws -> Node {
     }
 
     let numbers: [Double] = nodes.map {
-        $0.evaluated!.doubleValue
+        $0≈!
     }
 
     // Calculate avg.

@@ -10,22 +10,22 @@ import Foundation
 
 // Equality, inequality, and equations
 let equalityOperations: [Operation] = [
-    .init("=", [.any, .any]) {
-        Equation(lhs: $0[0], rhs: $0[1])
+    .binary("=", [.any, .any]) {
+        Equation(lhs: $0, rhs: $1)
     },
-    .init("<", [.any, .any]) {
-        Equation(lhs: $0[0], rhs: $0[1], mode: .lessThan)
+    .binary("<", [.any, .any]) {
+        Equation(lhs: $0, rhs: $1, mode: .lessThan)
     },
-    .init(">", [.any, .any]) {
-        Equation(lhs: $0[0], rhs: $0[1], mode: .greaterThan)
+    .binary(">", [.any, .any]) {
+        Equation(lhs: $0, rhs: $1, mode: .greaterThan)
     },
-    .init(">=", [.any, .any]) {
-        Equation(lhs: $0[0], rhs: $0[1], mode: .greaterThanOrEquals)
+    .binary(">=", [.any, .any]) {
+        Equation(lhs: $0, rhs: $1, mode: .greaterThanOrEquals)
     },
-    .init("<=", [.any, .any]) {
-        Equation(lhs: $0[0], rhs: $0[1], mode: .lessThanOrEquals)
+    .binary("<=", [.any, .any]) {
+        Equation(lhs: $0, rhs: $1, mode: .lessThanOrEquals)
     },
-    .init("equals", [.any, .any]) {
-        $0[0] === $0[1]
+    .binary("equals", [.any, .any]) {
+        $0 === $1
     },
 ]

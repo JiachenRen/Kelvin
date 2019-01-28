@@ -67,6 +67,26 @@ public class Operation: Equatable {
             $0 + $1.rawValue
         }
     }
+    
+    /// Convenient factory function for binary operation
+    public static func binary(
+        _ name: String,
+        _ signature: [ArgumentType],
+        binary: @escaping (Node, Node) throws -> Node?) -> Operation {
+        return Operation(name, signature) {
+            try binary($0[0], $0[1])
+        }
+    }
+    
+    /// Convenient factory function for unary operation
+    public static func unary(
+        _ name: String,
+        _ signature: [ArgumentType],
+        unary: @escaping (Node) throws -> Node?) -> Operation {
+        return Operation(name, signature) {
+            try unary($0[0])
+        }
+    }
 
     /**
      Generate the conjugate definition for the given operation.
@@ -247,6 +267,8 @@ public class Operation: Equatable {
                     fallthrough
                 case .string where !(arg is String):
                     fallthrough
+                case .int where !(arg is Int):
+                    fallthrough
                 case .func where !(arg is Function):
                     continue candLoop
                 default: continue
@@ -330,7 +352,7 @@ public class Operation: Equatable {
      and the types of arguments, we can generate a unique signature
      that is used later to find definitions.
      */
-    enum ArgumentType: Int, Equatable {
+    public enum ArgumentType: Int, Equatable {
         case int = 1
         case double
         case number
