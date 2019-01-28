@@ -1,4 +1,4 @@
-# Kelvin
+# Kelvin Computer Algebra System
 Based on Java Algebra System's powerful engine, Kelvin is a powerful programming language built with Swift for algebraic computation. Find [more](https://github.com/JiachenRen/java-algebra-system) about JAS here.
 
 ## Capabilities
