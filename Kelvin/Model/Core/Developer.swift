@@ -95,15 +95,32 @@ let developerOperations: [Operation] = [
         return $1.replacingAnonymousArgs(with: [simplified])
     },
     .binary(.replace, [.any, .any]) {
-        let simplified = try $0.simplify()
-        guard let eq = $1 as? Equation else {
-            return nil
+        var simplified = try $0.simplify()
+    
+        var pairs = [(Node, Node)]()
+        
+        func getPair(_ eq: Equation) throws -> (Node, Node) {
+            return try (eq.lhs.simplify(), eq.rhs.simplify())
         }
-        let target = try eq.lhs.simplify()
-        let replacement = try eq.rhs.simplify()
-        return simplified.replacing(by: {_ in replacement}) {
-            $0 === target
+        if let eq = $1 as? Equation {
+            pairs.append(try getPair(eq))
+        } else if let list = $1 as? List {
+            pairs.append(contentsOf:
+                try list.elements.map {node -> (Node, Node) in
+                if let eq = node as? Equation {
+                    return try getPair(eq)
+                }
+                throw ExecutionError.incompatibleList(.equation)
+            })
         }
+    
+        for (target, replacement) in pairs {
+            simplified = simplified.replacing(by: {_ in replacement}) {
+                $0 === target
+            }
+        }
+        
+        return simplified
     },
     .binary(.repeat, [.any, .number]) {(lhs, rhs) in
         let times = Int(rhs≈!)

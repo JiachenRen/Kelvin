@@ -15,6 +15,7 @@ enum DataType: String, CustomStringConvertible {
     case variable
     case vector
     case matrix
+    case equation
     
     var description: String {
         return rawValue

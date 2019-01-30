@@ -92,7 +92,7 @@ public class Stat {
                 $0 as! Tuple
                 }
                 .map {
-                    $0≈!
+                    $0[1]≈!
             }
             
             let stdevs = vs.map(sqrt)

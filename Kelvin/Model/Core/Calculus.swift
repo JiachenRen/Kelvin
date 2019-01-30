@@ -100,11 +100,11 @@ public class Calculus {
     public static func directionalDifferentiation(
         of fun: Function,
         direction: Vector,
-        independentVars vars: [Variable]) throws -> Vector {
+        independentVars vars: [Variable]) throws -> Node {
         
         let unitVec = direction.unitVector
         let grad = gradient(of: fun, independentVars: vars)
-        return try grad.perform(*, with: unitVec)
+        return try grad.dot(with: unitVec)
     }
     
     /**

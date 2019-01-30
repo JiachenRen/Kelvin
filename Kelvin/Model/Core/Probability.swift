@@ -12,7 +12,7 @@ let probabilityOperations: [Operation] = [
 
     // Random number generation
     .init(.random, []) { _ in
-        return Double.random(in: 0...1)
+        Double.random(in: 0...1)
     },
     .binary(.random, [.number, .number]) {
         let lb = $0≈!
@@ -24,10 +24,13 @@ let probabilityOperations: [Operation] = [
 
     // Combination and permutation
     .binary(.npr, [.any, .any]) {
-        return $0~! / ($0 - $1)~!
+        $0~! / ($0 - $1)~!
     },
     .binary(.ncr, [.any, .any]) {
-        return Function(.npr, [$0, $1]) / $1~!
+        Function(.npr, [$0, $1]) / $1~!
+    },
+    .binary(.ncr, [.list, .int]) {
+        List(combinations(of: ($0 as! List).elements, $1 as! Int).map {List($0)})
     },
 
     // Factorial
@@ -40,6 +43,44 @@ let probabilityOperations: [Operation] = [
 ]
 
 /// A very concise definition of factorial.
-fileprivate func factorial(_ n: Double) -> Double {
+public func factorial(_ n: Double) -> Double {
     return n < 0 ? .nan : n == 0 ? 1 : n * factorial(n - 1)
+}
+
+/**
+ The number of different, unordered combinations of r
+ objects from a set of n objects. Definition: nCr(n,r)=nPr(n,r)/r!=n!/r!(n−r)!
+ */
+public func combinations<T>(of arr: [T], _ r: Int) -> [[T]] {
+    func combinationUtil<T>(
+        _ arr: [T],
+        _ data: inout [T?],
+        _ start: Int,
+        _ end: Int,
+        _ index: Int,
+        _ r: Int) -> [[T]] {
+        
+        // Current combination is ready, unwrap and return.
+        if (index == r) {
+            return [data.compactMap {$0}]
+        }
+        
+        // Replace index with all possible elements. The condition
+        // "end-i+1 >= r-index" makes sure that including one element
+        // at index will make a combination with remaining elements
+        // at remaining positions
+        var combinations = [[T]]()
+        for i in start...end {
+            if !(i <= end && end - i + 1 >= r - index) {
+                return combinations
+            }
+            data[index] = arr[i];
+            let comb = combinationUtil(arr, &data, i + 1, end, index + 1, r)
+            combinations.append(contentsOf: comb)
+        }
+        return combinations
+    }
+    
+    var data = [T?](repeating: nil, count: r)
+    return combinationUtil(arr, &data, 0, arr.count - 1, 0, r)
 }

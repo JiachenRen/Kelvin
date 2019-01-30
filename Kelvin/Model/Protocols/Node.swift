@@ -144,7 +144,7 @@ public prefix func **(_ args: [Node]) -> Node {
 prefix operator +
 
 public prefix func +(_ args: [Node]) -> Node {
-    assert(args.count > 2)
+    assert(args.count >= 2)
     return Function("+", args)
 }
 

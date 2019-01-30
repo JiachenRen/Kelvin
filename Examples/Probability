@@ -25,3 +25,8 @@ println mean(rolls3)
 
 # A function that approaches 1 as x approaches infinity.
 def f(x) = min(random()...x) + max(random()...x)
+
+# nCr, nPr
+println (9 ncr 3)
+println (9 npr 3)
+println ({1, 2, 3, x, a, b, 4, 5} ncr 4)
