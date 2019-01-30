@@ -38,7 +38,8 @@ public class Operation: Equatable {
         conversionOperations,
         calculusOperations,
         vectorOperations,
-        matrixOperations
+        matrixOperations,
+        numberOperations
     ].flatMap {
         $0
     }

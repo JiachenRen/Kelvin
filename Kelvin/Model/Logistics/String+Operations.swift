@@ -79,7 +79,7 @@ public extension String {
     public static let gradient = "grad"
     
     // Algebra
-    public static let factorize = "factor"
+    public static let factorize = "factor" // Also used for factorizing an integer
     
     // Probability
     public static let random = "random"
@@ -153,4 +153,8 @@ public extension String {
     public static let degrees = "degrees"
     public static let percent = "pct"
     public static let `as` = "as"
+    
+    // Number
+    public static let greatestCommonDivisor = "gcd"
+    public static let leastCommonMultiple = "lcm"
 }

@@ -274,7 +274,7 @@ public struct Keyword {
         .init(for: .sqrt, associativity: .prefix, precedence: .attached, operator: .init("√", padding: .none)),
         .init(for: .degrees, associativity: .postfix, precedence: .attached, operator: .init("°", padding: .none)),
         .init(for: .factorial, associativity: .postfix, precedence: .attached, operator: .init("!", padding: .none)),
-        .init(for: .percent, associativity: .postfix, precedence: .attached),
+        .init(for: .percent, associativity: .postfix, precedence: .attached, operator: .init("%", padding: .none)),
         .init(for: .equates, associativity: .infix, precedence: .equation, operator: .init("=")),
         .init(for: .lessThan, associativity: .infix, precedence: .relational, operator: .init("<")),
         .init(for: .greaterThan, associativity: .infix, precedence: .relational, operator: .init(">")),
