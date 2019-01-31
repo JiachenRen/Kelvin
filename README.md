@@ -21,7 +21,7 @@ Based on Java Algebra System's powerful engine, Kelvin is a powerful programming
 ### Algebra
 - [x] Commutative simplification
 - [x] Preliminary factorization
-- [ ] Expand expressions
+- [x] Expand expressions
 - [ ] Complete the square
 - [ ] Exponential simplification
 - [ ] Solve
