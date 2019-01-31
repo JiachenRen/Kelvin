@@ -4,13 +4,17 @@ Based on Java Algebra System's powerful engine, Kelvin is a powerful programming
 ## Capabilities
 
 ### Arithmetic
-- [x] Binary operations
+- [x] Standard binary operations
   - *Addition*
   - *Subtraction*
   - *Multiplication*
   - *Division*
   - *Exponentiation*
+- [x] Unary operations (many, see below)
 
+### Number
+- [x] Greatest common divisor & least common multiple
+- [x] Prime factors
 - [ ] Fraction
 - [ ] Exact vs. approximate
 
@@ -127,3 +131,4 @@ Based on Java Algebra System's powerful engine, Kelvin is a powerful programming
 - [x] Scope management
   - Lock/unlock variables
   - Save/restore
+- [ ] Multi-line block
