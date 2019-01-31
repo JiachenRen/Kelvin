@@ -80,6 +80,7 @@ public extension String {
     
     // Algebra
     public static let factorize = "factor" // Also used for factorizing an integer
+    public static let expand = "expand"
     
     // Probability
     public static let random = "random"

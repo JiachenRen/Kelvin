@@ -1,5 +1,5 @@
 # Five number summary
-println (fiveNSummary({1, 3, 7, 9, 11, 12, 17}) | $0::1)
+println (sum5n({1, 3, 7, 9, 11, 12, 17}) | $0::1)
 
 def l1 = {1,1,2,2,3,3,3,4,2,6,9,49,107}
 println sum5n(l1)
