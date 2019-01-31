@@ -87,7 +87,7 @@ public extension Stat {
     }
     
     /// Sum of difference squared.
-    public static func ssx(_ numbers: [Double]) throws -> Node {
+    public static func ssx(_ numbers: [Double]) -> Double {
         
         // Calculate average.
         let sum: Double = numbers.reduce(0) {
@@ -96,12 +96,8 @@ public extension Stat {
         let avg: Double = sum / Double(numbers.count)
         
         // Sum of squared differences
-        return numbers.map {
-            pow($0 - avg, 2)
-            }
-            .reduce(0) { (a: Double, b: Double) in
-                return a + b
-        }
+        return numbers.map {pow($0 - avg, 2)}
+            .reduce(0) {$0 + $1}
     }
     
     public static func max(_ numbers: [Double]) -> Double {
@@ -138,5 +134,16 @@ public extension Stat {
             }
         }
         return ++nans + nSum
+    }
+    
+    public static func variance(_ numbers: [Double]) -> (sample: Double, population: Double) {
+        let s = ssx(numbers)
+        let c = Double(numbers.count)
+        return (s / (c - 1), s / c)
+    }
+    
+    public static func stdev(_ numbers: [Double]) -> (sample: Double, population: Double) {
+        let v = variance(numbers)
+        return (sqrt(v.sample), sqrt(v.population))
     }
 }

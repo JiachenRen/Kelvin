@@ -67,38 +67,16 @@ public class Stat {
         },
         .unary(.variance, [.list]) {
             let list = $0 as! List
-            let s = try ssx(list.convertToDoubles())
-            guard let n = s as? Double else {
-                // If we cannot calculate sum of difference squared,
-                // return the error message.
-                return s
-            }
-            
+            let variance = Stat.variance(try list.convertToDoubles())
             return List([
-                Tuple("sample", n / (list.count - 1)),
-                Tuple("population", n / list.count)
-                ])
+                Tuple("sample", variance.sample),
+                Tuple("population", variance.population)
+            ])
         },
-        .init(.stdev, [.list]) { nodes in
-            let vars = try Function(.variance, nodes).simplify()
-            
-            guard let elements = (vars as? List)?.elements else {
-                
-                // Forward error message
-                return vars
-            }
-            
-            let vs: [Double] = elements.map {
-                $0 as! Tuple
-                }
-                .map {
-                    $0[1]≈!
-            }
-            
-            let stdevs = vs.map(sqrt)
-            assert(stdevs.count == 2)
-            
-            let es = [Tuple("Sₓ", stdevs[0]), Tuple("σₓ", stdevs[1])]
+        .unary(.stdev, [.list]) {
+            let list = $0 as! List
+            let stdev = Stat.stdev(try list.convertToDoubles())
+            let es = [Tuple("Sₓ", stdev.sample), Tuple("σₓ", stdev.population)]
             return List(es)
         },
         
