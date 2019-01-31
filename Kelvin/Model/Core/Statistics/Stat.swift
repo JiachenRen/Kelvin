@@ -91,7 +91,15 @@ public class Stat {
         // IQR, 5 number summary
         .unary(.fiveNumberSummary, [.list]) {
             let list = try ($0 as! List).convertToDoubles()
-            return try fiveNSummary(list)
+            let sum5n = try fiveNSummary(list)
+            let stats: [Tuple] = [
+                .init("min", sum5n[0]),
+                .init("q1", sum5n[1]),
+                .init("median", sum5n[2]),
+                .init("q3", sum5n[3]),
+                .init("max", sum5n[4])
+            ]
+            return List(stats)
         },
         .unary(.interQuartileRange, [.list]) {
             let list = try ($0 as! List).convertToDoubles()
@@ -105,7 +113,38 @@ public class Stat {
         },
         .unary(.outliers, [.list]) {
             let list = try ($0 as! List).convertToDoubles()
-            return try outliers(list)
+            let outliers = try Stat.outliers(list)
+            return List([
+                Tuple("lower end", List(outliers.lowerEnd)),
+                Tuple("upper end", List(outliers.upperEnd))
+            ])
+        },
+        .unary(.oneVar, [.list]) {
+            let list = try ($0 as! List).convertToDoubles()
+            let mean = Stat.mean(list)
+            let sum = Stat.sum(list)
+            let sumSq = Stat.sumSquared(list)
+            let (s_stdev, p_stdev) = Stat.stdev(list)
+            let n = list.count
+            let sum5n = try Stat.fiveNSummary(list)
+            let ssx = Stat.ssx(list)
+            
+            let stats: [Tuple] = [
+                .init("x̅", mean),
+                .init("∑x", sum),
+                .init("∑x²", sumSq),
+                .init("Sₓ", s_stdev),
+                .init("σₓ", p_stdev),
+                .init("n", n),
+                .init("Minₓ", sum5n[0]),
+                .init("Q₁", sum5n[1]),
+                .init("Medianₓ", sum5n[2]),
+                .init("Q₃", sum5n[3]),
+                .init("Maxₓ", sum5n[4]),
+                .init("SSX", ssx),
+            ]
+            
+            return List(stats)
         }
     ]
 }

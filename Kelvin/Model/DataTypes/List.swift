@@ -102,8 +102,6 @@ public struct List: MutableListProtocol, NaN {
             }
             let msg = "conversion failed - every element must be a number"
             throw ExecutionError.general(errMsg: msg)
-            }.sorted {
-                $0 < $1
         }
     }
 }

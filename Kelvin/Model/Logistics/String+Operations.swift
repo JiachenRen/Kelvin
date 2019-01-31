@@ -59,6 +59,7 @@ public extension String {
     public static let interQuartileRange = "iqr"
     public static let median = "median"
     public static let outliers = "outliers"
+    public static let oneVar = "oneVar"
     
     // List & Tuple
     public static let list = "list"

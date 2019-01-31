@@ -12,7 +12,7 @@ import GameKit
 // OneVar statistics
 public extension Stat {
     
-    public static func outliers(_ list: [Double]) throws -> List {
+    public static func outliers(_ list: [Double]) throws -> (lowerEnd: [Double], upperEnd: [Double]) {
         let stats = try quartiles(list)
         let iqr = stats.q3 - stats.q1
         let ut = stats.q3 + 1.5 * iqr
@@ -26,55 +26,74 @@ public extension Stat {
             $0 > ut
         }
         
-        return List([
-            Tuple("lower end", List(leOutliers)),
-            Tuple("upper end", List(ueOutliers))
-        ])
+        return (leOutliers, ueOutliers)
     }
     
-    public static func fiveNSummary(_ list: [Double]) throws -> Node {
-        let c = list.count
-        if c == 0 {
-            throw ExecutionError.general(errMsg: "cannot perform summary statistics on empty list.")
-        }
+    public static func fiveNSummary(
+        _ numbers: [Double],
+        isSorted: Bool = false) throws -> [Double] {
         
-        let min = list.first!
-        let max = list.last!
-        
-        let m = try quartiles(list)
-        
-        let summary: [Tuple] = [
-            .init("min", min),
-            .init("q1", m.q1),
-            .init("median", m.m),
-            .init("q3", m.q3),
-            .init("max", max)
-        ]
-        
-        return List(summary)
-    }
-    
-    public static func quartiles(_ numbers: [Double]) throws -> (q1: Double, m: Double, q3: Double) {
+        var numbers = numbers
         let c = numbers.count
         if c == 0 {
             throw ExecutionError.general(errMsg: "cannot perform summary statistics on empty list.")
         }
         
-        let (m, i) = median(numbers)
+        if !isSorted {
+            numbers = numbers.sorted {
+                $0 < $1
+            }
+        }
+        
+        let min = numbers.first!
+        let max = numbers.last!
+        
+        let m = try quartiles(numbers, isSorted: true)
+        
+        return [min, m.q1, m.m, m.q3, max]
+    }
+    
+    public static func quartiles(
+        _ numbers: [Double],
+        isSorted: Bool = false) throws -> (q1: Double, m: Double, q3: Double) {
+        
+        var numbers = numbers
+        let c = numbers.count
+        if c == 0 {
+            throw ExecutionError.general(errMsg: "cannot perform summary statistics on empty list.")
+        }
+        
+        if !isSorted {
+            numbers = numbers.sorted {
+                $0 < $1
+            }
+        }
+        
+        let (m, i) = median(numbers, isSorted: true)
         var l = numbers, r = numbers
         let idx = i ?? c / 2
         l = Array(numbers.prefix(upTo: idx))
         r = Array(numbers.suffix(from: idx + 1))
         
-        let (q1, _) = median(l)
-        let (q3, _) = median(r)
+        let (q1, _) = median(l, isSorted: true)
+        let (q3, _) = median(r, isSorted: true)
         return (q1, m, q3)
     }
     
-    public static func median(_ numbers: [Double]) -> (Double, idx: Int?) {
+    public static func median(
+        _ numbers: [Double],
+        isSorted: Bool = false) -> (Double, idx: Int?) {
+        
+        var numbers = numbers
         let c = numbers.count
         if c == 0 {
             return (.nan, nil)
+        }
+        
+        if !isSorted {
+            numbers = numbers.sorted {
+                $0 < $1
+            }
         }
         
         if c % 2 == 0 {
@@ -136,6 +155,10 @@ public extension Stat {
         return ++nans + nSum
     }
     
+    public static func sumSquared(_ numbers: [Double]) -> Double {
+        return numbers.map {pow($0, 2)}.reduce(0) {$0 + $1}
+    }
+    
     public static func variance(_ numbers: [Double]) -> (sample: Double, population: Double) {
         let s = ssx(numbers)
         let c = Double(numbers.count)
@@ -145,5 +168,9 @@ public extension Stat {
     public static func stdev(_ numbers: [Double]) -> (sample: Double, population: Double) {
         let v = variance(numbers)
         return (sqrt(v.sample), sqrt(v.population))
+    }
+    
+    public static func mean(_ numbers: [Double]) -> Double {
+        return numbers.reduce(0) {$0 + $1} / Double(numbers.count)
     }
 }
