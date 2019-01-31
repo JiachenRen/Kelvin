@@ -1,101 +1,28 @@
 //
-//  Calculus.swift
+//  Differentiation.swift
 //  Kelvin
 //
-//  Created by Jiachen Ren on 1/20/19.
+//  Created by Jiachen Ren on 1/30/19.
 //  Copyright © 2019 Jiachen Ren. All rights reserved.
 //
 
 import Foundation
 
-let calculusOperations: [Operation] = [
-    .binary(.derivative, [.any, .var]) {
-        let v = $1 as! Variable
-        Scope.withholdAccess(to: v)
-        let dv = Calculus.derivative(
-            of: try $0.simplify(),
-            withRespectTo: v)
-        Scope.releaseRestrictions()
-        return dv
-    },
-    .init(.derivative, [.any, .var, .number]) {
-        let v = $0[1] as! Variable
-        Scope.withholdAccess(to: v)
-        let dnv = try Calculus.derivative(
-            of: $0[0].simplify(),
-            withRespectTo: v,
-            try $0[2].simplify() as! Int)
-        Scope.releaseRestrictions()
-        return dnv
-    },
-    .init(.implicitDifferentiation, [.any, .var, .var]) {
-        let dv = $0[1] as! Variable
-        let iv = $0[2] as! Variable
-        Scope.withholdAccess(to: dv, iv)
-        guard let eq = try $0[0].simplify() as? Equation else {
-            let msg = "left hand side of implicit differentiation must be an equation"
-            throw ExecutionError.general(errMsg: msg)
-        }
-        let r = try Calculus.implicitDifferentiation(
-            eq,
-            dependentVar: dv,
-            independentVar: iv)
-        Scope.releaseRestrictions()
-        return r
-    },
-    .binary(.gradient, [.func, .list]) {
-        let vars = try ($1 as! List).elements.map {
-            (n: Node) -> Variable in
-            if let v = n as? Variable {
-                return v
-            }
-            throw ExecutionError.incompatibleList(.variable)
-        }
-        
-        Scope.withholdAccess(to: vars)
-        let grad = Calculus.gradient(
-            of: $0 as! Function,
-            independentVars: vars)
-        Scope.releaseRestrictions()
-        return grad
-    },
-    .init(.directionalDifferentiation, [.func, .any, .list]) {
-        let vars = try ($0[2] as! List).elements.map {
-            (n: Node) -> Variable in
-            if let v = n as? Variable {
-                return v
-            }
-            throw ExecutionError.incompatibleList(.variable)
-        }
-        
-        guard let dir = try $0[1].simplify() as? Vector else {
-            throw ExecutionError.general(errMsg: "direction must be a vector")
-        }
-        
-        Scope.withholdAccess(to: vars)
-        let grad = try Calculus.directionalDifferentiation(
-            of: $0[0] as! Function,
-            direction: dir,
-            independentVars: vars)
-        Scope.releaseRestrictions()
-        return grad
-    }
-]
-
-public class Calculus {
+/// Differentiation
+public extension Calculus {
     
     /**
      The directional derivative del _(u)f(x_0,y_0,z_0) is the rate at which the function f(x,y,z)
      changes at a point (x_0,y_0,z_0) in the direction u.
      It is a vector form of the usual derivative, and can be defined as
      del _(u)f = del f·(u)/(|u|)
-
+     
      - Parameters:
-        - fun: A multivariate function of 2, 3, or more independent variables.
-        - direction: The direction in which we are interested in finding the function's rate of change. (u)
-        - independentVars: A list denoting the independent variables of the function.
+     - fun: A multivariate function of 2, 3, or more independent variables.
+     - direction: The direction in which we are interested in finding the function's rate of change. (u)
+     - independentVars: A list denoting the independent variables of the function.
      - Returns: A vector function of n variables that computes the rate at
-                which the function is changing in the direction of u.
+     which the function is changing in the direction of u.
      */
     public static func directionalDifferentiation(
         of fun: Function,
@@ -116,8 +43,8 @@ public class Calculus {
      https://math.oregonstate.edu/home/programs/undergrad/CalculusQuestStudyGuides/vcalc/grad/grad.html
      
      - Parameters:
-        - fun: A multivariate function of 2, 3, or more independent variables.
-        - independentVars: A list denoting the independent variables of the function.
+     - fun: A multivariate function of 2, 3, or more independent variables.
+     - independentVars: A list denoting the independent variables of the function.
      - Returns: The gradient vector of the function.
      */
     public static func gradient(of fun: Function, independentVars vars: [Variable]) -> Vector {
@@ -155,8 +82,8 @@ public class Calculus {
     /**
      Take the nth derivative of node n.
      - Parameters:
-        - v: The variable with respect to which the derivative is taken.
-        - nth: Nth derivative.
+     - v: The variable with respect to which the derivative is taken.
+     - nth: Nth derivative.
      - Returns: The nth derivative of n, if taken successfully.
      */
     public static func derivative(of n: Node, withRespectTo v: Variable, _ nth: Int) throws -> Node? {
@@ -175,8 +102,8 @@ public class Calculus {
      Take the (partial) derivative of node n w/ respect to variable v.
      
      - Parameters:
-        - n: The node to be differentiated
-        - v: The variable for which the derivative is taken with respect to.
+     - n: The node to be differentiated
+     - v: The variable for which the derivative is taken with respect to.
      - Returns: The derivative of n w/ respect to v.
      */
     public static func derivative(of n: Node, withRespectTo v: Variable) -> Node? {
@@ -266,7 +193,7 @@ public class Calculus {
         
         return nil
     }
-
+    
     
     public static func derivative(of nodes: [Node], withRespectTo v: Variable) -> [Node] {
         return nodes.map {

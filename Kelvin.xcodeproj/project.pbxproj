@@ -97,6 +97,11 @@
 		1F3974C921E6765A006D6DC2 /* Mode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974C721E67627006D6DC2 /* Mode.swift */; };
 		1F3D31622201FE0800462F10 /* Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3D31612201FE0800462F10 /* Number.swift */; };
 		1F3D316322020EF900462F10 /* Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3D31612201FE0800462F10 /* Number.swift */; };
+		1F3D31672202853000462F10 /* Factorization in Resources */ = {isa = PBXBuildFile; fileRef = 1F3D31662202853000462F10 /* Factorization */; };
+		1F3D31692202863900462F10 /* Factorization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3D31682202863900462F10 /* Factorization.swift */; };
+		1F3D316A220286CA00462F10 /* Factorization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3D31682202863900462F10 /* Factorization.swift */; };
+		1F3D316D2202874700462F10 /* Differentiation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3D316C2202874700462F10 /* Differentiation.swift */; };
+		1F3D316E2202874C00462F10 /* Differentiation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3D316C2202874700462F10 /* Differentiation.swift */; };
 		1F570B4E21FBE7150006E342 /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F570B4D21FBE7150006E342 /* Matrix.swift */; };
 		1F570B4F21FBEB960006E342 /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F570B4D21FBE7150006E342 /* Matrix.swift */; };
 		1F570B5121FBF28C0006E342 /* Matrix in Resources */ = {isa = PBXBuildFile; fileRef = 1F570B5021FBF28C0006E342 /* Matrix */; };
@@ -205,6 +210,9 @@
 		1F3974C421E633FD006D6DC2 /* Equation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Equation.swift; sourceTree = "<group>"; };
 		1F3974C721E67627006D6DC2 /* Mode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mode.swift; sourceTree = "<group>"; };
 		1F3D31612201FE0800462F10 /* Number.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Number.swift; sourceTree = "<group>"; };
+		1F3D31662202853000462F10 /* Factorization */ = {isa = PBXFileReference; lastKnownFileType = text; path = Factorization; sourceTree = "<group>"; };
+		1F3D31682202863900462F10 /* Factorization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Factorization.swift; sourceTree = "<group>"; };
+		1F3D316C2202874700462F10 /* Differentiation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Differentiation.swift; sourceTree = "<group>"; };
 		1F570B4D21FBE7150006E342 /* Matrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Matrix.swift; sourceTree = "<group>"; };
 		1F570B5021FBF28C0006E342 /* Matrix */ = {isa = PBXFileReference; lastKnownFileType = text; path = Matrix; sourceTree = "<group>"; };
 		1F570B5321FF6DB90006E342 /* Distribution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Distribution.swift; sourceTree = "<group>"; };
@@ -268,10 +276,10 @@
 			isa = PBXGroup;
 			children = (
 				1F570B5221FF6D8E0006E342 /* Statistics */,
+				1F3D316B2202871800462F10 /* Algebra */,
 				1F0936C921F4E26700E707BD /* Arithmetic */,
-				1F09370321F54E6200E707BD /* Calculus.swift */,
+				1F3D316F2202875700462F10 /* Calculus */,
 				1F0936CD21F4E36300E707BD /* Probability.swift */,
-				1F0936DC21F4EADE00E707BD /* Algebra.swift */,
 				1F3D31612201FE0800462F10 /* Number.swift */,
 				1F0936D021F4E45900E707BD /* Developer.swift */,
 				1F0936D621F4E80A00E707BD /* List & Tuple.swift */,
@@ -362,6 +370,7 @@
 				1F570B5021FBF28C0006E342 /* Matrix */,
 				1F0A90DE21F7E94200432B17 /* ErrorHandling */,
 				1F0A90E421F93DCE00432B17 /* Statistics */,
+				1F3D31662202853000462F10 /* Factorization */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
@@ -372,6 +381,24 @@
 				1F2E82BD219757FC005C3353 /* main.swift */,
 			);
 			path = KelvinCommandLine;
+			sourceTree = "<group>";
+		};
+		1F3D316B2202871800462F10 /* Algebra */ = {
+			isa = PBXGroup;
+			children = (
+				1F0936DC21F4EADE00E707BD /* Algebra.swift */,
+				1F3D31682202863900462F10 /* Factorization.swift */,
+			);
+			path = Algebra;
+			sourceTree = "<group>";
+		};
+		1F3D316F2202875700462F10 /* Calculus */ = {
+			isa = PBXGroup;
+			children = (
+				1F09370321F54E6200E707BD /* Calculus.swift */,
+				1F3D316C2202874700462F10 /* Differentiation.swift */,
+			);
+			path = Calculus;
 			sourceTree = "<group>";
 		};
 		1F570B5221FF6D8E0006E342 /* Statistics */ = {
@@ -618,6 +645,7 @@
 				1F0936BE21F3A54800E707BD /* Probability in Resources */,
 				1FFD8CAD218F50870004ECEB /* Main.storyboard in Resources */,
 				1F09370B21F57B0200E707BD /* Trigonometry in Resources */,
+				1F3D31672202853000462F10 /* Factorization in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -642,6 +670,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F3D316A220286CA00462F10 /* Factorization.swift in Sources */,
 				1F3D316322020EF900462F10 /* Number.swift in Sources */,
 				1F570B5B21FF73AF0006E342 /* String+Operations.swift in Sources */,
 				1F570B5721FF6FD30006E342 /* Distribution.swift in Sources */,
@@ -652,6 +681,7 @@
 				1F0A90E821F97B7200432B17 /* String+Regex.swift in Sources */,
 				1F0A90E321F8C3C100432B17 /* String+Colors.swift in Sources */,
 				1F09371E21F684EC00E707BD /* Scope.swift in Sources */,
+				1F3D316E2202874C00462F10 /* Differentiation.swift in Sources */,
 				1F09370521F5618200E707BD /* Calculus.swift in Sources */,
 				1F09370221F51EDD00E707BD /* Vector.swift in Sources */,
 				1F0936FB21F518D000E707BD /* Bool+Value.swift in Sources */,
@@ -737,6 +767,8 @@
 				1F3974C821E67627006D6DC2 /* Mode.swift in Sources */,
 				1FFD8CA3218F50850004ECEB /* AppDelegate.swift in Sources */,
 				1F0936E121F4EBBE00E707BD /* Conversion.swift in Sources */,
+				1F3D31692202863900462F10 /* Factorization.swift in Sources */,
+				1F3D316D2202874700462F10 /* Differentiation.swift in Sources */,
 				1F2E82B02197338B005C3353 /* Node.swift in Sources */,
 				1F09370121F51EC000E707BD /* Vector.swift in Sources */,
 				1F0936F621F5186200E707BD /* Int+Value.swift in Sources */,

@@ -1,26 +1,24 @@
 //
-//  Algebra.swift
+//  Factorization.swift
 //  Kelvin
 //
-//  Created by Jiachen Ren on 1/19/19.
+//  Created by Jiachen Ren on 1/30/19.
 //  Copyright © 2019 Jiachen Ren. All rights reserved.
 //
 
 import Foundation
 
-/// Algebraic operations (factorization, expansion)
-let algebraicOperations: [Operation] = [
-    .unary(.factorize, [.any]) {
-        try AlgebraEngine.factorize($0)
-    },
-]
-
-fileprivate class AlgebraEngine {
+/// Factorization (one of the most complex algorithms I wrote...)
+public extension Algebra {
+    
+    private static var time: TimeInterval {
+        return Date().timeIntervalSince1970
+    }
     
     /// Factorizes the parent node; e.g. a*b+a*c becomes a*(b+c)
-    fileprivate static func factorize(_ parent: Node) throws -> Node {
+    public static func factorize(_ parent: Node) throws -> Node {
         return try parent.replacing(by: {
-            try factorize(($0 as! Function).elements)
+            try factorize(time, limitedBy: 1.0, ($0 as! Function).elements)
         }) {
             ($0 as? Function)?.name == .add
         }
@@ -35,12 +33,18 @@ fileprivate class AlgebraEngine {
      factor(z * d * a + z * b + y * d * a + y * b + x * d * a + x * b)
      factor(z * d * a + z * b * 2 + y * d * a + y * b * 2 + x * d * a + x * b * 2)
      factor(e * b * a + d * b * a - d * c * a * 2 - e * c * a * 2)
+     factor(x * f * c + x * f * b + x * d * c + x * d * b + f * c * a + f * b * a + d * c * a + d * b * a)
      
-     - Todo: Return the simplest form of factorization.
+     - Todo: Use long division for factorization!
+     - Todo: Return once further factorization is no longer possible (this will be hard...)
      - Parameter nodes: The arguments of a summation function
      - Returns: The factorized form of arguments.
      */
-    fileprivate static func factorize(_ nodes: [Node]) throws -> Node {
+    private static func factorize(
+        _ startTime: TimeInterval,
+        limitedBy duration: TimeInterval,
+        _ nodes: [Node]) throws -> Node {
+        
         var nodes = nodes
         if nodes.count == 0 {
             throw ExecutionError.unexpectedError
@@ -66,6 +70,13 @@ fileprivate class AlgebraEngine {
         }
         
         for i in 0..<nodes.count {
+            
+            // If the expression can't be factorized in reasonable time, return the current
+            // simplest form.
+            if time - startTime > duration {
+                break
+            }
+            
             let n1 = nodes.remove(at: i)
             for j in i..<nodes.count {
                 let n2 = nodes.remove(at: j)
@@ -86,7 +97,7 @@ fileprivate class AlgebraEngine {
                     // Recursively factor the updated nodes pool, then choose
                     // the simpliest permutation of the recursively factorized forms
                     // and add it to the list of factorized forms at this level.
-                    let factorized = try factorize(pool)
+                    let factorized = try factorize(startTime, limitedBy: duration, pool)
                     
                     // Immediately return if the expression is factorized!
                     if (factorized as? Function)?.name == .mult {
@@ -112,7 +123,7 @@ fileprivate class AlgebraEngine {
                         let fab = try factorize(a + b).simplify()
                         c.append(f * fab)
                         
-                        let factorized = try factorize(c)
+                        let factorized = try factorize(startTime, limitedBy: duration, c)
                         
                         // Immediately return if the expression is factorized!
                         if (factorized as? Function)?.name == .mult {
@@ -123,6 +134,7 @@ fileprivate class AlgebraEngine {
                     }
                 }
             }
+            
             nodes.insert(n1, at: i)
         }
         
@@ -150,14 +162,36 @@ fileprivate class AlgebraEngine {
     // Deconstruct a node into its arguments if it is "*"
     // For nodes other than "*", return the node itself.
     private static func deconstruct(_ node: Node) -> [Node] {
-        if let mult = node as? Function, mult.name == .mult {
-            return mult.elements.map {n -> [Node] in
-                if let i = n as? Int {
-                    return primeFactors(of: i)
+        if let fun = node as? Function {
+            switch fun.name {
+            case .mult:
+                return fun.elements.map {n -> [Node] in
+                    if let i = n as? Int {
+                        return primeFactors(of: i)
+                    }
+                    return [n]
+                    }.flatMap {
+                        $0
                 }
-                return [n]
-                }.flatMap {
-                    $0
+            case .exp:
+                let base = fun[0]
+                let exponent = fun[1]
+                // TODO: Handle fractions
+                if let i = exponent as? Int {
+                    var nodes = [Node]()
+                    
+                    if i > 1 {
+                        nodes.append(base)
+                        for q in 2...i {
+                            nodes.append(base ^ q)
+                        }
+                        return nodes
+                    }
+                    
+                    // TOTO: Handle negative exponents
+                }
+            default:
+                break
             }
         } else if let i = node as? Int {
             return primeFactors(of: i)
@@ -173,7 +207,7 @@ fileprivate class AlgebraEngine {
      - Parameter nodes: The nodes from which common terms are derived.
      - Returns: Common factors of nodes excluding 1.
      */
-    fileprivate static func commonFactors(_ nodes: [Node]) -> [Node] {
+    private static func commonFactors(_ nodes: [Node]) -> [Node] {
         var nodes = nodes
         
         // Base case

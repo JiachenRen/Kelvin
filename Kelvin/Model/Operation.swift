@@ -27,16 +27,16 @@ public class Operation: Equatable {
     /// Collect all built-in operations and combine them into a single
     /// operations array.
     public static let defaults: [Operation] = [
+        Algebra.operations,
+        Calculus.operations,
+        Stat.operations,
         binaryOperations,
         unaryOperations,
-        Stat.operations,
         probabilityOperations,
-        algebraicOperations,
         developerOperations,
         listAndTupleOperations,
         equalityOperations,
         conversionOperations,
-        calculusOperations,
         vectorOperations,
         matrixOperations,
         numberOperations
