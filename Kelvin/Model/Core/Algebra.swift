@@ -34,6 +34,7 @@ fileprivate class AlgebraEngine {
      factor(z * b + z * a + y * b + y * a + x * b + x * a)
      factor(z * d * a + z * b + y * d * a + y * b + x * d * a + x * b)
      factor(z * d * a + z * b * 2 + y * d * a + y * b * 2 + x * d * a + x * b * 2)
+     factor(e * b * a + d * b * a - d * c * a * 2 - e * c * a * 2)
      
      - Todo: Return the simplest form of factorization.
      - Parameter nodes: The arguments of a summation function
@@ -85,7 +86,13 @@ fileprivate class AlgebraEngine {
                     // Recursively factor the updated nodes pool, then choose
                     // the simpliest permutation of the recursively factorized forms
                     // and add it to the list of factorized forms at this level.
-                    factorizedForms.append(try factorize(pool))
+                    let factorized = try factorize(pool)
+                    
+                    // Immediately return if the expression is factorized!
+                    if (factorized as? Function)?.name == .mult {
+                        return factorized
+                    }
+                    factorizedForms.append(factorized)
                 }
                 nodes.insert(n2, at: j)
             }
@@ -105,8 +112,14 @@ fileprivate class AlgebraEngine {
                         let fab = try factorize(a + b).simplify()
                         c.append(f * fab)
                         
-                        let factored = try factorize(c)
-                        factorizedForms.append(factored)
+                        let factorized = try factorize(c)
+                        
+                        // Immediately return if the expression is factorized!
+                        if (factorized as? Function)?.name == .mult {
+                            return factorized
+                        }
+                        
+                        factorizedForms.append(factorized)
                     }
                 }
             }
@@ -131,23 +144,25 @@ fileprivate class AlgebraEngine {
      - Returns: Given node with factor factorized out.
      */
     private static func factorize(_ node: Node, by factor: Node) -> Node {
-        if node === factor {
-            return 1
-        }
+        return try! (node / factor).simplify()
+    }
+    
+    // Deconstruct a node into its arguments if it is "*"
+    // For nodes other than "*", return the node itself.
+    private static func deconstruct(_ node: Node) -> [Node] {
         if let mult = node as? Function, mult.name == .mult {
-            var elements = mult.elements
-            for (i, e) in elements.enumerated() {
-                if e === factor {
-                    elements.remove(at: i)
-                    break
+            return mult.elements.map {n -> [Node] in
+                if let i = n as? Int {
+                    return primeFactors(of: i)
                 }
+                return [n]
+                }.flatMap {
+                    $0
             }
-            return **elements
-        } else if let i = node as? Int, let j = factor as? Int {
-            return i / j
+        } else if let i = node as? Int {
+            return primeFactors(of: i)
         }
-        
-        fatalError("cannot factorize \(node) by \(factor)")
+        return [node]
     }
     
     /**
@@ -166,24 +181,6 @@ fileprivate class AlgebraEngine {
             return []
         } else if nodes.count == 1 {
             return nodes
-        }
-        
-        // Deconstruct a node into its arguments if it is "*"
-        // For nodes other than "*", return the node itself.
-        func deconstruct(_ node: Node) -> [Node] {
-            if let mult = node as? Function, mult.name == .mult {
-                return mult.elements.map {n -> [Node] in
-                    if let i = n as? Int {
-                        return primeFactors(of: i)
-                    }
-                    return [n]
-                }.flatMap {
-                    $0
-                }
-            } else if let i = node as? Int {
-                return primeFactors(of: i)
-            }
-            return [node]
         }
         
         // Common terms
