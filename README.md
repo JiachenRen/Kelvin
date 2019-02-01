@@ -85,8 +85,7 @@ Based on Java Algebra System's powerful engine, Kelvin is a powerful programming
   - [x] Identity
   - [x] Multiplication
   - [x] Addition/Subtraction
-  - [x] Inversion
-  - [ ] Transposition
+  - [x] Transposition
 
 ### List math/operations
 - [x] Zip, map, and reduce w/ anonymous closure arguments.
