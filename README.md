@@ -91,8 +91,12 @@ Based on Java Algebra System's powerful engine, Kelvin is a powerful programming
 
 ### List math/operations
 - [x] Zip, map, and reduce w/ anonymous closure arguments.
-- [x] Sort, filter, and append
+- [x] Sort and filter
+- [x] Append and remove
+- [ ] Insert
 - [x] Chained subscript access
+  - Access by index
+  - Access by range
 - [x] Size
 
 ### Boolean logic
