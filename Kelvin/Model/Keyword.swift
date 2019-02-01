@@ -291,6 +291,7 @@ public struct Keyword {
         .init(for: .del, associativity: .prefix),
         .init(for: .get, associativity: .infix, precedence: .attached, operator: .init("::", padding: .none)), // Preserve arguments?
         .init(for: .size, associativity: .prefix, precedence: .attached),
+        .init(for: .shuffle, associativity: .prefix, precedence: .attached),
         .init(for: .map, associativity: .infix, operator: .init("|")),
         .init(for: .reduce, associativity: .infix, operator: .init("~")),
         .init(for: .filter, associativity: .infix, operator: .init("|?")),

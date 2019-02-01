@@ -21,6 +21,9 @@ let probabilityOperations: [Operation] = [
         let j = max(lb, ub)
         return Double.random(in: i...j)
     },
+    .unary(.random, [.list]) {
+        ($0 as! List).elements.randomElement()
+    },
 
     // Combination and permutation
     .binary(.npr, [.any, .any]) {

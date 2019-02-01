@@ -177,6 +177,11 @@ let listAndTupleOperations: [Operation] = [
     },
     .binary(.removeAtIdx, [.list, .int]) {
         try ($0 as! List).removing(at: $1 as! Int)
+    },
+    .unary(.shuffle, [.list]) {
+        var elements = ($0 as! List).elements
+        elements.shuffle()
+        return List(elements)
     }
 ]
 
