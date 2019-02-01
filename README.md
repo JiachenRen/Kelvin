@@ -57,8 +57,10 @@ Based on Java Algebra System's powerful engine, Kelvin is a powerful programming
   - [x] Random normal distribution (randNorm)
   - [x] Normal Pdf
   - [x] Inverse Normal
+  - [ ] Inverse t
   - [ ] Binomial Cdf/Pdf
   - [ ] Geometric Cdf/Pdf
+- [ ] Confidence intervals
 - [ ] Regression
   - [ ] Linear
   - [ ] Quadratic, cubic, quartic, power
