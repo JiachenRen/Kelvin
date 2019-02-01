@@ -84,6 +84,9 @@ println [[1, 2], [2, 3], [3, 4]] ** [[1, 2, 3], [2, 3, 4]] == [[5, 8, 11], [8, 1
 println [[1, 2, 3], [2, 3, 4]] ** [[1, 2], [2, 3], [3, 4]] == [[14, 20], [20, 29]]
 println mat == mat ** idMat(size(mat))
 
+# Test matrix transposition
+println ¡([1, 2, 3] !! matrix) == [[1], [2], [3]]
+
 # Test normCdf
 println normCdf(-inf, 7, 45, 21) == 0.0351847769664676
 println normCdf(-1, 1) == 0.6826894808737367
@@ -91,4 +94,5 @@ println normCdf(0) == 0.5000000005248086
 
 # Test map, reduce, oneVar, repeat, subscript, and closure arguments
 println (oneVar(0...1000 | 1 + $1) | $0::1 ~ $1 + $0) == 417671830.9944263
+
 

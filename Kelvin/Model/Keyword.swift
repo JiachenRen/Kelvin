@@ -323,6 +323,7 @@ public struct Keyword {
         .init(for: .determinant, associativity: .prefix, precedence: .attached),
         .init(for: .dotProduct, associativity: .infix, precedence: .product, operator: .init("•")),
         .init(for: .crossProduct, associativity: .infix, precedence: .product, operator: .init("×")),
-        .init(for: .matrixMultiplication, associativity: .infix, precedence: .product, operator: .init("**"))
+        .init(for: .matrixMultiplication, associativity: .infix, precedence: .product, operator: .init("**")),
+        .init(for: .transpose, associativity: .prefix, precedence: .attached, operator: .init("¡", padding: .none))
     ]
 }

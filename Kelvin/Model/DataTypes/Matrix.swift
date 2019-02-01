@@ -23,19 +23,19 @@ public struct Matrix: MutableListProtocol, NaN {
     var rows: [Row]
     
     var cols: [Vector] {
-        return inverted.rows
+        return transposed.rows
     }
     
-    var inverted: Matrix {
-        var inv = Matrix(rows: dim.cols, cols: dim.rows)
+    var transposed: Matrix {
+        var trans = Matrix(rows: dim.cols, cols: dim.rows)
         
         for (i, r) in rows.enumerated() {
             for (j, e) in r.elements.enumerated() {
-                inv[j][i] = e
+                trans[j][i] = e
             }
         }
         
-        return inv
+        return trans
     }
     
     var dim: Dimension
@@ -168,12 +168,12 @@ public struct Matrix: MutableListProtocol, NaN {
      dotting each row with each column of the input matrix.
      */
     public func mult(_ mat: Matrix) throws -> Matrix {
-        let inv = mat.inverted
+        let trans = mat.transposed
         
         var newRows = [Row]()
         for r in rows {
             var row = [Node]()
-            for c in inv.rows {
+            for c in trans.rows {
                 row.append(try r.dot(with: c))
             }
             let vec = Vector(row)

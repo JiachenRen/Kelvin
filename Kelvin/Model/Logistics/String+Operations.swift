@@ -139,7 +139,7 @@ public extension String {
     public static let determinant = "det"
     public static let createMatrix = "mat"
     public static let identityMatrix = "idMat"
-    public static let invertMatrix = "invert"
+    public static let transpose = "trans"
     
     // Equality
     public static let equals = "=="

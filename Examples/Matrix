@@ -38,5 +38,6 @@ println m1
 # Identity matrix
 println idMat(3)
 
-# Invert matrix
-println invert(m1)
+# Transpose matrix
+println trans(m1)
+println ¡([1, 2, 3] !! matrix) == [[1], [2], [3]]

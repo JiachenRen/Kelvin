@@ -78,8 +78,8 @@ let matrixOperations: [Operation] = [
     .unary(.identityMatrix, [.int]) {
         Matrix.identityMatrix(i($0))
     },
-    .unary(.invertMatrix, [.matrix]) {
-        m($0).inverted
+    .unary(.transpose, [.matrix]) {
+        m($0).transposed
     }
 ]
 
