@@ -34,10 +34,13 @@ let vectorOperations: [Operation] = [
         Vector(v(lhs).map {$0 / rhs})
     },
     .unary(.unitVector, [.vec]) {
-        return v($0).unitVector
+        v($0).unitVector
     },
     .unary(.magnitude, [.vec]) {
-        return v($0).magnitude
+        v($0).magnitude
+    },
+    .binary(.angleBetween, [.vec, .vec]) {
+        try Vector.angleBetween(v($0), v($1))
     }
 ]
 

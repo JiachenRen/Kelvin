@@ -117,4 +117,9 @@ public struct Vector: MutableListProtocol, NaN {
         copy.elements.removeLast()
         return copy
     }
+    
+    /// - Returns: Angle between v1 and v2 in radians
+    public static func angleBetween(_ v1: Vector, _ v2: Vector) throws -> Node {
+        return try acos(v1.unitVector.dot(with: v2.unitVector))
+    }
 }

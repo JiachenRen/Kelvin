@@ -309,6 +309,7 @@ public struct Keyword {
         .init(for: .print, associativity: .prefix),
         .init(for: .println, associativity: .prefix),
         .init(for: .compile, associativity: .prefix),
+        .init(for: .delay, associativity: .prefix),
         .init(for: .run, associativity: .prefix),
         .init(for: .try, associativity: .prefix),
         .init(for: .npr, associativity: .infix),

@@ -78,16 +78,16 @@ public class Compiler {
             expr = replace(expr, "{", "}", "list(", ")")
         }
 
-        // Sort syntactic definitions by compilation precedence
-        let syntacticDefinitions = Keyword.encodings.map {
+        // Sort keywords by compilation precedence
+        let keywords = Keyword.encodings.map {
                 $0.value
             }.sorted {
                 $0.compilationPriority > $1.compilationPriority
             }
         
-        // Apply syntactic transformations before compilation (encoding)
-        for def in syntacticDefinitions {
-            expr = encodeKeyword(def, for: expr)
+        // Encode expressions with keyword encodings before compilation (encoding)
+        for keyword in keywords {
+            expr = encodeKeyword(keyword, for: expr)
         }
 
         // Format the expression for compilation
@@ -211,6 +211,7 @@ public class Compiler {
                     $0.precedence > $1.precedence
                 }.first!.encoding
             }
+            
             expr = expr.replacingOccurrences(of: o, with: "\(c)")
         }
 

@@ -134,6 +134,7 @@ public extension String {
     public static let crossProduct = "crossP"
     public static let unitVector = "unitVec"
     public static let magnitude = "mag"
+    public static let angleBetween = "angle"
     public static let matrixMultiplication = "mult"
     public static let determinant = "det"
     public static let createMatrix = "mat"
