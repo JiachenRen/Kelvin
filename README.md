@@ -71,6 +71,9 @@ Based on Java Algebra System's powerful engine, Kelvin is a powerful programming
 ### Probability
 - [x] Permutation/combination
 - [x] Randomization
+  - random(lb, ub), random()
+  - Shuffle list
+  - Random element of list
 
 ### Vector/Matrix
 - [x] Vector
