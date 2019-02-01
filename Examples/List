@@ -1,0 +1,25 @@
+def l1 = {1, 2, 3, 4, 5}
+
+# Concatenation
+def l2 = (l1 ++ {6, 7, 8, 9, 10})
+
+# Map
+def l3 = (l2 | $0 + $1)
+
+# Filter
+def l4 = (l1 |? $0 % 2 == 0)
+
+# Sort
+def l5 = (l1 >? $0 > $1)
+
+# Reduce
+n := (l2 ~ $0 + $1 ^ 2)
+
+# Remove
+l1 := (l1 rm 3)
+
+# Subscript by range
+l6 := l1[1,2]
+
+
+

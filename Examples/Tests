@@ -95,4 +95,34 @@ println normCdf(0) == 0.5000000005248086
 # Test map, reduce, oneVar, repeat, subscript, and closure arguments
 println (oneVar(0...1000 | 1 + $1) | $0::1 ~ $1 + $0) == 417671830.9944263
 
+# Test list operations
+def l1 = {1, 2, 3, 4, 5}
 
+# Concatenation
+def l2 = (l1 ++ {6, 7, 8, 9, 10})
+
+# Map
+def l3 = (l2 | $0 + $1)
+
+# Filter
+def l4 = (l1 |? $0 % 2 == 0)
+
+# Sort
+def l5 = (l1 >? $0 > $1)
+
+# Reduce
+n := (l2 ~ $0 + $1 ^ 2)
+
+# Remove
+l1 := (l1 rm 3)
+
+# Subscript by range
+l6 := l1[1, 2]
+
+println l1 == {1, 2, 3, 5}
+println l2 == {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+println l3 == {1, 3, 5, 7, 9, 11, 13, 15, 17, 19}
+println l4 == {2, 4}
+println l5 == {5, 4, 3, 2, 1}
+println n == 385
+println l6 == {2}

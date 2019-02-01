@@ -24,6 +24,18 @@ extension ListProtocol {
         }
     }
     
+    public func isOutOfBounds(_ idx: Int) -> Bool {
+        return idx < 0 || idx >= count
+    }
+    
+    public func subsequence(from idx1: Int, to idx2: Int) throws -> [Node] {
+        if isOutOfBounds(idx1) || isOutOfBounds(idx2) || idx2 < idx1 {
+            throw ExecutionError.indexOutOfBounds
+        }
+        return Array(elements.suffix(from: idx1)
+            .prefix(upTo: idx2 - idx1 + 1))
+    }
+    
     /// Complexity of the list is the complexity of all its elements + 1.
     public var complexity: Int {
         return elements.reduce(0) {
@@ -100,7 +112,7 @@ extension ListProtocol {
         return true
     }
     
-    public func map(by unary: (Node) throws -> Node) rethrows -> [Node] {
+    public func map<T>(by unary: (Node) throws -> T) rethrows -> [T] {
         return try elements.map(unary)
     }
 }

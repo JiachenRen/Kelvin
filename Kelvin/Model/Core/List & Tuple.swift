@@ -87,6 +87,21 @@ let listAndTupleOperations: [Operation] = [
             return list[idx]
         }
     },
+    .binary(.get, [.iterable, .list]) {
+        let list = $0 as! ListProtocol
+        let indices = try ($1 as! List).map {(n: Node) throws -> Int in
+            if let i = n as? Int {
+                return i
+            }
+            throw ExecutionError.invalidDT("\(n)")
+        }
+        
+        if indices.count != 2 {
+            throw ExecutionError.invalidSubscript("list", "\($1)")
+        }
+        
+        return try List(list.subsequence(from: indices[0], to: indices[1]))
+    },
     .init(.size, [.iterable]) {
         return ($0[0] as! ListProtocol).count
     },
@@ -130,7 +145,7 @@ let listAndTupleOperations: [Operation] = [
     },
     .init(.zip, [.list, .list]) {
         if let l1 = $0[0] as? List, let l2 = $0[1] as? List {
-            return try l1.join(with: l2)
+            return try l1.joined(with: l2)
         }
         return nil
     },
@@ -159,6 +174,9 @@ let listAndTupleOperations: [Operation] = [
             }
         }
         return nil
+    },
+    .binary(.removeAtIdx, [.list, .int]) {
+        try ($0 as! List).removing(at: $1 as! Int)
     }
 ]
 
@@ -166,13 +184,13 @@ fileprivate func join(by bin: String, _ l1: Node, _ l2: Node) throws -> Node {
     let l1 = l1 as! List
     let l2 = l2 as! List
     
-    return try l1.join(with: l2, by: bin)
+    return try l1.joined(with: l2, by: bin)
 }
 
 fileprivate func map(by bin: String, _ l: Node, _ n: Node) -> Node {
     let l = l as! List
     
-    let elements = l.elements.map {
+    let elements = l.map {
         Function(bin, [$0, n])
     }
     return List(elements)

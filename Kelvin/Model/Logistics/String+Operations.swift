@@ -72,6 +72,7 @@ public extension String {
     public static let size = "size"
     public static let sort = "sort"
     public static let zip = "zip"
+    public static let removeAtIdx = "rm"
     
     // Differentiation
     public static let derivative = "derivative"

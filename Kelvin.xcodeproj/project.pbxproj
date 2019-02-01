@@ -112,6 +112,7 @@
 		1F570B5A21FF737D0006E342 /* String+Operations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F570B5921FF737D0006E342 /* String+Operations.swift */; };
 		1F570B5B21FF73AF0006E342 /* String+Operations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F570B5921FF737D0006E342 /* String+Operations.swift */; };
 		1F645FC021FAA1260096AD1C /* Vector in Resources */ = {isa = PBXBuildFile; fileRef = 1F645FBF21FAA1260096AD1C /* Vector */; };
+		1F8DF72C22050110006351B0 /* List in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF72B22050110006351B0 /* List */; };
 		1FE1697321F28F1E0006712C /* Tests in Resources */ = {isa = PBXBuildFile; fileRef = 1FE1697221F28F1E0006712C /* Tests */; };
 		1FE1697621F2D44A0006712C /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Tuple.swift */; };
 		1FE1697721F2D5D40006712C /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Tuple.swift */; };
@@ -219,6 +220,7 @@
 		1F570B5521FF6F670006E342 /* Stat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stat.swift; sourceTree = "<group>"; };
 		1F570B5921FF737D0006E342 /* String+Operations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Operations.swift"; sourceTree = "<group>"; };
 		1F645FBF21FAA1260096AD1C /* Vector */ = {isa = PBXFileReference; lastKnownFileType = text; path = Vector; sourceTree = "<group>"; };
+		1F8DF72B22050110006351B0 /* List */ = {isa = PBXFileReference; lastKnownFileType = text; path = List; sourceTree = "<group>"; };
 		1FE1697221F28F1E0006712C /* Tests */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tests; sourceTree = "<group>"; };
 		1FE1697521F2D44A0006712C /* Tuple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tuple.swift; sourceTree = "<group>"; };
 		1FE1697A21F2EC070006712C /* Conditionals */ = {isa = PBXFileReference; lastKnownFileType = text; path = Conditionals; sourceTree = "<group>"; };
@@ -370,6 +372,7 @@
 				1F570B5021FBF28C0006E342 /* Matrix */,
 				1F0A90DE21F7E94200432B17 /* ErrorHandling */,
 				1F0A90E421F93DCE00432B17 /* Statistics */,
+				1F8DF72B22050110006351B0 /* List */,
 				1F3D31662202853000462F10 /* Factorization */,
 			);
 			path = Examples;
@@ -635,6 +638,7 @@
 				1F09370721F56F9C00E707BD /* Calculus in Resources */,
 				1F0A90E521F93DCE00432B17 /* Statistics in Resources */,
 				1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */,
+				1F8DF72C22050110006351B0 /* List in Resources */,
 				1F09371921F672CD00E707BD /* DateTime in Resources */,
 				1F0CF2D321EEA74A00E40086 /* Misc in Resources */,
 				1F0A90DF21F7E94200432B17 /* ErrorHandling in Resources */,

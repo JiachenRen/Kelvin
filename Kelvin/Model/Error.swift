@@ -39,4 +39,8 @@ public enum ExecutionError: Error {
     static func invalidDomain(_ lb: Double, _ ub: Double) -> ExecutionError {
         return ExecutionError.general(errMsg: "invalid domain - input must be between \(lb) and \(ub)")
     }
+    
+    static func invalidSubscript(_ target: String, _ sub: String) -> ExecutionError {
+        return ExecutionError.general(errMsg: "cannot subscript \(target) by \(sub)")
+    }
 }

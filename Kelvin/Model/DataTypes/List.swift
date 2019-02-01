@@ -57,7 +57,7 @@ public struct List: MutableListProtocol, NaN {
         - operation: A binary operation.
      - Returns: A new list resulting from self ⊗ list.
      */
-    public func join(with list: List, by bin: String? = nil) throws -> List {
+    public func joined(with list: List, by bin: String? = nil) throws -> List {
         if count != list.count {
             throw ExecutionError.dimensionMismatch
         }
@@ -67,6 +67,15 @@ public struct List: MutableListProtocol, NaN {
             }
             return List($0.element, list[$0.offset])
         })
+    }
+    
+    public func removing(at idx: Int) throws -> List {
+        if isOutOfBounds(idx) {
+            throw ExecutionError.indexOutOfBounds
+        }
+        var list = self
+        list.elements.remove(at: idx)
+        return list
     }
 
     /**

@@ -297,6 +297,7 @@ public struct Keyword {
         .init(for: .zip, associativity: .infix, operator: .init("><")),
         .init(for: .append, associativity: .infix, operator: .init("++")),
         .init(for: .sort, associativity: .infix, operator: .init(">?")),
+        .init(for: .removeAtIdx, associativity: .infix),
         .init(for: .then, associativity: .infix, operator: .init(";", padding: .rightSide)),
         .init(for: .feed, associativity: .infix, operator: .init("->")),
         .init(for: .replace, associativity: .infix, operator: .init("<<")),
