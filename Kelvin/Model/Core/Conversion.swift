@@ -43,6 +43,8 @@ let conversionOperations: [Operation] = [
                 return try Matrix(list)
             }
             try bailOut()
+        case .string:
+            return KString(c.stringified)
         default:
             break
         }

@@ -9,34 +9,34 @@
 import Foundation
 
 print("Kelvin Algebra System. Copyright (c) 2019, Jiachen Ren.")
-Program.io = Console()
+let console = Console(colored: false)
+Program.io = console
 
 // Main program execution loop
 while true {
     do {
-        print("    >>> ", terminator: "")
+        print("      ← ", terminator: "")
         let input = readLine() ?? ""
         
         // Compile and execute the input statement
-        Program.io?.clear()
+        console.clear()
         let parent = try Compiler.compile(input)
-        print("      # \(parent.ansiColored)")
-        print("      = \(try parent.simplify().ansiColored)", terminator: "\n\n")
-        Program.io?.flush()
+        console.log(Program.Log(input: parent, output: try parent.simplify()))
+        console.flush()
     } catch CompilerError.illegalArgument(let msg) {
-        print("ERR >>> illegal argument: \(msg)", terminator: "\n\n")
+        console.error("illegal argument: \(msg)")
     } catch CompilerError.syntax(let msg) {
-        print("ERR >>> syntax: \(msg)", terminator: "\n\n")
+        console.error("syntax: \(msg)")
     } catch CompilerError.error(onLine: let n, let err) {
         switch err {
         case .syntax(let msg):
-            print("ERR >>> syntax error on line \(n): \(msg)", terminator: "\n\n")
+            console.error("syntax error on line \(n): \(msg)")
         case .illegalArgument(let msg):
-            print("ERR >>> illegal argument on line \(n): \(msg)", terminator: "\n\n")
+            console.error("illegal argument on line \(n): \(msg)")
         default:
-            print("ERR >>> unexpected error on line \(n): \(err)", terminator: "\n\n")
+            console.error("unexpected error on line \(n): \(err)")
         }
     } catch ExecutionError.general(let msg) {
-        print("ERR >>> \(msg)", terminator: "\n\n")
+        console.error("\(msg)")
     }
 }

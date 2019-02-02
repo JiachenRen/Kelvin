@@ -122,8 +122,10 @@ let developerOperations: [Operation] = [
         
         return simplified
     },
-    .binary(.repeat, [.any, .number]) {(lhs, rhs) in
-        let times = Int(rhs≈!)
+    .binary(.repeat, [.any, .any]) {(lhs, rhs) in
+        guard let times = try rhs.simplify() as? Int else {
+            return nil
+        }
         var elements = [Node]()
         (0..<times).forEach { _ in
             elements.append(lhs)
@@ -238,6 +240,10 @@ let developerOperations: [Operation] = [
     },
     .unary(.println, [.any]) {
         Program.io?.println($0)
+        return $0
+    },
+    .unary(.log, [.string]) {
+        Program.io?.log(($0 as! KString).string)
         return $0
     }
 ]

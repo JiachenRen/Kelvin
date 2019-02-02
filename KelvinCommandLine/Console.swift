@@ -10,22 +10,27 @@ import Foundation
 
 class Console: IOProtocol {
     private var output = ""
+    var colored: Bool
+    
+    init(colored: Bool = false) {
+        self.colored = colored
+    }
     
     func clear() {
         output = ""
     }
     
     func log(_ l: String) {
-        Swift.print(">>> \(l)")
+        Swift.print("→ \(l)")
     }
     
     func log(_ l: Program.Log) {
-        let output = "\(l.output.ansiColored)"
-        Swift.print("\t>>>\t\(l.input.ansiColored)\n\t\t\(output)\n")
+        let output = "\(colored ? l.output.ansiColored : l.output.stringified)"
+        Swift.print("      → \(colored ? l.input.ansiColored : l.input.stringified)\n      = \(output)\n")
     }
     
     func error(_ e: String) {
-        Swift.print(">>> \(e.red)")
+        Swift.print("→ \(colored ? e.red : e)", terminator: "\n\n")
     }
     
     func readLine() -> String {
@@ -36,7 +41,7 @@ class Console: IOProtocol {
         if let ks = n as? KString {
             return ks.string
         }
-        return n.ansiColored
+        return colored ? n.ansiColored : n.stringified
     }
     
     func print(_ n: Node) {
@@ -52,6 +57,6 @@ class Console: IOProtocol {
             return
         }
         log("program output:")
-        Swift.print(output, terminator: "")
+        Swift.print(output, terminator: "\n\n")
     }
 }

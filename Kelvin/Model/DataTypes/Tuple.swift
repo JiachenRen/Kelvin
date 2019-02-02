@@ -15,7 +15,7 @@ public struct Tuple: BinaryNode, NaN {
     }
     
     public var ansiColored: String {
-        return "(".bold.blue + "\(lhs.ansiColored) : \(rhs.ansiColored)" + ")".bold.blue
+        return "(".bold.yellow + "\(lhs.ansiColored) : \(rhs.ansiColored)" + ")".bold.yellow
     }
     
     /// First value of the tuple

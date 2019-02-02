@@ -38,13 +38,13 @@ public class Program {
             content = try String(contentsOf: url)
             io?.log("loading contents of \(fileName)")
         } catch let e {
-            io?.error("\(e)")
+            io?.error("\(e.localizedDescription)")
             io?.log("resolving absolute URL...")
             do {
                 content = try String(contentsOf: URL(fileURLWithPath: fileName))
                 io?.log("loading contents of \(fileName)")
-            } catch {
-                throw ExecutionError.general(errMsg: "file not found - abort.")
+            } catch let e {
+                throw ExecutionError.general(errMsg: e.localizedDescription)
             }
         }
         let t = Date().timeIntervalSince1970
