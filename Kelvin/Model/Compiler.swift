@@ -115,7 +115,7 @@ public class Compiler {
                 .map {
                     String($0)
                 }
-        var statements = [Node]()
+        var statements = [Program.Statement]()
 
         for (i, line) in lines.enumerated() {
 
@@ -127,7 +127,8 @@ public class Compiler {
 
             do {
                 let node = try compile(line)
-                statements.append(node)
+                let statement = Program.Statement(line: i + 1, node: node)
+                statements.append(statement)
             } catch let e where e is CompilerError {
                 throw CompilerError.error(onLine: i + 1, e as! CompilerError)
             }

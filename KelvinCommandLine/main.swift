@@ -8,35 +8,50 @@
 
 import Foundation
 
-print("Kelvin Algebra System. Copyright (c) 2019, Jiachen Ren.")
-let console = Console(colored: false)
+let args = CommandLine.arguments
+
+// Set up console
+let console = Console(colored: false, verbose: true)
 Program.io = console
 
-// Main program execution loop
-while true {
-    do {
-        print("      ← ", terminator: "")
-        let input = readLine() ?? ""
-        
-        // Compile and execute the input statement
-        console.clear()
-        let parent = try Compiler.compile(input)
-        console.log(Program.Log(input: parent, output: try parent.simplify()))
-        console.flush()
-    } catch CompilerError.illegalArgument(let msg) {
-        console.error("illegal argument: \(msg)")
-    } catch CompilerError.syntax(let msg) {
-        console.error("syntax: \(msg)")
-    } catch CompilerError.error(onLine: let n, let err) {
-        switch err {
-        case .syntax(let msg):
-            console.error("syntax error on line \(n): \(msg)")
-        case .illegalArgument(let msg):
-            console.error("illegal argument on line \(n): \(msg)")
+// No arguments, enter interactive mode.
+if args.count == 1 {
+    try console.interactiveLoop()
+} else {
+    switch try Option.resolve(args[1]) {
+    case .expression where args.count == 3:
+        let expr = args[2]
+        let output = try Compiler.compile(expr).simplify()
+        print(output.stringified)
+    case .colored:
+        console.colored = true
+        try console.interactiveLoop()
+    case .file where args.count == 3:
+        console.colored = false
+        console.verbose = false
+        try Program.compileAndRun(args[2])
+    case .file where args.count == 4:
+        let config = try Option.resolve(args[2])
+        console.colored = false
+        switch config {
+        case .verbose:
+            console.verbose = true
+        case .colored:
+            console.colored = true
+        case .verboseAndColored:
+            console.verbose = true
+            console.colored = true
         default:
-            console.error("unexpected error on line \(n): \(err)")
+            print("Unavailable option: \(config.rawValue)")
+            Console.printUsage()
+            exit(EXIT_FAILURE)
         }
-    } catch ExecutionError.general(let msg) {
-        console.error("\(msg)")
+        try Program.compileAndRun(args[3])
+    default:
+        print("Error: Invalid arguments.")
+        Console.printUsage()
+        exit(EXIT_FAILURE)
     }
 }
+
+exit(EXIT_SUCCESS)

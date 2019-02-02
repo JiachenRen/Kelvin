@@ -13,7 +13,7 @@ fileprivate let baseURL = URL(fileURLWithPath: "/Users/jiachenren/Library/Mobile
 
 public class Program {
 
-    var statements: [Node]
+    var statements: [Statement]
     
     var config: Configuration
     
@@ -24,13 +24,13 @@ public class Program {
         return Date().timeIntervalSince1970
     }
 
-    init(_ statements: [Node], config: Configuration = Configuration.default) {
+    init(_ statements: [Statement], config: Configuration = Configuration.default) {
         self.statements = statements
         self.config = config
     }
     
     /// Compile and run the file w/ the given file name under /Examples directory
-    public static func compileAndRun(_ fileName: String, with config: Configuration?) throws {
+    public static func compileAndRun(_ fileName: String, with config: Configuration? = nil) throws {
         var content = ""
         do {
             io?.log("trying relative URL to examples...")
@@ -58,7 +58,6 @@ public class Program {
     }
 
     /// Execute the program and produce an output.
-    /// - Parameter verbose: Whether to use verbose mode
     /// - Returns: A tuple consisting of program execution log and cumulative output.
     public func run() throws {
 
@@ -80,12 +79,17 @@ public class Program {
         Program.io?.log("begin program execution log:\n")
     
         try statements.forEach {
-            // Execute the statement and add it to logs
-            let result = try $0.simplify()
-
-            // Create log
-            let log = Log(input: $0, output: result)
-            Program.io?.log(log)
+            
+            do {
+                // Execute the statement and add it to logs
+                let result = try $0.node.simplify()
+                
+                // Create log
+                let log = Log(line: $0.line, input: $0.node, output: result)
+                Program.io?.log(log)
+            } catch ExecutionError.general(errMsg: let msg) {
+                throw ExecutionError.general(errMsg: "error on line \($0.line) - \(msg)")
+            }
         }
 
         Program.io?.log("end program execution log.\n")
@@ -100,19 +104,27 @@ public class Program {
         case .preserveAll:
             Scope.popLast()
         }
+        
+        // Transfer program outputs
+        Program.io?.flush()
+    }
+    
+    public struct Statement {
+        let line: Int
+        let node: Node
     }
 
     public struct Log {
+        let line: Int?
         let input: Node
         let output: Node
     }
     
     public struct Configuration {
-        var verbose: Bool
         var scope: Scope
         var retentionPolicy: RetentionPolicy
         
-        static var `default` = Configuration(verbose: true, scope: .useCurrent, retentionPolicy: .restore)
+        static var `default` = Configuration(scope: .useCurrent, retentionPolicy: .restore)
         
         enum Scope {
             case useCurrent

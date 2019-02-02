@@ -126,6 +126,7 @@ public extension String {
     public static let delay = "delay"
     public static let run = "run"
     public static let `try` = "try"
+    public static let `assert` = "assert"
     public static let measure = "measure"
     public static let compile = "compile"
     public static let print = "print"

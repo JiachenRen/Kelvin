@@ -8,32 +8,40 @@
 
 import Foundation
 
-class Console: IOProtocol {
+public class Console: IOProtocol {
     private var output = ""
-    var colored: Bool
+    public var colored: Bool
+    public var verbose: Bool
     
-    init(colored: Bool = false) {
+    init(colored: Bool = false, verbose: Bool = false) {
         self.colored = colored
+        self.verbose = verbose
     }
     
-    func clear() {
+    public func clear() {
         output = ""
     }
     
-    func log(_ l: String) {
+    public func log(_ l: String) {
+        if !verbose {
+            return
+        }
         Swift.print("→ \(l)")
     }
     
-    func log(_ l: Program.Log) {
+    public func log(_ l: Program.Log) {
+        if !verbose {
+            return
+        }
         let output = "\(colored ? l.output.ansiColored : l.output.stringified)"
         Swift.print("      → \(colored ? l.input.ansiColored : l.input.stringified)\n      = \(output)\n")
     }
     
-    func error(_ e: String) {
+    public func error(_ e: String) {
         Swift.print("→ \(colored ? e.red : e)", terminator: "\n\n")
     }
     
-    func readLine() -> String {
+    public func readLine() -> String {
         return Swift.readLine() ?? ""
     }
     
@@ -44,19 +52,65 @@ class Console: IOProtocol {
         return colored ? n.ansiColored : n.stringified
     }
     
-    func print(_ n: Node) {
+    public func print(_ n: Node) {
         output += format(n)
     }
     
-    func println(_ n: Node) {
+    public func println(_ n: Node) {
         output += format(n) + "\n"
     }
     
-    func flush() {
+    public func flush() {
         if output == "" {
             return
         }
         log("program output:")
         Swift.print(output, terminator: "\n\n")
+    }
+    
+    /// Main program execution interactive loop
+    public func interactiveLoop() throws {
+        
+        Swift.print("Kelvin Algebra System. Copyright (c) 2019, Jiachen Ren.")
+        
+        while true {
+            do {
+                Swift.print("      ← ", terminator: "")
+                let input = Swift.readLine() ?? ""
+                
+                // Compile and execute the input statement
+                clear()
+                let parent = try Compiler.compile(input)
+                log(Program.Log(line: nil, input: parent, output: try parent.simplify()))
+            } catch CompilerError.illegalArgument(let msg) {
+                error("illegal argument: \(msg)")
+            } catch CompilerError.syntax(let msg) {
+                error("syntax: \(msg)")
+            } catch CompilerError.error(onLine: let n, let err) {
+                switch err {
+                case .syntax(let msg):
+                    error("syntax error on line \(n): \(msg)")
+                case .illegalArgument(let msg):
+                    error("illegal argument on line \(n): \(msg)")
+                default:
+                    error("unexpected error on line \(n): \(err)")
+                }
+            } catch ExecutionError.general(let msg) {
+                error("\(msg)")
+            }
+        }
+    }
+    
+    public static func printUsage() {
+        Swift.print("Usage: kelvin -c")
+        Swift.print("   or  kelvin -e <expr>")
+        Swift.print("   or  kelvin -f [options] <filepath>\n")
+        Swift.print("Type kelvin without an option to enter interactive mode.\n")
+        Swift.print(" where options include:", terminator: "\n\n")
+        Swift.print("    -c format outputs with ANSI")
+        Swift.print("    -e <expr> evaluate the expression that follows")
+        Swift.print("    -f <filepath> execute the content of the file")
+        Swift.print("    -v verbose")
+        Swift.print("    -vc verbose output with ANSI\n")
     }
 }

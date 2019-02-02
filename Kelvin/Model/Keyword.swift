@@ -314,6 +314,7 @@ public struct Keyword {
         .init(for: .delay, associativity: .prefix),
         .init(for: .run, associativity: .prefix),
         .init(for: .try, associativity: .prefix),
+        .init(for: .assert, associativity: .prefix),
         .init(for: .npr, associativity: .infix),
         .init(for: .ncr, associativity: .infix),
         .init(for: .tuple, associativity: .infix, precedence: .tuple, operator: .init(":")),

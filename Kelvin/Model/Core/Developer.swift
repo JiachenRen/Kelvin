@@ -185,18 +185,17 @@ let developerOperations: [Operation] = [
         switch flag {
         case "-c":
             try Program.compileAndRun(filePath, with: Program.Configuration(
-                verbose: false,
                 scope: .useCurrent,
                 retentionPolicy: .restore))
         case "-v":
-            try Program.compileAndRun(filePath, with: nil)
+            try Program.compileAndRun(filePath)
         default:
             throw ExecutionError.general(errMsg: "invalid configuration \(flag)")
         }
         return KString("done")
     },
     .unary(.run, [.string]) {
-        try Program.compileAndRun(($0 as! KString).string, with: nil)
+        try Program.compileAndRun(($0 as! KString).string)
         return KString("done")
     },
     .unary(.try, [.tuple]) {
@@ -219,6 +218,12 @@ let developerOperations: [Operation] = [
             errMsg = "syntax: \(msg)"
         }
         return KString(errMsg)
+    },
+    .unary(.assert, [.bool]) {
+        if !($0 as! Bool) {
+            throw ExecutionError.general(errMsg: "assertion failed")
+        }
+        return true
     },
     .binary(.measure, [.any, .int]) {
         let n = $1 as! Int
