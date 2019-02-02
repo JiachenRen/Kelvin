@@ -9,6 +9,7 @@
 import Foundation
 
 print("Kelvin Algebra System. Copyright (c) 2019, Jiachen Ren.")
+Program.io = Console()
 
 // Main program execution loop
 while true {
@@ -17,9 +18,11 @@ while true {
         let input = readLine() ?? ""
         
         // Compile and execute the input statement
+        Program.io?.clear()
         let parent = try Compiler.compile(input)
         print("      # \(parent.stringified)")
         print("      = \(try parent.simplify().stringified)", terminator: "\n\n")
+        Program.io?.flush()
     } catch CompilerError.illegalArgument(let msg) {
         print("ERR >>> illegal argument: \(msg)", terminator: "\n\n")
     } catch CompilerError.syntax(let msg) {

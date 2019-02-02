@@ -64,8 +64,8 @@
 		1F0A90EB21FA10D800432B17 /* DataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E921FA0EF600432B17 /* DataType.swift */; };
 		1F0A90ED21FA27E700432B17 /* Vector & Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90EC21FA27E700432B17 /* Vector & Matrix.swift */; };
 		1F0A90EE21FA2A5C00432B17 /* Vector & Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90EC21FA27E700432B17 /* Vector & Matrix.swift */; };
-		1F0CF2C421EA420400E40086 /* String+LeafNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* String+LeafNode.swift */; };
-		1F0CF2C521EA428000E40086 /* String+LeafNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* String+LeafNode.swift */; };
+		1F0CF2C421EA420400E40086 /* KString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* KString.swift */; };
+		1F0CF2C521EA428000E40086 /* KString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* KString.swift */; };
 		1F0CF2C721EBA8C800E40086 /* Keyword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C621EBA8C800E40086 /* Keyword.swift */; };
 		1F0CF2CA21EBAAB500E40086 /* Keyword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C621EBA8C800E40086 /* Keyword.swift */; };
 		1F0CF2D321EEA74A00E40086 /* Misc in Resources */ = {isa = PBXBuildFile; fileRef = 1F0CF2D221EEA74A00E40086 /* Misc */; };
@@ -113,6 +113,9 @@
 		1F570B5B21FF73AF0006E342 /* String+Operations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F570B5921FF737D0006E342 /* String+Operations.swift */; };
 		1F645FC021FAA1260096AD1C /* Vector in Resources */ = {isa = PBXBuildFile; fileRef = 1F645FBF21FAA1260096AD1C /* Vector */; };
 		1F8DF72C22050110006351B0 /* List in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF72B22050110006351B0 /* List */; };
+		1F8DF73022050B5B006351B0 /* IOProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF72F22050B5B006351B0 /* IOProtocol.swift */; };
+		1F8DF73122050B97006351B0 /* IOProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF72F22050B5B006351B0 /* IOProtocol.swift */; };
+		1F8DF73522050D3A006351B0 /* Console.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF73322050CD3006351B0 /* Console.swift */; };
 		1FE1697321F28F1E0006712C /* Tests in Resources */ = {isa = PBXBuildFile; fileRef = 1FE1697221F28F1E0006712C /* Tests */; };
 		1FE1697621F2D44A0006712C /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Tuple.swift */; };
 		1FE1697721F2D5D40006712C /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Tuple.swift */; };
@@ -193,7 +196,7 @@
 		1F0A90E621F97B5000432B17 /* String+Regex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Regex.swift"; sourceTree = "<group>"; };
 		1F0A90E921FA0EF600432B17 /* DataType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataType.swift; sourceTree = "<group>"; };
 		1F0A90EC21FA27E700432B17 /* Vector & Matrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Vector & Matrix.swift"; sourceTree = "<group>"; };
-		1F0CF2C321EA420400E40086 /* String+LeafNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+LeafNode.swift"; sourceTree = "<group>"; };
+		1F0CF2C321EA420400E40086 /* KString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KString.swift; sourceTree = "<group>"; };
 		1F0CF2C621EBA8C800E40086 /* Keyword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keyword.swift; sourceTree = "<group>"; };
 		1F0CF2D221EEA74A00E40086 /* Misc */ = {isa = PBXFileReference; lastKnownFileType = text; path = Misc; sourceTree = "<group>"; };
 		1F0CF2D421EEB69300E40086 /* Program.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Program.swift; sourceTree = "<group>"; };
@@ -221,6 +224,8 @@
 		1F570B5921FF737D0006E342 /* String+Operations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Operations.swift"; sourceTree = "<group>"; };
 		1F645FBF21FAA1260096AD1C /* Vector */ = {isa = PBXFileReference; lastKnownFileType = text; path = Vector; sourceTree = "<group>"; };
 		1F8DF72B22050110006351B0 /* List */ = {isa = PBXFileReference; lastKnownFileType = text; path = List; sourceTree = "<group>"; };
+		1F8DF72F22050B5B006351B0 /* IOProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOProtocol.swift; sourceTree = "<group>"; };
+		1F8DF73322050CD3006351B0 /* Console.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Console.swift; sourceTree = "<group>"; };
 		1FE1697221F28F1E0006712C /* Tests */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tests; sourceTree = "<group>"; };
 		1FE1697521F2D44A0006712C /* Tuple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tuple.swift; sourceTree = "<group>"; };
 		1FE1697A21F2EC070006712C /* Conditionals */ = {isa = PBXFileReference; lastKnownFileType = text; path = Conditionals; sourceTree = "<group>"; };
@@ -306,6 +311,7 @@
 			isa = PBXGroup;
 			children = (
 				1FE1697C21F380CA0006712C /* BinaryNode.swift */,
+				1F8DF72F22050B5B006351B0 /* IOProtocol.swift */,
 				1F3974BE21E3B741006D6DC2 /* LeafNode.swift */,
 				1F0936EB21F5058B00E707BD /* ListProtocol.swift */,
 				1F0936EF21F513AF00E707BD /* MutableListProtocol.swift */,
@@ -337,7 +343,7 @@
 				1F0936F721F5189500E707BD /* Bool+Value.swift */,
 				1F0936F321F5184400E707BD /* Double+Value.swift */,
 				1F0936F521F5186200E707BD /* Int+Value.swift */,
-				1F0CF2C321EA420400E40086 /* String+LeafNode.swift */,
+				1F0CF2C321EA420400E40086 /* KString.swift */,
 				1F0936F921F518BB00E707BD /* NSNumber+Value.swift */,
 			);
 			path = ValueTypes;
@@ -381,6 +387,7 @@
 		1F2E82BC219757FC005C3353 /* KelvinCommandLine */ = {
 			isa = PBXGroup;
 			children = (
+				1F8DF73322050CD3006351B0 /* Console.swift */,
 				1F2E82BD219757FC005C3353 /* main.swift */,
 			);
 			path = KelvinCommandLine;
@@ -674,6 +681,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F8DF73522050D3A006351B0 /* Console.swift in Sources */,
+				1F8DF73122050B97006351B0 /* IOProtocol.swift in Sources */,
 				1F3D316A220286CA00462F10 /* Factorization.swift in Sources */,
 				1F3D316322020EF900462F10 /* Number.swift in Sources */,
 				1F570B5B21FF73AF0006E342 /* String+Operations.swift in Sources */,
@@ -708,7 +717,7 @@
 				1FE1697721F2D5D40006712C /* Tuple.swift in Sources */,
 				1F0CF2D621EEB6C100E40086 /* Program.swift in Sources */,
 				1F0CF2CA21EBAAB500E40086 /* Keyword.swift in Sources */,
-				1F0CF2C521EA428000E40086 /* String+LeafNode.swift in Sources */,
+				1F0CF2C521EA428000E40086 /* KString.swift in Sources */,
 				1F3974C921E6765A006D6DC2 /* Mode.swift in Sources */,
 				1F3974C621E6341C006D6DC2 /* Equation.swift in Sources */,
 				1F3974C221E3B8A3006D6DC2 /* NaN.swift in Sources */,
@@ -757,13 +766,14 @@
 				1F0936DD21F4EADE00E707BD /* Algebra.swift in Sources */,
 				1F2E82AE2197331F005C3353 /* Function.swift in Sources */,
 				1F0936C121F3C0B300E707BD /* Binary.swift in Sources */,
-				1F0CF2C421EA420400E40086 /* String+LeafNode.swift in Sources */,
+				1F0CF2C421EA420400E40086 /* KString.swift in Sources */,
 				1F570B5621FF6F670006E342 /* Stat.swift in Sources */,
 				1F0CF2D521EEB69300E40086 /* Program.swift in Sources */,
 				1F0936C321F3C13100E707BD /* OneVar.swift in Sources */,
 				1F3D31622201FE0800462F10 /* Number.swift in Sources */,
 				1F0CF2C721EBA8C800E40086 /* Keyword.swift in Sources */,
 				1F09371D21F684D500E707BD /* Scope.swift in Sources */,
+				1F8DF73022050B5B006351B0 /* IOProtocol.swift in Sources */,
 				1FFD8CA5218F50850004ECEB /* ViewController.swift in Sources */,
 				1F0936FA21F518BB00E707BD /* NSNumber+Value.swift in Sources */,
 				1F0936D721F4E80A00E707BD /* List & Tuple.swift in Sources */,

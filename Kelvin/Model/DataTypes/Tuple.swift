@@ -25,6 +25,11 @@ public struct Tuple: BinaryNode, NaN {
         self.rhs = v2
     }
     
+    init(_ ks: String, _ v2: Node) {
+        self.lhs = KString(ks)
+        self.rhs = v2
+    }
+    
     public func equals(_ node: Node) -> Bool {
         if let t = node as? Tuple {
             return equals(list: t)

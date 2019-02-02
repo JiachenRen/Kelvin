@@ -12,7 +12,7 @@ public struct Matrix: MutableListProtocol, NaN {
 
     public var stringified: String {
         let r = rows.reduce(nil) {
-            return $0 == nil ? $1.stringified : $0!.stringified + ", " + $1.stringified
+            return $0 == nil ? $1.stringified : $0! + ", " + $1.stringified
         }
         return "[\(r!)]"
     }

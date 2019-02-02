@@ -13,18 +13,11 @@ fileprivate let baseURL = URL(fileURLWithPath: "/Users/jiachenren/Library/Mobile
 
 public class Program {
 
-    /// The output of the program consisting of logs and outputs.
-    public typealias Output = (logs: [Log], outputs: [Node])
-
-    /// Results from executing statements are stored here.
-    var logs = [Log]()
-
-    /// Program outputs are stored here.
-    var outputs = [Node]()
-
     var statements: [Node]
     
     var config: Configuration
+    
+    public static var io: IOProtocol?
 
     /// Get the absolute time
     var currentTime: TimeInterval {
@@ -36,55 +29,38 @@ public class Program {
         self.config = config
     }
     
-    private func vPrint(_ s: Any) {
-        if config.verbose {
-            print(s)
-        }
-    }
-    
-    private func vPrint(_ s: Any, terminator t: String) {
-        if config.verbose {
-            print(s, terminator: t)
-        }
-    }
-    
     /// Compile and run the file w/ the given file name under /Examples directory
-    @discardableResult
-    public static func compileAndRun(_ fileName: String, with config: Configuration?) throws -> Output {
+    public static func compileAndRun(_ fileName: String, with config: Configuration?) throws {
         var content = ""
         do {
-            print(">>> trying relative URL to examples...")
+            io?.log("trying relative URL to examples...")
             let url = URL(fileURLWithPath: fileName, relativeTo: baseURL)
             content = try String(contentsOf: url)
-            print(">>> loading contents of \(fileName)")
+            io?.log("loading contents of \(fileName)")
         } catch let e {
-            print(">>> \(e);\n>>> resolving absolute URL...")
+            io?.error("\(e)")
+            io?.log("resolving absolute URL...")
             do {
                 content = try String(contentsOf: URL(fileURLWithPath: fileName))
-                print(">>> loading contents of \(fileName)")
+                io?.log("loading contents of \(fileName)")
             } catch {
                 throw ExecutionError.general(errMsg: "file not found - abort.")
             }
         }
         let t = Date().timeIntervalSince1970
-        print(">>> compiling...")
+        io?.log("compiling...")
         let program = try Compiler.compile(document: content)
-        print(">>> compilation successful in \(Date().timeIntervalSince1970 - t) seconds.")
+        io?.log("compilation successful in \(Date().timeIntervalSince1970 - t) seconds.")
         if let c = config {
             program.config = c
         }
-        return try program.run()
+        try program.run()
     }
 
     /// Execute the program and produce an output.
     /// - Parameter verbose: Whether to use verbose mode
     /// - Returns: A tuple consisting of program execution log and cumulative output.
-    @discardableResult
-    public func run() throws -> Output {
-
-        // Clear logs and outputs before program execution.
-        logs = [Log]()
-        outputs = [Node]()
+    public func run() throws {
 
         /// Record start time
         let startTime = currentTime
@@ -93,13 +69,15 @@ public class Program {
         Scope.save()
         switch config.scope {
         case .useDefault:
-            vPrint(">>> restoring to default execution scope...")
+            Program.io?.log("restoring to default execution scope...")
             Scope.restoreDefault()
         default:
             break
         }
 
-        vPrint(">>> starting...\n>>> timestamp: \(startTime)\n>>> begin program execution log:\n")
+        Program.io?.log("starting...")
+        Program.io?.log("timestamp: \(startTime)")
+        Program.io?.log("begin program execution log:\n")
     
         try statements.forEach {
             // Execute the statement and add it to logs
@@ -107,38 +85,11 @@ public class Program {
 
             // Create log
             let log = Log(input: $0, output: result)
-            logs.append(log)
-
-            vPrint(log, terminator: "\n\n")
-
-            // Generate outputs
-            result.forEach {
-                if let f = $0 as? Function {
-                    switch f.name {
-                    case "print":
-                        f.elements.forEach {
-                            outputs.append($0)
-                        }
-                    case "println":
-                        f.elements.forEach {
-                            outputs.append($0)
-                            outputs.append("\n")
-                        }
-                    default:
-                        break
-                    }
-                }
-            }
+            Program.io?.log(log)
         }
 
-        vPrint(">>> end program execution log.\n")
-        vPrint(">>> program output:\n")
-        vPrint(outputs.map {
-            $0.stringified
-        }.reduce("") {
-            $0 + $1
-        }, terminator: "\n")
-        vPrint(">>> program terminated in \(currentTime - startTime) seconds.")
+        Program.io?.log("end program execution log.\n")
+        Program.io?.log("program terminated in \(currentTime - startTime) seconds.")
 
         // Clear all temporary variables, functions, and keyword definitions.
         switch config.retentionPolicy {
@@ -149,17 +100,11 @@ public class Program {
         case .preserveAll:
             Scope.popLast()
         }
-
-        return (logs, outputs)
     }
 
-    public struct Log: CustomStringConvertible {
+    public struct Log {
         let input: Node
         let output: Node
-
-        public var description: String {
-            return "\t>>>\t\(input)\n\t\t\(output)"
-        }
     }
     
     public struct Configuration {

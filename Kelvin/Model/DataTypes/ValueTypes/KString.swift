@@ -8,17 +8,27 @@
 
 import Foundation
 
-extension String: LeafNode, NaN {
-
-    public var stringified: String {
-        return self
+struct KString: LeafNode, NaN {
+    
+    var stringified: String {
+        return "\"\(string)\""
     }
-
-    public func equals(_ node: Node) -> Bool {
-        if let s = node as? String {
-            return self == s
+    
+    let string: String
+    
+    init(_ string: String) {
+        self.string = string
+    }
+    
+    func equals(_ node: Node) -> Bool {
+        if let kString = node as? KString {
+            return kString.string == string
         }
         return false
+    }
+    
+    func concat(_ ks: KString) -> KString {
+        return KString("\(string)\(ks.string)")
     }
 }
 

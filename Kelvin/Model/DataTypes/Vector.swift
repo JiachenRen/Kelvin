@@ -23,7 +23,7 @@ public struct Vector: MutableListProtocol, NaN {
     
     public var stringified: String {
         let e = elements.reduce(nil) {
-            $0 == nil ? $1 : "\($0!), \($1)"
+            $0 == nil ? $1.stringified : "\($0!), \($1.stringified)"
         } ?? ""
         return "[\(e)]"
     }

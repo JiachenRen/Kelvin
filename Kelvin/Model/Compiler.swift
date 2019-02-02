@@ -182,7 +182,7 @@ public class Compiler {
             }
 
             // Store the extracted string as a node reference
-            dict[encoded] = extracted
+            dict[encoded] = KString(extracted)
 
             count += 1
         }

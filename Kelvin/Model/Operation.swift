@@ -266,7 +266,7 @@ public class Operation: Equatable {
                     fallthrough
                 case .equation where !(arg is Equation):
                     fallthrough
-                case .string where !(arg is String):
+                case .string where !(arg is KString):
                     fallthrough
                 case .int where !(arg is Int):
                     fallthrough

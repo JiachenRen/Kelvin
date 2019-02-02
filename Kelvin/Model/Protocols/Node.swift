@@ -20,7 +20,7 @@ public typealias PUnary = (Node) -> Bool
 /// Binary predicament
 public typealias PBinary = (Node, Node) -> Bool
 
-public protocol Node: CustomStringConvertible {
+public protocol Node {
 
     /// The string representation of the node.
     /// This is used to override the description implemented in Double;
@@ -66,11 +66,6 @@ public protocol Node: CustomStringConvertible {
 }
 
 extension Node {
-    
-    /// Interface w/ CustomStringConvertible.
-    public var description: String {
-        return stringified
-    }
     
     /**
      Replace anonymous closure arguments $0, $1, etc. w/ supplied arguments.

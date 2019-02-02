@@ -50,7 +50,7 @@ let developerOperations: [Operation] = [
         if let v = $0 as? Variable {
             Variable.delete(v.name)
             Operation.remove(v.name)
-            return "deleted '\(v.stringified)'"
+            return KString("deleted '\(v.stringified)'")
         }
         return nil
     },
@@ -131,12 +131,18 @@ let developerOperations: [Operation] = [
         return List(elements)
     },
     .init(.copy, [.any, .number]) {
-        return Function(.repeat, $0)
+        Function(.repeat, $0)
     },
     
     // String concatenation
     .binary(.concat, [.any, .any]) {
-        return "\($0)\($1)"
+        KString("\($0.stringified)").concat(KString("\($1.stringified)"))
+    },
+    .binary(.concat, [.string, .any]) {
+        ($0 as! KString).concat(KString("\($1.stringified)"))
+    },
+    .binary(.concat, [.any, .string]) {
+        KString("\($0.stringified)").concat($1 as! KString)
     },
     
     // String subscript
@@ -147,7 +153,7 @@ let developerOperations: [Operation] = [
         if n >= s.count || n < 0{
             throw ExecutionError.indexOutOfBounds
         } else {
-            return "\(s[n])"
+            return KString("\(s[n])")
         }
     },
     
@@ -162,35 +168,34 @@ let developerOperations: [Operation] = [
         exit(0)
     },
     .init(.date, []) { _ in
-        "\(Date())"
+        KString("\(Date())")
     },
     .init(.time, []) { _ in
         Date().timeIntervalSince1970
     },
     .unary(.delay, [.number]) {
         Thread.sleep(forTimeInterval: $0≈!)
-        return "done"
+        return KString("done")
     },
     .binary(.run, [.string, .string]) {
-        let flag = $0 as! String
-        let filePath = $1 as! String
+        let flag = ($0 as! KString).string
+        let filePath = ($1 as! KString).string
         switch flag {
         case "-c":
-            return List(try Program.compileAndRun(filePath, with: Program.Configuration(
+            try Program.compileAndRun(filePath, with: Program.Configuration(
                 verbose: false,
                 scope: .useCurrent,
-                retentionPolicy: .restore)).outputs
-                .filter {$0 !== "\n"})
+                retentionPolicy: .restore))
         case "-v":
             try Program.compileAndRun(filePath, with: nil)
         default:
             throw ExecutionError.general(errMsg: "invalid configuration \(flag)")
         }
-        return "done"
+        return KString("done")
     },
     .unary(.run, [.string]) {
-        try Program.compileAndRun($0 as! String, with: nil)
-        return "done"
+        try Program.compileAndRun(($0 as! KString).string, with: nil)
+        return KString("done")
     },
     .unary(.try, [.tuple]) {
         let tuple = $0 as! Tuple
@@ -201,15 +206,17 @@ let developerOperations: [Operation] = [
         }
     },
     .unary(.try, [.any]) {
+        var errMsg = ""
         do {
             return try $0.simplify()
         } catch ExecutionError.general(let msg) {
-            return msg
+            errMsg = msg
         } catch CompilerError.illegalArgument(let msg) {
-            return msg
+            errMsg = "illegal arguement: \(msg)"
         } catch CompilerError.syntax(let msg) {
-            return msg
+            errMsg = "syntax: \(msg)"
         }
+        return KString(errMsg)
     },
     .binary(.measure, [.any, .int]) {
         let n = $1 as! Int
@@ -221,7 +228,25 @@ let developerOperations: [Operation] = [
         return Tuple("avg(s)", avg)
     },
     .unary(.compile, [.string]) {
-        try Compiler.compile($0 as! String)
+        try Compiler.compile(($0 as! KString).string)
+    },
+    
+    // IO
+    .unary(.print, [.any]) {
+        if let s = $0 as? KString {
+            Program.io?.print(s.string)
+        } else {
+            Program.io?.print($0.stringified)
+        }
+        return $0
+    },
+    .unary(.println, [.any]) {
+        if let s = $0 as? KString {
+            Program.io?.println(s.string)
+        } else {
+            Program.io?.println($0.stringified)
+        }
+        return $0
     }
 ]
 
