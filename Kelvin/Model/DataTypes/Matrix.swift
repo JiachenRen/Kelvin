@@ -17,6 +17,13 @@ public struct Matrix: MutableListProtocol, NaN {
         return "[\(r!)]"
     }
     
+    public var ansiColored: String {
+        let r = rows.reduce(nil) {
+            return $0 == nil ? $1.ansiColored : $0! + ", " + $1.ansiColored
+        }
+        return "[".red.bold + "\(r!)" + "]".red.bold
+    }
+    
     public typealias Row = Vector
     public typealias Dimension = (rows: Int, cols: Int)
     

@@ -12,4 +12,8 @@ extension Bool: Value {
     public var doubleValue: Double {
         return Double(self ? 1 : 0)
     }
+    
+    public var ansiColored: String {
+        return self ? "\(self)".green.bold : "\(self)".red.bold
+    }
 }

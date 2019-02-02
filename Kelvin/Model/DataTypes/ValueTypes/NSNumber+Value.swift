@@ -9,4 +9,7 @@
 import Foundation
 
 extension NSNumber: Value {
+    public var ansiColored: String {
+        return "\(self)".blue
+    }
 }

@@ -20,8 +20,8 @@ while true {
         // Compile and execute the input statement
         Program.io?.clear()
         let parent = try Compiler.compile(input)
-        print("      # \(parent.stringified)")
-        print("      = \(try parent.simplify().stringified)", terminator: "\n\n")
+        print("      # \(parent.ansiColored)")
+        print("      = \(try parent.simplify().ansiColored)", terminator: "\n\n")
         Program.io?.flush()
     } catch CompilerError.illegalArgument(let msg) {
         print("ERR >>> illegal argument: \(msg)", terminator: "\n\n")

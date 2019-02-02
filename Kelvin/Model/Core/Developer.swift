@@ -233,19 +233,11 @@ let developerOperations: [Operation] = [
     
     // IO
     .unary(.print, [.any]) {
-        if let s = $0 as? KString {
-            Program.io?.print(s.string)
-        } else {
-            Program.io?.print($0.stringified)
-        }
+        Program.io?.print($0)
         return $0
     },
     .unary(.println, [.any]) {
-        if let s = $0 as? KString {
-            Program.io?.println(s.string)
-        } else {
-            Program.io?.println($0.stringified)
-        }
+        Program.io?.println($0)
         return $0
     }
 ]

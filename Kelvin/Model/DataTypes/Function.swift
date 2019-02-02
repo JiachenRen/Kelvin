@@ -62,35 +62,52 @@ public struct Function: MutableListProtocol {
     }
 
     public var stringified: String {
-        let r = elements.map {
-            $0.stringified
-        }
-        var n = " \(name) "
+        return toString()
+    }
+    
+    public var ansiColored: String {
+        return toString(colored: true)
+    }
+    
+    private var ansiFormattedName: String {
+        return Operation.registered[name] == nil ? name : name.bold.italic
+    }
 
+    private func parenthesize(_ s: String, _ colored: Bool) -> String {
+        return colored ? "(".bold + s + ")".bold : "(\(s))"
+    }
+    
+    private func toString(colored: Bool = false) -> String {
+        let r = elements.map {
+            colored ? $0.ansiColored : $0.stringified
+        }
+        var n = " \(colored ? ansiFormattedName : name) "
+        
         func formatted() -> String {
             let l = r.reduce(nil) {
                 $0 == nil ? "\($1)" : "\($0!), \($1)"
             }
-            return "\(name)(\(l ?? ""))"
+            return "\(colored ? ansiFormattedName : name)\(parenthesize(l ?? "", colored))"
         }
-
+        
         if let keyword = self.keyword {
-
+            
             // Determine which form of the function to use;
             // there are three options: shorthand, operator, or default.
-            let n = keyword.formatted
-
+            let k = keyword.formatted
+            let n = colored ? (k.replacingOccurrences(of: " ", with: "").isAlphaNumeric ? k.bold : k) : k
+            
             switch keyword.associativity {
             case .infix where count == 1:
-
+                
                 // Handle special case of -x.
-                let c = keyword.operator?.name ?? name
+                let c = keyword.operator?.name ?? (colored ? ansiFormattedName : name)
                 return "\(c)\(r[0])"
             case .infix where args.count == 2 || isCommutative:
                 if let s = r.enumerated().reduce(nil, { (a, c) -> String in
                     let (i, b) = c
                     let p = usesParenthesis(forNodeAtIndex: i)
-                    let b1 = p ? "(\(b))" : "\(b)"
+                    let b1 = p ? parenthesize(b, colored) : "\(b)"
                     return a == nil ? "\(b1)" : "\(a!)\(n)\(b1)"
                 }) {
                     return "\(s)"
@@ -99,15 +116,15 @@ public struct Function: MutableListProtocol {
                 }
             case .prefix where r.count == 1:
                 let p = usesParenthesis(forNodeAtIndex: 0)
-                return p ? "\(n)(\(r[0]))" : "\(n)\(r[0])"
+                return p ? "\(n)\(parenthesize(r[0], colored))" : "\(n)\(r[0])"
             case .postfix where r.count == 1:
                 let p = usesParenthesis(forNodeAtIndex: 0)
-                return p ? "(\(r[0]))\(n)" : "\(r[0])\(n)"
+                return p ? "\(parenthesize(r[0], colored))\(n)" : "\(r[0])\(n)"
             default:
                 break
             }
         }
-
+        
         return formatted()
     }
 

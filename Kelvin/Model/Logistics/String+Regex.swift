@@ -70,6 +70,10 @@ extension String {
     func replace(pattern: String, template: String) -> String {
         return self.replaceRegex(pattern: Regex(pattern: pattern), template: template)
     }
+    
+    var isAlphaNumeric: Bool {
+        return self ~ "^[a-zA-Z_]+[a-zA-Z_\\d]*$"
+    }
 }
 
 infix operator ~

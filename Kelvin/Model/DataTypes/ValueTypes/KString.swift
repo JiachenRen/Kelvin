@@ -14,6 +14,10 @@ struct KString: LeafNode, NaN {
         return "\"\(string)\""
     }
     
+    var ansiColored: String {
+        return "\"\(string)\"".green
+    }
+    
     let string: String
     
     init(_ string: String) {

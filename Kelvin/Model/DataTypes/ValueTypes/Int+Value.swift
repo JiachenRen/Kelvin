@@ -12,4 +12,8 @@ extension Int: Value {
     public var doubleValue: Double {
         return Double(self)
     }
+    
+    public var ansiColored: String {
+        return "\(self)".blue
+    }
 }

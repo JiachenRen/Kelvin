@@ -18,7 +18,14 @@ extension Double: Value {
     }
     
     public var stringified: String {
-        
+        return formatted
+    }
+    
+    public var ansiColored: String {
+        return formatted.blue
+    }
+    
+    private var formatted: String {
         // Use the proper scientific notation
         return "\(self)".replacingOccurrences(of: "e+", with: "*10^")
             .replacingOccurrences(of: "e-", with: "*10^-")

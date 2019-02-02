@@ -13,6 +13,10 @@ public struct Equation: BinaryNode, NaN {
     public var stringified: String {
         return "\(lhs.stringified) \(mode.rawValue) \(rhs.stringified)"
     }
+    
+    public var ansiColored: String {
+        return "\(lhs.ansiColored) \(mode.rawValue.bold) \(rhs.ansiColored)"
+    }
 
     /// The left hand side of the equation
     var lhs: Node

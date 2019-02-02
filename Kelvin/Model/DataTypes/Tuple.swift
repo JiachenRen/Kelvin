@@ -14,6 +14,10 @@ public struct Tuple: BinaryNode, NaN {
         return "(\(lhs.stringified) : \(rhs.stringified))"
     }
     
+    public var ansiColored: String {
+        return "(".bold.blue + "\(lhs.ansiColored) : \(rhs.ansiColored)" + ")".bold.blue
+    }
+    
     /// First value of the tuple
     var lhs: Node
     

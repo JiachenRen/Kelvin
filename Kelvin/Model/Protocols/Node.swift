@@ -26,6 +26,8 @@ public protocol Node {
     /// This is used to override the description implemented in Double;
     /// It serves as an intermediate.
     var stringified: String { get }
+    
+    var ansiColored: String { get }
 
     /// Computes the numerical value that the node represents.
     var evaluated: Value? { get }

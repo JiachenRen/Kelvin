@@ -20,6 +20,15 @@ public struct List: MutableListProtocol, NaN {
         }
         return "{\(pars ?? "")}"
     }
+    
+    public var ansiColored: String {
+        let pars = elements.map {
+            $0.ansiColored
+            }.reduce(nil) {
+                $0 == nil ? "\($1)" : "\($0!), \($1)"
+        }
+        return "{".red.bold + "\(pars ?? "")" + "}".red.bold
+    }
 
     init(_ elements: [Node]) {
         self.elements = elements

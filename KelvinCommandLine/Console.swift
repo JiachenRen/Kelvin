@@ -20,8 +20,8 @@ class Console: IOProtocol {
     }
     
     func log(_ l: Program.Log) {
-        let output = "\(l.output.stringified)".green
-        Swift.print("\t>>>\t\(l.input.stringified)\n\t\t\(output)\n")
+        let output = "\(l.output.ansiColored)"
+        Swift.print("\t>>>\t\(l.input.ansiColored)\n\t\t\(output)\n")
     }
     
     func error(_ e: String) {
@@ -32,8 +32,19 @@ class Console: IOProtocol {
         return Swift.readLine() ?? ""
     }
     
-    func print(_ s: String) {
-        output += s
+    private func format(_ n: Node) -> String {
+        if let ks = n as? KString {
+            return ks.string
+        }
+        return n.ansiColored
+    }
+    
+    func print(_ n: Node) {
+        output += format(n)
+    }
+    
+    func println(_ n: Node) {
+        output += format(n) + "\n"
     }
     
     func flush() {

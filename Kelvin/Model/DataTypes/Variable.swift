@@ -30,6 +30,13 @@ public struct Variable: LeafNode, NaN {
     public var stringified: String {
         return name
     }
+    
+    public var ansiColored: String {
+        if definition != nil {
+            return isConstant ? name.bold.magenta : name.bold
+        }
+        return isAnonymous ? name.cyan.bold : name;
+    }
 
     /// Extract the definition of the variable from the definitions.
     var definition: Node? {

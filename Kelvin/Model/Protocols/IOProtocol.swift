@@ -10,16 +10,11 @@ import Foundation
 
 public protocol IOProtocol {
     func readLine() -> String
-    func print(_ s: String)
+    func print(_ n: Node)
+    func println(_ n: Node)
     func log(_ l: String)
     func log(_ l: Program.Log)
     func error(_ e: String)
     func clear()
     func flush()
-}
-
-extension IOProtocol {
-    public func println(_ s: String) {
-        print(s + "\n")
-    }
 }

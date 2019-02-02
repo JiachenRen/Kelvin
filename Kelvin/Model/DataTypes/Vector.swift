@@ -28,6 +28,13 @@ public struct Vector: MutableListProtocol, NaN {
         return "[\(e)]"
     }
     
+    public var ansiColored: String {
+        let e = elements.reduce(nil) {
+            $0 == nil ? $1.ansiColored : "\($0!), \($1.ansiColored)"
+            } ?? ""
+        return "[".red.bold + "\(e)" + "]".red.bold
+    }
+    
     init(_ components: [Node]) {
         self.elements = components
     }
