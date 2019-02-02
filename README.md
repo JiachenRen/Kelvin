@@ -1,6 +1,87 @@
 # Kelvin CAS
 Kelvin is a powerful computer algebra system built with Swift with elegant programming capabilities. It is similar to its close relative, **Java Algebra System**. Find [more](https://github.com/JiachenRen/java-algebra-system) about JAS here.
 
+## Command Line Application
+### Setup
+1. Download the binary file `kelvin` from releases (or you can build it yourself with XCode)
+2. If the file name is altered by your browser, remove the extension.
+3. Optionally, you can add `kelvin` as part of your command line tools by the following command:
+```bash
+mv <path to kelvin> /usr/local/bin
+```
+
+### Usage
+```bash
+Usage: kelvin -c
+   or  kelvin -e <expr>
+   or  kelvin -f [options] <filepath>
+
+Type kelvin without an option to enter interactive mode.
+
+ where options include:
+
+    -c format outputs with ANSI
+    -e <expr> evaluate the expression that follows
+    -f <filepath> execute the content of the file
+    -v verbose
+    -vc verbose output with ANSI
+```
+
+### Examples
+- Type `kelvin` and hit return to enter interactive mode (lines starting with `←` denotes input).
+```bash
+# Enter interactive mode
+$ kelvin
+
+# Define a function f(x) that generates a fibonacci series up to the xth element
+← def f(x) = ((x == 0 || x == 1 || x == 2) ? (1...x) : ((q := {1, 1}; repeat(q := (q ++ q[size q - 2] + q[size q - 1]), x - 2)); q))
+→ def f(x) = x == 2 || x == 1 || x == 0 ? (1...x : q := {1, 1}; (q := (q ++ q::(size q - 2) + q::(size q - 1)))...x - 2; q)
+= {1, 1}
+
+# Generate the first 11 terms of the fibonacci series
+← f(11)
+→ f(11)
+= {1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89}
+
+# Exit Kelvin
+← exit()
+```
+- If your terminal supports ANSI, use `kelvin -c` to activate ANSI coloring.
+- Compile and run a file containing kelvin scripts.
+```bash
+# Change directory to tmp
+$ cd /tmp
+
+# Make a new file named "prg" containing a single line 'print "Hello World"'
+$ echo "print \"Hello World\"" > prg
+
+# Compile and run prg, which prints "Hello World"
+$ kelvin -f /tmp/prg
+
+# Alternatively, you can run the program with verbose on
+$ kelvin -f -v /tmp/prg
+
+# Program output under verbose mode
+→ trying relative URL to examples...
+→ The file “prg” couldn’t be opened because there is no such file.
+
+→ resolving absolute URL...
+→ loading contents of prg
+→ compiling...
+→ compilation successful in 0.014269828796386719 seconds.
+→ starting...
+→ timestamp: 1549149227.4572248
+→ begin program execution log:
+
+      → print "Hello World"
+      = "Hello World"
+
+→ end program execution log.
+→ program output:
+Hello World
+```
+For more complex examples (algebraic operations, calulus, stats, loops, conditional statements, etc., please refer to [Examples](Examples).
+
 ## Capabilities
 
 ### Arithmetic
