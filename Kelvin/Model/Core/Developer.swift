@@ -146,16 +146,19 @@ let developerOperations: [Operation] = [
     .binary(.concat, [.any, .string]) {
         KString("\($0.stringified)").concat($1 as! KString)
     },
+    .binary(.concat, [.string, .string]) {
+        ($0 as! KString).concat($1 as! KString)
+    },
     
     // String subscript
     .binary(.get, [.string, .number]) {
-        guard let s = $0 as? String, let n = $1 as? Int else {
+        guard let s = $0 as? KString, let n = $1 as? Int else {
             return nil
         }
-        if n >= s.count || n < 0{
+        if n >= s.string.count || n < 0{
             throw ExecutionError.indexOutOfBounds
         } else {
-            return KString("\(s[n])")
+            return KString("\(s.string[n])")
         }
     },
     

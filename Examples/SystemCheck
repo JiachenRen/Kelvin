@@ -1,4 +1,11 @@
-# Run all Kelvin scripts and tests and do a pansystemic performance.
+# Run all Kelvin scripts and tests and do a pansystemic performance analysis.
+
+# Replace with your absolute directory to Examples
+def examples_dir = "/Users/jiachenren/Library/Mobile Documents/com~apple~CloudDocs/Documents/Developer/Kelvin/Examples/"
+
 def start_time = time()
-{"Misc", "Tests", "Probability", "Calculus", "Conditionals", "Randomization", "DateTime", "Subscript", "Loops", "String", "Trigonometry", "ErrorHandling", "Statistics", "Vector", "Matrix", "Factorization", "List"} | run($0)
+def files = {"Misc", "Tests", "Probability", "Calculus", "Conditionals", "Randomization", "DateTime", "Subscript", "Loops", "String", "Trigonometry", "ErrorHandling", "Statistics", "Vector", "Matrix", "Factorization", "List"}
+def file_paths = (files | (examples_dir & $0))
+file_paths | run $0
+
 println "System check completed in " & (time() - start_time) & " seconds."

@@ -8,9 +8,6 @@
 
 import Foundation
 
-// Replace with base URL to /Examples directory
-fileprivate let baseURL = URL(fileURLWithPath: "/Users/jiachenren/Library/Mobile Documents/com~apple~CloudDocs/Documents/Developer/Kelvin/Examples/")
-
 public class Program {
 
     var statements: [Statement]
@@ -33,8 +30,9 @@ public class Program {
     public static func compileAndRun(_ fileName: String, with config: Configuration? = nil) throws {
         var content = ""
         do {
-            io?.log("trying relative URL to examples...")
-            let url = URL(fileURLWithPath: fileName, relativeTo: baseURL)
+            io?.log("trying relative URL to current working directory...")
+            let url = URL(fileURLWithPath: Process().currentDirectoryPath)
+                .appendingPathComponent(fileName)
             content = try String(contentsOf: url)
             io?.log("loading contents of \(fileName)")
         } catch let e {

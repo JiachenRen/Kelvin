@@ -127,4 +127,7 @@ assert l5 == {5, 4, 3, 2, 1}
 assert n == 385
 assert l6 == {2}
 
+# Test string concatenation
+assert "asdf" & "sdfsdf"[1] == "asdfd"
+
 println "Test completed. No errors identified. System operational."
