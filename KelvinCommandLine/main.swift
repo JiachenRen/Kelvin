@@ -20,6 +20,7 @@ func compileAndRun(_ document: String) throws {
         console.flush()
     } catch let e as KelvinError {
         console.error(e.localizedDescription)
+        exit(EXIT_FAILURE)
     }
 }
 
@@ -30,8 +31,12 @@ if args.count == 1 {
     switch try Option.resolve(args[1]) {
     case .expression where args.count == 3:
         let expr = args[2]
-        let output = try Compiler.compile(expr).simplify()
-        print(output.stringified)
+        do {
+            let output = try Compiler.compile(expr).simplify()
+            print(output.stringified)
+        } catch let e as KelvinError {
+            console.error(e.localizedDescription)
+        }
     case .colored:
         console.colored = true
         try console.interactiveLoop()
