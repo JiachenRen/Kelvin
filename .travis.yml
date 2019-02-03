@@ -1,0 +1,4 @@
+language: objective-c
+xcode_project: Kelvin.xcodeproj
+xcode_scheme: CommandLineRelease
+xcode_destination: platform=macOS
