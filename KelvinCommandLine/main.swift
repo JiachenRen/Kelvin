@@ -30,6 +30,7 @@ if args.count == 1 {
         console.colored = false
         console.verbose = false
         try Program.compileAndRun(args[2])
+        console.flush()
     case .file where args.count == 4:
         let config = try Option.resolve(args[2])
         console.colored = false
@@ -47,6 +48,7 @@ if args.count == 1 {
             exit(EXIT_FAILURE)
         }
         try Program.compileAndRun(args[3])
+        console.flush()
     default:
         print("Error: Invalid arguments.")
         Console.printUsage()

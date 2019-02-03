@@ -81,7 +81,9 @@ public class Console: IOProtocol {
                 // Compile and execute the input statement
                 clear()
                 let parent = try Compiler.compile(input)
-                log(Program.Log(line: nil, input: parent, output: try parent.simplify()))
+                let result = try parent.simplify()
+                flush()
+                log(Program.Log(line: nil, input: parent, output: result))
             } catch CompilerError.illegalArgument(let msg) {
                 error("illegal argument: \(msg)")
             } catch CompilerError.syntax(let msg) {

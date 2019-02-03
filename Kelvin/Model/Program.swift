@@ -36,7 +36,7 @@ public class Program {
             content = try String(contentsOf: url)
             io?.log("loading contents of \(fileName)")
         } catch let e {
-            io?.error("\(e.localizedDescription)")
+            io?.log("\(e.localizedDescription)")
             io?.log("resolving absolute URL...")
             do {
                 content = try String(contentsOf: URL(fileURLWithPath: fileName))
@@ -102,9 +102,6 @@ public class Program {
         case .preserveAll:
             Scope.popLast()
         }
-        
-        // Transfer program outputs
-        Program.io?.flush()
     }
     
     public struct Statement {
