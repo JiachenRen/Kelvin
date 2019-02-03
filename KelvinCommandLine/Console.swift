@@ -33,6 +33,10 @@ public class Console: IOProtocol {
         if !verbose {
             return
         }
+        if let line = l.line {
+            let msg = "      # \(line)"
+            Swift.print(colored ? msg.white : msg)
+        }
         let output = "\(colored ? l.output.ansiColored : l.output.stringified)"
         Swift.print("      → \(colored ? l.input.ansiColored : l.input.stringified)\n      = \(output)\n")
     }
@@ -84,21 +88,8 @@ public class Console: IOProtocol {
                 let result = try parent.simplify()
                 flush()
                 log(Program.Log(line: nil, input: parent, output: result))
-            } catch CompilerError.illegalArgument(let msg) {
-                error("illegal argument: \(msg)")
-            } catch CompilerError.syntax(let msg) {
-                error("syntax: \(msg)")
-            } catch CompilerError.error(onLine: let n, let err) {
-                switch err {
-                case .syntax(let msg):
-                    error("syntax error on line \(n): \(msg)")
-                case .illegalArgument(let msg):
-                    error("illegal argument on line \(n): \(msg)")
-                default:
-                    error("unexpected error on line \(n): \(err)")
-                }
-            } catch ExecutionError.general(let msg) {
-                error("\(msg)")
+            } catch let e as KelvinError {
+                error(e.localizedDescription)
             }
         }
     }

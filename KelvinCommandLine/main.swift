@@ -14,6 +14,15 @@ let args = CommandLine.arguments
 let console = Console(colored: false, verbose: true)
 Program.io = console
 
+func compileAndRun(_ document: String) throws {
+    do {
+        try Program.compileAndRun(document)
+        console.flush()
+    } catch let e as KelvinError {
+        console.error(e.localizedDescription)
+    }
+}
+
 // No arguments, enter interactive mode.
 if args.count == 1 {
     try console.interactiveLoop()
@@ -29,8 +38,7 @@ if args.count == 1 {
     case .file where args.count == 3:
         console.colored = false
         console.verbose = false
-        try Program.compileAndRun(args[2])
-        console.flush()
+        try compileAndRun(args[2])
     case .file where args.count == 4:
         let config = try Option.resolve(args[2])
         console.colored = false
@@ -47,8 +55,7 @@ if args.count == 1 {
             Console.printUsage()
             exit(EXIT_FAILURE)
         }
-        try Program.compileAndRun(args[3])
-        console.flush()
+        try compileAndRun(args[3])
     default:
         print("Error: Invalid arguments.")
         Console.printUsage()

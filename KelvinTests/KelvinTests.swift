@@ -12,36 +12,40 @@ import XCTest
 class KelvinTests: XCTestCase {
 
     override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        Program.io = Console(colored: false, verbose: true)
+        restoreDefault()
     }
 
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        restoreDefault()
+        Program.io?.flush()
     }
     
-    func testCompiler() {
-        do {
-            let compiled = try Compiler.compile("(3-a)*(c+b)/5+log(c)")
-            print(compiled)
-        } catch let err {
-            print(err)
-        }
+    private let examplesDir = "/Users/jiachenren/Library/Mobile Documents/com~apple~CloudDocs/Documents/Developer/Kelvin/Examples/"
+    
+    private func restoreDefault() {
+        Variable.restoreDefault()
+        Operation.restoreDefault()
+        Keyword.restoreDefault()
     }
     
-    func testNumericOperations() {
-        
+    func testSystemCheck() throws {
+        let systemCheckUrl = examplesDir + "SystemCheck"
+        let _ = try Compiler.compile("run \"\(systemCheckUrl)\"").simplify()
     }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
+    
+    func testPerformance() {
         self.measure {
-            // Put the code you want to measure the time of here.
+            restoreDefault()
+            let systemCheckUrl = examplesDir + "SystemCheck"
+            do {
+                let _ = try Compiler.compile("run \"\(systemCheckUrl)\"").simplify()
+            } catch let e as KelvinError {
+                print(e.localizedDescription)
+                XCTAssert(false)
+            }
         }
+        
     }
 
 }

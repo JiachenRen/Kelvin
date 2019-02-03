@@ -85,8 +85,8 @@ public class Program {
                 // Create log
                 let log = Log(line: $0.line, input: $0.node, output: result)
                 Program.io?.log(log)
-            } catch ExecutionError.general(errMsg: let msg) {
-                throw ExecutionError.general(errMsg: "error on line \($0.line) - \(msg)")
+            } catch let e as KelvinError {
+                throw ExecutionError.on(line: $0.line, err: e)
             }
         }
 

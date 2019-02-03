@@ -117,6 +117,55 @@
 		1F8DF73122050B97006351B0 /* IOProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF72F22050B5B006351B0 /* IOProtocol.swift */; };
 		1F8DF73522050D3A006351B0 /* Console.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF73322050CD3006351B0 /* Console.swift */; };
 		1F8DF73722063067006351B0 /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF73622063067006351B0 /* Option.swift */; };
+		1F8DF73A220672BE006351B0 /* OneVar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936C221F3C13100E707BD /* OneVar.swift */; };
+		1F8DF73B220672BE006351B0 /* Distribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F570B5321FF6DB90006E342 /* Distribution.swift */; };
+		1F8DF73C220672BE006351B0 /* Stat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F570B5521FF6F670006E342 /* Stat.swift */; };
+		1F8DF73D220672BE006351B0 /* Algebra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936DC21F4EADE00E707BD /* Algebra.swift */; };
+		1F8DF73E220672BE006351B0 /* Factorization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3D31682202863900462F10 /* Factorization.swift */; };
+		1F8DF73F220672BE006351B0 /* Binary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936C021F3C0B300E707BD /* Binary.swift */; };
+		1F8DF740220672BE006351B0 /* Unary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936CA21F4E2A300E707BD /* Unary.swift */; };
+		1F8DF741220672BE006351B0 /* Calculus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09370321F54E6200E707BD /* Calculus.swift */; };
+		1F8DF742220672BE006351B0 /* Differentiation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3D316C2202874700462F10 /* Differentiation.swift */; };
+		1F8DF743220672BE006351B0 /* Probability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936CD21F4E36300E707BD /* Probability.swift */; };
+		1F8DF744220672BE006351B0 /* Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3D31612201FE0800462F10 /* Number.swift */; };
+		1F8DF745220672BE006351B0 /* Developer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936D021F4E45900E707BD /* Developer.swift */; };
+		1F8DF746220672BE006351B0 /* List & Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936D621F4E80A00E707BD /* List & Tuple.swift */; };
+		1F8DF747220672BE006351B0 /* Vector & Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90EC21FA27E700432B17 /* Vector & Matrix.swift */; };
+		1F8DF748220672BE006351B0 /* Equality.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936DE21F4EB7A00E707BD /* Equality.swift */; };
+		1F8DF749220672BE006351B0 /* Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936E021F4EBBE00E707BD /* Conversion.swift */; };
+		1F8DF74A220672BE006351B0 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936E521F4ED2300E707BD /* Configuration.swift */; };
+		1F8DF74B220672BE006351B0 /* Equation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974C421E633FD006D6DC2 /* Equation.swift */; };
+		1F8DF74C220672BE006351B0 /* Bool+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F721F5189500E707BD /* Bool+Value.swift */; };
+		1F8DF74D220672BE006351B0 /* Double+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F321F5184400E707BD /* Double+Value.swift */; };
+		1F8DF74E220672BE006351B0 /* Int+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F521F5186200E707BD /* Int+Value.swift */; };
+		1F8DF74F220672BE006351B0 /* KString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* KString.swift */; };
+		1F8DF750220672BE006351B0 /* NSNumber+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F921F518BB00E707BD /* NSNumber+Value.swift */; };
+		1F8DF751220672BE006351B0 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AD2197331F005C3353 /* Function.swift */; };
+		1F8DF752220672BE006351B0 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82B32197416D005C3353 /* List.swift */; };
+		1F8DF753220672BE006351B0 /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Tuple.swift */; };
+		1F8DF754220672BE006351B0 /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82B521974368005C3353 /* Variable.swift */; };
+		1F8DF755220672BE006351B0 /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F570B4D21FBE7150006E342 /* Matrix.swift */; };
+		1F8DF756220672BE006351B0 /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09370021F51EC000E707BD /* Vector.swift */; };
+		1F8DF757220672BE006351B0 /* String+Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E121F8C32B00432B17 /* String+Colors.swift */; };
+		1F8DF758220672BE006351B0 /* String+Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E621F97B5000432B17 /* String+Regex.swift */; };
+		1F8DF759220672BE006351B0 /* String+Operations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F570B5921FF737D0006E342 /* String+Operations.swift */; };
+		1F8DF75A220672BE006351B0 /* BinaryNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697C21F380CA0006712C /* BinaryNode.swift */; };
+		1F8DF75B220672BE006351B0 /* IOProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF72F22050B5B006351B0 /* IOProtocol.swift */; };
+		1F8DF75C220672BE006351B0 /* LeafNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974BE21E3B741006D6DC2 /* LeafNode.swift */; };
+		1F8DF75D220672BE006351B0 /* ListProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936EB21F5058B00E707BD /* ListProtocol.swift */; };
+		1F8DF75E220672BE006351B0 /* MutableListProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936EF21F513AF00E707BD /* MutableListProtocol.swift */; };
+		1F8DF75F220672BE006351B0 /* NaN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974C021E3B761006D6DC2 /* NaN.swift */; };
+		1F8DF760220672BE006351B0 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AF2197338B005C3353 /* Node.swift */; };
+		1F8DF761220672BE006351B0 /* Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82B121973FF7005C3353 /* Value.swift */; };
+		1F8DF762220672BE006351B0 /* Compiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD8CD4218F52430004ECEB /* Compiler.swift */; };
+		1F8DF763220672BE006351B0 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974BB21E3970F006D6DC2 /* Error.swift */; };
+		1F8DF764220672BE006351B0 /* DataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E921FA0EF600432B17 /* DataType.swift */; };
+		1F8DF765220672BE006351B0 /* Mode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974C721E67627006D6DC2 /* Mode.swift */; };
+		1F8DF766220672BE006351B0 /* Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AB21966FC5005C3353 /* Operation.swift */; };
+		1F8DF767220672BE006351B0 /* Scope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09371C21F684D500E707BD /* Scope.swift */; };
+		1F8DF768220672BE006351B0 /* Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2D421EEB69300E40086 /* Program.swift */; };
+		1F8DF769220672BE006351B0 /* Keyword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C621EBA8C800E40086 /* Keyword.swift */; };
+		1F8DF76A220675E5006351B0 /* Console.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF73322050CD3006351B0 /* Console.swift */; };
 		1FE1697321F28F1E0006712C /* Tests in Resources */ = {isa = PBXBuildFile; fileRef = 1FE1697221F28F1E0006712C /* Tests */; };
 		1FE1697621F2D44A0006712C /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Tuple.swift */; };
 		1FE1697721F2D5D40006712C /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Tuple.swift */; };
@@ -800,6 +849,55 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F8DF76A220675E5006351B0 /* Console.swift in Sources */,
+				1F8DF73A220672BE006351B0 /* OneVar.swift in Sources */,
+				1F8DF73B220672BE006351B0 /* Distribution.swift in Sources */,
+				1F8DF73C220672BE006351B0 /* Stat.swift in Sources */,
+				1F8DF73D220672BE006351B0 /* Algebra.swift in Sources */,
+				1F8DF73E220672BE006351B0 /* Factorization.swift in Sources */,
+				1F8DF73F220672BE006351B0 /* Binary.swift in Sources */,
+				1F8DF740220672BE006351B0 /* Unary.swift in Sources */,
+				1F8DF741220672BE006351B0 /* Calculus.swift in Sources */,
+				1F8DF742220672BE006351B0 /* Differentiation.swift in Sources */,
+				1F8DF743220672BE006351B0 /* Probability.swift in Sources */,
+				1F8DF744220672BE006351B0 /* Number.swift in Sources */,
+				1F8DF745220672BE006351B0 /* Developer.swift in Sources */,
+				1F8DF746220672BE006351B0 /* List & Tuple.swift in Sources */,
+				1F8DF747220672BE006351B0 /* Vector & Matrix.swift in Sources */,
+				1F8DF748220672BE006351B0 /* Equality.swift in Sources */,
+				1F8DF749220672BE006351B0 /* Conversion.swift in Sources */,
+				1F8DF74A220672BE006351B0 /* Configuration.swift in Sources */,
+				1F8DF74B220672BE006351B0 /* Equation.swift in Sources */,
+				1F8DF74C220672BE006351B0 /* Bool+Value.swift in Sources */,
+				1F8DF74D220672BE006351B0 /* Double+Value.swift in Sources */,
+				1F8DF74E220672BE006351B0 /* Int+Value.swift in Sources */,
+				1F8DF74F220672BE006351B0 /* KString.swift in Sources */,
+				1F8DF750220672BE006351B0 /* NSNumber+Value.swift in Sources */,
+				1F8DF751220672BE006351B0 /* Function.swift in Sources */,
+				1F8DF752220672BE006351B0 /* List.swift in Sources */,
+				1F8DF753220672BE006351B0 /* Tuple.swift in Sources */,
+				1F8DF754220672BE006351B0 /* Variable.swift in Sources */,
+				1F8DF755220672BE006351B0 /* Matrix.swift in Sources */,
+				1F8DF756220672BE006351B0 /* Vector.swift in Sources */,
+				1F8DF757220672BE006351B0 /* String+Colors.swift in Sources */,
+				1F8DF758220672BE006351B0 /* String+Regex.swift in Sources */,
+				1F8DF759220672BE006351B0 /* String+Operations.swift in Sources */,
+				1F8DF75A220672BE006351B0 /* BinaryNode.swift in Sources */,
+				1F8DF75B220672BE006351B0 /* IOProtocol.swift in Sources */,
+				1F8DF75C220672BE006351B0 /* LeafNode.swift in Sources */,
+				1F8DF75D220672BE006351B0 /* ListProtocol.swift in Sources */,
+				1F8DF75E220672BE006351B0 /* MutableListProtocol.swift in Sources */,
+				1F8DF75F220672BE006351B0 /* NaN.swift in Sources */,
+				1F8DF760220672BE006351B0 /* Node.swift in Sources */,
+				1F8DF761220672BE006351B0 /* Value.swift in Sources */,
+				1F8DF762220672BE006351B0 /* Compiler.swift in Sources */,
+				1F8DF763220672BE006351B0 /* Error.swift in Sources */,
+				1F8DF764220672BE006351B0 /* DataType.swift in Sources */,
+				1F8DF765220672BE006351B0 /* Mode.swift in Sources */,
+				1F8DF766220672BE006351B0 /* Operation.swift in Sources */,
+				1F8DF767220672BE006351B0 /* Scope.swift in Sources */,
+				1F8DF768220672BE006351B0 /* Program.swift in Sources */,
+				1F8DF769220672BE006351B0 /* Keyword.swift in Sources */,
 				1FFD8CB9218F50870004ECEB /* KelvinTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

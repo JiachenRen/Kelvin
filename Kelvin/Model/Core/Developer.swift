@@ -210,17 +210,11 @@ let developerOperations: [Operation] = [
         }
     },
     .unary(.try, [.any]) {
-        var errMsg = ""
         do {
             return try $0.simplify()
-        } catch ExecutionError.general(let msg) {
-            errMsg = msg
-        } catch CompilerError.illegalArgument(let msg) {
-            errMsg = "illegal arguement: \(msg)"
-        } catch CompilerError.syntax(let msg) {
-            errMsg = "syntax: \(msg)"
+        } catch let e as KelvinError {
+            return KString(e.localizedDescription)
         }
-        return KString(errMsg)
     },
     .unary(.assert, [.bool]) {
         if !($0 as! Bool) {

@@ -129,8 +129,8 @@ public class Compiler {
                 let node = try compile(line)
                 let statement = Program.Statement(line: i + 1, node: node)
                 statements.append(statement)
-            } catch let e where e is CompilerError {
-                throw CompilerError.error(onLine: i + 1, e as! CompilerError)
+            } catch let e as CompilerError {
+                throw CompilerError.on(line: i + 1, e)
             }
         }
 
@@ -428,7 +428,7 @@ public class Compiler {
             let r = innermost(expr, "[", "]")
             
             if expr.index(after: r.lowerBound) == r.upperBound {
-                throw CompilerError.syntax(errMsg: "cannot subscript with []")
+                throw CompilerError.syntax(errMsg: "cannot subscript with empty square brackets []")
             }
             
             // Find the range of string inside the brackets.
@@ -861,15 +861,15 @@ public class Compiler {
         }
 
         if !matches(expr, parentheses) {
-            throw CompilerError.syntax(errMsg: "() mismatch in \(expr)")
+            throw CompilerError.syntax(errMsg: "() mismatch in \"\(expr)\"")
         } else if !matches(expr, brackets) {
-            throw CompilerError.syntax(errMsg: "{} mismatch in \(expr)")
+            throw CompilerError.syntax(errMsg: "{} mismatch in \"\(expr)\"")
         } else if !matches(expr, squareBrackets) {
-            throw CompilerError.syntax(errMsg: "[] mismatch in \(expr)")
+            throw CompilerError.syntax(errMsg: "[] mismatch in \"\(expr)\"")
         } else if expr == "" {
             throw CompilerError.illegalArgument(errMsg: "Give me some juice!")
         } else if num(expr, char: "\"") % 2 != 0 {
-            throw CompilerError.syntax(errMsg: "\" mismatch in \(expr)")
+            throw CompilerError.syntax(errMsg: "\" mismatch in \"\(expr)\"")
         }
     }
 

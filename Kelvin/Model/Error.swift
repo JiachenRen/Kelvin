@@ -8,21 +8,37 @@
 
 import Foundation
 
-/// Errors that occur during the compilation phase such as any bad syntax or
-/// an incorrect number of arguments supplied to reserved binary/unary operations
-indirect public enum CompilerError: Error {
-    case illegalArgument(errMsg: String)
-    case syntax(errMsg: String)
-    case error(onLine: Int, _ err: CompilerError)
+public protocol KelvinError: Error {
+    var localizedDescription: String { get }
 }
 
-public enum ExecutionError: Error {
+/// Errors that occur during the compilation phase such as any bad syntax or
+/// an incorrect number of arguments supplied to reserved binary/unary operations
+indirect public enum CompilerError: KelvinError {
+    case illegalArgument(errMsg: String)
+    case syntax(errMsg: String)
+    case on(line: Int, _ err: CompilerError)
+    
+    public var localizedDescription: String {
+        switch self {
+        case .illegalArgument(errMsg: let msg):
+            return "illegal argument: \(msg)"
+        case .syntax(errMsg: let msg):
+            return "syntax: \(msg)"
+        case .on(line: let i, let e):
+            return "error on line \(i) - \(e.localizedDescription)"
+        }
+    }
+}
+
+public enum ExecutionError: KelvinError {
     static let indexOutOfBounds = ExecutionError.general(errMsg: "index out of bounds")
     static let dimensionMismatch = ExecutionError.general(errMsg: "dimension mismatch")
     static let predicateException = ExecutionError.general(errMsg: "predicate must be a boolean")
     static let unexpectedError = ExecutionError.general(errMsg: "an unexpected error has occurred")
     
     case general(errMsg: String)
+    case on(line: Int, err: KelvinError)
     
     static func invalidDT(_ invalid: String) -> ExecutionError {
         return ExecutionError.general(errMsg: "invalid data type '\(invalid)'")
@@ -42,5 +58,23 @@ public enum ExecutionError: Error {
     
     static func invalidSubscript(_ target: String, _ sub: String) -> ExecutionError {
         return ExecutionError.general(errMsg: "cannot subscript \(target) by \(sub)")
+    }
+    
+    public var localizedDescription: String {
+        switch self {
+        case .general(errMsg: let msg):
+            return "error: \(msg)"
+        case .on(line: let i, err: let e):
+            var msg = e.localizedDescription
+            if let execErr = e as? ExecutionError {
+                switch execErr {
+                case .general(errMsg: let errMsg):
+                    msg = errMsg
+                default:
+                    break
+                }
+            }
+            return "error on line \(i) - \(msg)"
+        }
     }
 }
