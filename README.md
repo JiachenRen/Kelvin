@@ -1,7 +1,7 @@
 # Kelvin CAS
 Kelvin is a powerful computer algebra system built with _Swift 4_. It is similar to its close relative, _Java Algebra System_, only a gazilion times faster & cleaner. Find [more](https://github.com/JiachenRen/java-algebra-system) about JAS here.
 
-## Command Line Application
+## Command Line
 ### Setup
 1. Download the binary file `kelvin` from releases (or you can build it yourself with XCode)
 2. If the file name is altered by your browser, remove the extension.
