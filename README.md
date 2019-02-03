@@ -1,5 +1,5 @@
 # Kelvin CAS
-Kelvin is a powerful computer algebra system built with Swift with elegant programming capabilities. It is similar to its close relative, **Java Algebra System**. Find [more](https://github.com/JiachenRen/java-algebra-system) about JAS here.
+Kelvin is a powerful computer algebra system built with _Swift 4_. It is similar to its close relative, _Java Algebra System_, only a gazilion times faster & cleaner. Find [more](https://github.com/JiachenRen/java-algebra-system) about JAS here.
 
 ## Command Line Application
 ### Setup
@@ -80,7 +80,7 @@ $ kelvin -f -v /tmp/prg
 → program output:
 Hello World
 ```
-For more complex examples (algebraic operations, calulus, stats, loops, conditional statements, etc., please refer to [Examples](Examples).
+For more complex examples (algebraic operations, calulus, stats, loops, conditional statements, etc.), please refer to [Examples](Examples).
 
 ## Capabilities
 
