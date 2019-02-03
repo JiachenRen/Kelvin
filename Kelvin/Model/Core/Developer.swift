@@ -75,7 +75,7 @@ let developerOperations: [Operation] = [
         try assign($1, to: $0, by: /)
     },
     
-    // Consecutive execution, feed forward, flow control
+    // Consecutive execution, pileline, flow control
     .binary(.if, [.any, .tuple]) {
         let node = try $0.simplify()
         guard let predicament = node as? Bool else {
@@ -85,12 +85,12 @@ let developerOperations: [Operation] = [
 
         return try (predicament ? tuple.lhs : tuple.rhs).simplify() // Should this be simplified?
     },
-    .init(.then, [.universal]) { nodes in
+    .init(.semicolon, [.universal]) { nodes in
         return try nodes.map {
             try $0.simplify()
         }.last
     },
-    .binary(.feed, [.any, .any]) {
+    .binary(.pipe, [.any, .any]) {
         let simplified = try $0.simplify()
         return $1.replacingAnonymousArgs(with: [simplified])
     },

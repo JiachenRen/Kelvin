@@ -112,8 +112,8 @@ public extension String {
     
     // Developer
     public static let `if` = "if"
-    public static let then = "then"
-    public static let feed = "feed"
+    public static let semicolon = ";"
+    public static let pipe = "pipe"
     public static let replace = "replace"
     public static let `repeat` = "repeat"
     public static let copy = "copy"

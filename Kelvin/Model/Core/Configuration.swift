@@ -19,7 +19,7 @@ let defaultConfiguration: [Operation.Attribute: [String]] = [
     .preservesArguments: [
         .complexity,
         .repeat,
-        .then,
+        .semicolon,
         .define,
         .def,
         .del,
@@ -28,7 +28,7 @@ let defaultConfiguration: [Operation.Attribute: [String]] = [
         .try,
         
         // Functions that accepts anonymous arguments should preserve arguments.
-        .feed,
+        .pipe,
         .replace,
         .map,
         .reduce,
