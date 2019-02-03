@@ -2,4 +2,4 @@ language: objective-c
 osx_image: xcode10.1
 
 script:
-  - xcodebuild clean test -project Kelvin.xcodeproj -scheme CommandLine -destination "platform=macOS" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -quiet
+  - xcodebuild clean build -project Kelvin.xcodeproj -scheme CommandLine -destination "platform=macOS" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -quiet
