@@ -21,7 +21,10 @@ class KelvinTests: XCTestCase {
         Program.io?.flush()
     }
     
-    private let examplesDir = "/Users/jiachenren/Library/Mobile Documents/com~apple~CloudDocs/Documents/Developer/Kelvin/Examples/"
+    private let examplesUrl = URL(fileURLWithPath: #file)
+        .deletingLastPathComponent()
+        .deletingLastPathComponent()
+        .appendingPathComponent("Examples")
     
     private func restoreDefault() {
         Variable.restoreDefault()
@@ -30,19 +33,21 @@ class KelvinTests: XCTestCase {
     }
     
     func testSystemCheck() throws {
-        let systemCheckUrl = examplesDir + "SystemCheck"
+        let systemCheckUrl = examplesUrl.path + "/Tests"
         let _ = try Compiler.compile("run \"\(systemCheckUrl)\"").simplify()
     }
     
     func testPerformance() {
         self.measure {
             restoreDefault()
-            let systemCheckUrl = examplesDir + "SystemCheck"
+            let systemCheckUrl = examplesUrl.path + "/Tests"
             do {
                 let _ = try Compiler.compile("run \"\(systemCheckUrl)\"").simplify()
             } catch let e as KelvinError {
                 print(e.localizedDescription)
                 XCTAssert(false)
+            } catch let e {
+                XCTFail(e.localizedDescription)
             }
         }
         
