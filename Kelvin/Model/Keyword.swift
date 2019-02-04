@@ -200,9 +200,7 @@ public struct Keyword {
     }
 
     public enum Precedence: Int, Comparable {
-        case endLinePostfix // ; TODO: bad practice,
-        case endLineInfix   // ;
-        case execution      // , ->
+        case execution      // ->
         case assignment     // :=, +=, -=, *=, /=
         case equation       // =
         case `repeat`       // ...
@@ -301,8 +299,6 @@ public struct Keyword {
         .init(for: .append, associativity: .infix, operator: .init("++")),
         .init(for: .sort, associativity: .infix, operator: .init(">?")),
         .init(for: .removeAtIdx, associativity: .infix),
-        .init(for: .endLineInfix, associativity: .infix, precedence: .endLineInfix, operator: .init(";", padding: .rightSide)),
-        .init(for: .endLinePostfix, associativity: .postfix, precedence: .endLinePostfix, operator: .init(";", padding: .none)),
         .init(for: .pipe, associativity: .infix, operator: .init("->")),
         .init(for: .replace, associativity: .infix, operator: .init("<<")),
         .init(for: .repeat, associativity: .infix, precedence: .repeat, operator: .init("...", padding: .none)),

@@ -108,14 +108,6 @@ let developerOperations: [Operation] = [
         }
         return KVoid()
     },
-    .init(.endLineInfix, [.universal]) { nodes in
-        return try nodes.map {
-            try $0.simplify()
-        }.last
-    },
-    .unary(.endLinePostfix, [.any]) {
-        return try $0.simplify()
-    },
     .binary(.pipe, [.any, .any]) {
         let simplified = try $0.simplify()
         return $1.replacingAnonymousArgs(with: [simplified])
