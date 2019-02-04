@@ -74,6 +74,11 @@ extension String {
     var isAlphaNumeric: Bool {
         return self ~ "^[a-zA-Z_]+[a-zA-Z_\\d]*$"
     }
+    
+    /// Same string with leading and trailing white spaces removed
+    var trimmed: String {
+        return trimmingCharacters(in: .whitespacesAndNewlines)
+    }
 }
 
 infix operator ~

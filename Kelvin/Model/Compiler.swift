@@ -13,9 +13,16 @@ import Foundation
  * Compiles mathematical expressions into a tree consisting of nodes.
  */
 public class Compiler {
-    private static let squareBrackets = ["[", "]"]
-    private static let parentheses = ["(", ")"]
-    private static let brackets = ["{", "}"]
+    
+    private enum Bracket: String {
+        case curly = "{}"
+        case square = "[]"
+        case round = "()"
+        
+        static var all: [Bracket] {
+            return [.round, .curly, .square]
+        }
+    }
 
     /// Symbols from binary operators, shorthands, and syntactic sugars.
     private static var symbols: String {
@@ -23,7 +30,10 @@ public class Compiler {
                 .keys.reduce("") {
             "\($0)\($1)"
         }
-        return ",(){}[]'\(operators)"
+        let brackets = Bracket.all.reduce("") {
+            $0 + $1.rawValue
+        }
+        return ",\(brackets)'\(operators)"
     }
 
     /// Digits from 0 to 9
@@ -116,12 +126,48 @@ public class Compiler {
                     String($0)
                 }
         var statements = [Program.Statement]()
-
-        for (i, line) in lines.enumerated() {
+        var buff: String? = nil
+        
+        var depths: [Bracket: Int] = [
+            .curly: 0,
+            .square: 0,
+            .round: 0
+        ]
+        
+        for (i, var line) in lines.enumerated() {
 
             // Character '#' serves as a precursor for comment
             // Empty lines are omitted.
             if line.starts(with: "#") || line == "" {
+                continue
+            }
+            
+            // Remove trailing and padding white spaces
+            line = line.trimmed
+            
+            // Update bracket depths
+            let curDepths = bracketDepths(line)
+            depths[.square]! += curDepths[.square]!
+            depths[.round]! += curDepths[.round]!
+            depths[.curly]! += curDepths[.curly]!
+            
+            for (bracket, depth) in depths {
+                if depth < 0 {
+                    let e = CompilerError.syntax(errMsg: "\(bracket.rawValue) mismatch in \"\(line)\"")
+                    throw CompilerError.on(line: i + 1, e)
+                }
+            }
+            
+            if depths.allSatisfy({$0.value == 0}) {
+                if let b = buff {
+                    line = b + line
+                    buff = nil
+                }
+            } else {
+                if buff == nil {
+                    buff = ""
+                }
+                buff?.append(line)
                 continue
             }
 
@@ -135,6 +181,35 @@ public class Compiler {
         }
 
         return Program(statements)
+    }
+    
+    private static func bracketDepths(_ line: String) -> [Bracket: Int] {
+        var counts = [Int](repeating: 0, count: 3)
+        for c in line {
+            switch c {
+            case "{":
+                counts[0] += 1
+            case "}":
+                counts[0] -= 1
+            case "[":
+                counts[1] += 1
+            case "]":
+                counts[1] -= 1
+            case "(":
+                counts[2] += 1
+            case ")":
+                counts[2] -= 1
+            default:
+                continue
+            }
+        }
+        
+        var dict = [Bracket: Int]()
+        dict[.curly] = counts[0]
+        dict[.square] = counts[1]
+        dict[.round] = counts[2]
+        
+        return dict
     }
 
     /// Replace strings in the expression w/ node references and store the
@@ -394,7 +469,7 @@ public class Compiler {
                 }
 
                 // Remove trailing and padding white spaces around the name.
-                name = removeWhiteSpace(name)
+                name = name.trimmed
 
                 if ir[0] == r.upperBound {
                     
@@ -474,7 +549,7 @@ public class Compiler {
             
             // The base case of the recursion tree where there are no more
             // square brackets, parentheses, functions, or lists.
-            expr = removeWhiteSpace(expr)
+            expr = expr.trimmed
 
             // Try turning the expr into a node by first trying it as a node reference,
             // then an integer, next a double, and finally a boolean.
@@ -486,22 +561,6 @@ public class Compiler {
                 return try Variable(expr)
             }
         }
-    }
-
-    /// Remove trailing and padding white space.
-    private static func removeWhiteSpace(_ expr: String) -> String {
-        var expr = expr
-        // Remove padding white space
-        while expr.starts(with: " ") {
-            expr.removeFirst()
-        }
-
-        // Remove trailing white space
-        while expr.reversed().first == " " {
-            expr.removeLast()
-        }
-
-        return expr
     }
 
     private static func binaryToFunction(_ expr: inout String) throws -> OperatorReference {
@@ -780,10 +839,8 @@ public class Compiler {
      */
     private static func format(_ expr: inout String) {
 
-        // Remove spaces for ease of processing
-        expr.removeAll {
-            $0 == " "
-        }
+        // Remove white spaces for ease of processing
+        expr = expr.replacingOccurrences(of: "\\s+", with: "", options: .regularExpression)
 
         // Add another layer of parenthesis to prevent an error
         expr = "(\(expr))"
@@ -848,27 +905,27 @@ public class Compiler {
      */
     private static func validate(_ expr: String) throws {
         func matches(_ expr: String, _ chars: [String]) -> Bool {
-            var count: Int? = nil
+            var n: Int? = nil
             for char in chars {
                 let c = Character(char)
-                if count == nil {
-                    count = num(expr, char: c)
-                } else if num(expr, char: c) != count {
+                if n == nil {
+                    n = count(expr, char: c)
+                } else if count(expr, char: c) != n {
                     return false
                 }
             }
             return true
         }
+        
+        for bracket in Bracket.all {
+            if !matches(expr, bracket.rawValue.map {"\($0)"}) {
+                throw CompilerError.syntax(errMsg: "\(bracket) mismatch in \"\(expr)\"")
+            }
+        }
 
-        if !matches(expr, parentheses) {
-            throw CompilerError.syntax(errMsg: "() mismatch in \"\(expr)\"")
-        } else if !matches(expr, brackets) {
-            throw CompilerError.syntax(errMsg: "{} mismatch in \"\(expr)\"")
-        } else if !matches(expr, squareBrackets) {
-            throw CompilerError.syntax(errMsg: "[] mismatch in \"\(expr)\"")
-        } else if expr == "" {
+        if expr == "" {
             throw CompilerError.illegalArgument(errMsg: "Give me some juice!")
-        } else if num(expr, char: "\"") % 2 != 0 {
+        } else if count(expr, char: "\"") % 2 != 0 {
             throw CompilerError.syntax(errMsg: "\" mismatch in \"\(expr)\"")
         }
     }
@@ -954,7 +1011,7 @@ public class Compiler {
      - Parameter c: char c for num of occurrence.
      - Returns: The number of times that **c** shows up in **s**.
      */
-    private static func num(_ s: String, char: Character) -> Int {
+    private static func count(_ s: String, char: Character) -> Int {
         var count = 0
         for c in s {
             if c == char {

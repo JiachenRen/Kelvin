@@ -41,7 +41,7 @@ let developerOperations: [Operation] = [
             throw ExecutionError.general(errMsg: "cannot use \($0.stringified) as definition.")
         }
         try eq.define()
-        return eq.lhs
+        return KString("done")
     },
     .binary(.define, [.any, .any]) {
         return Function(.def, [Equation(lhs: $0, rhs: $1)])

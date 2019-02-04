@@ -68,8 +68,7 @@ public class Console: IOProtocol {
         if output == "" {
             return
         }
-        log("program output:")
-        Swift.print(output, terminator: "\n\n")
+        Swift.print(output)
     }
     
     /// Main program execution interactive loop

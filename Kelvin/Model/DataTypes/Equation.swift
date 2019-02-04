@@ -171,13 +171,11 @@ public struct Equation: BinaryNode, NaN {
             }
 
             // Revert changes made to the variable names
-            return try template.replacing(by: {
+            return template.replacing(by: {
                         var mod = $0 as! Variable
                         mod.name.removeFirst()
                         return mod
                     }, where: { ($0 as? Variable)?.name.starts(with: "#") ?? false })
-                    // Say f(x) = g(x), this ensures that g(x) is evaluated
-                    .simplify()
         }
 
         // Create parametric operation

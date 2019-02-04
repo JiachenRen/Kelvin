@@ -277,6 +277,9 @@
 		1F8DF72F22050B5B006351B0 /* IOProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOProtocol.swift; sourceTree = "<group>"; };
 		1F8DF73322050CD3006351B0 /* Console.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Console.swift; sourceTree = "<group>"; };
 		1F8DF73622063067006351B0 /* Option.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
+		1F8DF76D22074B9C006351B0 /* Multiline */ = {isa = PBXFileReference; lastKnownFileType = text; path = Multiline; sourceTree = "<group>"; };
+		1F8DF76F22075A32006351B0 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
+		1F8DF77022075A32006351B0 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		1FE1697221F28F1E0006712C /* Tests */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tests; sourceTree = "<group>"; };
 		1FE1697521F2D44A0006712C /* Tuple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tuple.swift; sourceTree = "<group>"; };
 		1FE1697A21F2EC070006712C /* Conditionals */ = {isa = PBXFileReference; lastKnownFileType = text; path = Conditionals; sourceTree = "<group>"; };
@@ -431,6 +434,7 @@
 				1F0A90E421F93DCE00432B17 /* Statistics */,
 				1F8DF72B22050110006351B0 /* List */,
 				1F3D31662202853000462F10 /* Factorization */,
+				1F8DF76D22074B9C006351B0 /* Multiline */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
@@ -473,9 +477,20 @@
 			path = Statistics;
 			sourceTree = "<group>";
 		};
+		1F8DF76E220759FF006351B0 /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				1F8DF76F22075A32006351B0 /* LICENSE */,
+				1F8DF77022075A32006351B0 /* README.md */,
+			);
+			name = Misc;
+			path = "New Group";
+			sourceTree = "<group>";
+		};
 		1FFD8C96218F50850004ECEB = {
 			isa = PBXGroup;
 			children = (
+				1F8DF76E220759FF006351B0 /* Misc */,
 				1F0CF2CF21EEA6D600E40086 /* Examples */,
 				1FFD8CA1218F50850004ECEB /* Kelvin */,
 				1FFD8CB7218F50870004ECEB /* KelvinTests */,
