@@ -112,7 +112,8 @@ public extension String {
     
     // Developer
     public static let `if` = "if"
-    public static let semicolon = ";"
+    public static let endLineInfix = ";"
+    public static let endLinePostfix = "end"
     public static let pipe = "pipe"
     public static let replace = "replace"
     public static let `repeat` = "repeat"
@@ -131,6 +132,12 @@ public extension String {
     public static let compile = "compile"
     public static let print = "print"
     public static let println = "println"
+    public static let `return` = "return"
+    public static let `continue` = "continue"
+    public static let `break` = "break"
+    public static let `throw` = "throw"
+    public static let `for` = "for"
+    public static let `while` = "while"
     
     // Matrix & vector
     public static let dotProduct = "dotP"

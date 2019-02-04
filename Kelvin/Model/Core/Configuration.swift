@@ -19,13 +19,17 @@ let defaultConfiguration: [Operation.Attribute: [String]] = [
     .preservesArguments: [
         .complexity,
         .repeat,
-        .semicolon,
+        .endLineInfix,
+        .endLinePostfix,
         .define,
         .def,
         .del,
         .if,
         .measure,
         .try,
+        .for,
+        .while,
+        
         
         // Functions that accepts anonymous arguments should preserve arguments.
         .pipe,

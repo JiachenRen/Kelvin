@@ -270,6 +270,8 @@ public class Operation: Equatable {
                     fallthrough
                 case .int where !(arg is Int):
                     fallthrough
+                case .closure where !(arg is Closure):
+                    fallthrough
                 case .func where !(arg is Function):
                     continue candLoop
                 default: continue
@@ -360,6 +362,7 @@ public class Operation: Equatable {
         case nan
         case `var`
         case `func`
+        case closure
         case bool
         case equation
         case string

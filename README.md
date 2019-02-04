@@ -198,11 +198,20 @@ For more complex examples (algebraic operations, calulus, stats, loops, conditio
   - Loops
     - *Copy*
     - *Repeat*
+    - *for (a: list) {...}*
+    - *while (a) {...}*
   - Conditional statements
-    - Ternary operator '?'
+    - *Ternary operator '?'*
+    - *If (predicate) {...}*
+    - [ ] Else
+    - [ ] Else if
 - [x] I/O
   - *Program execution*
   - *Print, println*
+  - *Log*
+  - *Recursion*
+  - *Return*
+  - [ ] *Throw*
 - [x] Strings
   - *Concatenation*
   - *Subscript access*
@@ -217,4 +226,4 @@ For more complex examples (algebraic operations, calulus, stats, loops, conditio
   - Lock/unlock variables
   - Save/restore
 - [x] Multi-line function/list/vector compilation
-- [ ] Trailing closure syntax
+- [x] Trailing closure syntax

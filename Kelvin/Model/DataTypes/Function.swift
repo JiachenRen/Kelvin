@@ -245,6 +245,71 @@ public struct Function: MutableListProtocol {
         // Cannot be further simplified
         return copy
     }
+    
+    public func implement(using template: Node) throws {
+        // Create function signature
+        let signature = [Operation.ArgumentType](repeating: .any, count: args.count)
+        
+        
+        // Make sure the old definition is removed from registry
+        Operation.remove(name, signature)
+        
+        // Create and register function denition as an operation
+        let def = try Function.createDefinition(from: template, using: args.elements)
+        let op = Operation(name, signature, definition: def)
+        Operation.register(op)
+    }
+    
+    /// Creates a definition from the template, by replacing
+    /// the variables in template with arguments
+    static func createDefinition(from template: Node, using args: [Node]) throws -> Definition {
+        
+        // Check to make sure that every argument is a variable
+        for arg in args {
+            if !(arg is Variable) {
+                let msg = "function signature should only contain variables"
+                throw ExecutionError.general(errMsg: msg)
+            }
+        }
+        
+        // Cast the arguments to variables
+        let vars = args.map {
+            $0 as! Variable
+        }
+        
+        var dict = [String: Int]()
+        vars.enumerated().forEach { (args) in
+            let (idx, v) = args
+            dict[v.name] = idx
+        }
+        
+        return { args in
+            var template = template.replacing(by: {
+                var rpl = $0 as! Variable
+                
+                // This is for dealing with the following bug:
+                // Suppose we have f(a,b) = a+b^2
+                // Call to f(a,b) results in a+b^2,
+                // Nevertheless, call to f(b,a) results in b+b^2!
+                rpl.name = "#\(rpl.name)"
+                return rpl
+            }, where: { $0 is Variable })
+            
+            dict.forEach { (pair) in
+                let (key, value) = pair
+                template = template.replacing(by: { _ in args[value] }) {
+                    ($0 as? Variable)?.name == "#\(key)"
+                }
+            }
+            
+            // Revert changes made to the variable names
+            return template.replacing(by: {
+                var mod = $0 as! Variable
+                mod.name.removeFirst()
+                return mod
+            }, where: { ($0 as? Variable)?.name.starts(with: "#") ?? false })
+        }
+    }
 
     /**
      Unravel the binary operation tree.

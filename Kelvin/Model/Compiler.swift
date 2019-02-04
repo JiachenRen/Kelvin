@@ -79,10 +79,10 @@ public class Compiler {
         var dict = Dictionary<String, Node>()
         encodeStrings(&expr, dict: &dict)
 
-        // Validate the expression
         try validate(expr)
-
-        // Format lists and vectors
+        applyTrailingClosureSyntax(&expr)
+        
+        // Format lists
         while expr.contains("{") {
             expr = replace(expr, "{", "}", "list(", ")")
         }
@@ -99,7 +99,6 @@ public class Compiler {
             expr = encodeKeyword(keyword, for: expr)
         }
 
-        // Format the expression for compilation
         format(&expr)
 
         // Convert all binary operations to functions with parameters.
@@ -169,6 +168,11 @@ public class Compiler {
                     buff = ""
                 }
                 buff?.append(line)
+                
+                // Temporary fix
+                if line == "}" {
+                    buff?.append(";")
+                }
                 continue
             }
 
@@ -215,6 +219,21 @@ public class Compiler {
         openBrackets[.round] = counts[2]
         
         return openBrackets
+    }
+    
+    private static func applyTrailingClosureSyntax(_ expr: inout String) {
+        
+        // Remove white spaces b/w parenthesis and trailing closure
+        expr = expr.replacingOccurrences(of: "\\)\\s*\\{", with: "){", options: .regularExpression)
+        
+        // Convert f(a){...} to f(a,#(...))
+        while let range = expr.range(of: "){") {
+            let closingCurlyBracketIdx = find(expr, start: expr.index(before: range.upperBound), close: "}")!
+            let insideCurlyBrackets = String(expr[range.upperBound..<closingCurlyBracketIdx])
+            let left = expr[expr.startIndex..<range.lowerBound]
+            let right = expr[expr.index(after: closingCurlyBracketIdx)...]
+            expr = "\(left), \(Closure.symbol)(\(insideCurlyBrackets)))\(right)"
+        }
     }
 
     /// Replaces strings in the expression w/ node references and store the
@@ -363,6 +382,17 @@ public class Compiler {
         }) {
             name($0) == "tuple"
         }
+        
+        // Restore closures
+        parent = parent.replacing(by: {
+            let a = args($0)
+            if a.count == 0 {
+                return Closure(KVoid())
+            }
+            return Closure(a[0])
+        }) {
+            name($0) == Closure.symbol
+        }
 
         // Restore equations
         parent = parent.replacing(by: {
@@ -491,9 +521,10 @@ public class Compiler {
                 }
             } else {
                 if ir[0] == r.upperBound {
-                    throw CompilerError.syntax(errMsg: "undefined operation '()'")
+                    node = KVoid()
+                } else {
+                    node = try resolve(String(expr[ir[0]...ir[1]]), &dict, binOps)
                 }
-                node = try resolve(String(expr[ir[0]...ir[1]]), &dict, binOps)
             }
 
             // Update the expression.

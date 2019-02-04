@@ -121,68 +121,9 @@ public struct Equation: BinaryNode, NaN {
             let msg = "left hand side of definition must be a variable/function"
             throw ExecutionError.general(errMsg: msg)
         }
-
-        let args = fun.elements
-
-        // Check to make sure that every argument is a variable
-        for arg in args {
-            if !(arg is Variable) {
-                let msg = "function signature should only contain variables"
-                throw ExecutionError.general(errMsg: msg)
-            }
-        }
-
-        // Cast the arguments to variables
-        let vars = args.map {
-            $0 as! Variable
-        }
-
-        // Create function signature
-        let signature = [Operation.ArgumentType](repeating: .any, count: vars.count)
-        var dict = [String: Int]()
-        vars.enumerated().forEach { (args) in
-            let (idx, v) = args
-            dict[v.name] = idx
-        }
-
-        // Make sure the old definition is removed from registry
-        Operation.remove(fun.name, signature)
-
-        // Create a definition template from right hand side, then
-        // replace the variables in template with arguments as input
-        // to create the definition
-        let def: Definition = { args in
-            var template = self.rhs.replacing(by: {
-                var rpl = $0 as! Variable
-
-                // This is for dealing with the following bug:
-                // Suppose we have f(a,b) = a+b^2
-                // Call to f(a,b) results in a+b^2,
-                // Nevertheless, call to f(b,a) results in b+b^2!
-                rpl.name = "#\(rpl.name)"
-                return rpl
-            }, where: { $0 is Variable })
-
-            dict.forEach { (pair) in
-                let (key, value) = pair
-                template = template.replacing(by: { _ in args[value] }) {
-                    ($0 as? Variable)?.name == "#\(key)"
-                }
-            }
-
-            // Revert changes made to the variable names
-            return template.replacing(by: {
-                        var mod = $0 as! Variable
-                        mod.name.removeFirst()
-                        return mod
-                    }, where: { ($0 as? Variable)?.name.starts(with: "#") ?? false })
-        }
-
-        // Create parametric operation
-        let op = Operation(fun.name, signature, definition: def)
-
-        // Register parametric operation
-        Operation.register(op)
+        
+        // Use the rhs of the equation as a template to create function definition.
+        try fun.implement(using: rhs)
     }
 
     /**
