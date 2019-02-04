@@ -38,10 +38,23 @@ let developerOperations: [Operation] = [
     // Variable/function definition and deletion
     .unary(.def, [.equation]) {
         guard let eq = $0 as? Equation else {
-            throw ExecutionError.general(errMsg: "cannot use \($0.stringified) as definition.")
+            throw ExecutionError.general(errMsg: "cannot create definition using \($0.stringified) as template.")
         }
         try eq.define()
-        return eq.lhs
+        return KString("done")
+    },
+    .unary(.def, [.func]) {
+        guard var fun = $0 as? Function else {
+            throw ExecutionError.general(errMsg: "cannot create definition using \($0.stringified) as template.")
+        }
+        guard var closure = fun.elements.last as? Closure else {
+            let msg = "last element in function \($0.stringified) must be a closure to be used as definition"
+            throw ExecutionError.general(errMsg: msg)
+        }
+        fun.elements.removeLast()
+        closure.capturesReturn = true
+        try fun.implement(using: closure)
+        return KString("done")
     },
     .binary(.define, [.any, .any]) {
         return Function(.def, [Equation(lhs: $0, rhs: $1)])
@@ -75,7 +88,7 @@ let developerOperations: [Operation] = [
         try assign($1, to: $0, by: /)
     },
     
-    // Consecutive execution, feed forward, flow control
+    // Consecutive execution, pileline, flow control
     .binary(.if, [.any, .tuple]) {
         let node = try $0.simplify()
         guard let predicament = node as? Bool else {
@@ -85,12 +98,25 @@ let developerOperations: [Operation] = [
 
         return try (predicament ? tuple.lhs : tuple.rhs).simplify() // Should this be simplified?
     },
-    .init(.then, [.universal]) { nodes in
+    .binary(.if, [.any, .closure]) {
+        let node = try $0.simplify()
+        guard let predicate = node as? Bool else {
+            throw ExecutionError.predicateException
+        }
+        if predicate {
+            let _ = try $1.simplify()
+        }
+        return KVoid()
+    },
+    .init(.endLineInfix, [.universal]) { nodes in
         return try nodes.map {
             try $0.simplify()
         }.last
     },
-    .binary(.feed, [.any, .any]) {
+    .unary(.endLinePostfix, [.any]) {
+        return try $0.simplify()
+    },
+    .binary(.pipe, [.any, .any]) {
         let simplified = try $0.simplify()
         return $1.replacingAnonymousArgs(with: [simplified])
     },
@@ -134,6 +160,72 @@ let developerOperations: [Operation] = [
     },
     .init(.copy, [.any, .number]) {
         Function(.repeat, $0)
+    },
+    .unary(.return, [.any]) {
+        throw Transfer.return($0)
+    },
+    .unary(.return, []) {_ in
+        throw Transfer.return(nil)
+    },
+    .init(.for, [.tuple, .closure]) {
+        guard let tuple = $0[0] as? Tuple, let closure = $0[1] as? Closure else {
+            throw ExecutionError.general(errMsg: "invalid for loop construct")
+        }
+        
+        guard let v = tuple.lhs as? Variable else {
+            let msg = "variable name expected in lhs of \"\(tuple)\", but found \"\(tuple.lhs)\" instead."
+            throw ExecutionError.general(errMsg: msg)
+        }
+        
+        guard let list = tuple.rhs as? ListProtocol else {
+            let msg = "list expected in rhs of \"\(tuple)\", but found \"\(tuple.rhs)\" instead"
+            throw ExecutionError.general(errMsg: msg)
+        }
+    
+        for e in list.elements {
+            Scope.save()
+            Variable.define(v.name, e)
+            do {
+                let _ = try closure.simplify()
+            } catch let c as Control {
+                switch c {
+                case .continue:
+                    continue
+                case .break:
+                    break
+                }
+            }
+            Scope.restore()
+        }
+        
+        return KVoid()
+    },
+    .binary(.while, [.any, .closure]) {
+        guard let closure = $1 as? Closure else {
+            throw ExecutionError.general(errMsg: "invalid while loop construct")
+        }
+        
+        while true {
+            guard let b = try $0.simplify() as? Bool else {
+                print($0)
+                throw ExecutionError.predicateException
+            }
+            if !b {
+                break
+            }
+            
+            do {
+                let _ = try closure.simplify()
+            } catch let c as Control {
+                switch c {
+                case .continue:
+                    continue
+                case .break:
+                    break
+                }
+            }
+        }
+        return KVoid()
     },
     
     // String concatenation

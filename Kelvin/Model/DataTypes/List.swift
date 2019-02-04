@@ -41,6 +41,8 @@ public struct List: MutableListProtocol, NaN {
     init?(_ node: Node) {
         if let list = node as? ListProtocol {
             self.elements = list.elements
+        } else if let str = node as? KString {
+            self.elements = str.string.map {KString("\($0)")}
         } else {
             return nil
         }

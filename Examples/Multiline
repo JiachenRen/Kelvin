@@ -1,0 +1,34 @@
+def f(a,b,c) = (
+    a := 3;
+    b := 4;
+    c := a / b;
+    c + a + b
+)
+
+def g(x) = (
+    x == 0 ? 1 : (
+        x * g(x - 1)
+    )
+)
+
+println g(10)
+
+def l1 = {
+    "Hello",
+    "World"
+}
+
+println l1
+
+def fibonacci(x) = (
+    (x == 0 || x == 1 || x == 2) ? (1...x) : (
+        q := {1, 1};
+        repeat(
+            q := (q ++ q[size q - 2] + q[size q - 1]),
+            x - 2
+        )
+    );
+    q
+)
+
+println fibonacci(11)

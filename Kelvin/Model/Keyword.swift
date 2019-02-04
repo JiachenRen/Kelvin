@@ -200,7 +200,9 @@ public struct Keyword {
     }
 
     public enum Precedence: Int, Comparable {
-        case execution = 1  // ;, ->
+        case endLinePostfix // ; TODO: bad practice,
+        case endLineInfix   // ;
+        case execution      // , ->
         case assignment     // :=, +=, -=, *=, /=
         case equation       // =
         case `repeat`       // ...
@@ -299,8 +301,9 @@ public struct Keyword {
         .init(for: .append, associativity: .infix, operator: .init("++")),
         .init(for: .sort, associativity: .infix, operator: .init(">?")),
         .init(for: .removeAtIdx, associativity: .infix),
-        .init(for: .then, associativity: .infix, operator: .init(";", padding: .rightSide)),
-        .init(for: .feed, associativity: .infix, operator: .init("->")),
+        .init(for: .endLineInfix, associativity: .infix, precedence: .endLineInfix, operator: .init(";", padding: .rightSide)),
+        .init(for: .endLinePostfix, associativity: .postfix, precedence: .endLinePostfix, operator: .init(";", padding: .none)),
+        .init(for: .pipe, associativity: .infix, operator: .init("->")),
         .init(for: .replace, associativity: .infix, operator: .init("<<")),
         .init(for: .repeat, associativity: .infix, precedence: .repeat, operator: .init("...", padding: .none)),
         .init(for: .copy, associativity: .infix, precedence: .repeat),
@@ -314,11 +317,13 @@ public struct Keyword {
         .init(for: .delay, associativity: .prefix),
         .init(for: .run, associativity: .prefix),
         .init(for: .try, associativity: .prefix),
+        .init(for: .return, associativity: .prefix),
+        .init(for: .for, associativity: .prefix),
+        .init(for: .if, associativity: .infix, precedence: .conditional, operator: .init("?")),
         .init(for: .assert, associativity: .prefix),
         .init(for: .npr, associativity: .infix),
         .init(for: .ncr, associativity: .infix),
         .init(for: .tuple, associativity: .infix, precedence: .tuple, operator: .init(":")),
-        .init(for: .if, associativity: .infix, precedence: .conditional, operator: .init("?")),
         .init(for: .concat, associativity: .infix, precedence: .concat, operator: .init("&")),
         .init(for: .derivative, associativity: .infix, precedence: .derivative, operator: .init("'", padding: .none)),
         .init(for: .as, associativity: .infix, precedence: .coersion, operator: .init("!!")),

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class Program {
+public struct Program {
 
     var statements: [Statement]
     
@@ -47,7 +47,7 @@ public class Program {
         }
         let t = Date().timeIntervalSince1970
         io?.log("compiling...")
-        let program = try Compiler.compile(document: content)
+        var program = try Compiler.compile(document: content)
         io?.log("compilation successful in \(Date().timeIntervalSince1970 - t) seconds.")
         if let c = config {
             program.config = c

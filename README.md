@@ -67,9 +67,6 @@ $ kelvin -f /tmp/prg
 $ kelvin -f -v /tmp/prg
 
 # Program output under verbose mode
-→ trying relative URL to examples...
-→ The file “prg” couldn’t be opened because there is no such file.
-
 → resolving absolute URL...
 → loading contents of prg
 → compiling...
@@ -206,11 +203,20 @@ For more complex examples (algebraic operations, calulus, stats, loops, conditio
   - Loops
     - *Copy*
     - *Repeat*
+    - *for (a: list) {...}*
+    - *while (a) {...}*
   - Conditional statements
-    - Ternary operator '?'
+    - *Ternary operator '?'*
+    - *If (predicate) {...}*
+    - [ ] Else
+    - [ ] Else if
 - [x] I/O
   - *Program execution*
   - *Print, println*
+  - *Log*
+  - *Recursion*
+  - *Return*
+  - [ ] *Throw*
 - [x] Strings
   - *Concatenation*
   - *Subscript access*
@@ -224,4 +230,5 @@ For more complex examples (algebraic operations, calulus, stats, loops, conditio
 - [x] Scope management
   - Lock/unlock variables
   - Save/restore
-- [ ] Multi-line block
+- [x] Multi-line function/list/vector compilation
+- [x] Trailing closure syntax

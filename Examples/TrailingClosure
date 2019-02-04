@@ -1,0 +1,58 @@
+# Fucking trailing closure syntax!
+
+def f(a,b) {
+    print "Hello World!"
+}
+
+def f(a) {
+    if (a > 10) {
+        println a;
+        return f(a / 10)
+    }
+    return a
+}
+
+def contains(list, a) {
+    for (e: list) {
+        if (e == a) {
+            return true
+        }
+    }
+    return false
+}
+
+println f(1000005)
+println f(15)
+println contains({1, 2, 3}, 2)
+println contains({1, 2, 3}, x)
+
+def bin_search(arr, search) {
+    c := 0;
+    first := 0;
+    n := size(arr);
+    last := n - 1;
+    middle := int((first + last) / 2);
+
+    while (first <= last) {
+        b := false;
+
+        if (arr[middle] < search) {
+            first := middle + 1;
+            b := true;
+        }
+
+        if (arr[middle] == search) {
+            return middle + 1;
+        }
+
+        if (!b) {
+            last := middle - 1;
+        }
+
+        middle := (first + last) / 2;
+    }
+
+    return "not found";
+}
+
+println bin_search({1, 2, 3, 5, 7, 8, 9, 10}, 5)

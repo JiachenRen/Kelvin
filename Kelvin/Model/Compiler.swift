@@ -10,12 +10,18 @@ import Foundation
 
 /**
  * Created by Jiachen on 19/05/2017.
- * Compiles mathematical expressions into a tree consisting of nodes.
  */
 public class Compiler {
-    private static let squareBrackets = ["[", "]"]
-    private static let parentheses = ["(", ")"]
-    private static let brackets = ["{", "}"]
+    
+    private enum Bracket: String {
+        case curly = "{}"
+        case square = "[]"
+        case round = "()"
+        
+        static var all: [Bracket] {
+            return [.round, .curly, .square]
+        }
+    }
 
     /// Symbols from binary operators, shorthands, and syntactic sugars.
     private static var symbols: String {
@@ -23,7 +29,10 @@ public class Compiler {
                 .keys.reduce("") {
             "\($0)\($1)"
         }
-        return ",(){}[]'\(operators)"
+        let brackets = Bracket.all.reduce("") {
+            $0 + $1.rawValue
+        }
+        return ",\(brackets)'\(operators)"
     }
 
     /// Digits from 0 to 9
@@ -58,7 +67,7 @@ public class Compiler {
     ]
 
     /**
-     Compile a single line expression.
+     Compiles a single line expression.
      
      - Parameter expr: String representation of an expression
      - Returns: Parent node of the compiled expression.
@@ -70,10 +79,10 @@ public class Compiler {
         var dict = Dictionary<String, Node>()
         encodeStrings(&expr, dict: &dict)
 
-        // Validate the expression
         try validate(expr)
-
-        // Format lists and vectors
+        applyTrailingClosureSyntax(&expr)
+        
+        // Format lists
         while expr.contains("{") {
             expr = replace(expr, "{", "}", "list(", ")")
         }
@@ -90,7 +99,6 @@ public class Compiler {
             expr = encodeKeyword(keyword, for: expr)
         }
 
-        // Format the expression for compilation
         format(&expr)
 
         // Convert all binary operations to functions with parameters.
@@ -105,7 +113,7 @@ public class Compiler {
     }
 
     /**
-     Compile a multi-line document into a program.
+     Compiles a multi-line document into a program.
      
      - Parameter document: A string containing multiple lines of code
      - Returns: A program.
@@ -116,12 +124,55 @@ public class Compiler {
                     String($0)
                 }
         var statements = [Program.Statement]()
-
-        for (i, line) in lines.enumerated() {
+        var buff: String? = nil
+        
+        var openBrackets: [Bracket: Int] = [
+            .curly: 0,
+            .square: 0,
+            .round: 0
+        ]
+        
+        for (i, var line) in lines.enumerated() {
 
             // Character '#' serves as a precursor for comment
             // Empty lines are omitted.
             if line.starts(with: "#") || line == "" {
+                continue
+            }
+            
+            // Remove trailing and padding white spaces
+            line = line.trimmed
+            
+            // Update bracket depths
+            let curOpenBrackets = countOpenBrackets(line)
+            openBrackets[.square]! += curOpenBrackets[.square]!
+            openBrackets[.round]! += curOpenBrackets[.round]!
+            openBrackets[.curly]! += curOpenBrackets[.curly]!
+            
+            for (bracket, depth) in openBrackets {
+                if depth < 0 {
+                    let e = CompilerError.syntax(errMsg: "\(bracket.rawValue) mismatch in \"\(line)\"")
+                    throw CompilerError.on(line: i + 1, e)
+                }
+            }
+            
+            if openBrackets.allSatisfy({$0.value == 0}) {
+                
+                // All brackets have been closed at this point.
+                if let b = buff {
+                    line = b + line
+                    buff = nil
+                }
+            } else {
+                if buff == nil {
+                    buff = ""
+                }
+                buff?.append(line)
+                
+                // Temporary fix
+                if line == "}" {
+                    buff?.append(";")
+                }
                 continue
             }
 
@@ -136,8 +187,56 @@ public class Compiler {
 
         return Program(statements)
     }
+    
+    /**
+     Counts the number of open brackets (round, curly, and square) in the line.
+     - Returns: A dictionary containing the number of open brackets for each type.
+     */
+    private static func countOpenBrackets(_ line: String) -> [Bracket: Int] {
+        var counts = [Int](repeating: 0, count: 3)
+        for c in line {
+            switch c {
+            case "{":
+                counts[0] += 1
+            case "}":
+                counts[0] -= 1
+            case "[":
+                counts[1] += 1
+            case "]":
+                counts[1] -= 1
+            case "(":
+                counts[2] += 1
+            case ")":
+                counts[2] -= 1
+            default:
+                continue
+            }
+        }
+        
+        var openBrackets = [Bracket: Int]()
+        openBrackets[.curly] = counts[0]
+        openBrackets[.square] = counts[1]
+        openBrackets[.round] = counts[2]
+        
+        return openBrackets
+    }
+    
+    private static func applyTrailingClosureSyntax(_ expr: inout String) {
+        
+        // Remove white spaces b/w parenthesis and trailing closure
+        expr = expr.replacingOccurrences(of: "\\)\\s*\\{", with: "){", options: .regularExpression)
+        
+        // Convert f(a){...} to f(a,#(...))
+        while let range = expr.range(of: "){") {
+            let closingCurlyBracketIdx = find(expr, start: expr.index(before: range.upperBound), close: "}")!
+            let insideCurlyBrackets = String(expr[range.upperBound..<closingCurlyBracketIdx])
+            let left = expr[expr.startIndex..<range.lowerBound]
+            let right = expr[expr.index(after: closingCurlyBracketIdx)...]
+            expr = "\(left), \(Closure.symbol)(\(insideCurlyBrackets)))\(right)"
+        }
+    }
 
-    /// Replace strings in the expression w/ node references and store the
+    /// Replaces strings in the expression w/ node references and store the
     /// actual string values into the node reference dictionary.
     /// They are converted back at the final step of compilation.
     private static func encodeStrings(_ expr: inout String, dict: inout NodeReference) {
@@ -174,7 +273,7 @@ public class Compiler {
 
             let encoded = "\(Flag.node)\(count)"
 
-            // Updated the expression with the code for the extracted string.
+            // Update the expression with the code for the extracted string.
             expr = "\(left)\(encoded)\(right)"
 
             // Restore escape characters to their original form.
@@ -190,8 +289,7 @@ public class Compiler {
     }
 
     /**
-     Perform syntactic manipulations on the expression.
-     Replace common names and operators with their encodings.
+     Replace keywords and their symbols with their encodings.
      
      - Parameters:
         - keyword: The keyword to be encoded
@@ -284,6 +382,17 @@ public class Compiler {
         }) {
             name($0) == "tuple"
         }
+        
+        // Restore closures
+        parent = parent.replacing(by: {
+            let a = args($0)
+            if a.count == 0 {
+                return Closure(KVoid())
+            }
+            return Closure(a[0])
+        }) {
+            name($0) == Closure.symbol
+        }
 
         // Restore equations
         parent = parent.replacing(by: {
@@ -316,7 +425,7 @@ public class Compiler {
     }
     
     /**
-     Find the start index of the prefix before square brackets or parenthesis.
+     Finds the start index of the prefix before square brackets or parenthesis.
      e.g.
      in "38+random()", the index of "r" is returned;
      In "a+list[b]", index of "l" is returned b/c the brackets in this case constitutes a subscript.
@@ -339,7 +448,7 @@ public class Compiler {
     }
 
     /**
-     Turn a properly encoded/formatted string that represents an expression into a parent node. Working from
+     Turns a properly encoded/formatted string that represents an expression into a parent node. Working from
      inside out, the innermost parenthesis is identified and resolved; then, its content is extracted and resolved
      recursively. This way, a complex expression is systematically broken down and resolved.
      
@@ -394,7 +503,7 @@ public class Compiler {
                 }
 
                 // Remove trailing and padding white spaces around the name.
-                name = removeWhiteSpace(name)
+                name = name.trimmed
 
                 if ir[0] == r.upperBound {
                     
@@ -412,9 +521,10 @@ public class Compiler {
                 }
             } else {
                 if ir[0] == r.upperBound {
-                    throw CompilerError.syntax(errMsg: "undefined operation '()'")
+                    node = KVoid()
+                } else {
+                    node = try resolve(String(expr[ir[0]...ir[1]]), &dict, binOps)
                 }
-                node = try resolve(String(expr[ir[0]...ir[1]]), &dict, binOps)
             }
 
             // Update the expression.
@@ -474,7 +584,7 @@ public class Compiler {
             
             // The base case of the recursion tree where there are no more
             // square brackets, parentheses, functions, or lists.
-            expr = removeWhiteSpace(expr)
+            expr = expr.trimmed
 
             // Try turning the expr into a node by first trying it as a node reference,
             // then an integer, next a double, and finally a boolean.
@@ -486,22 +596,6 @@ public class Compiler {
                 return try Variable(expr)
             }
         }
-    }
-
-    /// Remove trailing and padding white space.
-    private static func removeWhiteSpace(_ expr: String) -> String {
-        var expr = expr
-        // Remove padding white space
-        while expr.starts(with: " ") {
-            expr.removeFirst()
-        }
-
-        // Remove trailing white space
-        while expr.reversed().first == " " {
-            expr.removeLast()
-        }
-
-        return expr
     }
 
     private static func binaryToFunction(_ expr: inout String) throws -> OperatorReference {
@@ -561,7 +655,7 @@ public class Compiler {
     }
     
     /**
-     Find the index of the first appearance of any of the operators.
+     Finds the index of the first appearance of any of the operators.
      e.g. in a+b-c, first index returns index of "+", then next time, after
      "+" is parenthesized, index for "-" is returned.
      
@@ -776,14 +870,12 @@ public class Compiler {
      Formats the raw String to prepare it for the formulation into a Function instance.
      For instance, the call to formatCoefficients("x+2x^2+3x+4") would return "x+2*x^2+3*x+4"
      
-     - Parameter expr: the expression to have coefficients and negative sign formatted
+     - Parameter expr: The expression to have coefficients and negative sign formatted
      */
     private static func format(_ expr: inout String) {
 
-        // Remove spaces for ease of processing
-        expr.removeAll {
-            $0 == " "
-        }
+        // Remove white spaces for ease of processing
+        expr = expr.replacingOccurrences(of: "\\s+", with: "", options: .regularExpression)
 
         // Add another layer of parenthesis to prevent an error
         expr = "(\(expr))"
@@ -796,7 +888,7 @@ public class Compiler {
     }
 
     /**
-     Find all indices in which the substring occurs in the given string
+     Finds all indices in which the substring occurs in the given string
      
      - Parameter substr: A string to look for in str
      - Parameter str: A string containing multiple (or none) occurences of substr
@@ -836,7 +928,7 @@ public class Compiler {
             }
         }
 
-        // Relocate indices in original expr.
+        // Relocates indices in original expr.
         let lb = segment.index(beginIdx, offsetBy: 0)
         let ub = segment.index(endIdx, offsetBy: left.count)
 
@@ -844,43 +936,43 @@ public class Compiler {
     }
 
     /**
-     Validate the expression for parenthesis/brackets match, illegal symbols, etc.
+     Validates the expression for parenthesis/brackets match, illegal symbols, etc.
      */
     private static func validate(_ expr: String) throws {
         func matches(_ expr: String, _ chars: [String]) -> Bool {
-            var count: Int? = nil
+            var n: Int? = nil
             for char in chars {
                 let c = Character(char)
-                if count == nil {
-                    count = num(expr, char: c)
-                } else if num(expr, char: c) != count {
+                if n == nil {
+                    n = count(expr, char: c)
+                } else if count(expr, char: c) != n {
                     return false
                 }
             }
             return true
         }
+        
+        for bracket in Bracket.all {
+            if !matches(expr, bracket.rawValue.map {"\($0)"}) {
+                throw CompilerError.syntax(errMsg: "\(bracket) mismatch in \"\(expr)\"")
+            }
+        }
 
-        if !matches(expr, parentheses) {
-            throw CompilerError.syntax(errMsg: "() mismatch in \"\(expr)\"")
-        } else if !matches(expr, brackets) {
-            throw CompilerError.syntax(errMsg: "{} mismatch in \"\(expr)\"")
-        } else if !matches(expr, squareBrackets) {
-            throw CompilerError.syntax(errMsg: "[] mismatch in \"\(expr)\"")
-        } else if expr == "" {
+        if expr == "" {
             throw CompilerError.illegalArgument(errMsg: "Give me some juice!")
-        } else if num(expr, char: "\"") % 2 != 0 {
+        } else if count(expr, char: "\"") % 2 != 0 {
             throw CompilerError.syntax(errMsg: "\" mismatch in \"\(expr)\"")
         }
     }
 
     /**
      - Parameters:
-        - exp: the expression to be modified
-        - open: open bracket symbol
-        - close: close bracket symbol
-        - rp1: replacement for "open"
-        - rp2: replacement for "close"
-     - Returns: expression with "open" replaced with "open1" and close replaced with "close1"
+        - exp: The expression to be modified
+        - open: Open bracket symbol
+        - close: Close bracket symbol
+        - rp1: Replacement for "open"
+        - rp2: Replacement for "close"
+     - Returns: Expression with "open" replaced with "open1" and "close" replaced with "close1"
      */
     private static func replace(_ exp: String, _ open: Character, _ close: Character, _ rp1: String, _ rp2: String) -> String {
         let r = self.innermost(exp, open, close)
@@ -895,7 +987,7 @@ public class Compiler {
     }
 
     /**
-     - Returns: the indices of the innermost opening and the closing parenthesis/brackets
+     - Returns: The indices of the innermost opening and the closing parenthesis/brackets
      */
     private static func innermost(_ exp: String, _ open: Character, _ close: Character) -> ClosedRange<String.Index> {
         let closeIdx = exp.firstIndex(of: close)!
@@ -930,7 +1022,6 @@ public class Compiler {
 
 
     /**
-     See forward(_:,_:,_:); this does the exact opposite of that.
      - Returns: the index at which the parenthesis/bracket opens
      */
     private static func find(_ expr: String, end: String.Index, open: Character) -> String.Index? {
@@ -954,7 +1045,7 @@ public class Compiler {
      - Parameter c: char c for num of occurrence.
      - Returns: The number of times that **c** shows up in **s**.
      */
-    private static func num(_ s: String, char: Character) -> Int {
+    private static func count(_ s: String, char: Character) -> Int {
         var count = 0
         for c in s {
             if c == char {
