@@ -19,8 +19,6 @@ let defaultConfiguration: [Operation.Attribute: [String]] = [
     .preservesArguments: [
         .complexity,
         .repeat,
-        .endLineInfix,
-        .endLinePostfix,
         .define,
         .def,
         .del,

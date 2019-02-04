@@ -33,14 +33,18 @@ class KelvinTests: XCTestCase {
     }
     
     func testSystemCheck() throws {
-        let systemCheckUrl = examplesUrl.path + "/SystemCheck"
-        let _ = try Compiler.compile("run \"\(systemCheckUrl)\"").simplify()
+        let systemCheckUrl = examplesUrl.path + "/Tests"
+        do {
+            let _ = try Compiler.compile("run \"\(systemCheckUrl)\"").simplify()
+        } catch let e as KelvinError {
+            XCTFail(e.localizedDescription)
+        }
     }
     
     func testPerformance() {
         self.measure {
             restoreDefault()
-            let systemCheckUrl = examplesUrl.path + "/SystemCheck"
+            let systemCheckUrl = examplesUrl.path + "/Tests"
             do {
                 let _ = try Compiler.compile("run \"\(systemCheckUrl)\"").simplify()
             } catch let e as KelvinError {

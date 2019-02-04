@@ -112,8 +112,6 @@ public extension String {
     
     // Developer
     public static let `if` = "if"
-    public static let endLineInfix = ";"
-    public static let endLinePostfix = "end"
     public static let pipe = "pipe"
     public static let replace = "replace"
     public static let `repeat` = "repeat"

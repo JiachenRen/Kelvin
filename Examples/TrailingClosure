@@ -42,17 +42,19 @@ def bin_search(arr, search) {
         }
 
         if (arr[middle] == search) {
-            return middle + 1;
+            return middle;
         }
 
         if (!b) {
             last := middle - 1;
         }
 
-        middle := (first + last) / 2;
+        middle := int((first + last) / 2);
     }
 
     return "not found";
 }
 
-println bin_search({1, 2, 3, 5, 7, 8, 9, 10}, 5)
+def l1 = {1, 2, 3, 5, 7, 8, 9, 10}
+println bin_search(l1, 8.5)
+assert bin_search(l1, 9) == 6

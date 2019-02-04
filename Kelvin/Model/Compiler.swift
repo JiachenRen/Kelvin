@@ -32,7 +32,7 @@ public class Compiler {
         let brackets = Bracket.all.reduce("") {
             $0 + $1.rawValue
         }
-        return ",\(brackets)'\(operators)"
+        return ",;\(brackets)\(operators)"
     }
 
     /// Digits from 0 to 9
@@ -573,8 +573,15 @@ public class Compiler {
             update(node!, r, prefixIdx)
         }
 
-        // Resolve lists.
-        if expr.contains(",") {
+        if expr.contains(";") {
+            let nodes = try expr.split(separator: ";")
+                .map {
+                    try resolve(String($0), &dict, binOps)
+            }
+            return Pipeline(nodes)
+        } else if expr.contains(",") {
+            
+            // Resolve lists.
             let nodes = try expr.split(separator: ",")
                     .map {
                         try resolve(String($0), &dict, binOps)
