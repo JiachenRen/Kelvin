@@ -9,7 +9,7 @@
 import Foundation
 
 // Equality, inequality, and equations
-let equalityOperations: [Operation] = [
+let relationalOperations: [Operation] = [
     .binary(.equates, [.any, .any]) {
         Equation(lhs: $0, rhs: $1)
     },

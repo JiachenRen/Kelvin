@@ -17,7 +17,13 @@ let numberOperations: [Operation] = [
     },
     .unary(.factorize, [.int]) {
         List(primeFactors(of: $0 as! Int))
-    }
+    },
+    .unary(.degrees, [.any]) {
+        $0 / 180 * ("pi"&)
+    },
+    .unary(.percent, [.any]) {
+        $0 / 100
+    },
 ]
 
 public func gcd(_ a: Int, _ b: Int) -> Int {

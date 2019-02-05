@@ -27,7 +27,7 @@ class KelvinTests: XCTestCase {
         .appendingPathComponent("Examples")
     
     private var testUrl: String {
-        return examplesUrl.path + "/Tests"
+        return examplesUrl.path + "/SystemCheck"
     }
     
     private func restoreDefault() {

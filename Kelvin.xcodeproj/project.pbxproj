@@ -21,11 +21,9 @@
 		1F0936D721F4E80A00E707BD /* List & Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936D621F4E80A00E707BD /* List & Tuple.swift */; };
 		1F0936D821F4E83A00E707BD /* List & Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936D621F4E80A00E707BD /* List & Tuple.swift */; };
 		1F0936DD21F4EADE00E707BD /* Algebra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936DC21F4EADE00E707BD /* Algebra.swift */; };
-		1F0936DF21F4EB7A00E707BD /* Equality.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936DE21F4EB7A00E707BD /* Equality.swift */; };
-		1F0936E121F4EBBE00E707BD /* Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936E021F4EBBE00E707BD /* Conversion.swift */; };
+		1F0936DF21F4EB7A00E707BD /* Relation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936DE21F4EB7A00E707BD /* Relation.swift */; };
 		1F0936E221F4EBF900E707BD /* Algebra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936DC21F4EADE00E707BD /* Algebra.swift */; };
-		1F0936E321F4EBF900E707BD /* Equality.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936DE21F4EB7A00E707BD /* Equality.swift */; };
-		1F0936E421F4EBF900E707BD /* Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936E021F4EBBE00E707BD /* Conversion.swift */; };
+		1F0936E321F4EBF900E707BD /* Relation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936DE21F4EB7A00E707BD /* Relation.swift */; };
 		1F0936E621F4ED2300E707BD /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936E521F4ED2300E707BD /* Configuration.swift */; };
 		1F0936E721F4EDA100E707BD /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936E521F4ED2300E707BD /* Configuration.swift */; };
 		1F0936EC21F5058B00E707BD /* ListProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936EB21F5058B00E707BD /* ListProtocol.swift */; };
@@ -131,8 +129,7 @@
 		1F8DF745220672BE006351B0 /* Developer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936D021F4E45900E707BD /* Developer.swift */; };
 		1F8DF746220672BE006351B0 /* List & Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936D621F4E80A00E707BD /* List & Tuple.swift */; };
 		1F8DF747220672BE006351B0 /* Vector & Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90EC21FA27E700432B17 /* Vector & Matrix.swift */; };
-		1F8DF748220672BE006351B0 /* Equality.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936DE21F4EB7A00E707BD /* Equality.swift */; };
-		1F8DF749220672BE006351B0 /* Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936E021F4EBBE00E707BD /* Conversion.swift */; };
+		1F8DF748220672BE006351B0 /* Relation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936DE21F4EB7A00E707BD /* Relation.swift */; };
 		1F8DF74A220672BE006351B0 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936E521F4ED2300E707BD /* Configuration.swift */; };
 		1F8DF74B220672BE006351B0 /* Equation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974C421E633FD006D6DC2 /* Equation.swift */; };
 		1F8DF74C220672BE006351B0 /* Bool+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F721F5189500E707BD /* Bool+Value.swift */; };
@@ -186,6 +183,21 @@
 		1F8DF78D2208CCB0006351B0 /* ForLoop in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF78C2208CCB0006351B0 /* ForLoop */; };
 		1F8DF78F2208CCEE006351B0 /* FunctionDefinition in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF78E2208CCEE006351B0 /* FunctionDefinition */; };
 		1F8DF7922208D2E5006351B0 /* WhileLoop in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF7912208D2E5006351B0 /* WhileLoop */; };
+		1F8DF79422093690006351B0 /* String+Subscript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF79322093690006351B0 /* String+Subscript.swift */; };
+		1F8DF795220936C9006351B0 /* String+Subscript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF79322093690006351B0 /* String+Subscript.swift */; };
+		1F8DF796220936D9006351B0 /* String+Subscript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF79322093690006351B0 /* String+Subscript.swift */; };
+		1F8DF7992209381B006351B0 /* Boolean Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF7982209381B006351B0 /* Boolean Logic.swift */; };
+		1F8DF79B22093876006351B0 /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF79A22093876006351B0 /* Assignment.swift */; };
+		1F8DF79D22093909006351B0 /* Flow Control.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF79C22093909006351B0 /* Flow Control.swift */; };
+		1F8DF79F220939CE006351B0 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF79E220939CE006351B0 /* String.swift */; };
+		1F8DF7A022093B51006351B0 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF79E220939CE006351B0 /* String.swift */; };
+		1F8DF7A122093B51006351B0 /* Flow Control.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF79C22093909006351B0 /* Flow Control.swift */; };
+		1F8DF7A222093B51006351B0 /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF79A22093876006351B0 /* Assignment.swift */; };
+		1F8DF7A322093B51006351B0 /* Boolean Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF7982209381B006351B0 /* Boolean Logic.swift */; };
+		1F8DF7A422093B8F006351B0 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF79E220939CE006351B0 /* String.swift */; };
+		1F8DF7A522093B8F006351B0 /* Flow Control.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF79C22093909006351B0 /* Flow Control.swift */; };
+		1F8DF7A622093B8F006351B0 /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF79A22093876006351B0 /* Assignment.swift */; };
+		1F8DF7A722093B8F006351B0 /* Boolean Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF7982209381B006351B0 /* Boolean Logic.swift */; };
 		1FE1697321F28F1E0006712C /* Tests in Resources */ = {isa = PBXBuildFile; fileRef = 1FE1697221F28F1E0006712C /* Tests */; };
 		1FE1697621F2D44A0006712C /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Tuple.swift */; };
 		1FE1697721F2D5D40006712C /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Tuple.swift */; };
@@ -240,8 +252,7 @@
 		1F0936D021F4E45900E707BD /* Developer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Developer.swift; sourceTree = "<group>"; };
 		1F0936D621F4E80A00E707BD /* List & Tuple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "List & Tuple.swift"; sourceTree = "<group>"; };
 		1F0936DC21F4EADE00E707BD /* Algebra.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Algebra.swift; sourceTree = "<group>"; };
-		1F0936DE21F4EB7A00E707BD /* Equality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Equality.swift; sourceTree = "<group>"; };
-		1F0936E021F4EBBE00E707BD /* Conversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversion.swift; sourceTree = "<group>"; };
+		1F0936DE21F4EB7A00E707BD /* Relation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Relation.swift; sourceTree = "<group>"; };
 		1F0936E521F4ED2300E707BD /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		1F0936EB21F5058B00E707BD /* ListProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListProtocol.swift; sourceTree = "<group>"; };
 		1F0936EF21F513AF00E707BD /* MutableListProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableListProtocol.swift; sourceTree = "<group>"; };
@@ -311,6 +322,11 @@
 		1F8DF78C2208CCB0006351B0 /* ForLoop */ = {isa = PBXFileReference; lastKnownFileType = text; path = ForLoop; sourceTree = "<group>"; };
 		1F8DF78E2208CCEE006351B0 /* FunctionDefinition */ = {isa = PBXFileReference; lastKnownFileType = text; path = FunctionDefinition; sourceTree = "<group>"; };
 		1F8DF7912208D2E5006351B0 /* WhileLoop */ = {isa = PBXFileReference; lastKnownFileType = text; path = WhileLoop; sourceTree = "<group>"; };
+		1F8DF79322093690006351B0 /* String+Subscript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Subscript.swift"; sourceTree = "<group>"; };
+		1F8DF7982209381B006351B0 /* Boolean Logic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Boolean Logic.swift"; sourceTree = "<group>"; };
+		1F8DF79A22093876006351B0 /* Assignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignment.swift; sourceTree = "<group>"; };
+		1F8DF79C22093909006351B0 /* Flow Control.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Flow Control.swift"; sourceTree = "<group>"; };
+		1F8DF79E220939CE006351B0 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		1FE1697221F28F1E0006712C /* Tests */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tests; sourceTree = "<group>"; };
 		1FE1697521F2D44A0006712C /* Tuple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tuple.swift; sourceTree = "<group>"; };
 		1FE1697A21F2EC070006712C /* Conditionals */ = {isa = PBXFileReference; lastKnownFileType = text; path = Conditionals; sourceTree = "<group>"; };
@@ -371,13 +387,12 @@
 				1F3D316B2202871800462F10 /* Algebra */,
 				1F0936C921F4E26700E707BD /* Arithmetic */,
 				1F3D316F2202875700462F10 /* Calculus */,
+				1F8DF7972209376B006351B0 /* Developer */,
 				1F0936CD21F4E36300E707BD /* Probability.swift */,
 				1F3D31612201FE0800462F10 /* Number.swift */,
-				1F0936D021F4E45900E707BD /* Developer.swift */,
 				1F0936D621F4E80A00E707BD /* List & Tuple.swift */,
 				1F0A90EC21FA27E700432B17 /* Vector & Matrix.swift */,
-				1F0936DE21F4EB7A00E707BD /* Equality.swift */,
-				1F0936E021F4EBBE00E707BD /* Conversion.swift */,
+				1F0936DE21F4EB7A00E707BD /* Relation.swift */,
 				1F0936E521F4ED2300E707BD /* Configuration.swift */,
 			);
 			path = Core;
@@ -444,6 +459,7 @@
 				1F0A90E121F8C32B00432B17 /* String+Colors.swift */,
 				1F0A90E621F97B5000432B17 /* String+Regex.swift */,
 				1F570B5921FF737D0006E342 /* String+Operations.swift */,
+				1F8DF79322093690006351B0 /* String+Subscript.swift */,
 			);
 			path = Logistics;
 			sourceTree = "<group>";
@@ -531,6 +547,18 @@
 				1F8DF7912208D2E5006351B0 /* WhileLoop */,
 				1F8DF7882208CC13006351B0 /* BinarySearch */,
 				1F8DF78A2208CC54006351B0 /* Recursion */,
+			);
+			path = Developer;
+			sourceTree = "<group>";
+		};
+		1F8DF7972209376B006351B0 /* Developer */ = {
+			isa = PBXGroup;
+			children = (
+				1F0936D021F4E45900E707BD /* Developer.swift */,
+				1F8DF79E220939CE006351B0 /* String.swift */,
+				1F8DF79C22093909006351B0 /* Flow Control.swift */,
+				1F8DF79A22093876006351B0 /* Assignment.swift */,
+				1F8DF7982209381B006351B0 /* Boolean Logic.swift */,
 			);
 			path = Developer;
 			sourceTree = "<group>";
@@ -802,6 +830,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F8DF7A422093B8F006351B0 /* String.swift in Sources */,
+				1F8DF7A522093B8F006351B0 /* Flow Control.swift in Sources */,
+				1F8DF7A622093B8F006351B0 /* Assignment.swift in Sources */,
+				1F8DF7A722093B8F006351B0 /* Boolean Logic.swift in Sources */,
+				1F8DF795220936C9006351B0 /* String+Subscript.swift in Sources */,
 				1F8DF7872208A298006351B0 /* Pipeline.swift in Sources */,
 				1F8DF7822207EFC3006351B0 /* KVoid.swift in Sources */,
 				1F8DF77A2207DE6A006351B0 /* Closure.swift in Sources */,
@@ -831,8 +864,7 @@
 				1F0936ED21F5066100E707BD /* ListProtocol.swift in Sources */,
 				1F0936E721F4EDA100E707BD /* Configuration.swift in Sources */,
 				1F0936E221F4EBF900E707BD /* Algebra.swift in Sources */,
-				1F0936E321F4EBF900E707BD /* Equality.swift in Sources */,
-				1F0936E421F4EBF900E707BD /* Conversion.swift in Sources */,
+				1F0936E321F4EBF900E707BD /* Relation.swift in Sources */,
 				1F0936D821F4E83A00E707BD /* List & Tuple.swift in Sources */,
 				1F0936D421F4E6BF00E707BD /* Developer.swift in Sources */,
 				1F0936CF21F4E3A600E707BD /* Probability.swift in Sources */,
@@ -865,6 +897,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F8DF79422093690006351B0 /* String+Subscript.swift in Sources */,
 				1F0936F821F5189500E707BD /* Bool+Value.swift in Sources */,
 				1F0A90E221F8C32B00432B17 /* String+Colors.swift in Sources */,
 				1F3974BF21E3B741006D6DC2 /* LeafNode.swift in Sources */,
@@ -874,6 +907,7 @@
 				1F8DF7752207D755006351B0 /* Closure.swift in Sources */,
 				1F2E82B221973FF7005C3353 /* Value.swift in Sources */,
 				1F2E82B621974368005C3353 /* Variable.swift in Sources */,
+				1F8DF79B22093876006351B0 /* Assignment.swift in Sources */,
 				1F0A90EA21FA0EF600432B17 /* DataType.swift in Sources */,
 				1F0936CB21F4E2A300E707BD /* Unary.swift in Sources */,
 				1F0936EC21F5058B00E707BD /* ListProtocol.swift in Sources */,
@@ -886,11 +920,12 @@
 				1F0A90E721F97B5000432B17 /* String+Regex.swift in Sources */,
 				1F570B4E21FBE7150006E342 /* Matrix.swift in Sources */,
 				1F09370421F54E6200E707BD /* Calculus.swift in Sources */,
+				1F8DF79F220939CE006351B0 /* String.swift in Sources */,
 				1F0936F421F5184400E707BD /* Double+Value.swift in Sources */,
 				1FFD8CA8218F50850004ECEB /* Kelvin.xcdatamodeld in Sources */,
 				1F0936CE21F4E36300E707BD /* Probability.swift in Sources */,
 				1F2E82AC21966FC5005C3353 /* Operation.swift in Sources */,
-				1F0936DF21F4EB7A00E707BD /* Equality.swift in Sources */,
+				1F0936DF21F4EB7A00E707BD /* Relation.swift in Sources */,
 				1F570B5421FF6DB90006E342 /* Distribution.swift in Sources */,
 				1F0936F021F513AF00E707BD /* MutableListProtocol.swift in Sources */,
 				1F0936DD21F4EADE00E707BD /* Algebra.swift in Sources */,
@@ -898,6 +933,7 @@
 				1F0936C121F3C0B300E707BD /* Binary.swift in Sources */,
 				1F0CF2C421EA420400E40086 /* KString.swift in Sources */,
 				1F570B5621FF6F670006E342 /* Stat.swift in Sources */,
+				1F8DF7992209381B006351B0 /* Boolean Logic.swift in Sources */,
 				1F0CF2D521EEB69300E40086 /* Program.swift in Sources */,
 				1F0936C321F3C13100E707BD /* OneVar.swift in Sources */,
 				1F8DF78522089E30006351B0 /* Pipeline.swift in Sources */,
@@ -911,8 +947,8 @@
 				1F0A90ED21FA27E700432B17 /* Vector & Matrix.swift in Sources */,
 				1F3974C821E67627006D6DC2 /* Mode.swift in Sources */,
 				1FFD8CA3218F50850004ECEB /* AppDelegate.swift in Sources */,
-				1F0936E121F4EBBE00E707BD /* Conversion.swift in Sources */,
 				1F3D31692202863900462F10 /* Factorization.swift in Sources */,
+				1F8DF79D22093909006351B0 /* Flow Control.swift in Sources */,
 				1F3D316D2202874700462F10 /* Differentiation.swift in Sources */,
 				1F2E82B02197338B005C3353 /* Node.swift in Sources */,
 				1F09370121F51EC000E707BD /* Vector.swift in Sources */,
@@ -928,6 +964,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F8DF7A022093B51006351B0 /* String.swift in Sources */,
+				1F8DF7A122093B51006351B0 /* Flow Control.swift in Sources */,
+				1F8DF7A222093B51006351B0 /* Assignment.swift in Sources */,
+				1F8DF7A322093B51006351B0 /* Boolean Logic.swift in Sources */,
+				1F8DF796220936D9006351B0 /* String+Subscript.swift in Sources */,
 				1F8DF7862208A0CE006351B0 /* Pipeline.swift in Sources */,
 				1F8DF7832207FEFA006351B0 /* KVoid.swift in Sources */,
 				1F8DF7792207DD34006351B0 /* UnaryNode.swift in Sources */,
@@ -947,8 +988,7 @@
 				1F8DF745220672BE006351B0 /* Developer.swift in Sources */,
 				1F8DF746220672BE006351B0 /* List & Tuple.swift in Sources */,
 				1F8DF747220672BE006351B0 /* Vector & Matrix.swift in Sources */,
-				1F8DF748220672BE006351B0 /* Equality.swift in Sources */,
-				1F8DF749220672BE006351B0 /* Conversion.swift in Sources */,
+				1F8DF748220672BE006351B0 /* Relation.swift in Sources */,
 				1F8DF74A220672BE006351B0 /* Configuration.swift in Sources */,
 				1F8DF74B220672BE006351B0 /* Equation.swift in Sources */,
 				1F8DF74C220672BE006351B0 /* Bool+Value.swift in Sources */,
