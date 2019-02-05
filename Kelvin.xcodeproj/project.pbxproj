@@ -198,6 +198,8 @@
 		1F8DF7A522093B8F006351B0 /* Flow Control.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF79C22093909006351B0 /* Flow Control.swift */; };
 		1F8DF7A622093B8F006351B0 /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF79A22093876006351B0 /* Assignment.swift */; };
 		1F8DF7A722093B8F006351B0 /* Boolean Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF7982209381B006351B0 /* Boolean Logic.swift */; };
+		1F8DF7AB22095321006351B0 /* Deconstruct in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF7AA22095321006351B0 /* Deconstruct */; };
+		1F8DF7AD2209538A006351B0 /* FlatMap in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF7AC2209538A006351B0 /* FlatMap */; };
 		1FE1697321F28F1E0006712C /* Tests in Resources */ = {isa = PBXBuildFile; fileRef = 1FE1697221F28F1E0006712C /* Tests */; };
 		1FE1697621F2D44A0006712C /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Tuple.swift */; };
 		1FE1697721F2D5D40006712C /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Tuple.swift */; };
@@ -327,6 +329,8 @@
 		1F8DF79A22093876006351B0 /* Assignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignment.swift; sourceTree = "<group>"; };
 		1F8DF79C22093909006351B0 /* Flow Control.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Flow Control.swift"; sourceTree = "<group>"; };
 		1F8DF79E220939CE006351B0 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		1F8DF7AA22095321006351B0 /* Deconstruct */ = {isa = PBXFileReference; lastKnownFileType = text; path = Deconstruct; sourceTree = "<group>"; };
+		1F8DF7AC2209538A006351B0 /* FlatMap */ = {isa = PBXFileReference; lastKnownFileType = text; path = FlatMap; sourceTree = "<group>"; };
 		1FE1697221F28F1E0006712C /* Tests */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tests; sourceTree = "<group>"; };
 		1FE1697521F2D44A0006712C /* Tuple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tuple.swift; sourceTree = "<group>"; };
 		1FE1697A21F2EC070006712C /* Conditionals */ = {isa = PBXFileReference; lastKnownFileType = text; path = Conditionals; sourceTree = "<group>"; };
@@ -523,6 +527,16 @@
 			path = Statistics;
 			sourceTree = "<group>";
 		};
+		1F6D09FA220A439200807377 /* Algorithms */ = {
+			isa = PBXGroup;
+			children = (
+				1F8DF7882208CC13006351B0 /* BinarySearch */,
+				1F8DF7AA22095321006351B0 /* Deconstruct */,
+				1F8DF7AC2209538A006351B0 /* FlatMap */,
+			);
+			path = Algorithms;
+			sourceTree = "<group>";
+		};
 		1F8DF76E220759FF006351B0 /* Misc */ = {
 			isa = PBXGroup;
 			children = (
@@ -535,18 +549,18 @@
 		1F8DF7902208CEB9006351B0 /* Developer */ = {
 			isa = PBXGroup;
 			children = (
+				1F6D09FA220A439200807377 /* Algorithms */,
 				1FE1697A21F2EC070006712C /* Conditionals */,
-				1F09371021F62BF700E707BD /* Loops */,
-				1F09371621F66C4B00E707BD /* Subscript */,
 				1F09371821F672CD00E707BD /* DateTime */,
 				1F0A90DE21F7E94200432B17 /* ErrorHandling */,
-				1F8DF76D22074B9C006351B0 /* Multiline */,
-				1F8DF7732207D53C006351B0 /* TrailingClosure */,
-				1F8DF78E2208CCEE006351B0 /* FunctionDefinition */,
 				1F8DF78C2208CCB0006351B0 /* ForLoop */,
-				1F8DF7912208D2E5006351B0 /* WhileLoop */,
-				1F8DF7882208CC13006351B0 /* BinarySearch */,
+				1F8DF78E2208CCEE006351B0 /* FunctionDefinition */,
+				1F09371021F62BF700E707BD /* Loops */,
+				1F8DF76D22074B9C006351B0 /* Multiline */,
 				1F8DF78A2208CC54006351B0 /* Recursion */,
+				1F09371621F66C4B00E707BD /* Subscript */,
+				1F8DF7732207D53C006351B0 /* TrailingClosure */,
+				1F8DF7912208D2E5006351B0 /* WhileLoop */,
 			);
 			path = Developer;
 			sourceTree = "<group>";
@@ -796,6 +810,7 @@
 				1F8DF72C22050110006351B0 /* List in Resources */,
 				1F8DF7892208CC13006351B0 /* BinarySearch in Resources */,
 				1F09371921F672CD00E707BD /* DateTime in Resources */,
+				1F8DF7AD2209538A006351B0 /* FlatMap in Resources */,
 				1F0CF2D321EEA74A00E40086 /* Misc in Resources */,
 				1F0A90DF21F7E94200432B17 /* ErrorHandling in Resources */,
 				1FE1697B21F2EC070006712C /* Conditionals in Resources */,
@@ -806,6 +821,7 @@
 				1FFD8CAD218F50870004ECEB /* Main.storyboard in Resources */,
 				1F09370B21F57B0200E707BD /* Trigonometry in Resources */,
 				1F3D31672202853000462F10 /* Factorization in Resources */,
+				1F8DF7AB22095321006351B0 /* Deconstruct in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

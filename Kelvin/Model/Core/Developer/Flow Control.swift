@@ -90,7 +90,7 @@ public extension Developer {
             }
             
             loop: for e in list.elements {
-                Scope.save()
+                let def = Variable.definitions[v.name]
                 Variable.define(v.name, e)
                 do {
                     let _ = try closure.simplify()
@@ -102,7 +102,7 @@ public extension Developer {
                         break loop
                     }
                 }
-                Scope.restore()
+                Variable.definitions[v.name] = def
             }
             
             return KVoid()

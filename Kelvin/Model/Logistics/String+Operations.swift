@@ -160,12 +160,13 @@ public extension String {
     public static let greaterThanOrEquals = ">="
     public static let lessThanOrEquals = "<="
     
-    // Number system & conversion
-    public static let degrees = "degrees"
-    public static let percent = "pct"
+    // Type system
     public static let `as` = "as"
+    public static let `is` = "is"
     
     // Number
     public static let greatestCommonDivisor = "gcd"
     public static let leastCommonMultiple = "lcm"
+    public static let degrees = "degrees"
+    public static let percent = "pct"
 }

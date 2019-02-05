@@ -138,7 +138,10 @@ public class Developer {
                 throw ExecutionError.invalidDT(n.name)
             }
             
-            func bailOut() throws {
+            func bailOut(msg: String? = nil) throws {
+                if let m = msg {
+                    throw ExecutionError.general(errMsg: m)
+                }
                 throw ExecutionError.inconvertibleDT(from: "\(c)", to: dt.rawValue)
             }
             
@@ -160,15 +163,25 @@ public class Developer {
                 try bailOut()
             case .string:
                 return KString(c.stringified)
+            case .variable:
+                if let s = $0 as? KString  {
+                    return try Variable(s.string)
+                }
+                try bailOut()
             default:
                 break
             }
             
             return nil
+        },
+        .binary(.is, [.any, .var]) {
+            let v = $1 as! Variable
+            guard let t1 = DataType(rawValue: v.name) else {
+                throw ExecutionError.invalidDT(v.name)
+            }
+            
+            let t2 = try DataType.resolve($0)
+            return t2 == t1
         }
     ]
 }
-
-
-
-

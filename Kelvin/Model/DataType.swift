@@ -16,8 +16,36 @@ enum DataType: String, CustomStringConvertible {
     case vector
     case matrix
     case equation
+    case tuple
+    case function
+    case bool
     
     var description: String {
         return rawValue
+    }
+    
+    static func resolve(_ node: Node) throws -> DataType {
+        if node is KString {
+            return .string
+        } else if node is List {
+            return .list
+        } else if node is NSNumber {
+            return .number
+        } else if node is Variable {
+            return .variable
+        } else if node is Vector {
+            return .vector
+        } else if node is Matrix {
+            return .matrix
+        } else if node is Equation {
+            return .equation
+        } else if node is Tuple {
+            return .tuple
+        } else if node is Function {
+            return .function
+        } else if node is Bool {
+            return .bool
+        }
+        throw ExecutionError.general(errMsg: "unable to resolve type of \(node)")
     }
 }

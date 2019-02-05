@@ -30,5 +30,5 @@ def bin_search(arr, search) {
 }
 
 def l1 = {1, 2, 3, 5, 7, 8, 9, 10}
-println bin_search(l1, 8.5)
+assert println(bin_search(l1, 8.5)) == "not found"
 assert bin_search(l1, 9) == 6

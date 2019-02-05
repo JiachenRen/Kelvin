@@ -20,7 +20,7 @@ def files = {
 }
 
 def file_paths = (files | (examples_dir & $0))
-file_paths | run $0
+file_paths | (run $0)
 
 def dev_files = {
     "Conditionals",
@@ -33,13 +33,21 @@ def dev_files = {
     "FunctionDefinition",
     "ForLoop",
     "WhileLoop",
-    "BinarySearch",
     "Recursion"
 }
 
 for (dev_file: dev_files) {
     full_path := examples_dir & "Developer/" dev_file
     run full_path
+}
+
+def alg_files = {
+    "BinarySearch",
+    "FlatMap"
+}
+
+map(alg_files) {
+    run examples_dir & "Developer/Algorithms/" & $0
 }
 
 println "System check completed in " & (time() - start_time) & " seconds."
