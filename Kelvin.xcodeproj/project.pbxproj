@@ -181,6 +181,11 @@
 		1F8DF78522089E30006351B0 /* Pipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF78422089E30006351B0 /* Pipeline.swift */; };
 		1F8DF7862208A0CE006351B0 /* Pipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF78422089E30006351B0 /* Pipeline.swift */; };
 		1F8DF7872208A298006351B0 /* Pipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF78422089E30006351B0 /* Pipeline.swift */; };
+		1F8DF7892208CC13006351B0 /* BinarySearch in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF7882208CC13006351B0 /* BinarySearch */; };
+		1F8DF78B2208CC54006351B0 /* Recursion in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF78A2208CC54006351B0 /* Recursion */; };
+		1F8DF78D2208CCB0006351B0 /* ForLoop in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF78C2208CCB0006351B0 /* ForLoop */; };
+		1F8DF78F2208CCEE006351B0 /* FunctionDefinition in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF78E2208CCEE006351B0 /* FunctionDefinition */; };
+		1F8DF7922208D2E5006351B0 /* WhileLoop in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF7912208D2E5006351B0 /* WhileLoop */; };
 		1FE1697321F28F1E0006712C /* Tests in Resources */ = {isa = PBXBuildFile; fileRef = 1FE1697221F28F1E0006712C /* Tests */; };
 		1FE1697621F2D44A0006712C /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Tuple.swift */; };
 		1FE1697721F2D5D40006712C /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Tuple.swift */; };
@@ -301,6 +306,11 @@
 		1F8DF77C2207E54A006351B0 /* Control & Transfer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Control & Transfer.swift"; sourceTree = "<group>"; };
 		1F8DF7802207EE9A006351B0 /* KVoid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KVoid.swift; sourceTree = "<group>"; };
 		1F8DF78422089E30006351B0 /* Pipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pipeline.swift; sourceTree = "<group>"; };
+		1F8DF7882208CC13006351B0 /* BinarySearch */ = {isa = PBXFileReference; lastKnownFileType = text; path = BinarySearch; sourceTree = "<group>"; };
+		1F8DF78A2208CC54006351B0 /* Recursion */ = {isa = PBXFileReference; lastKnownFileType = text; path = Recursion; sourceTree = "<group>"; };
+		1F8DF78C2208CCB0006351B0 /* ForLoop */ = {isa = PBXFileReference; lastKnownFileType = text; path = ForLoop; sourceTree = "<group>"; };
+		1F8DF78E2208CCEE006351B0 /* FunctionDefinition */ = {isa = PBXFileReference; lastKnownFileType = text; path = FunctionDefinition; sourceTree = "<group>"; };
+		1F8DF7912208D2E5006351B0 /* WhileLoop */ = {isa = PBXFileReference; lastKnownFileType = text; path = WhileLoop; sourceTree = "<group>"; };
 		1FE1697221F28F1E0006712C /* Tests */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tests; sourceTree = "<group>"; };
 		1FE1697521F2D44A0006712C /* Tuple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tuple.swift; sourceTree = "<group>"; };
 		1FE1697A21F2EC070006712C /* Conditionals */ = {isa = PBXFileReference; lastKnownFileType = text; path = Conditionals; sourceTree = "<group>"; };
@@ -443,24 +453,18 @@
 			children = (
 				1F0CF2D221EEA74A00E40086 /* Misc */,
 				1FE1697221F28F1E0006712C /* Tests */,
-				1FE1697A21F2EC070006712C /* Conditionals */,
+				1F8DF7902208CEB9006351B0 /* Developer */,
 				1F0936BD21F3A54800E707BD /* Probability */,
 				1F09370E21F5800B00E707BD /* String */,
 				1F09371A21F67FDD00E707BD /* SystemCheck */,
 				1F09370621F56F9C00E707BD /* Calculus */,
 				1F09370A21F57B0200E707BD /* Trigonometry */,
 				1F09371421F64FC600E707BD /* Randomization */,
-				1F09371021F62BF700E707BD /* Loops */,
-				1F09371621F66C4B00E707BD /* Subscript */,
-				1F09371821F672CD00E707BD /* DateTime */,
 				1F645FBF21FAA1260096AD1C /* Vector */,
 				1F570B5021FBF28C0006E342 /* Matrix */,
-				1F0A90DE21F7E94200432B17 /* ErrorHandling */,
 				1F0A90E421F93DCE00432B17 /* Statistics */,
 				1F8DF72B22050110006351B0 /* List */,
 				1F3D31662202853000462F10 /* Factorization */,
-				1F8DF76D22074B9C006351B0 /* Multiline */,
-				1F8DF7732207D53C006351B0 /* TrailingClosure */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
@@ -509,8 +513,26 @@
 				1F8DF76F22075A32006351B0 /* LICENSE */,
 				1F8DF77022075A32006351B0 /* README.md */,
 			);
-			name = Misc;
-			path = "New Group";
+			path = Misc;
+			sourceTree = "<group>";
+		};
+		1F8DF7902208CEB9006351B0 /* Developer */ = {
+			isa = PBXGroup;
+			children = (
+				1FE1697A21F2EC070006712C /* Conditionals */,
+				1F09371021F62BF700E707BD /* Loops */,
+				1F09371621F66C4B00E707BD /* Subscript */,
+				1F09371821F672CD00E707BD /* DateTime */,
+				1F0A90DE21F7E94200432B17 /* ErrorHandling */,
+				1F8DF76D22074B9C006351B0 /* Multiline */,
+				1F8DF7732207D53C006351B0 /* TrailingClosure */,
+				1F8DF78E2208CCEE006351B0 /* FunctionDefinition */,
+				1F8DF78C2208CCB0006351B0 /* ForLoop */,
+				1F8DF7912208D2E5006351B0 /* WhileLoop */,
+				1F8DF7882208CC13006351B0 /* BinarySearch */,
+				1F8DF78A2208CC54006351B0 /* Recursion */,
+			);
+			path = Developer;
 			sourceTree = "<group>";
 		};
 		1FFD8C96218F50850004ECEB = {
@@ -732,14 +754,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				1FE1697321F28F1E0006712C /* Tests in Resources */,
+				1F8DF78F2208CCEE006351B0 /* FunctionDefinition in Resources */,
 				1F09371521F64FC600E707BD /* Randomization in Resources */,
+				1F8DF78D2208CCB0006351B0 /* ForLoop in Resources */,
 				1F09370F21F5800B00E707BD /* String in Resources */,
 				1F570B5121FBF28C0006E342 /* Matrix in Resources */,
 				1F09371B21F67FDD00E707BD /* SystemCheck in Resources */,
+				1F8DF78B2208CC54006351B0 /* Recursion in Resources */,
+				1F8DF7922208D2E5006351B0 /* WhileLoop in Resources */,
 				1F09370721F56F9C00E707BD /* Calculus in Resources */,
 				1F0A90E521F93DCE00432B17 /* Statistics in Resources */,
 				1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */,
 				1F8DF72C22050110006351B0 /* List in Resources */,
+				1F8DF7892208CC13006351B0 /* BinarySearch in Resources */,
 				1F09371921F672CD00E707BD /* DateTime in Resources */,
 				1F0CF2D321EEA74A00E40086 /* Misc in Resources */,
 				1F0A90DF21F7E94200432B17 /* ErrorHandling in Resources */,

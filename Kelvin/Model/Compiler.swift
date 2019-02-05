@@ -133,15 +133,15 @@ public class Compiler {
         ]
         
         for (i, var line) in lines.enumerated() {
+            
+            // Remove trailing and padding white spaces
+            line = line.trimmed
 
             // Character '#' serves as a precursor for comment
             // Empty lines are omitted.
             if line.starts(with: "#") || line == "" {
                 continue
             }
-            
-            // Remove trailing and padding white spaces
-            line = line.trimmed
             
             // Update bracket depths
             let curOpenBrackets = countOpenBrackets(line)
@@ -597,8 +597,10 @@ public class Compiler {
             // then an integer, next a double, and finally a boolean.
             if let node = dict[expr] ?? Int(expr) ?? Double(expr) ?? Bool(expr) {
                 return node
+            } else if let fun = Transfer.parse(expr) ?? Control.parse(expr) {
+                // Flow control & transfer (return, throw, continue, break)
+                return fun
             } else {
-                
                 // If none of the types above apply, then try to use it as a variable name.
                 return try Variable(expr)
             }
@@ -614,10 +616,8 @@ public class Compiler {
         var prioritized = [[Keyword]]()
         var cur = sorted[0].precedence
         
-        // The operators are split into two groups, one of which containing binary
-        // operators while the other contains prefix and postfix operators.
-        var groupA = [Keyword]()
-        var groupB = [Keyword]()
+        // Split operators into precedence groups
+        var precedenceGroup = [Keyword]()
         
         sorted.forEach {
             
@@ -629,24 +629,17 @@ public class Compiler {
                 
                 // First add the prefix and postfix group, as they need to be
                 // processed first; then add the infix group
-                prioritized.append(groupB)
-                prioritized.append(groupA)
+                prioritized.append(precedenceGroup)
                 
-                // Clear groups bugger.
-                groupA = [Keyword]()
-                groupB = [Keyword]()
+                // Clear precedence group buffer.
+                precedenceGroup = [Keyword]()
             }
             
-            if $0.associativity == .infix {
-                groupA.append($0)
-            } else {
-                groupB.append($0)
-            }
+            precedenceGroup.append($0)
         }
         
         // Add the remaining groups with lowest precedence.
-        prioritized.append(groupB)
-        prioritized.append(groupA)
+        prioritized.append(precedenceGroup)
 
         var dict = OperatorReference()
         for keywords in prioritized {
@@ -718,17 +711,6 @@ public class Compiler {
                 // a + func(...), the right hand side is a function
                 end = find(expr, start: p, close: ")")!
                 right = String(expr[idx_...end])
-            } else if let p = expr.index(r.upperBound, offsetBy: 1, limitedBy: expr.index(before: expr.endIndex)), expr[p] == "[" {
-                
-                // a + matrix[a][b][... the right hand side is a (chained) subscript.
-                end = find(expr, start: p, close: "]")!
-                while let m = expr.index(end, offsetBy: 1, limitedBy: expr.index(before: expr.endIndex)) {
-                    if expr[m] != "[" {
-                        break
-                    }
-                    end = find(expr, start: m, close: "]")!
-                }
-                right = String(expr[idx_...end])
             } else {
                 
                 // a + b?, right hand side is a variable, or no right hand side.
@@ -737,6 +719,15 @@ public class Compiler {
                     right = rop
                 }
                 end = r.upperBound
+            }
+            
+            // a + matrix[a][b]...; a + f()[a]...; a + {a, b, c}[d]; the right hand side is a (chained) subscript.
+            while let m = expr.index(end, offsetBy: 1, limitedBy: expr.index(before: expr.endIndex)) {
+                if expr[m] != "[" {
+                    break
+                }
+                end = find(expr, start: m, close: "]")!
+                right = String(expr[idx_...end])
             }
             
             var anchor = _idx

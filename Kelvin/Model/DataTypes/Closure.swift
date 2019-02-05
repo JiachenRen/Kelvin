@@ -40,7 +40,7 @@ public struct Closure: UnaryNode, NaN {
         } catch let e as Transfer {
             switch e {
             case .return(let n) where capturesReturn:
-                return n ?? KVoid()
+                return n
             default:
                 throw e
             }

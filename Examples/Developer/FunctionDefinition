@@ -1,0 +1,5 @@
+def f(a,b) {
+    print "Hello World! a = " & a & "; b = " & b
+}
+
+f(3, 4)

@@ -156,8 +156,14 @@ let developerOperations: [Operation] = [
     .unary(.return, [.any]) {
         throw Transfer.return($0)
     },
-    .unary(.return, []) {_ in
-        throw Transfer.return(nil)
+    .unary(.throw, [.any]) {
+        throw ExecutionError.general(errMsg: $0.stringified)
+    },
+    .init(.break, []) {_ in
+        throw Control.break
+    },
+    .init(.continue, []) {_ in
+        throw Control.continue
     },
     .init(.for, [.tuple, .closure]) {
         guard let tuple = $0[0] as? Tuple, let closure = $0[1] as? Closure else {
@@ -165,16 +171,16 @@ let developerOperations: [Operation] = [
         }
         
         guard let v = tuple.lhs as? Variable else {
-            let msg = "variable name expected in lhs of \"\(tuple)\", but found \"\(tuple.lhs)\" instead."
+            let msg = "variable name expected in lhs of \"\(tuple.stringified)\", but found \"\(tuple.lhs.stringified)\" instead."
             throw ExecutionError.general(errMsg: msg)
         }
         
-        guard let list = tuple.rhs as? ListProtocol else {
-            let msg = "list expected in rhs of \"\(tuple)\", but found \"\(tuple.rhs)\" instead"
+        guard let list = try tuple.rhs.simplify() as? ListProtocol else {
+            let msg = "list expected in rhs of \"\(tuple.stringified)\", but found \"\(tuple.rhs.stringified)\" instead"
             throw ExecutionError.general(errMsg: msg)
         }
     
-        for e in list.elements {
+        loop: for e in list.elements {
             Scope.save()
             Variable.define(v.name, e)
             do {
@@ -184,7 +190,7 @@ let developerOperations: [Operation] = [
                 case .continue:
                     continue
                 case .break:
-                    break
+                    break loop
                 }
             }
             Scope.restore()
@@ -197,7 +203,7 @@ let developerOperations: [Operation] = [
             throw ExecutionError.general(errMsg: "invalid while loop construct")
         }
         
-        while true {
+        loop: while true {
             guard let b = try $0.simplify() as? Bool else {
                 print($0)
                 throw ExecutionError.predicateException
@@ -213,7 +219,7 @@ let developerOperations: [Operation] = [
                 case .continue:
                     continue
                 case .break:
-                    break
+                    break loop
                 }
             }
         }

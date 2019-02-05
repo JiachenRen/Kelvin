@@ -250,7 +250,6 @@ public struct Function: MutableListProtocol {
         // Create function signature
         let signature = [Operation.ArgumentType](repeating: .any, count: args.count)
         
-        
         // Make sure the old definition is removed from registry
         Operation.remove(name, signature)
         
@@ -277,37 +276,43 @@ public struct Function: MutableListProtocol {
             $0 as! Variable
         }
         
-        var dict = [String: Int]()
-        vars.enumerated().forEach { (args) in
-            let (idx, v) = args
-            dict[v.name] = idx
+        // Generate a unique tag
+        let tag = Keyword.Encoder.next()
+        
+        var dict = vars.reduce(into: [:]) {
+            $0[$1.name] = "\(tag)\($1.name)"
         }
         
-        return { args in
-            var template = template.replacing(by: {
-                var rpl = $0 as! Variable
-                
-                // This is for dealing with the following bug:
-                // Suppose we have f(a,b) = a+b^2
-                // Call to f(a,b) results in a+b^2,
-                // Nevertheless, call to f(b,a) results in b+b^2!
-                rpl.name = "#\(rpl.name)"
-                return rpl
-            }, where: { $0 is Variable })
+        let template = template.replacing(by: {
+            var rpl = $0 as! Variable
             
-            dict.forEach { (pair) in
-                let (key, value) = pair
-                template = template.replacing(by: { _ in args[value] }) {
-                    ($0 as? Variable)?.name == "#\(key)"
-                }
+            // This is for dealing with the following senario:
+            // Suppose we have f(x) = x^2, then call to f({x})
+            // will cause infinite recursion. This prevents it by
+            // tagging the function variables.
+            rpl.name = dict[rpl.name]!
+            return rpl
+        }, where: {n in
+            if let v = n as? Variable {
+                return vars.contains {v === $0}
             }
-            
-            // Revert changes made to the variable names
-            return template.replacing(by: {
-                var mod = $0 as! Variable
-                mod.name.removeFirst()
-                return mod
-            }, where: { ($0 as? Variable)?.name.starts(with: "#") ?? false })
+            return false
+        })
+        
+        return { args in
+            Scope.save()
+            zip(vars, args).forEach {
+                Variable.define(dict[$0.name]!, $1)
+            }
+            let result = try template.simplify()
+                .replacing(by: { (n) -> Node in
+                    let v = n as! Variable
+                    return Variable.definitions[v.name]!
+                }, where: {
+                    ($0 as? Variable)?.name.first == tag
+                })
+            Scope.restore()
+            return result
         }
     }
 

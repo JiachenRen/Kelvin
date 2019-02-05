@@ -1,0 +1,15 @@
+# Fucking trailing closure syntax!
+
+def l1 = random()...10
+
+# This is equivalent to "l1 | $0 + $1"
+println map(l1) {$0 ^ 2}
+
+# This is equivalent to "l1 ~ $0 + $1"
+println reduce(l1) {$0 + $1}
+
+# This is equivalent to "l1 |? $0 > 0.5"
+println filter(l1) {$0 > 0.5}
+
+# This is equivalent to "l1 >? $0 > 0.5"
+println sort(l1) {$0 > $1}

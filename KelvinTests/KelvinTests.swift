@@ -26,6 +26,10 @@ class KelvinTests: XCTestCase {
         .deletingLastPathComponent()
         .appendingPathComponent("Examples")
     
+    private var testUrl: String {
+        return examplesUrl.path + "/Tests"
+    }
+    
     private func restoreDefault() {
         Variable.restoreDefault()
         Operation.restoreDefault()
@@ -33,9 +37,8 @@ class KelvinTests: XCTestCase {
     }
     
     func testSystemCheck() throws {
-        let systemCheckUrl = examplesUrl.path + "/Tests"
         do {
-            let _ = try Compiler.compile("run \"\(systemCheckUrl)\"").simplify()
+            let _ = try Compiler.compile("run \"\(testUrl)\"").simplify()
         } catch let e as KelvinError {
             XCTFail(e.localizedDescription)
         }
@@ -44,12 +47,11 @@ class KelvinTests: XCTestCase {
     func testPerformance() {
         self.measure {
             restoreDefault()
-            let systemCheckUrl = examplesUrl.path + "/Tests"
+            
             do {
-                let _ = try Compiler.compile("run \"\(systemCheckUrl)\"").simplify()
+                let _ = try Compiler.compile("run \"\(testUrl)\"").simplify()
             } catch let e as KelvinError {
-                print(e.localizedDescription)
-                XCTAssert(false)
+                XCTFail(e.localizedDescription)
             } catch let e {
                 XCTFail(e.localizedDescription)
             }

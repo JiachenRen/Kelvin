@@ -85,11 +85,22 @@ public struct Keyword {
     fileprivate init(
         for name: String,
         associativity: Associativity,
-        precedence: Precedence = .execution,
+        precedence: Precedence? = nil,
         operator: Operator? = nil) {
         self.name = name
         self.associativity = associativity
-        self.precedence = precedence
+        if let p = precedence {
+            self.precedence = p
+        } else {
+            switch associativity {
+            case .infix:
+                self.precedence = .pipeline
+            case .prefix:
+                self.precedence = .prefix
+            case .postfix:
+                self.precedence = .postfix
+            }
+        }
         self.operator = `operator`
         self.encoding = Encoder.next() // Create a unique encoding
     }
@@ -98,7 +109,7 @@ public struct Keyword {
     public static func define(
         for name: String,
         associativity: Associativity,
-        precedence: Precedence = .execution,
+        precedence: Precedence? = nil,
         operator: Operator? = nil) {
 
         // Create the keyword
@@ -200,7 +211,8 @@ public struct Keyword {
     }
 
     public enum Precedence: Int, Comparable {
-        case execution      // ->
+        case prefixCommand  // return, throw, print, println, etc.
+        case pipeline       // ->
         case assignment     // :=, +=, -=, *=, /=
         case equation       // =
         case `repeat`       // ...
@@ -213,11 +225,13 @@ public struct Keyword {
         case relational     // <, >, <=, >=
         case concat         // &
         case addition       // +,-
-        case product        // *,/
+        case scaling        // *,/
         case exponent       // ^
         case coersion       // as
         case derivative     // '
-        case attached       // ++, --, !, °, prefix and postfix
+        case prefix         // √, !(not)
+        case postfix        // ++, --, !(factorial), °, %
+        case `subscript`    // ::
 
         public static func <(lhs: Precedence, rhs: Precedence) -> Bool {
             return lhs.rawValue < rhs.rawValue
@@ -260,21 +274,21 @@ public struct Keyword {
     private static let defaultDefinitions: [Keyword] = [
         .init(for: .add, associativity: .infix, precedence: .addition, operator: .init("+")),
         .init(for: .sub, associativity: .infix, precedence: .addition, operator: .init("-")),
-        .init(for: .negate, associativity: .prefix, precedence: .attached, operator: .init("-", padding: .none)),
-        .init(for: .mult, associativity: .infix, precedence: .product, operator: .init("*")),
-        .init(for: .div, associativity: .infix, precedence: .product, operator: .init("/")),
-        .init(for: .mod, associativity: .infix, precedence: .product, operator: .init("%")),
+        .init(for: .negate, associativity: .prefix, operator: .init("-", padding: .none)),
+        .init(for: .mult, associativity: .infix, precedence: .scaling, operator: .init("*")),
+        .init(for: .div, associativity: .infix, precedence: .scaling, operator: .init("/")),
+        .init(for: .mod, associativity: .infix, precedence: .scaling, operator: .init("%")),
         .init(for: .exp, associativity: .infix, precedence: .exponent, operator: .init("^")),
-        .init(for: .increment, associativity: .postfix, precedence: .attached, operator: .init("++", padding: .rightSide)),
-        .init(for: .decrement, associativity: .postfix, precedence: .attached, operator: .init("--", padding: .rightSide)),
+        .init(for: .increment, associativity: .postfix, operator: .init("++", padding: .rightSide)),
+        .init(for: .decrement, associativity: .postfix, operator: .init("--", padding: .rightSide)),
         .init(for: .mutatingAdd, associativity: .infix, precedence: .assignment, operator: .init("+=")),
         .init(for: .mutatingSub, associativity: .infix, precedence: .assignment, operator: .init("-=")),
         .init(for: .mutatingMult, associativity: .infix, precedence: .assignment, operator: .init("*=")),
         .init(for: .mutatingDiv, associativity: .infix, precedence: .assignment, operator: .init("/=")),
-        .init(for: .sqrt, associativity: .prefix, precedence: .attached, operator: .init("√", padding: .none)),
-        .init(for: .degrees, associativity: .postfix, precedence: .attached, operator: .init("°", padding: .none)),
-        .init(for: .factorial, associativity: .postfix, precedence: .attached, operator: .init("!", padding: .none)),
-        .init(for: .percent, associativity: .postfix, precedence: .attached, operator: .init("%", padding: .none)),
+        .init(for: .sqrt, associativity: .prefix, operator: .init("√", padding: .none)),
+        .init(for: .degrees, associativity: .postfix, operator: .init("°", padding: .none)),
+        .init(for: .factorial, associativity: .postfix, operator: .init("!", padding: .none)),
+        .init(for: .percent, associativity: .postfix, operator: .init("%", padding: .none)),
         .init(for: .equates, associativity: .infix, precedence: .equation, operator: .init("=")),
         .init(for: .lessThan, associativity: .infix, precedence: .relational, operator: .init("<")),
         .init(for: .greaterThan, associativity: .infix, precedence: .relational, operator: .init(">")),
@@ -285,13 +299,13 @@ public struct Keyword {
         .init(for: .and, associativity: .infix, precedence: .and, operator: .init("&&")),
         .init(for: .or, associativity: .infix, precedence: .or, operator: .init("||")),
         .init(for: .xor, associativity: .infix, precedence: .xor, operator: .init("^^")),
-        .init(for: .not, associativity: .prefix, precedence: .attached, operator: .init("!", padding: .none)),
+        .init(for: .not, associativity: .prefix, operator: .init("!", padding: .none)),
         .init(for: .define, associativity: .infix, precedence: .assignment, operator: .init(":=", padding: .bothSides)),
         .init(for: .def, associativity: .prefix, precedence: .assignment),
         .init(for: .del, associativity: .prefix),
-        .init(for: .get, associativity: .infix, precedence: .attached, operator: .init("::", padding: .none)), // Preserve arguments?
-        .init(for: .size, associativity: .prefix, precedence: .attached),
-        .init(for: .shuffle, associativity: .prefix, precedence: .attached),
+        .init(for: .get, associativity: .infix, precedence: .subscript, operator: .init("::", padding: .none)), // Preserve arguments?
+        .init(for: .size, associativity: .prefix),
+        .init(for: .shuffle, associativity: .prefix),
         .init(for: .map, associativity: .infix, operator: .init("|")),
         .init(for: .reduce, associativity: .infix, operator: .init("~")),
         .init(for: .filter, associativity: .infix, operator: .init("|?")),
@@ -304,19 +318,20 @@ public struct Keyword {
         .init(for: .repeat, associativity: .infix, precedence: .repeat, operator: .init("...", padding: .none)),
         .init(for: .copy, associativity: .infix, precedence: .repeat),
         .init(for: .complexity, associativity: .prefix),
-        .init(for: .round, associativity: .prefix, precedence: .attached),
-        .init(for: .int, associativity: .prefix, precedence: .attached),
+        .init(for: .round, associativity: .prefix),
+        .init(for: .int, associativity: .prefix),
         .init(for: .eval, associativity: .prefix),
-        .init(for: .print, associativity: .prefix),
-        .init(for: .println, associativity: .prefix),
+        .init(for: .print, associativity: .prefix, precedence: .prefixCommand),
+        .init(for: .println, associativity: .prefix, precedence: .prefixCommand),
         .init(for: .compile, associativity: .prefix),
         .init(for: .delay, associativity: .prefix),
         .init(for: .run, associativity: .prefix),
-        .init(for: .try, associativity: .prefix),
-        .init(for: .return, associativity: .prefix),
+        .init(for: .try, associativity: .prefix, precedence: .prefixCommand),
+        .init(for: .throw, associativity: .prefix, precedence: .prefixCommand),
+        .init(for: .return, associativity: .prefix, precedence: .prefixCommand),
         .init(for: .for, associativity: .prefix),
         .init(for: .if, associativity: .infix, precedence: .conditional, operator: .init("?")),
-        .init(for: .assert, associativity: .prefix),
+        .init(for: .assert, associativity: .prefix, precedence: .prefixCommand),
         .init(for: .npr, associativity: .infix),
         .init(for: .ncr, associativity: .infix),
         .init(for: .tuple, associativity: .infix, precedence: .tuple, operator: .init(":")),
@@ -324,10 +339,10 @@ public struct Keyword {
         .init(for: .derivative, associativity: .infix, precedence: .derivative, operator: .init("'", padding: .none)),
         .init(for: .as, associativity: .infix, precedence: .coersion, operator: .init("!!")),
         .init(for: .gradient, associativity: .infix, precedence: .derivative, operator: .init("∇")),
-        .init(for: .determinant, associativity: .prefix, precedence: .attached),
-        .init(for: .dotProduct, associativity: .infix, precedence: .product, operator: .init("•")),
-        .init(for: .crossProduct, associativity: .infix, precedence: .product, operator: .init("×")),
-        .init(for: .matrixMultiplication, associativity: .infix, precedence: .product, operator: .init("**")),
-        .init(for: .transpose, associativity: .prefix, precedence: .attached, operator: .init("¡", padding: .none))
+        .init(for: .determinant, associativity: .prefix),
+        .init(for: .dotProduct, associativity: .infix, precedence: .scaling, operator: .init("•")),
+        .init(for: .crossProduct, associativity: .infix, precedence: .scaling, operator: .init("×")),
+        .init(for: .matrixMultiplication, associativity: .infix, precedence: .scaling, operator: .init("**")),
+        .init(for: .transpose, associativity: .prefix, operator: .init("¡", padding: .none))
     ]
 }

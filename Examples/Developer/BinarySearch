@@ -1,31 +1,4 @@
-# Fucking trailing closure syntax!
-
-def f(a,b) {
-    print "Hello World!"
-}
-
-def f(a) {
-    if (a > 10) {
-        println a;
-        return f(a / 10)
-    }
-    return a
-}
-
-def contains(list, a) {
-    for (e: list) {
-        if (e == a) {
-            return true
-        }
-    }
-    return false
-}
-
-println f(1000005)
-println f(15)
-println contains({1, 2, 3}, 2)
-println contains({1, 2, 3}, x)
-
+# Conventional binary search algorithm implemented in kelvin!
 def bin_search(arr, search) {
     c := 0;
     first := 0;
@@ -33,6 +6,7 @@ def bin_search(arr, search) {
     last := n - 1;
     middle := int((first + last) / 2);
 
+    # This is a while loop
     while (first <= last) {
         b := false;
 

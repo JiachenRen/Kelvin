@@ -4,8 +4,42 @@
 def examples_dir = "/Users/jiachenren/Library/Mobile Documents/com~apple~CloudDocs/Documents/Developer/Kelvin/Examples/"
 
 def start_time = time()
-def files = {"Misc", "Tests", "Probability", "Calculus", "Conditionals", "Randomization", "DateTime", "Subscript", "Loops", "String", "Trigonometry", "ErrorHandling", "Statistics", "Vector", "Matrix", "Factorization", "List", "Multiline", "TrailingClosure"}
+def files = {
+    "Misc",
+    "Tests",
+    "Probability",
+    "Calculus",
+    "Randomization",
+    "String",
+    "Trigonometry",
+    "Statistics",
+    "Vector",
+    "Matrix",
+    "Factorization",
+    "List"
+}
+
 def file_paths = (files | (examples_dir & $0))
 file_paths | run $0
+
+def dev_files = {
+    "Conditionals",
+    "Loops",
+    "Subscript",
+    "DateTime",
+    "ErrorHandling",
+    "Multiline",
+    "TrailingClosure",
+    "FunctionDefinition",
+    "ForLoop",
+    "WhileLoop",
+    "BinarySearch",
+    "Recursion"
+}
+
+for (dev_file: dev_files) {
+    full_path := examples_dir & "Developer/" dev_file
+    run full_path
+}
 
 println "System check completed in " & (time() - start_time) & " seconds."

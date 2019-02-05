@@ -1,0 +1,10 @@
+def f(a) {
+    if (a > 10) {
+        println a;
+        return f(a / 10)
+    }
+    return a
+}
+
+println f(1000005)
+println f(15)

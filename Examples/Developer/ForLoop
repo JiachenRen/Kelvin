@@ -1,0 +1,15 @@
+# A function that checks if list contains a
+def contains(list, a) {
+    for (e: list) {
+        if (e == a) {
+            return true
+        }
+    }
+    return false
+}
+
+# Prints true
+println contains({1, 2, 3}, 2)
+
+# Prints false
+println contains({1, 2, 3}, x)

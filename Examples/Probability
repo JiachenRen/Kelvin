@@ -2,7 +2,7 @@ def dice1() = round random(1,6)
 def dice2() = int random(1, 7)
 
 seeds(x) := round random(1, 6) ... x
-def dice3() = seeds(10)::int random(0, 9)
+def dice3() = seeds(10)[int random(0, 9)]
 
 # Roll dice 1 10000 times
 rolls1 := dice1()...10000

@@ -130,4 +130,38 @@ assert l6 == {2}
 # Test string concatenation
 assert "asdf" & "sdfsdf"[1] == "asdfd"
 
+# Test Multiline function definition
+def bin_search(arr, search) {
+    c := 0;
+    first := 0;
+    n := size(arr);
+    last := n - 1;
+    middle := int((first + last) / 2);
+
+    while (first <= last) {
+        b := false;
+
+        if (arr[middle] < search) {
+            first := middle + 1;
+            b := true;
+        }
+
+        if (arr[middle] == search) {
+            return middle;
+        }
+
+        if (!b) {
+            last := middle - 1;
+        }
+
+        middle := int((first + last) / 2);
+    }
+
+    return "not found";
+}
+
+def l1 = {1, 2, 3, 5, 7, 8, 9, 10}
+assert bin_search(l1, 8.5) == "not found"
+assert bin_search(l1, 9) == 6
+
 println "Test completed. No errors identified. System operational."
