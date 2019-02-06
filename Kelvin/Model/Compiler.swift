@@ -372,7 +372,7 @@ public class Compiler {
 
         // Restore list() to {}
         parent = parent.replacing(by: { args($0) }) {
-            name($0) == "list"
+            name($0) == .list
         }
         
         // Restore tuple() to (:)
@@ -380,7 +380,7 @@ public class Compiler {
             let elements = args($0).elements
             return Tuple(elements[0], elements[1])
         }) {
-            name($0) == "tuple"
+            name($0) == .tuple
         }
         
         // Restore closures
@@ -398,7 +398,23 @@ public class Compiler {
         parent = parent.replacing(by: {
             Equation(lhs: args($0)[0], rhs: args($0)[1])
         }) {
-            name($0) == "="
+            name($0) == .equates
+        }
+        
+        // Restore else {...}
+        parent = parent.replacing(by: {
+            var fun = $0 as! Function
+            fun[1] = Closure(fun[1] as! List)!
+            return fun
+        }) {
+            if let fun = $0 as? Function, fun.name == .else {
+                if let list = fun.elements.last as? List {
+                    if Closure(list) != nil {
+                        return true
+                    }
+                }
+            }
+            return false
         }
         
         // Infer matrices

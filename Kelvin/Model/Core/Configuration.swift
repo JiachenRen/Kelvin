@@ -23,6 +23,7 @@ let defaultConfiguration: [Operation.Attribute: [String]] = [
         .def,
         .del,
         .if,
+        .else,
         .measure,
         .try,
         .for,

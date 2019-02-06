@@ -112,6 +112,8 @@ public extension String {
     
     // Developer
     public static let `if` = "if"
+    public static let ternaryConditional = "ternary"
+    public static let `else` = "else"
     public static let pipe = "pipe"
     public static let replace = "replace"
     public static let `repeat` = "repeat"

@@ -12,7 +12,7 @@ public extension Developer {
     static let flowControlOperations: [Operation] = [
         
         // Pileline, conditional statements
-        .binary(.if, [.any, .tuple]) {
+        .binary(.ternaryConditional, [.any, .tuple]) {
             let node = try $0.simplify()
             guard let predicament = node as? Bool else {
                 return nil
@@ -28,8 +28,24 @@ public extension Developer {
             }
             if predicate {
                 let _ = try $1.simplify()
+                return true
             }
             return KVoid()
+        },
+        .binary(.else, [.func, .any]) {
+            guard let name = ($0 as? Function)?.name, name == .if || name == .else else {
+                throw ExecutionError.general(errMsg: "left hand side of 'else' must be a if statement or else statement")
+            }
+            
+            guard ($1 as? Function)?.name == .if || $1 is Closure else {
+                throw ExecutionError.general(errMsg: "right hand side of 'else' must be a if statement or closure")
+            }
+            
+            if try $0.simplify() === true {
+                return true
+            } else {
+                return try $1.simplify()
+            }
         },
         .binary(.pipe, [.any, .any]) {
             let simplified = try $0.simplify()

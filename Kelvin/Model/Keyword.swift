@@ -213,11 +213,11 @@ public struct Keyword {
     public enum Precedence: Int, Comparable {
         case prefixCommand  // return, throw, print, println, etc.
         case pipeline       // ->
+        case conditional    // ?
+        case tuple          // :
         case assignment     // :=, +=, -=, *=, /=
         case equation       // =
         case `repeat`       // ...
-        case conditional    // conditional statements like if
-        case tuple          // (:)
         case or             // ||
         case and            // &&
         case xor            // ^^
@@ -232,6 +232,7 @@ public struct Keyword {
         case prefix         // √, !(not)
         case postfix        // ++, --, !(factorial), °, %
         case `subscript`    // ::
+        case binding        // binding between closures
 
         public static func <(lhs: Precedence, rhs: Precedence) -> Bool {
             return lhs.rawValue < rhs.rawValue
@@ -346,11 +347,11 @@ public struct Keyword {
         // Transfer, flow control, and error handling
         .init(for: .return, associativity: .prefix, precedence: .prefixCommand),
         .init(for: .for, associativity: .prefix),
-        .init(for: .if, associativity: .infix, precedence: .conditional, operator: .init("?")),
+        .init(for: .ternaryConditional, associativity: .infix, precedence: .conditional, operator: .init("?")),
         .init(for: .assert, associativity: .prefix, precedence: .prefixCommand),
         .init(for: .try, associativity: .prefix, precedence: .prefixCommand),
         .init(for: .throw, associativity: .prefix, precedence: .prefixCommand),
-        
+        .init(for: .else, associativity: .infix, precedence: .binding),
         
         // Calculus
         .init(for: .derivative, associativity: .infix, precedence: .derivative, operator: .init("'", padding: .none)),

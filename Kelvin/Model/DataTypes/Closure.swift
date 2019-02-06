@@ -24,6 +24,14 @@ public struct Closure: UnaryNode, NaN {
         self.node = definition
         self.capturesReturn = capturesReturn
     }
+    
+    init?(_ list: List) {
+        if list.count == 1 {
+            self.init(list[0])
+        } else {
+            return nil
+        }
+    }
 
     public var ansiColored: String {
         return "#(".magenta.bold + node.ansiColored + ")".magenta.bold
