@@ -253,33 +253,33 @@ public struct Function: MutableListProtocol {
         // Make sure the old definition is removed from registry
         Operation.remove(name, signature)
         
+        // Check to make sure that every argument is a variable
+        for arg in args.elements {
+            if !(arg is Variable) {
+                let msg = "expecting parameter name, instead found \(arg.stringified)"
+                throw ExecutionError.general(errMsg: msg)
+            }
+        }
+        
+        // Cast the arguments to variables
+        let parameters = args.map {
+            $0 as! Variable
+        }
+        
         // Create and register function denition as an operation
-        let def = try Function.createDefinition(from: template, using: args.elements)
+        let def = try Function.createDefinition(from: template, using: parameters)
         let op = Operation(name, signature, definition: def)
         Operation.register(op)
     }
     
     /// Creates a definition from the template, by replacing
     /// the variables in template with arguments
-    static func createDefinition(from template: Node, using args: [Node]) throws -> Definition {
-        
-        // Check to make sure that every argument is a variable
-        for arg in args {
-            if !(arg is Variable) {
-                let msg = "function signature should only contain variables"
-                throw ExecutionError.general(errMsg: msg)
-            }
-        }
-        
-        // Cast the arguments to variables
-        let vars = args.map {
-            $0 as! Variable
-        }
+    static func createDefinition(from template: Node, using parameters: [Variable]) throws -> Definition {
         
         // Generate a unique tag
         let tag = Keyword.Encoder.next()
         
-        var dict = vars.reduce(into: [:]) {
+        var dict = parameters.reduce(into: [:]) {
             $0[$1.name] = "\(tag)\($1.name)"
         }
         
@@ -294,16 +294,34 @@ public struct Function: MutableListProtocol {
             return rpl
         }, where: {n in
             if let v = n as? Variable {
-                return vars.contains {v === $0}
+                return parameters.contains {v === $0}
             }
             return false
         })
         
         return { args in
             Scope.save()
-            zip(vars, args).forEach {
-                Variable.define(dict[$0.name]!, $1)
+            
+            var inoutVars = [Variable]()
+            try zip(parameters, args).forEach {(par, arg) in
+                var arg = arg
+                
+                // Find all inout variables, extract their definitions
+                if let fun = arg as? Function, fun.name == .inout {
+                    guard fun.count == 1, let iv = fun[0] as? Variable else {
+                        let msg = "expecting variable name after inout modifier, instead found \(fun[0].stringified)"
+                        throw ExecutionError.general(errMsg: msg)
+                    }
+                    inoutVars.append(iv)
+                    if Variable.definitions[iv.name] == nil {
+                        let msg = "variable \(iv.stringified) is undefined; inout modifier can only be used on variables with definitions"
+                        throw ExecutionError.general(errMsg: msg)
+                    }
+                    arg = iv.simplify()
+                }
+                Variable.define(dict[par.name]!, arg)
             }
+            
             let result = try template.simplify()
                 .replacing(by: { (n) -> Node in
                     let v = n as! Variable
@@ -311,7 +329,19 @@ public struct Function: MutableListProtocol {
                 }, where: {
                     ($0 as? Variable)?.name.first == tag
                 })
+            
+            // Escaping definitions for inout variables
+            let escaping = inoutVars.reduce(into: [:]) {
+                $0[$1.name] = Variable.definitions[dict[$1.name]!]
+            }
+            
             Scope.restore()
+            
+            // Escape inout variable definitions
+            for (v, def) in escaping {
+                Variable.definitions[v] = def
+            }
+            
             return result
         }
     }

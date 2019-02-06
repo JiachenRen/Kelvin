@@ -138,6 +138,7 @@ public extension String {
     public static let `throw` = "throw"
     public static let `for` = "for"
     public static let `while` = "while"
+    public static let `inout` = "inout"
     
     // Matrix & vector
     public static let dotProduct = "dotP"

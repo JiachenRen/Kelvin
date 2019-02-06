@@ -352,6 +352,7 @@ public struct Keyword {
         .init(for: .try, associativity: .prefix, precedence: .prefixCommand),
         .init(for: .throw, associativity: .prefix, precedence: .prefixCommand),
         .init(for: .else, associativity: .infix, precedence: .binding),
+        .init(for: .inout, associativity: .prefix, operator: .init("&", padding: .none)),
         
         // Calculus
         .init(for: .derivative, associativity: .infix, precedence: .derivative, operator: .init("'", padding: .none)),

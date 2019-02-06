@@ -28,6 +28,7 @@ let defaultConfiguration: [Operation.Attribute: [String]] = [
         .try,
         .for,
         .while,
+        .inout,
         
         
         // Functions that accepts anonymous arguments should preserve arguments.
