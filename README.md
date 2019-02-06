@@ -251,6 +251,7 @@ For more examples (algebraic operations, calulus, stats, loops, conditional stat
 - [x] Sort and filter
 - [x] Append and remove
 - [ ] Insert
+- [ ] Contains
 - [x] Chained subscript access
   - Access by index
   - Access by range
@@ -263,14 +264,17 @@ For more examples (algebraic operations, calulus, stats, loops, conditional stat
   - *Only handles and & or for now*
 
 ### Programs/functions
-- [x] Definition & deletion of variables and functions
-  - *Support function overloading*
+- [x] Variables & Functions
+  - *Definition & deletion*
+  - *Overloading of functions*
   - *Automatic scope management*
+  - *Closures*
+  - *Anonymous closure arguments (e.g. $0, $1, ...)*
 - [x] Runtime compilation
 - [x] Flow control
   - Execution
-    - *Line break*
-    - *Line feed*
+    - *Line break (;)*
+    - *Pipeline (->)*
   - Loops
     - *Copy*
     - *Repeat*
@@ -279,22 +283,30 @@ For more examples (algebraic operations, calulus, stats, loops, conditional stat
   - Conditional statements
     - *Ternary operator '?'*
     - *If (predicate) {...}*
-    - [ ] Else
-    - [ ] Else if
+    - *Else {...}*
+    - *Else if (predicate) {...}*
+  - Transfer
+    - *Return*
+  - Control
+    - *Break*
+    - *Continue*
 - [x] I/O
   - *Program execution*
   - *Print, println*
   - *Log*
   - *Recursion*
   - *Return*
-  - [ ] *Throw*
+  - *Throw*
 - [x] Strings
   - *Concatenation*
   - *Subscript access*
 - [x] Tuples
   - *Compilation*
   - *Subscript access*
-- [x] Error handling with try
+- [x] Error handling
+  - *Try*
+  - *Assert*
+  - *Throw*
 - [x] System
   - *Precise date & time (down to nano seconds)*
   - *Performance measurement*
