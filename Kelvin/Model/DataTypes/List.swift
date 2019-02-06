@@ -107,7 +107,7 @@ public struct List: MutableListProtocol, NaN {
      */
     public func ordered() -> List {
         return sorted {(e1, e2) in
-            return e1.stringified > e2.stringified
+            return e1.stringified < e2.stringified
         }
     }
     

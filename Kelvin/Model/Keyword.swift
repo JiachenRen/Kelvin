@@ -272,6 +272,8 @@ public struct Keyword {
 
     /// Default keywords
     private static let defaultDefinitions: [Keyword] = [
+        
+        // Arithmetic
         .init(for: .add, associativity: .infix, precedence: .addition, operator: .init("+")),
         .init(for: .sub, associativity: .infix, precedence: .addition, operator: .init("-")),
         .init(for: .negate, associativity: .prefix, operator: .init("-", padding: .none)),
@@ -279,16 +281,29 @@ public struct Keyword {
         .init(for: .div, associativity: .infix, precedence: .scaling, operator: .init("/")),
         .init(for: .mod, associativity: .infix, precedence: .scaling, operator: .init("%")),
         .init(for: .exp, associativity: .infix, precedence: .exponent, operator: .init("^")),
+        .init(for: .sqrt, associativity: .prefix, operator: .init("√", padding: .none)),
+        
+        // Assignment
         .init(for: .increment, associativity: .postfix, operator: .init("++", padding: .rightSide)),
         .init(for: .decrement, associativity: .postfix, operator: .init("--", padding: .rightSide)),
         .init(for: .mutatingAdd, associativity: .infix, precedence: .assignment, operator: .init("+=")),
         .init(for: .mutatingSub, associativity: .infix, precedence: .assignment, operator: .init("-=")),
         .init(for: .mutatingMult, associativity: .infix, precedence: .assignment, operator: .init("*=")),
         .init(for: .mutatingDiv, associativity: .infix, precedence: .assignment, operator: .init("/=")),
-        .init(for: .sqrt, associativity: .prefix, operator: .init("√", padding: .none)),
+        .init(for: .define, associativity: .infix, precedence: .assignment, operator: .init(":=", padding: .bothSides)),
+        .init(for: .def, associativity: .prefix, precedence: .assignment),
+        .init(for: .del, associativity: .prefix),
+        
+        // Number
         .init(for: .degrees, associativity: .postfix, operator: .init("°", padding: .none)),
         .init(for: .factorial, associativity: .postfix, operator: .init("!", padding: .none)),
         .init(for: .percent, associativity: .postfix, operator: .init("%", padding: .none)),
+        .init(for: .round, associativity: .prefix),
+        .init(for: .int, associativity: .prefix),
+        .init(for: .npr, associativity: .infix),
+        .init(for: .ncr, associativity: .infix),
+        
+        // Relational
         .init(for: .equates, associativity: .infix, precedence: .equation, operator: .init("=")),
         .init(for: .lessThan, associativity: .infix, precedence: .relational, operator: .init("<")),
         .init(for: .greaterThan, associativity: .infix, precedence: .relational, operator: .init(">")),
@@ -296,13 +311,14 @@ public struct Keyword {
         .init(for: .lessThanOrEquals, associativity: .infix, precedence: .relational, operator: .init("<=")),
         .init(for: .equals, associativity: .infix, precedence: .equality, operator: .init("==")),
         .init(for: .notEquals, associativity: .infix, precedence: .equality, operator: .init("!=")),
+        
+        // Boolean logic
         .init(for: .and, associativity: .infix, precedence: .and, operator: .init("&&")),
         .init(for: .or, associativity: .infix, precedence: .or, operator: .init("||")),
         .init(for: .xor, associativity: .infix, precedence: .xor, operator: .init("^^")),
         .init(for: .not, associativity: .prefix, operator: .init("!", padding: .none)),
-        .init(for: .define, associativity: .infix, precedence: .assignment, operator: .init(":=", padding: .bothSides)),
-        .init(for: .def, associativity: .prefix, precedence: .assignment),
-        .init(for: .del, associativity: .prefix),
+        
+        // List
         .init(for: .get, associativity: .infix, precedence: .subscript, operator: .init("::", padding: .none)), // Preserve arguments?
         .init(for: .size, associativity: .prefix),
         .init(for: .shuffle, associativity: .prefix),
@@ -313,37 +329,46 @@ public struct Keyword {
         .init(for: .append, associativity: .infix, precedence: .concat, operator: .init("++")),
         .init(for: .sort, associativity: .infix, operator: .init(">?")),
         .init(for: .removeAtIdx, associativity: .infix),
+        
+        // Developer utility
         .init(for: .pipe, associativity: .infix, operator: .init("->")),
         .init(for: .replace, associativity: .infix, operator: .init("<<")),
         .init(for: .repeat, associativity: .infix, precedence: .repeat, operator: .init("...", padding: .none)),
         .init(for: .copy, associativity: .infix, precedence: .repeat),
         .init(for: .complexity, associativity: .prefix),
-        .init(for: .round, associativity: .prefix),
-        .init(for: .int, associativity: .prefix),
         .init(for: .eval, associativity: .prefix),
         .init(for: .print, associativity: .prefix, precedence: .prefixCommand),
         .init(for: .println, associativity: .prefix, precedence: .prefixCommand),
         .init(for: .compile, associativity: .prefix),
         .init(for: .delay, associativity: .prefix),
         .init(for: .run, associativity: .prefix, precedence: .prefixCommand),
-        .init(for: .try, associativity: .prefix, precedence: .prefixCommand),
-        .init(for: .throw, associativity: .prefix, precedence: .prefixCommand),
+        
+        // Transfer, flow control, and error handling
         .init(for: .return, associativity: .prefix, precedence: .prefixCommand),
         .init(for: .for, associativity: .prefix),
         .init(for: .if, associativity: .infix, precedence: .conditional, operator: .init("?")),
         .init(for: .assert, associativity: .prefix, precedence: .prefixCommand),
-        .init(for: .npr, associativity: .infix),
-        .init(for: .ncr, associativity: .infix),
-        .init(for: .tuple, associativity: .infix, precedence: .tuple, operator: .init(":")),
-        .init(for: .concat, associativity: .infix, precedence: .concat, operator: .init("&")),
+        .init(for: .try, associativity: .prefix, precedence: .prefixCommand),
+        .init(for: .throw, associativity: .prefix, precedence: .prefixCommand),
+        
+        
+        // Calculus
         .init(for: .derivative, associativity: .infix, precedence: .derivative, operator: .init("'", padding: .none)),
+        .init(for: .gradient, associativity: .infix, precedence: .derivative, operator: .init("∇")),
+        
+        // Type casting
         .init(for: .as, associativity: .infix, precedence: .coersion, operator: .init("!!")),
         .init(for: .is, associativity: .infix, precedence: .coersion, operator: .init("??")),
-        .init(for: .gradient, associativity: .infix, precedence: .derivative, operator: .init("∇")),
+        
+        // Matrix & vector
         .init(for: .determinant, associativity: .prefix),
         .init(for: .dotProduct, associativity: .infix, precedence: .scaling, operator: .init("•")),
         .init(for: .crossProduct, associativity: .infix, precedence: .scaling, operator: .init("×")),
         .init(for: .matrixMultiplication, associativity: .infix, precedence: .scaling, operator: .init("**")),
-        .init(for: .transpose, associativity: .prefix, operator: .init("¡", padding: .none))
+        .init(for: .transpose, associativity: .prefix, operator: .init("¡", padding: .none)),
+        
+        // Others
+        .init(for: .tuple, associativity: .infix, precedence: .tuple, operator: .init(":")),
+        .init(for: .concat, associativity: .infix, precedence: .concat, operator: .init("&"))
     ]
 }

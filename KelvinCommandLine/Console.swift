@@ -13,6 +13,8 @@ public class Console: IOProtocol {
     public var colored: Bool
     public var verbose: Bool
     
+    private let tab = "      "
+    
     init(colored: Bool = false, verbose: Bool = false) {
         self.colored = colored
         self.verbose = verbose
@@ -34,11 +36,11 @@ public class Console: IOProtocol {
             return
         }
         if let line = l.line {
-            let msg = "      # \(line)"
+            let msg = "\(tab)# \(line)"
             Swift.print(colored ? msg.white : msg)
         }
         let output = "\(colored ? l.output.ansiColored : l.output.stringified)"
-        Swift.print("      → \(colored ? l.input.ansiColored : l.input.stringified)\n      = \(output)\n")
+        Swift.print("\(tab)→ \(colored ? l.input.ansiColored : l.input.stringified)\n\(tab)= \(output)\n")
     }
     
     public func error(_ e: String) {
@@ -76,10 +78,57 @@ public class Console: IOProtocol {
         
         Swift.print("Kelvin Algebra System. Copyright (c) 2019, Jiachen Ren.")
         
+        var openBrackets = [Compiler.Bracket: Int]()
+        var buff: String? = nil
+        
+        func resetCounters() {
+            openBrackets = [
+                .curly: 0,
+                .square: 0,
+                .round: 0
+            ]
+            buff = nil
+        }
+        
+        resetCounters()
+        
         while true {
             do {
-                Swift.print("      ← ", terminator: "")
-                let input = Swift.readLine() ?? ""
+                let open = openBrackets.reduce(0) {$0 + $1.value}
+                if open == 0 {
+                    Swift.print("\(tab)← ", terminator: "")
+                } else {
+                    Swift.print("\(tab)  ", terminator: "")
+                }
+                
+                var input = Swift.readLine()?.trimmed ?? ""
+                
+                let curOpenBrackets = Compiler.countOpenBrackets(input)
+                openBrackets[.square]! += curOpenBrackets[.square]!
+                openBrackets[.round]! += curOpenBrackets[.round]!
+                openBrackets[.curly]! += curOpenBrackets[.curly]!
+                
+                if openBrackets.allSatisfy({$0.value == 0}) {
+                    
+                    // All brackets have been closed at this point.
+                    if let b = buff {
+                        input = b + input
+                        buff = nil
+                    }
+                } else if openBrackets.allSatisfy({$0.value >= 0}) {
+                    if buff == nil {
+                        buff = ""
+                    }
+                    buff?.append(input)
+                    
+                    // Temporary fix
+                    if input == "}" {
+                        buff?.append(";")
+                    }
+                    continue
+                } else {
+                    let _ = try Compiler.compile(input)
+                }
                 
                 // Compile and execute the input statement
                 clear()
@@ -88,6 +137,7 @@ public class Console: IOProtocol {
                 flush()
                 log(Program.Log(line: nil, input: parent, output: result))
             } catch let e as KelvinError {
+                resetCounters()
                 error(e.localizedDescription)
             }
         }

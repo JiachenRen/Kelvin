@@ -13,7 +13,7 @@ import Foundation
  */
 public class Compiler {
     
-    private enum Bracket: String {
+    public enum Bracket: String {
         case curly = "{}"
         case square = "[]"
         case round = "()"
@@ -192,7 +192,7 @@ public class Compiler {
      Counts the number of open brackets (round, curly, and square) in the line.
      - Returns: A dictionary containing the number of open brackets for each type.
      */
-    private static func countOpenBrackets(_ line: String) -> [Bracket: Int] {
+    public static func countOpenBrackets(_ line: String) -> [Bracket: Int] {
         var counts = [Int](repeating: 0, count: 3)
         for c in line {
             switch c {
