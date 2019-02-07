@@ -163,7 +163,8 @@ public class Compiler {
                     line = b + line
                     buff = nil
                 }
-            } else {
+            } else if openBrackets.allSatisfy({$0.value >= 0}) {
+                
                 if buff == nil {
                     buff = ""
                 }
@@ -174,6 +175,14 @@ public class Compiler {
                     buff?.append(";")
                 }
                 continue
+            } else {
+                
+                // Brackets mismatch, deliberately bail out
+                do {
+                    let _ = try Compiler.compile(line)
+                } catch let e as CompilerError {
+                    throw CompilerError.on(line: i + 1, e)
+                }
             }
 
             do {
@@ -182,6 +191,14 @@ public class Compiler {
                 statements.append(statement)
             } catch let e as CompilerError {
                 throw CompilerError.on(line: i + 1, e)
+            }
+        }
+        
+        for (key, value) in openBrackets {
+            if value != 0 {
+                throw CompilerError.on(
+                    line: lines.count,
+                    CompilerError.syntax(errMsg: "\(key.rawValue) mismatch"))
             }
         }
 

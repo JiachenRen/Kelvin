@@ -39,8 +39,9 @@ public class Console: IOProtocol {
             let msg = "\(tab)# \(line)"
             Swift.print(colored ? msg.white : msg)
         }
-        let output = "\(colored ? l.output.ansiColored : l.output.stringified)"
-        Swift.print("\(tab)→ \(colored ? l.input.ansiColored : l.input.stringified)\n\(tab)= \(output)\n")
+        let output = "\(format(l.output))"
+        let input = "\(format(l.input))"
+        Swift.print("\(tab)→ \(input)\n\(tab)= \(output)\n")
     }
     
     public func error(_ e: String) {

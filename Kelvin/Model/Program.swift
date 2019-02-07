@@ -74,7 +74,7 @@ public struct Program {
 
         Program.io?.log("starting...")
         Program.io?.log("timestamp: \(startTime)")
-        Program.io?.log("begin program execution log:\n")
+        Program.io?.log("begin program execution log:")
     
         try statements.forEach {
             
@@ -90,7 +90,7 @@ public struct Program {
             }
         }
 
-        Program.io?.log("end program execution log.\n")
+        Program.io?.log("end program execution log.")
         Program.io?.log("program terminated in \(currentTime - startTime) seconds.")
 
         // Clear all temporary variables, functions, and keyword definitions.
