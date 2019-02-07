@@ -111,7 +111,6 @@
 		1F570B5B21FF73AF0006E342 /* String+Operations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F570B5921FF737D0006E342 /* String+Operations.swift */; };
 		1F645FC021FAA1260096AD1C /* Vector in Resources */ = {isa = PBXBuildFile; fileRef = 1F645FBF21FAA1260096AD1C /* Vector */; };
 		1F6D09FC220B98AA00807377 /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6D09FB220B98AA00807377 /* ConsoleViewController.swift */; };
-		1F6D09FE220B9A2200807377 /* EditorSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6D09FD220B9A2200807377 /* EditorSplitViewController.swift */; };
 		1F8DF72C22050110006351B0 /* List in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF72B22050110006351B0 /* List */; };
 		1F8DF73022050B5B006351B0 /* IOProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF72F22050B5B006351B0 /* IOProtocol.swift */; };
 		1F8DF73122050B97006351B0 /* IOProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF72F22050B5B006351B0 /* IOProtocol.swift */; };
@@ -209,7 +208,6 @@
 		1FE1697D21F380CA0006712C /* BinaryNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697C21F380CA0006712C /* BinaryNode.swift */; };
 		1FE1697E21F381730006712C /* BinaryNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697C21F380CA0006712C /* BinaryNode.swift */; };
 		1FFD8CA3218F50850004ECEB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD8CA2218F50850004ECEB /* AppDelegate.swift */; };
-		1FFD8CA5218F50850004ECEB /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD8CA4218F50850004ECEB /* EditorViewController.swift */; };
 		1FFD8CA8218F50850004ECEB /* Kelvin.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD8CA6218F50850004ECEB /* Kelvin.xcdatamodeld */; };
 		1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FFD8CA9218F50870004ECEB /* Assets.xcassets */; };
 		1FFD8CAD218F50870004ECEB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1FFD8CAB218F50870004ECEB /* Main.storyboard */; };
@@ -309,7 +307,6 @@
 		1F570B5921FF737D0006E342 /* String+Operations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Operations.swift"; sourceTree = "<group>"; };
 		1F645FBF21FAA1260096AD1C /* Vector */ = {isa = PBXFileReference; lastKnownFileType = text; path = Vector; sourceTree = "<group>"; };
 		1F6D09FB220B98AA00807377 /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
-		1F6D09FD220B9A2200807377 /* EditorSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSplitViewController.swift; sourceTree = "<group>"; };
 		1F8DF72B22050110006351B0 /* List */ = {isa = PBXFileReference; lastKnownFileType = text; path = List; sourceTree = "<group>"; };
 		1F8DF72F22050B5B006351B0 /* IOProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOProtocol.swift; sourceTree = "<group>"; };
 		1F8DF73322050CD3006351B0 /* Console.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Console.swift; sourceTree = "<group>"; };
@@ -341,7 +338,6 @@
 		1FE1697C21F380CA0006712C /* BinaryNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryNode.swift; sourceTree = "<group>"; };
 		1FFD8C9F218F50850004ECEB /* Kelvin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kelvin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FFD8CA2218F50850004ECEB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		1FFD8CA4218F50850004ECEB /* EditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewController.swift; sourceTree = "<group>"; };
 		1FFD8CA7218F50850004ECEB /* Kelvin.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Kelvin.xcdatamodel; sourceTree = "<group>"; };
 		1FFD8CA9218F50870004ECEB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1FFD8CAC218F50870004ECEB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -648,10 +644,8 @@
 		1FFD8CD2218F51850004ECEB /* Interface */ = {
 			isa = PBXGroup;
 			children = (
-				1FFD8CA4218F50850004ECEB /* EditorViewController.swift */,
 				1F6D09FB220B98AA00807377 /* ConsoleViewController.swift */,
 				1FFD8CAB218F50870004ECEB /* Main.storyboard */,
-				1F6D09FD220B9A2200807377 /* EditorSplitViewController.swift */,
 			);
 			path = Interface;
 			sourceTree = "<group>";
@@ -923,7 +917,6 @@
 				1F0936F821F5189500E707BD /* Bool+Value.swift in Sources */,
 				1F0A90E221F8C32B00432B17 /* String+Colors.swift in Sources */,
 				1F3974BF21E3B741006D6DC2 /* LeafNode.swift in Sources */,
-				1F6D09FE220B9A2200807377 /* EditorSplitViewController.swift in Sources */,
 				1F8DF7812207EE9A006351B0 /* KVoid.swift in Sources */,
 				1FE1697621F2D44A0006712C /* Tuple.swift in Sources */,
 				1FE1697D21F380CA0006712C /* BinaryNode.swift in Sources */,
@@ -965,7 +958,6 @@
 				1F0CF2C721EBA8C800E40086 /* Keyword.swift in Sources */,
 				1F09371D21F684D500E707BD /* Scope.swift in Sources */,
 				1F8DF73022050B5B006351B0 /* IOProtocol.swift in Sources */,
-				1FFD8CA5218F50850004ECEB /* EditorViewController.swift in Sources */,
 				1F0936FA21F518BB00E707BD /* NSNumber+Value.swift in Sources */,
 				1F0936D721F4E80A00E707BD /* List & Tuple.swift in Sources */,
 				1F0A90ED21FA27E700432B17 /* Vector & Matrix.swift in Sources */,

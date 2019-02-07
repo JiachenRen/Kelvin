@@ -127,21 +127,21 @@ public struct Keyword {
         encodings[keyword.encoding] = keyword
         glossary[keyword.name] = keyword
         
-        disambiguated = disambiguate()
+        ambiguousOperators = findAmbiguousOperators()
     }
     
     /**
-     Some operations have ambiguous definitions. i.e., they use the same
+     Some operators have ambiguous definitions. i.e., they use the same
      operator, but have different associativity.
      e.g. '!', when used as a prefix, means .not while the same operator used
      as a postfix, say in 'a!', it means factorial.
      This function finds all ambiguous keyword operators.
      */
-    public static var disambiguated: [String: [Keyword]] = {
-        return disambiguate()
+    public static var ambiguousOperators: [String: [Keyword]] = {
+        return findAmbiguousOperators()
     }()
     
-    private static func disambiguate() -> [String: [Keyword]] {
+    private static func findAmbiguousOperators() -> [String: [Keyword]] {
         var dict = [String: [Keyword]]()
         var d = [String: [Associativity: Keyword]]()
         for keyword in encodings.values {

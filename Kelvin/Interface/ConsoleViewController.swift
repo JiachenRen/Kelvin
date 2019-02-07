@@ -8,35 +8,51 @@
 
 import Cocoa
 
-class ConsoleViewController: NSViewController, NSTextViewDelegate, NSSplitViewDelegate {
+class ConsoleViewController: NSViewController, NSTextViewDelegate {
 
+    @IBOutlet var editorTextView: NSTextView!
     @IBOutlet var consoleTextView: NSTextView!
     @IBOutlet var debuggerTextView: NSTextView!
-    @IBOutlet weak var splitView: NSSplitView!
     
     weak var delegate: ConsoleDelegate?
+    var consoleOutput = "" {
+        didSet {
+            DispatchQueue.main.async {
+                self.consoleTextView.string = self.consoleOutput
+            }
+        }
+    }
+    var debuggerOutput = "" {
+        didSet {
+            DispatchQueue.main.async {
+                self.debuggerTextView.string = self.debuggerOutput
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        consoleTextView.delegate = self
-        splitView.delegate = self
+        editorTextView.delegate = self
+        editorTextView.enabledTextCheckingTypes = 0
         Program.io = self
     }
     
     var time: TimeInterval {
         return Date().timeIntervalSince1970
     }
-
     
-    func compileAndRun(_ sourceCode: String) {
+    let programExecQueue = DispatchQueue(label: "com.jiachenren.Kelvin")
+    var workItem: DispatchWorkItem?
+    
+    func compileAndRun(_ sourceCode: String, _ workItem: DispatchWorkItem!) {
         clear()
         do {
             log("compiling...")
             let t = time
-            let program = try Compiler.compile(document: sourceCode)
+            let program = try Compiler.compile(document: sourceCode, workItem: workItem)
             log("compilation successful in \(time - t) seconds.")
-            try program.run()
+            try program.run(workItem: workItem)
         } catch let e as KelvinError {
             log(e.localizedDescription)
         } catch let e {
@@ -44,44 +60,18 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate, NSSplitViewDe
         }
     }
     
+    func textDidChange(_ notification: Notification) {
+        workItem?.cancel()
+        let sourceCode = self.editorTextView.string
+        workItem = DispatchWorkItem {[unowned self] in
+            self.compileAndRun(sourceCode, self.workItem)
+        }
+        programExecQueue.asyncAfter(deadline: .now() + 0.1, execute: workItem!)
+    }
+    
 }
 
 extension ConsoleViewController: IOProtocol {
-    
-    private var consoleOutput: String {
-        get {
-            var content: String = ""
-            let workItem = DispatchWorkItem {
-                content = self.consoleTextView.string
-            }
-            DispatchQueue.main.async(execute: workItem)
-            workItem.wait()
-            return content
-        }
-        set {
-            DispatchQueue.main.async {
-                self.consoleTextView.string = newValue
-            }
-        }
-    }
-    
-    // Inefficient code
-    private var debuggerOutput: String {
-        get {
-            var content: String = ""
-            let workItem = DispatchWorkItem {
-                content = self.debuggerTextView.string
-            }
-            DispatchQueue.main.async(execute: workItem)
-            workItem.wait()
-            return content
-        }
-        set {
-            DispatchQueue.main.async {
-                self.debuggerTextView.string = newValue
-            }
-        }
-    }
     
     private func format(_ n: Node) -> String {
         if let ks = n as? KString {

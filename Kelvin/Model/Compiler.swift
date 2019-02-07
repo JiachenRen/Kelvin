@@ -65,6 +65,8 @@ public class Compiler {
         "\\\"": "\"",
         "\\\\": "\\"
     ]
+    
+    private static var compiledExpressions = [String: Node]()
 
     /**
      Compiles a single line expression.
@@ -74,7 +76,12 @@ public class Compiler {
      */
     public static func compile(_ expr: String) throws -> Node {
         var expr = expr
-
+        
+        let preserved = expr
+        if let compiled = compiledExpressions[expr] {
+            return compiled
+        }
+        
         // Encode strings
         var dict = Dictionary<String, Node>()
         encodeStrings(&expr, dict: &dict)
@@ -109,7 +116,9 @@ public class Compiler {
         let parent = try resolve(expr, &dict, binOps)
 
         // Restore encodings to their original form.
-        return try decode(parent)
+        let compiled =  try decode(parent)
+        compiledExpressions[preserved] = compiled
+        return compiled
     }
 
     /**
@@ -118,7 +127,7 @@ public class Compiler {
      - Parameter document: A string containing multiple lines of code
      - Returns: A program.
      */
-    public static func compile(document: String) throws -> Program {
+    public static func compile(document: String, workItem: DispatchWorkItem? = nil) throws -> Program {
         let lines = document.split(separator: "\n", omittingEmptySubsequences: false)
                 .map {
                     String($0)
@@ -133,6 +142,9 @@ public class Compiler {
         ]
         
         for (i, var line) in lines.enumerated() {
+            if let item = workItem, item.isCancelled {
+                throw CompilerError.cancelled
+            }
             
             // Remove trailing and padding white spaces
             line = line.trimmed
@@ -322,7 +334,7 @@ public class Compiler {
             // If there exists multiple definitions of the same operator,
             // use the encoding for the most prioritized definition
             // in terms of associative property.
-            if let disambiguated = Keyword.disambiguated[o] {
+            if let disambiguated = Keyword.ambiguousOperators[o] {
                 c = disambiguated.sorted {
                     $0.precedence > $1.precedence
                 }.first!.encoding
@@ -881,7 +893,7 @@ public class Compiler {
         }
         
         if let o = keyword.operator?.name  {
-            if let arr = Keyword.disambiguated[o] {
+            if let arr = Keyword.ambiguousOperators[o] {
                 for s in arr {
                     if let i = try? fun(s) {
                         return (i, s.encoding)

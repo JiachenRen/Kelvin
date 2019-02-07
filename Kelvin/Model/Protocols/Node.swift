@@ -84,7 +84,9 @@ extension Node {
             // If the variable is an anonymous closure argument,
             // replace it with the supplied argument.
             if let i = Int(name) {
-                return args[i]
+                if i < args.count && i >= 0 {
+                    return args[i]
+                }
             }
             
             return v

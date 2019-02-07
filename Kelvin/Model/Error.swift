@@ -18,6 +18,7 @@ indirect public enum CompilerError: KelvinError {
     case illegalArgument(errMsg: String)
     case syntax(errMsg: String)
     case on(line: Int, _ err: CompilerError)
+    case cancelled
     
     public var localizedDescription: String {
         switch self {
@@ -27,6 +28,8 @@ indirect public enum CompilerError: KelvinError {
             return "syntax: \(msg)"
         case .on(line: let i, let e):
             return "error on line \(i) - \(e.localizedDescription)"
+        case .cancelled:
+            return "compilation has been cancelled"
         }
     }
 }
@@ -39,6 +42,7 @@ public enum ExecutionError: KelvinError {
     
     case general(errMsg: String)
     case on(line: Int, err: KelvinError)
+    case cancelled
     
     static func invalidDT(_ invalid: String) -> ExecutionError {
         return ExecutionError.general(errMsg: "invalid data type '\(invalid)'")
@@ -75,6 +79,8 @@ public enum ExecutionError: KelvinError {
                 }
             }
             return "error on line \(i) - \(msg)"
+        case .cancelled:
+            return "program execution has been cancelled"
         }
     }
 }

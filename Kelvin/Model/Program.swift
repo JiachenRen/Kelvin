@@ -57,7 +57,7 @@ public struct Program {
 
     /// Execute the program and produce an output.
     /// - Returns: A tuple consisting of program execution log and cumulative output.
-    public func run() throws {
+    public func run(workItem: DispatchWorkItem? = nil) throws {
 
         /// Record start time
         let startTime = currentTime
@@ -77,6 +77,9 @@ public struct Program {
         Program.io?.log("begin program execution log:")
     
         try statements.forEach {
+            if let item = workItem, item.isCancelled {
+                throw ExecutionError.cancelled
+            }
             
             do {
                 // Execute the statement and add it to logs
