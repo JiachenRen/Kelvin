@@ -111,6 +111,7 @@
 		1F570B5B21FF73AF0006E342 /* String+Operations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F570B5921FF737D0006E342 /* String+Operations.swift */; };
 		1F645FC021FAA1260096AD1C /* Vector in Resources */ = {isa = PBXBuildFile; fileRef = 1F645FBF21FAA1260096AD1C /* Vector */; };
 		1F6D09FC220B98AA00807377 /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6D09FB220B98AA00807377 /* ConsoleViewController.swift */; };
+		1F6D0A04220D18CE00807377 /* Highlightr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F6D0A03220D18CE00807377 /* Highlightr.framework */; };
 		1F8DF72C22050110006351B0 /* List in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF72B22050110006351B0 /* List */; };
 		1F8DF73022050B5B006351B0 /* IOProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF72F22050B5B006351B0 /* IOProtocol.swift */; };
 		1F8DF73122050B97006351B0 /* IOProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF72F22050B5B006351B0 /* IOProtocol.swift */; };
@@ -307,6 +308,7 @@
 		1F570B5921FF737D0006E342 /* String+Operations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Operations.swift"; sourceTree = "<group>"; };
 		1F645FBF21FAA1260096AD1C /* Vector */ = {isa = PBXFileReference; lastKnownFileType = text; path = Vector; sourceTree = "<group>"; };
 		1F6D09FB220B98AA00807377 /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
+		1F6D0A03220D18CE00807377 /* Highlightr.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Highlightr.framework; path = Carthage/Build/Mac/Highlightr.framework; sourceTree = "<group>"; };
 		1F8DF72B22050110006351B0 /* List */ = {isa = PBXFileReference; lastKnownFileType = text; path = List; sourceTree = "<group>"; };
 		1F8DF72F22050B5B006351B0 /* IOProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOProtocol.swift; sourceTree = "<group>"; };
 		1F8DF73322050CD3006351B0 /* Console.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Console.swift; sourceTree = "<group>"; };
@@ -364,6 +366,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F6D0A04220D18CE00807377 /* Highlightr.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -557,6 +560,14 @@
 			path = Kelvin;
 			sourceTree = "<group>";
 		};
+		1F6D0A02220D18CE00807377 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1F6D0A03220D18CE00807377 /* Highlightr.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		1F8DF76E220759FF006351B0 /* Misc */ = {
 			isa = PBXGroup;
 			children = (
@@ -608,6 +619,7 @@
 				1FFD8CC2218F50870004ECEB /* KelvinUITests */,
 				1F2E82BC219757FC005C3353 /* KelvinCommandLine */,
 				1FFD8CA0218F50850004ECEB /* Products */,
+				1F6D0A02220D18CE00807377 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -697,6 +709,7 @@
 				1FFD8C9B218F50850004ECEB /* Sources */,
 				1FFD8C9C218F50850004ECEB /* Frameworks */,
 				1FFD8C9D218F50850004ECEB /* Resources */,
+				1F6D0A05220D196600807377 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -840,6 +853,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1F6D0A05220D196600807377 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/Mac/Highlightr.framework",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n/usr/local/bin/carthage copy-frameworks\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1F2E82B7219757FC005C3353 /* Sources */ = {
@@ -1222,6 +1256,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/KelvinMacOS/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1241,6 +1279,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/KelvinMacOS/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
