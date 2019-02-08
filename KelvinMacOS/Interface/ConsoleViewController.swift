@@ -18,7 +18,8 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
     var consoleOutput = "" {
         didSet {
             DispatchQueue.main.async {
-                self.consoleTextView.string = self.consoleOutput
+                let attr = NSAttributedString(string: self.consoleOutput)
+                self.consoleTextView.textStorage?.setAttributedString(attr)
             }
         }
     }

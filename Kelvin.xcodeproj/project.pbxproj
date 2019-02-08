@@ -537,6 +537,26 @@
 			path = Algorithms;
 			sourceTree = "<group>";
 		};
+		1F6D0A01220D0FF300807377 /* Kelvin */ = {
+			isa = PBXGroup;
+			children = (
+				1F0936BF21F3C08100E707BD /* Core */,
+				1F0936F221F516E500E707BD /* DataTypes */,
+				1F0A90E021F8C30F00432B17 /* Logistics */,
+				1F0936EE21F5132200E707BD /* Protocols */,
+				1FFD8CD4218F52430004ECEB /* Compiler.swift */,
+				1F3974BB21E3970F006D6DC2 /* Error.swift */,
+				1F0A90E921FA0EF600432B17 /* DataType.swift */,
+				1F3974C721E67627006D6DC2 /* Mode.swift */,
+				1F2E82AB21966FC5005C3353 /* Operation.swift */,
+				1F09371C21F684D500E707BD /* Scope.swift */,
+				1F8DF77C2207E54A006351B0 /* Control & Transfer.swift */,
+				1F0CF2D421EEB69300E40086 /* Program.swift */,
+				1F0CF2C621EBA8C800E40086 /* Keyword.swift */,
+			);
+			path = Kelvin;
+			sourceTree = "<group>";
+		};
 		1F8DF76E220759FF006351B0 /* Misc */ = {
 			isa = PBXGroup;
 			children = (
@@ -582,7 +602,8 @@
 			children = (
 				1F8DF76E220759FF006351B0 /* Misc */,
 				1F0CF2CF21EEA6D600E40086 /* Examples */,
-				1FFD8CA1218F50850004ECEB /* Kelvin */,
+				1F6D0A01220D0FF300807377 /* Kelvin */,
+				1FFD8CA1218F50850004ECEB /* KelvinMacOS */,
 				1FFD8CB7218F50870004ECEB /* KelvinTests */,
 				1FFD8CC2218F50870004ECEB /* KelvinUITests */,
 				1F2E82BC219757FC005C3353 /* KelvinCommandLine */,
@@ -601,16 +622,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		1FFD8CA1218F50850004ECEB /* Kelvin */ = {
+		1FFD8CA1218F50850004ECEB /* KelvinMacOS */ = {
 			isa = PBXGroup;
 			children = (
 				1FFD8CA2218F50850004ECEB /* AppDelegate.swift */,
 				1FFD8CD2218F51850004ECEB /* Interface */,
-				1FFD8CD3218F522E0004ECEB /* Model */,
 				1FFD8CD1218F51330004ECEB /* Resources */,
 				1FFD8CAF218F50870004ECEB /* Kelvin.entitlements */,
 			);
-			path = Kelvin;
+			path = KelvinMacOS;
 			sourceTree = "<group>";
 		};
 		1FFD8CB7218F50870004ECEB /* KelvinTests */ = {
@@ -648,26 +668,6 @@
 				1FFD8CAB218F50870004ECEB /* Main.storyboard */,
 			);
 			path = Interface;
-			sourceTree = "<group>";
-		};
-		1FFD8CD3218F522E0004ECEB /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				1F0936BF21F3C08100E707BD /* Core */,
-				1F0936F221F516E500E707BD /* DataTypes */,
-				1F0A90E021F8C30F00432B17 /* Logistics */,
-				1F0936EE21F5132200E707BD /* Protocols */,
-				1FFD8CD4218F52430004ECEB /* Compiler.swift */,
-				1F3974BB21E3970F006D6DC2 /* Error.swift */,
-				1F0A90E921FA0EF600432B17 /* DataType.swift */,
-				1F3974C721E67627006D6DC2 /* Mode.swift */,
-				1F2E82AB21966FC5005C3353 /* Operation.swift */,
-				1F09371C21F684D500E707BD /* Scope.swift */,
-				1F8DF77C2207E54A006351B0 /* Control & Transfer.swift */,
-				1F0CF2D421EEB69300E40086 /* Program.swift */,
-				1F0CF2C621EBA8C800E40086 /* Keyword.swift */,
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1218,11 +1218,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Kelvin/Kelvin.entitlements;
+				CODE_SIGN_ENTITLEMENTS = KelvinMacOS/Kelvin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;
-				INFOPLIST_FILE = "$(SRCROOT)/Kelvin/Resources/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/KelvinMacOS/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1237,11 +1237,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Kelvin/Kelvin.entitlements;
+				CODE_SIGN_ENTITLEMENTS = KelvinMacOS/Kelvin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;
-				INFOPLIST_FILE = "$(SRCROOT)/Kelvin/Resources/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/KelvinMacOS/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
