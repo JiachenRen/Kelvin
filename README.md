@@ -3,6 +3,7 @@ Kelvin CAS
 [![Build Status](https://travis-ci.com/JiachenRen/kelvin-cas.svg?branch=master)](https://travis-ci.com/JiachenRen/kelvin-cas)
 ![Swift 4.2](https://img.shields.io/badge/swift-4.2-orange.svg)
 [![License: MIT](https://img.shields.io/apm/l/vim-mode.svg?colorB=blue&style=flat)](/LICENSE)
+![Carthage - Compatible](https://img.shields.io/badge/carthage-✓-orange.svg?style=flat)
 
 Kelvin is a powerful computer algebra system built with _Swift 4_. It is similar to its close relative, _Java Algebra System_, only a gazilion times faster & cleaner. Find [more](https://github.com/JiachenRen/java-algebra-system) about JAS here.
 
