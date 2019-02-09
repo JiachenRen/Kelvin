@@ -104,24 +104,26 @@ $ echo "print \"Hello World\"" > prg
 
 # Compile and run prg, which prints "Hello World"
 $ kelvin -f /tmp/prg
+Hello World
 
 # Alternatively, you can run the program with verbose on
 $ kelvin -f -v /tmp/prg
 
 # Program output under verbose mode
-→ resolving absolute URL...
+→ trying relative URL to current working directory...
 → loading contents of prg
 → compiling...
-→ compilation successful in 0.014269828796386719 seconds.
+→ compilation successful in 0.03710794448852539 seconds.
 → starting...
-→ timestamp: 1549149227.4572248
+→ timestamp: 1549690611.090765
 → begin program execution log:
 
-      → print "Hello World"
-      = "Hello World"
+    # 1
+    → println "Hello World"
+    = "Hello World"
 
 → end program execution log.
-→ program output:
+→ program terminated in 0.0023789405822753906 seconds.
 Hello World
 ```
 ## The Kelvin Language
