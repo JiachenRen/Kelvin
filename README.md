@@ -104,7 +104,10 @@ The Kelvin programming language is developed by a high school senior. Yes, reall
 
 ### Examples
 - Binary search algorithm written in `Kelvin`:
-```swift
+```ruby
+# The conventional binary search algorithm written in kelvin language
+# - arr: a sorted array of values (kelvin only has value types, but the inout modifier '&' makes up for it.)
+# - search: the value to look up in arr. (kelvin does not have type safety, like js.)
 def bin_search(arr, search) {
     c := 0;
     first := 0;
@@ -113,22 +116,17 @@ def bin_search(arr, search) {
     middle := int((first + last) / 2);
 
     while (first <= last) {
-        b := false;
 
         if (arr[middle] < search) {
             first := middle + 1;
             b := true;
+        } else {
+            middle := int((first + last) / 2);
         }
 
         if (arr[middle] == search) {
             return middle;
-        }
-
-        if (!b) {
-            last := middle - 1;
-        }
-
-        middle := int((first + last) / 2);
+        } 
     }
 
     return "not found";
@@ -136,12 +134,16 @@ def bin_search(arr, search) {
 
 # Define a list l1
 def l1 = {1, 2, 3, 5, 7, 8, 9, 10}
+
+# 
 println bin_search(l1, 8.5)
 assert bin_search(l1, 9) == 6
 ```
-- For loops, if statements, while loops, etc. in `Kelvin`:
-```swift
-def foo(a, b) {
+- For loops, if statements, and while loops, etc. written in `Kelvin`:
+```ruby
+# A function that demonstrates if statement, while loop, map, and
+# flow control keywords like return, continue, and break in kelvin.
+def whatTheHeckDoesThisDo(a, b) {
     while (a < 100 || b < 100) {
         println "a = " & a;
         a := a + 1;
@@ -165,11 +167,11 @@ def foo(a, b) {
     return {a, b}
 }
 
-def result = foo(1, 3)
+def result = whatTheHeckDoesThisDo(1, 3)
 assert print(result) == {114, 67}
 ```
 
-For more examples (algebraic operations, calulus, stats, loops, conditional statements, etc.), please refer to [Examples](Examples).
+For more examples (algebraic operations, calulus, stats, loops, conditional statements, error handling, closures, list operations, etc.), please refer to [Examples](Examples).
 
 ## Capabilities
 
