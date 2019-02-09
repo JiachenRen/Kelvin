@@ -52,17 +52,43 @@ Type kelvin without an option to enter interactive mode.
 - Type `kelvin` and hit return to enter interactive mode (lines starting with `←` denotes input).
 ```bash
 # Enter interactive mode
+# Note: enter the statements line by line in the terminal. ommit the ← and → symbols
+# to reproduce the result
 $ kelvin
 
-# Define a function f(x) that generates a fibonacci series up to the xth element
-← def f(x) = ((x == 0 || x == 1 || x == 2) ? (1...x) : ((q := {1, 1}; repeat(q := (q ++ q[size q - 2] + q[size q - 1]), x - 2)); q))
-→ def f(x) = x == 2 || x == 1 || x == 0 ? (1...x : q := {1, 1}; (q := (q ++ q::(size q - 2) + q::(size q - 1)))...x - 2; q)
-= {1, 1}
+# Define a function fib(x) that finds the nth element of the fibonacci series
+# In kelvin, this can be abbreviated into a single line: 
+# def fib(n, #((if(n <= 1, #(return n)); return fib(n - 1) + fib(n - 2))))
+# You don't want to do that! (Nobody would understand...)
+← def fib(n) {
+    if (n <= 1) {
+        return n
+    }
+    return fib(n-1) + fib(n-2)
+  }
+→ done
 
-# Generate the first 11 terms of the fibonacci series
-← f(11)
-→ f(11)
-= {1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89}
+# Test to see what the 10th element of the series is
+← println fib(10)
+→ 55
+
+# Define a function listFib(n) that generates a fibonacci series of up to n elements
+# Again, look at this one liner that means the same thing (seriously though, don't do this)
+# def listFib(n, #(return 0...n | #(fib($1 + 1))))
+← def listFib(n) {
+    return map(0...n) {fib($1+1)}
+  }
+→ done
+
+# Print the first 10 elements of the series, and sum them up
+← println listFib(10)
+→ {1, 1, 2, 3, 5, 8, 13, 21, 34, 55}
+
+← s := sum(listFib(10))
+→ done
+
+← println s
+→ 143
 
 # Exit Kelvin
 ← exit()
