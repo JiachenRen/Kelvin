@@ -210,6 +210,8 @@
 		1FE1697E21F381730006712C /* BinaryNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697C21F380CA0006712C /* BinaryNode.swift */; };
 		1FE487F3220E4132005361AC /* ConsoleViewController+IOProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE487F2220E4132005361AC /* ConsoleViewController+IOProtocol.swift */; };
 		1FE487F5220E416F005361AC /* ConsoleViewController+NSOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE487F4220E416F005361AC /* ConsoleViewController+NSOutlineView.swift */; };
+		1FE487FD220E9028005361AC /* ruby_github_theme.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FE487FB220E9027005361AC /* ruby_github_theme.png */; };
+		1FE487FE220E9028005361AC /* ruby_dracula_theme.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FE487FC220E9028005361AC /* ruby_dracula_theme.png */; };
 		1FFD8CA3218F50850004ECEB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD8CA2218F50850004ECEB /* AppDelegate.swift */; };
 		1FFD8CA8218F50850004ECEB /* Kelvin.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD8CA6218F50850004ECEB /* Kelvin.xcdatamodeld */; };
 		1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FFD8CA9218F50870004ECEB /* Assets.xcassets */; };
@@ -334,6 +336,8 @@
 		1FE1697C21F380CA0006712C /* BinaryNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryNode.swift; sourceTree = "<group>"; };
 		1FE487F2220E4132005361AC /* ConsoleViewController+IOProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConsoleViewController+IOProtocol.swift"; sourceTree = "<group>"; };
 		1FE487F4220E416F005361AC /* ConsoleViewController+NSOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConsoleViewController+NSOutlineView.swift"; sourceTree = "<group>"; };
+		1FE487FB220E9027005361AC /* ruby_github_theme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ruby_github_theme.png; sourceTree = "<group>"; };
+		1FE487FC220E9028005361AC /* ruby_dracula_theme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ruby_dracula_theme.png; sourceTree = "<group>"; };
 		1FFD8C9F218F50850004ECEB /* macOS Application.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "macOS Application.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FFD8CA2218F50850004ECEB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1FFD8CA7218F50850004ECEB /* Kelvin.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Kelvin.xcdatamodel; sourceTree = "<group>"; };
@@ -559,6 +563,7 @@
 		1F8DF76E220759FF006351B0 /* Misc */ = {
 			isa = PBXGroup;
 			children = (
+				1FE487FA220E8DC8005361AC /* Screenshots */,
 				1F8DF76F22075A32006351B0 /* LICENSE */,
 				1F8DF77022075A32006351B0 /* README.md */,
 			);
@@ -594,6 +599,15 @@
 				1F8DF7982209381B006351B0 /* Boolean Logic.swift */,
 			);
 			path = Developer;
+			sourceTree = "<group>";
+		};
+		1FE487FA220E8DC8005361AC /* Screenshots */ = {
+			isa = PBXGroup;
+			children = (
+				1FE487FC220E9028005361AC /* ruby_dracula_theme.png */,
+				1FE487FB220E9027005361AC /* ruby_github_theme.png */,
+			);
+			path = Screenshots;
 			sourceTree = "<group>";
 		};
 		1FFD8C96218F50850004ECEB = {
@@ -778,7 +792,9 @@
 				1F09371521F64FC600E707BD /* Randomization in Resources */,
 				1F8DF78D2208CCB0006351B0 /* ForLoop in Resources */,
 				1F09370F21F5800B00E707BD /* String in Resources */,
+				1FE487FE220E9028005361AC /* ruby_dracula_theme.png in Resources */,
 				1F570B5121FBF28C0006E342 /* Matrix in Resources */,
+				1FE487FD220E9028005361AC /* ruby_github_theme.png in Resources */,
 				1F09371B21F67FDD00E707BD /* SystemCheck in Resources */,
 				1F8DF78B2208CC54006351B0 /* Recursion in Resources */,
 				1F8DF7922208D2E5006351B0 /* WhileLoop in Resources */,

@@ -6,6 +6,22 @@ Kelvin CAS
 
 Kelvin is a powerful computer algebra system built with _Swift 4_. It is similar to its close relative, _Java Algebra System_, only a gazilion times faster & cleaner. Find [more](https://github.com/JiachenRen/java-algebra-system) about JAS here.
 
+## MacOS User Interface
+
+Finally, the UI is here! Well, it is rather simple, but isn't that a good thing? Using `Highlightr` (which uses [highlight.js](https://highlightjs.org "highlight.js homepage") at its core), the editor supports **185** languages and **89** themes. That's just something extra and useless imo but hey, it looks great!
+
+### Integrated Development Environment
+Well, it is primitive as of now... but it gets the job done! It sort of works like the old [Swift Playground](https://developer.apple.com/swift-playgrounds/ "Apple's Introduction on Swift Playgrounds") - that is, as you edit your code, the editor automatically compiles and runs it for you! Only this time, it is faster (imo of course...). The window on the lower left is the `console`, all program outputs go in there. The window on the lower right is the `debugger`, all execution logs including compilation time, run time, errors, and step by step execution result go in there. 
+
+Below is the Kelvin IDE in default `github` theme, highlighted using `ruby`'s syntax (keep in mind that you can choose from a large poo of candidates).
+
+![Screenshot of IDE with GitHub Theme](/Misc/Screenshots/ruby_github_theme.png "IDE with GitHub theme")
+
+Another one of the **85** themes you can choose from that is my personal favorite, `dracula`
+![Screenshot of IDE with Dracula Theme](/Misc/Screenshots/ruby_dracula_theme.png "IDE with Dracula theme")
+
+Try it out, 'cause it's awesome ~~ why not??
+
 ## Command Line
 ### Setup
 1. Download the binary file `kelvin` from releases (or you can build it yourself with XCode)
