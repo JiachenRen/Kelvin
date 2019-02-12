@@ -18,6 +18,10 @@ Below is the Kelvin IDE in default `github` theme, highlighted using `ruby`'s sy
 
 ![Screenshot of IDE with GitHub Theme](/Misc/Screenshots/ruby_github_theme.png "IDE with GitHub theme")
 
+The following screenshot demonstrates using Kelvin IDE to find the **tangent line/plane** of multivariate functions. (Notice how the whole script is compiled and evaluated in under **0.1 seconds**! Blazing fast, indeed. Even if the execution time lasts longer, there won't be any lagging since the scripts run on a separate thread and are cancelled/started automatically. 
+
+![Finding Tangent with IDE and Kelvin](/Misc/Screenshots/finding_tangent.png "Finding Tangent")
+
 Another one of the **85** themes you can choose from that is my personal favorite, `dracula`
 ![Screenshot of IDE with Dracula Theme](/Misc/Screenshots/ruby_dracula_theme.png "IDE with Dracula theme")
 
