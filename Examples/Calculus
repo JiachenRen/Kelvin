@@ -36,7 +36,7 @@ println f(x, y, z) grad {x, y, z}
 
 # Directional differentiation
 println "\nDirectional differentiation:"
-println dirDif(f(x, y, z), [a, b, c], {x, y, z})
+println dirDif(f(x, y, z), {x, y, z}, [a, b, c])
 
 # Gradient at specific point
 def f(x, y, z) = z ^ 2 + 2y * x + x ^ 3

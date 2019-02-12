@@ -42,6 +42,7 @@ let defaultConfiguration: [Operation.Attribute: [String]] = [
         .implicitDifferentiation,
         .gradient,
         .directionalDifferentiation,
+        .tangent,
         
         // Mutating functions should preserve arguments.
         // Thus x += 1 won't become ... += 1
@@ -54,6 +55,7 @@ let defaultConfiguration: [Operation.Attribute: [String]] = [
     ],
     .forwardCommutative: [
         .div,
-        .sub
+        .sub,
+        .pipe
     ]
 ]

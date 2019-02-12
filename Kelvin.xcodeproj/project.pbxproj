@@ -212,6 +212,7 @@
 		1FE487F5220E416F005361AC /* ConsoleViewController+NSOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE487F4220E416F005361AC /* ConsoleViewController+NSOutlineView.swift */; };
 		1FE487FD220E9028005361AC /* ruby_github_theme.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FE487FB220E9027005361AC /* ruby_github_theme.png */; };
 		1FE487FE220E9028005361AC /* ruby_dracula_theme.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FE487FC220E9028005361AC /* ruby_dracula_theme.png */; };
+		1FE4880022126206005361AC /* finding_tangent.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FE487FF22126206005361AC /* finding_tangent.png */; };
 		1FFD8CA3218F50850004ECEB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD8CA2218F50850004ECEB /* AppDelegate.swift */; };
 		1FFD8CA8218F50850004ECEB /* Kelvin.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD8CA6218F50850004ECEB /* Kelvin.xcdatamodeld */; };
 		1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FFD8CA9218F50870004ECEB /* Assets.xcassets */; };
@@ -338,6 +339,7 @@
 		1FE487F4220E416F005361AC /* ConsoleViewController+NSOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConsoleViewController+NSOutlineView.swift"; sourceTree = "<group>"; };
 		1FE487FB220E9027005361AC /* ruby_github_theme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ruby_github_theme.png; sourceTree = "<group>"; };
 		1FE487FC220E9028005361AC /* ruby_dracula_theme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ruby_dracula_theme.png; sourceTree = "<group>"; };
+		1FE487FF22126206005361AC /* finding_tangent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = finding_tangent.png; sourceTree = "<group>"; };
 		1FFD8C9F218F50850004ECEB /* macOS Application.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "macOS Application.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FFD8CA2218F50850004ECEB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1FFD8CA7218F50850004ECEB /* Kelvin.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Kelvin.xcdatamodel; sourceTree = "<group>"; };
@@ -604,6 +606,7 @@
 		1FE487FA220E8DC8005361AC /* Screenshots */ = {
 			isa = PBXGroup;
 			children = (
+				1FE487FF22126206005361AC /* finding_tangent.png */,
 				1FE487FC220E9028005361AC /* ruby_dracula_theme.png */,
 				1FE487FB220E9027005361AC /* ruby_github_theme.png */,
 			);
@@ -814,6 +817,7 @@
 				1F0936BE21F3A54800E707BD /* Probability in Resources */,
 				1FFD8CAD218F50870004ECEB /* Main.storyboard in Resources */,
 				1F09370B21F57B0200E707BD /* Trigonometry in Resources */,
+				1FE4880022126206005361AC /* finding_tangent.png in Resources */,
 				1F3D31672202853000462F10 /* Factorization in Resources */,
 				1F8DF7AB22095321006351B0 /* Deconstruct in Resources */,
 			);

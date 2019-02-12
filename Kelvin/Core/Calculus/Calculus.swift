@@ -27,7 +27,7 @@ public class Calculus {
             let dnv = try Calculus.derivative(
                 of: $0[0].simplify(),
                 withRespectTo: v,
-                try $0[2].simplify() as! Int)
+                $0[2].simplify() as! Int)
             Scope.releaseRestrictions()
             return dnv
         },
@@ -46,26 +46,34 @@ public class Calculus {
             Scope.releaseRestrictions()
             return r
         },
-        .binary(.gradient, [.func, .list]) {
+        .binary(.gradient, [.any, .list]) {
             let vars = try extractVariables(from: $1 as! List)
             
             Scope.withholdAccess(to: vars)
+            guard let fun = try $0.simplify() as? Function else {
+                let msg = "cannot find gradient of non-functional type \($0.stringified)"
+                throw ExecutionError.general(errMsg: msg)
+            }
             let grad = Calculus.gradient(
-                of: $0 as! Function,
+                of: fun,
                 independentVars: vars)
             Scope.releaseRestrictions()
             return grad
         },
-        .init(.directionalDifferentiation, [.func, .any, .list]) {
-            let vars = try extractVariables(from: $0[2] as! List)
+        .init(.directionalDifferentiation, [.func, .list, .any]) {
+            let vars = try extractVariables(from: $0[1] as! List)
             
-            guard let dir = try $0[1].simplify() as? Vector else {
+            guard let dir = try $0[2].simplify() as? Vector else {
                 throw ExecutionError.general(errMsg: "direction must be a vector")
             }
             
             Scope.withholdAccess(to: vars)
+            guard let fun = try $0[0].simplify() as? Function else {
+                let msg = "cannot directional differentiate non-functional type \($0[0].stringified)"
+                throw ExecutionError.general(errMsg: msg)
+            }
             let grad = try Calculus.directionalDifferentiation(
-                of: $0[0] as! Function,
+                of: fun,
                 direction: dir,
                 independentVars: vars)
             Scope.releaseRestrictions()
@@ -79,6 +87,10 @@ public class Calculus {
             }
             
             Scope.withholdAccess(to: vars)
+            guard let fun = try $0[0].simplify() as? Function else {
+                let msg = "cannot find tangent of non-functional type \($0[0].stringified)"
+                throw ExecutionError.general(errMsg: msg)
+            }
             let tangent = try Calculus.tangent(
                 of: $0[0] as! Function,
                 variables: vars,
