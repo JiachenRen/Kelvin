@@ -1,5 +1,0 @@
-println "Calculating average of 100000 random numbers..."
-println mean(random()...100000)
-
-println "Calculating average of 1000000 1s..."
-println mean(1...100000)

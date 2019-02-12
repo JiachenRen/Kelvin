@@ -20,5 +20,5 @@ println normCdf(-inf, 7, 45, 21)
 println normCdf(-1, 1)
 println normCdf(0)
 
-# One variable statistic
+# One variable statistics
 println oneVar(l1)
