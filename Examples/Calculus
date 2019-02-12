@@ -57,3 +57,19 @@ assert g1 = [13, 8, 108]
 
 def g2 = (f(x, y, z) grad {x, y, z} << {x = a, y = b, z = c})
 assert g2 == [2 * a + 2 * b + 3, 2 + 2 * a, 3 * c ^ 2]
+
+# Finding the tangent line/plane/surface/hyper-blablabla in higher dimensions
+def f(x,y,z) = x ^ 2 + 2 * x * y + z ^ 3
+def p = [1, 2, 3]
+def t = tangent(f(x, y, z), {x, y, z}, p)
+
+print "Equation of tangent plane for function " & f(x, y, z)
+print " at point " & p & " is "
+println t & "\n"
+
+def g(x, y) = x ^ 2 + y ^ 3
+def points = {[1, 2], [2, 3], [4, 9], [a, b]}
+for (point: points) {
+    print "Tangenet line for " & g(x, y) & " at " & point & " is ";
+    println tangent(g(x,y), {x,y}, point)
+}
