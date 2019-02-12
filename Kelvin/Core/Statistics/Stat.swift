@@ -69,14 +69,14 @@ public class Stat {
             let list = $0 as! List
             let variance = Stat.variance(try list.convertToDoubles())
             return List([
-                Tuple("sample", variance.sample),
-                Tuple("population", variance.population)
+                Pair("sample", variance.sample),
+                Pair("population", variance.population)
             ])
         },
         .unary(.stdev, [.list]) {
             let list = $0 as! List
             let stdev = Stat.stdev(try list.convertToDoubles())
-            let es = [Tuple("Sₓ", stdev.sample), Tuple("σₓ", stdev.population)]
+            let es = [Pair("Sₓ", stdev.sample), Pair("σₓ", stdev.population)]
             return List(es)
         },
         
@@ -92,7 +92,7 @@ public class Stat {
         .unary(.fiveNumberSummary, [.list]) {
             let list = try ($0 as! List).convertToDoubles()
             let sum5n = try fiveNSummary(list)
-            let stats: [Tuple] = [
+            let stats: [Pair] = [
                 .init("min", sum5n[0]),
                 .init("q1", sum5n[1]),
                 .init("median", sum5n[2]),
@@ -115,8 +115,8 @@ public class Stat {
             let list = try ($0 as! List).convertToDoubles()
             let outliers = try Stat.outliers(list)
             return List([
-                Tuple("lower end", List(outliers.lowerEnd)),
-                Tuple("upper end", List(outliers.upperEnd))
+                Pair("lower end", List(outliers.lowerEnd)),
+                Pair("upper end", List(outliers.upperEnd))
             ])
         },
         .unary(.oneVar, [.list]) {
@@ -129,7 +129,7 @@ public class Stat {
             let sum5n = try Stat.fiveNSummary(list)
             let ssx = Stat.ssx(list)
             
-            let stats: [Tuple] = [
+            let stats: [Pair] = [
                 .init("x̅", mean),
                 .init("∑x", sum),
                 .init("∑x²", sumSq),

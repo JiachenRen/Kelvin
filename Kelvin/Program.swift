@@ -55,8 +55,7 @@ public struct Program {
         try program.run()
     }
 
-    /// Execute the program and produce an output.
-    /// - Returns: A tuple consisting of program execution log and cumulative output.
+    /// Executes the program; all outputs are redirected to io specified by `Program.io`
     public func run(workItem: DispatchWorkItem? = nil) throws {
 
         /// Record start time

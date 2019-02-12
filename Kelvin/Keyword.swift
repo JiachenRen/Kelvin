@@ -211,28 +211,29 @@ public struct Keyword {
     }
 
     public enum Precedence: Int, Comparable {
-        case prefixCommand  // return, throw, print, println, etc.
-        case pipeline       // ->
-        case conditional    // ?
-        case tuple          // :
-        case assignment     // :=, +=, -=, *=, /=
-        case equation       // =
-        case `repeat`       // ...
-        case or             // ||
-        case and            // &&
-        case xor            // ^^
-        case equality       // ==, !=
-        case relational     // <, >, <=, >=
-        case concat         // &
-        case addition       // +,-
-        case scaling        // *,/
-        case exponent       // ^
-        case coersion       // as
-        case derivative     // '
-        case prefix         // √, !(not)
-        case postfix        // ++, --, !(factorial), °, %
-        case `subscript`    // ::
-        case binding        // binding between closures
+        case prefixCommand = 0  // return, throw, print, println, etc.
+        case pipeline           // ->, ;
+        case conditional        // ?
+        case pair               // :
+        case assignment         // :=, +=, -=, *=, /=
+        case equation           // =
+        case `repeat`           // ...
+        case or                 // ||
+        case and                // &&
+        case xor                // ^^
+        case equality           // ==, !=
+        case relational         // <, >, <=, >=
+        case concat             // &
+        case addition           // +,-
+        case scaling            // *,/
+        case exponent           // ^
+        case coersion           // as
+        case derivative         // '
+        case prefix             // √, !(not)
+        case postfix            // ++, --, !(factorial), °, %
+        case `subscript`        // ::
+        case binding            // binding between closures
+        case node               // leaf nodes should never require parenthesis
 
         public static func <(lhs: Precedence, rhs: Precedence) -> Bool {
             return lhs.rawValue < rhs.rawValue
@@ -333,7 +334,7 @@ public struct Keyword {
         
         // Developer utility
         .init(for: .pipe, associativity: .infix, operator: .init("->")),
-        .init(for: .replace, associativity: .infix, operator: .init("<<")),
+        .init(for: .evaluateAt, associativity: .infix, operator: .init("<<")),
         .init(for: .repeat, associativity: .infix, precedence: .repeat, operator: .init("...", padding: .none)),
         .init(for: .copy, associativity: .infix, precedence: .repeat),
         .init(for: .complexity, associativity: .prefix),
@@ -370,7 +371,7 @@ public struct Keyword {
         .init(for: .transpose, associativity: .prefix, operator: .init("¡", padding: .none)),
         
         // Others
-        .init(for: .tuple, associativity: .infix, precedence: .tuple, operator: .init(":")),
+        .init(for: .pair, associativity: .infix, precedence: .pair, operator: .init(":")),
         .init(for: .concat, associativity: .infix, precedence: .concat, operator: .init("&"))
     ]
 }

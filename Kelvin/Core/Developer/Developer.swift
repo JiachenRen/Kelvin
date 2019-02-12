@@ -20,30 +20,69 @@ public class Developer {
     static let utilityOperations: [Operation] = [
         
         // Utilities
-        .binary(.replace, [.any, .any]) {
-            var simplified = try $0.simplify()
-            
-            var pairs = [(Node, Node)]()
-            
-            func getPair(_ eq: Equation) throws -> (Node, Node) {
-                return try (eq.lhs.simplify(), eq.rhs.simplify())
+        .binary(.evaluateAt, [.any, .equation]) {
+            let eq = $1 as! Equation
+            guard let v = eq.lhs as? Variable else {
+                let msg = "left hand side of definition \(eq.stringified) must be a variable"
+                throw ExecutionError.general(errMsg: msg)
             }
-            if let eq = $1 as? Equation {
-                pairs.append(try getPair(eq))
-            } else if let list = $1 as? List {
-                pairs.append(contentsOf:
-                    try list.elements.map {node -> (Node, Node) in
-                        if let eq = node as? Equation {
-                            return try getPair(eq)
-                        }
-                        throw ExecutionError.incompatibleList(.equation)
-                    })
-            }
+            Scope.save()
             
-            for (target, replacement) in pairs {
-                simplified = simplified.replacing(by: {_ in replacement}) {
-                    $0 === target
+            defer {
+                Scope.restore()
+            }
+
+            Variable.define(v.name, eq.rhs)
+            let simplified = try $0.simplify()
+            
+            if simplified.contains(where: {$0 === v}, depth: Int.max) {
+                if simplified === $0 {
+                    return nil
                 }
+                return Function(.evaluateAt, [simplified, eq])
+            }
+            
+            return simplified
+        },
+        .binary(.evaluateAt, [.any, .list]) {
+            let list = $1 as! List
+            Scope.save()
+            let definitions = try list.map {
+                (n) -> Equation in
+                guard let eq = n as? Equation else {
+                    throw ExecutionError.incompatibleList(.equation)
+                }
+                return eq
+            }
+            
+            for eq in definitions {
+                guard let v = eq.lhs as? Variable else {
+                    let msg = "left hand side of definition \(eq.stringified) must be a variable"
+                    throw ExecutionError.general(errMsg: msg)
+                }
+                Variable.define(v.name, eq.rhs)
+            }
+            
+            defer {
+                Scope.restore()
+            }
+            
+            
+            let simplified = try $0.simplify()
+            var unresolved = [Equation]()
+            for eq in definitions {
+                if simplified.contains(where: {$0 === eq.lhs}, depth: Int.max) {
+                    unresolved.append(eq)
+                }
+            }
+            
+            if unresolved.count == 1 {
+                return Function(.evaluateAt, [simplified, unresolved[0]])
+            } else if unresolved.count > 1 {
+                if simplified === $0 {
+                    return nil
+                }
+                return Function(.evaluateAt, [simplified, List(unresolved)])
             }
             
             return simplified
@@ -89,7 +128,7 @@ public class Developer {
                 let _ = try $0.simplify()
             }
             let avg = (Date().timeIntervalSince1970 - t) / Double(n)
-            return Tuple("avg(s)", avg)
+            return Pair("avg(s)", avg)
         },
         
         // Compilation & execution

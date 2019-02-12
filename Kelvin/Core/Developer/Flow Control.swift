@@ -12,14 +12,14 @@ public extension Developer {
     static let flowControlOperations: [Operation] = [
         
         // Pileline, conditional statements
-        .binary(.ternaryConditional, [.any, .tuple]) {
+        .binary(.ternaryConditional, [.any, .pair]) {
             let node = try $0.simplify()
             guard let predicament = node as? Bool else {
                 return nil
             }
-            let tuple = $1 as! Tuple
+            let pair = $1 as! Pair
             
-            return try (predicament ? tuple.lhs : tuple.rhs).simplify() // Should this be simplified?
+            return try (predicament ? pair.lhs : pair.rhs).simplify() // Should this be simplified?
         },
         .binary(.if, [.any, .closure]) {
             let node = try $0.simplify()
@@ -67,12 +67,12 @@ public extension Developer {
         .unary(.throw, [.any]) {
             throw ExecutionError.general(errMsg: $0.stringified)
         },
-        .unary(.try, [.tuple]) {
-            let tuple = $0 as! Tuple
+        .unary(.try, [.pair]) {
+            let pair = $0 as! Pair
             do {
-                return try tuple.lhs.simplify()
+                return try pair.lhs.simplify()
             } catch {
-                return try tuple.rhs.simplify()
+                return try pair.rhs.simplify()
             }
         },
         .unary(.try, [.any]) {
@@ -90,18 +90,18 @@ public extension Developer {
         },
         
         // Loops
-        .init(.for, [.tuple, .closure]) {
-            guard let tuple = $0[0] as? Tuple, let closure = $0[1] as? Closure else {
+        .init(.for, [.pair, .closure]) {
+            guard let pair = $0[0] as? Pair, let closure = $0[1] as? Closure else {
                 throw ExecutionError.general(errMsg: "invalid for loop construct")
             }
             
-            guard let v = tuple.lhs as? Variable else {
-                let msg = "variable name expected in lhs of \"\(tuple.stringified)\", but found \"\(tuple.lhs.stringified)\" instead."
+            guard let v = pair.lhs as? Variable else {
+                let msg = "variable name expected in lhs of \"\(pair.stringified)\", but found \"\(pair.lhs.stringified)\" instead."
                 throw ExecutionError.general(errMsg: msg)
             }
             
-            guard let list = try tuple.rhs.simplify() as? ListProtocol else {
-                let msg = "list expected in rhs of \"\(tuple.stringified)\", but found \"\(tuple.rhs.stringified)\" instead"
+            guard let list = try pair.rhs.simplify() as? ListProtocol else {
+                let msg = "list expected in rhs of \"\(pair.stringified)\", but found \"\(pair.rhs.stringified)\" instead"
                 throw ExecutionError.general(errMsg: msg)
             }
             

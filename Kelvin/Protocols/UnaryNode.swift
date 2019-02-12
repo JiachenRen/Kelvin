@@ -14,6 +14,10 @@ protocol UnaryNode: Node {
 
 extension UnaryNode {
     
+    public var precedence: Keyword.Precedence {
+        return .node
+    }
+    
     /// Perform an action on each node in the tree.
     public func forEach(_ body: (Node) -> ()) {
         body(self)

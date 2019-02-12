@@ -1,5 +1,5 @@
 //
-//  Tuple.swift
+//  Pair.swift
 //  Kelvin
 //
 //  Created by Jiachen Ren on 1/18/19.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Tuple: BinaryNode, NaN {
+public struct Pair: BinaryNode, NaN {
     
     public var stringified: String {
         return "(\(lhs.stringified) : \(rhs.stringified))"
@@ -18,10 +18,14 @@ public struct Tuple: BinaryNode, NaN {
         return "(".bold.yellow + "\(lhs.ansiColored) : \(rhs.ansiColored)" + ")".bold.yellow
     }
     
-    /// First value of the tuple
+    public var precedence: Keyword.Precedence {
+        return .pair
+    }
+    
+    /// First value of the pair
     var lhs: Node
     
-    /// Second value of the tuple
+    /// Second value of the pair
     var rhs: Node
     
     init(_ v1: Node, _ v2: Node) {
@@ -35,7 +39,7 @@ public struct Tuple: BinaryNode, NaN {
     }
     
     public func equals(_ node: Node) -> Bool {
-        if let t = node as? Tuple {
+        if let t = node as? Pair {
             return equals(list: t)
         }
         return false

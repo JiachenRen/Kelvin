@@ -12,17 +12,55 @@ import Foundation
 public extension Calculus {
     
     /**
+     Generic operation for calculating the tangential line/plane/surface of a function
+     of n variables in multivariable.
+     Suppose you want to find the tangent of equation `y = x^2`, first convert it to a function:
+     `y - x^2 = 0 -> f(x,y) = y - x^2`, where `f(x, y) = 0`.
+     Then, invoking `tangent(_:_:_:)` with `f(x, y)`, `{x, y}`, and a point `[a, b]` would give the
+     expected equation for the tangent line, `1(y - b) + 2a(x - a) = 0`.
+     
+     - Parameters:
+        - point: A vector representing a point on the function.
+        - fun: A function of n variables.
+        - variables: The independent variables of `fun`
+     */
+    public static func tangent(
+        of fun: Function,
+        variables: [Variable],
+        at point: Vector) throws -> Equation {
+        guard variables.count == point.count else {
+            let msg = "The function with arguments \(List(variables).stringified) cannot be evaluated with the given point \(point.stringified)"
+            throw ExecutionError.general(errMsg: msg)
+        }
+        
+        let grad = gradient(of: fun, independentVars: variables)
+        let defs = zip(variables, point.elements).map {
+            Equation(lhs: $0, rhs: $1)
+        }
+        let components = try grad.elements.map {
+            try Function(.evaluateAt, [$0, List(defs)])
+                .simplify()
+        }
+        
+        let deltas = zip(variables, point.elements)
+            .map {$0 - $1}
+        let lhs = ++zip(components, deltas)
+            .map {$0 * $1}
+        return Equation(lhs: lhs, rhs: 0)
+    }
+    
+    /**
      The directional derivative del _(u)f(x_0,y_0,z_0) is the rate at which the function f(x,y,z)
      changes at a point (x_0,y_0,z_0) in the direction u.
      It is a vector form of the usual derivative, and can be defined as
      del _(u)f = del f·(u)/(|u|)
      
      - Parameters:
-     - fun: A multivariate function of 2, 3, or more independent variables.
-     - direction: The direction in which we are interested in finding the function's rate of change. (u)
-     - independentVars: A list denoting the independent variables of the function.
-     - Returns: A vector function of n variables that computes the rate at
-     which the function is changing in the direction of u.
+        - fun: A multivariate function of 2, 3, or more independent variables.
+        - direction: The direction in which we are interested in finding the function's rate of change. (u)
+        - independentVars: A list denoting the independent variables of the function.
+     - Returns: A function containing variables identical to the independent variables provided
+     that computes the slope of the function in the specified direction
      */
     public static func directionalDifferentiation(
         of fun: Function,
@@ -99,11 +137,11 @@ public extension Calculus {
     }
     
     /**
-     Take the (partial) derivative of node n w/ respect to variable v.
+     Takes the (partial) derivative of node n w/ respect to variable v.
      
      - Parameters:
-     - n: The node to be differentiated
-     - v: The variable for which the derivative is taken with respect to.
+        - n: The node to be differentiated
+        - v: The variable for which the derivative is taken with respect to.
      - Returns: The derivative of n w/ respect to v.
      */
     public static func derivative(of n: Node, withRespectTo v: Variable) -> Node? {
@@ -152,7 +190,10 @@ public extension Calculus {
                     break
                 }
                 if let big = bigKahuna {
-                    return derivative(of: fun.elements, withRespectTo: v)[0] * big
+                    if let small = derivative(of: fun[0], withRespectTo: v) {
+                        return small * big
+                    }
+                    return Function(.derivative, [fun[0]]) * big
                 }
             } else {
                 switch fun.name {

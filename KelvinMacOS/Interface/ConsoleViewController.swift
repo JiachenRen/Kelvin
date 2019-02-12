@@ -10,7 +10,7 @@ import Cocoa
 import Highlightr
 
 fileprivate let defaultTheme = "github"
-fileprivate let defaultLanguage = "elixir" // "ruby" also works fine
+fileprivate let defaultLanguage = "elixir" // "ruby" and "crystal" also works fine
 
 class ConsoleViewController: NSViewController, NSTextViewDelegate {
 

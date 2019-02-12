@@ -12,6 +12,10 @@ public protocol LeafNode: Node {
 }
 
 extension LeafNode {
+    
+    public var precedence: Keyword.Precedence {
+        return .node
+    }
 
     /// Leaf nodes have a complexity of 1
     public var complexity: Int {

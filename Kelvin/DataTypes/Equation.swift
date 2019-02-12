@@ -17,6 +17,10 @@ public struct Equation: BinaryNode, NaN {
     public var ansiColored: String {
         return "\(lhs.ansiColored) \(mode.rawValue.bold) \(rhs.ansiColored)"
     }
+    
+    public var precedence: Keyword.Precedence {
+        return .equation
+    }
 
     /// The left hand side of the equation
     var lhs: Node

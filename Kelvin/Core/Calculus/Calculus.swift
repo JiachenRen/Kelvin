@@ -47,13 +47,7 @@ public class Calculus {
             return r
         },
         .binary(.gradient, [.func, .list]) {
-            let vars = try ($1 as! List).elements.map {
-                (n: Node) -> Variable in
-                if let v = n as? Variable {
-                    return v
-                }
-                throw ExecutionError.incompatibleList(.variable)
-            }
+            let vars = try extractVariables(from: $1 as! List)
             
             Scope.withholdAccess(to: vars)
             let grad = Calculus.gradient(
@@ -63,13 +57,7 @@ public class Calculus {
             return grad
         },
         .init(.directionalDifferentiation, [.func, .any, .list]) {
-            let vars = try ($0[2] as! List).elements.map {
-                (n: Node) -> Variable in
-                if let v = n as? Variable {
-                    return v
-                }
-                throw ExecutionError.incompatibleList(.variable)
-            }
+            let vars = try extractVariables(from: $0[2] as! List)
             
             guard let dir = try $0[1].simplify() as? Vector else {
                 throw ExecutionError.general(errMsg: "direction must be a vector")
@@ -82,6 +70,31 @@ public class Calculus {
                 independentVars: vars)
             Scope.releaseRestrictions()
             return grad
+        },
+        .init(.tangent, [.func, .list, .any]) {
+            let vars = try extractVariables(from: $0[1] as! List)
+            guard let vec = try $0[2].simplify() as? Vector else {
+                let msg = "value supplied for finding tangential line/plane/surface must be a vector"
+                throw ExecutionError.general(errMsg: msg)
+            }
+            
+            Scope.withholdAccess(to: vars)
+            let tangent = try Calculus.tangent(
+                of: $0[0] as! Function,
+                variables: vars,
+                at: vec)
+            Scope.releaseRestrictions()
+            return tangent
         }
     ]
+    
+    private static func extractVariables(from list: List) throws -> [Variable] {
+        return try list.elements.map {
+            (n: Node) -> Variable in
+            if let v = n as? Variable {
+                return v
+            }
+            throw ExecutionError.incompatibleList(.variable)
+        }
+    }
 }

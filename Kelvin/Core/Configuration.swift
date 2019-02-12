@@ -33,7 +33,7 @@ let defaultConfiguration: [Operation.Attribute: [String]] = [
         
         // Functions that accepts anonymous arguments should preserve arguments.
         .pipe,
-        .replace,
+        .evaluateAt,
         .map,
         .reduce,
         .filter,

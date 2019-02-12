@@ -238,6 +238,8 @@ For more examples (algebraic operations, calulus, stats, loops, conditional stat
     - Implicit differentiation
     - Directional differentiation
     - Gradient
+    - Derivative/gradient at point/vector
+    - Tangent line/plane/surface/hyperplane/etc for multivariate functions
   
 - [ ] Integration
 
@@ -346,7 +348,7 @@ For more examples (algebraic operations, calulus, stats, loops, conditional stat
 - [x] Strings
   - *Concatenation*
   - *Subscript access*
-- [x] Tuples
+- [x] Pairs
   - *Compilation*
   - *Subscript access*
 - [x] Error handling

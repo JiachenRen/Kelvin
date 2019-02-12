@@ -34,7 +34,7 @@ public class Operation: Equatable {
         binaryOperations,
         unaryOperations,
         probabilityOperations,
-        listAndTupleOperations,
+        listAndPairOperations,
         relationalOperations,
         vectorOperations,
         matrixOperations,
@@ -245,7 +245,7 @@ public class Operation: Equatable {
                     continue
                 case .leaf where !(arg is LeafNode):
                     fallthrough
-                case .tuple where !(arg is Tuple):
+                case .pair where !(arg is Pair):
                     fallthrough
                 case .var where !(arg is Variable):
                     fallthrough
@@ -368,7 +368,7 @@ public class Operation: Equatable {
         case vec
         case matrix
         case list
-        case tuple
+        case pair
         case iterable
         case leaf
         case any = 100

@@ -16,7 +16,7 @@ enum DataType: String, CustomStringConvertible {
     case vector
     case matrix
     case equation
-    case tuple
+    case pair
     case function
     case bool
     
@@ -39,8 +39,8 @@ enum DataType: String, CustomStringConvertible {
             return .matrix
         } else if node is Equation {
             return .equation
-        } else if node is Tuple {
-            return .tuple
+        } else if node is Pair {
+            return .pair
         } else if node is Function {
             return .function
         } else if node is Bool {

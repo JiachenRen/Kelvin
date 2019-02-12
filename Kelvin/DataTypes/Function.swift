@@ -42,6 +42,10 @@ public struct Function: MutableListProtocol {
         return Keyword.glossary[name]
     }
     
+    public var precedence: Keyword.Precedence {
+        return keyword?.precedence ?? .node
+    }
+    
     /// Whether the function is commutative.
     let isCommutative: Bool
 
@@ -140,43 +144,14 @@ public struct Function: MutableListProtocol {
      */
     private func usesParenthesis(forNodeAtIndex idx: Int) -> Bool {
         let child = args[idx]
-        if let fun = child as? Function {
-            if let p1 = fun.keyword?.precedence {
-                if let p2 = keyword?.precedence {
-                    if p1 < p2 {
+        if child.precedence < precedence {
 
-                        // e.g. (a + b) * c
-                        // If the child's precedence is lower, a parenthesis is always needed.
-                        return true
-                    } else if p1 == p2 {
-
-                        // Always parenthesize unary operations to disambiguate
-                        if fun.count == 1 {
-                            return true
-                        }
-
-                        // e.g. a + b - c
-                        // If the child is on the left and has the same precedence,
-                        // a parenthesis is not needed.
-                        if idx != 0 {
-                            if Operation.has(attr: .forwardCommutative, name) {
-
-                                // e.g. case of a - (b + c)
-                                // If the parent is only commutative in the forward direction,
-                                // then always use a parenthesis for rhs.
-                                return true
-                            } else if Operation.has(attr: .commutative, name) {
-
-                                // e.g. a + b + c
-                                // If the parent is commutative both forward and backward,
-                                // then omit parenthesis when the child and parent are the same function.
-                                return name != fun.name
-                            } else {
-                                return true
-                            }
-                        }
-                    }
-                }
+            // e.g. (a + b) * c
+            // If the child's precedence is lower, a parenthesis is always needed.
+            return true
+        } else if child.precedence == precedence {
+            if idx != 0 && Operation.has(attr: .forwardCommutative, name) {
+                return true
             }
         }
         return false

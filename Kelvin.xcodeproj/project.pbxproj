@@ -141,7 +141,7 @@
 		1F8DF750220672BE006351B0 /* NSNumber+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F921F518BB00E707BD /* NSNumber+Value.swift */; };
 		1F8DF751220672BE006351B0 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AD2197331F005C3353 /* Function.swift */; };
 		1F8DF752220672BE006351B0 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82B32197416D005C3353 /* List.swift */; };
-		1F8DF753220672BE006351B0 /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Tuple.swift */; };
+		1F8DF753220672BE006351B0 /* Pair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Pair.swift */; };
 		1F8DF754220672BE006351B0 /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82B521974368005C3353 /* Variable.swift */; };
 		1F8DF755220672BE006351B0 /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F570B4D21FBE7150006E342 /* Matrix.swift */; };
 		1F8DF756220672BE006351B0 /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09370021F51EC000E707BD /* Vector.swift */; };
@@ -203,8 +203,8 @@
 		1F8DF7AB22095321006351B0 /* Deconstruct in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF7AA22095321006351B0 /* Deconstruct */; };
 		1F8DF7AD2209538A006351B0 /* FlatMap in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF7AC2209538A006351B0 /* FlatMap */; };
 		1FE1697321F28F1E0006712C /* Tests in Resources */ = {isa = PBXBuildFile; fileRef = 1FE1697221F28F1E0006712C /* Tests */; };
-		1FE1697621F2D44A0006712C /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Tuple.swift */; };
-		1FE1697721F2D5D40006712C /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Tuple.swift */; };
+		1FE1697621F2D44A0006712C /* Pair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Pair.swift */; };
+		1FE1697721F2D5D40006712C /* Pair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Pair.swift */; };
 		1FE1697B21F2EC070006712C /* Conditionals in Resources */ = {isa = PBXBuildFile; fileRef = 1FE1697A21F2EC070006712C /* Conditionals */; };
 		1FE1697D21F380CA0006712C /* BinaryNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697C21F380CA0006712C /* BinaryNode.swift */; };
 		1FE1697E21F381730006712C /* BinaryNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697C21F380CA0006712C /* BinaryNode.swift */; };
@@ -331,7 +331,7 @@
 		1F8DF7AA22095321006351B0 /* Deconstruct */ = {isa = PBXFileReference; lastKnownFileType = text; path = Deconstruct; sourceTree = "<group>"; };
 		1F8DF7AC2209538A006351B0 /* FlatMap */ = {isa = PBXFileReference; lastKnownFileType = text; path = FlatMap; sourceTree = "<group>"; };
 		1FE1697221F28F1E0006712C /* Tests */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tests; sourceTree = "<group>"; };
-		1FE1697521F2D44A0006712C /* Tuple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tuple.swift; sourceTree = "<group>"; };
+		1FE1697521F2D44A0006712C /* Pair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pair.swift; sourceTree = "<group>"; };
 		1FE1697A21F2EC070006712C /* Conditionals */ = {isa = PBXFileReference; lastKnownFileType = text; path = Conditionals; sourceTree = "<group>"; };
 		1FE1697C21F380CA0006712C /* BinaryNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryNode.swift; sourceTree = "<group>"; };
 		1FE487F2220E4132005361AC /* ConsoleViewController+IOProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConsoleViewController+IOProtocol.swift"; sourceTree = "<group>"; };
@@ -431,7 +431,7 @@
 				1F8DF7742207D755006351B0 /* Closure.swift */,
 				1F2E82B32197416D005C3353 /* List.swift */,
 				1F8DF78422089E30006351B0 /* Pipeline.swift */,
-				1FE1697521F2D44A0006712C /* Tuple.swift */,
+				1FE1697521F2D44A0006712C /* Pair.swift */,
 				1F2E82B521974368005C3353 /* Variable.swift */,
 				1F570B4D21FBE7150006E342 /* Matrix.swift */,
 				1F09370021F51EC000E707BD /* Vector.swift */,
@@ -896,7 +896,7 @@
 				1F0936C421F3C19F00E707BD /* Binary.swift in Sources */,
 				1F0936C521F3C19F00E707BD /* OneVar.swift in Sources */,
 				1FE1697E21F381730006712C /* BinaryNode.swift in Sources */,
-				1FE1697721F2D5D40006712C /* Tuple.swift in Sources */,
+				1FE1697721F2D5D40006712C /* Pair.swift in Sources */,
 				1F0CF2D621EEB6C100E40086 /* Program.swift in Sources */,
 				1F0CF2CA21EBAAB500E40086 /* Keyword.swift in Sources */,
 				1F0CF2C521EA428000E40086 /* KString.swift in Sources */,
@@ -926,7 +926,7 @@
 				1F0A90E221F8C32B00432B17 /* String+Colors.swift in Sources */,
 				1F3974BF21E3B741006D6DC2 /* LeafNode.swift in Sources */,
 				1F8DF7812207EE9A006351B0 /* KVoid.swift in Sources */,
-				1FE1697621F2D44A0006712C /* Tuple.swift in Sources */,
+				1FE1697621F2D44A0006712C /* Pair.swift in Sources */,
 				1FE1697D21F380CA0006712C /* BinaryNode.swift in Sources */,
 				1F8DF7752207D755006351B0 /* Closure.swift in Sources */,
 				1FE487F3220E4132005361AC /* ConsoleViewController+IOProtocol.swift in Sources */,
@@ -1024,7 +1024,7 @@
 				1F8DF750220672BE006351B0 /* NSNumber+Value.swift in Sources */,
 				1F8DF751220672BE006351B0 /* Function.swift in Sources */,
 				1F8DF752220672BE006351B0 /* List.swift in Sources */,
-				1F8DF753220672BE006351B0 /* Tuple.swift in Sources */,
+				1F8DF753220672BE006351B0 /* Pair.swift in Sources */,
 				1F8DF754220672BE006351B0 /* Variable.swift in Sources */,
 				1F8DF755220672BE006351B0 /* Matrix.swift in Sources */,
 				1F8DF756220672BE006351B0 /* Vector.swift in Sources */,

@@ -712,14 +712,14 @@
                             <splitView arrangesAllSubviews="NO" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fMy-Qb-wSQ">
                                 <rect key="frame" x="0.0" y="0.0" width="732" height="467"/>
                                 <subviews>
-                                    <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="26" horizontalPageScroll="10" verticalLineScroll="26" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="3Uu-Vh-flJ">
+                                    <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="20" horizontalPageScroll="10" verticalLineScroll="20" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="3Uu-Vh-flJ">
                                         <rect key="frame" x="0.0" y="0.0" width="150" height="467"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <clipView key="contentView" drawsBackground="NO" id="rpw-zP-epb">
                                             <rect key="frame" x="1" y="1" width="148" height="465"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="10" outlineTableColumn="LMK-Py-9RV" id="xDL-rM-Huy">
+                                                <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" multipleSelection="NO" autosaveColumns="NO" rowHeight="18" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="10" outlineTableColumn="LMK-Py-9RV" id="xDL-rM-Huy">
                                                     <rect key="frame" x="0.0" y="0.0" width="148" height="465"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
@@ -927,7 +927,7 @@
                 </viewController>
                 <customObject id="fRg-qi-wCp" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="344" y="786.5"/>
+            <point key="canvasLocation" x="515" y="777.5"/>
         </scene>
     </scenes>
     <resources>

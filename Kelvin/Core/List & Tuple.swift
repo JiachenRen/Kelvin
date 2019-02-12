@@ -1,5 +1,5 @@
 //
-//  List & Tuple.swift
+//  List & Pair.swift
 //  Kelvin
 //
 //  Created by Jiachen Ren on 1/20/19.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-let listAndTupleOperations: [Operation] = [
+let listAndPairOperations: [Operation] = [
     
     .init(.add, [.list, .list]) {
         try join(by: .add, $0[0], $0[1])
@@ -57,18 +57,18 @@ let listAndTupleOperations: [Operation] = [
         map(by: .mod, $0[0], $0[1])
     },
 
-    // Tuple operations
-    .init(.tuple, [.leaf, .leaf]) {
-        Tuple($0[0], $0[1])
+    // Pair operations
+    .init(.pair, [.leaf, .leaf]) {
+        Pair($0[0], $0[1])
     },
-    .init(.get, [.tuple, .number]) { nodes in
-        let tuple = nodes[0] as! Tuple
+    .init(.get, [.pair, .number]) { nodes in
+        let pair = nodes[0] as! Pair
         let idx = Int(nodes[1]≈!)
         switch idx {
         case 0:
-            return tuple.lhs
+            return pair.lhs
         case 1:
-            return tuple.rhs
+            return pair.rhs
         default:
             throw ExecutionError.indexOutOfBounds
         }

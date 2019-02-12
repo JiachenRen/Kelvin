@@ -29,6 +29,10 @@ public struct List: MutableListProtocol, NaN {
         }
         return "{".red.bold + "\(pars ?? "")" + "}".red.bold
     }
+    
+    public var precedence: Keyword.Precedence {
+        return .node
+    }
 
     init(_ elements: [Node]) {
         self.elements = elements

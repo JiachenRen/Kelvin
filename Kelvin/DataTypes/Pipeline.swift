@@ -10,20 +10,24 @@ import Foundation
 
 public struct Pipeline: MutableListProtocol, NaN {
     
+    public var precedence: Keyword.Precedence {
+        return .pipeline
+    }
+    
     var elements: [Node]
     
     public var stringified: String {
         let statements: String? = elements.reduce(nil) {
             $0 == nil ? $1.stringified : $0! + "; " + $1.stringified
         }
-        return "(" + (statements ?? "") + ")"
+        return statements ?? ""
     }
     
     public var ansiColored: String {
         let statements: String? = elements.reduce(nil) {
             $0 == nil ? $1.ansiColored : $0! + "; ".bold + $1.ansiColored
         }
-        return "(".bold + (statements ?? "") + ")".bold
+        return statements ?? ""
     }
     
     init(_ statements: [Node]) {

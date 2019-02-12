@@ -11,9 +11,9 @@ def df_du = derivative(f(u, s, t), u)
 def df_ds = derivative(f(u, s, t), s)
 def df_dt = derivative(f(u, s, t), t)
 
-println "df/du = " & df_du
-println "df/ds = " & df_ds
-println "df/dt = " & df_dt
+println "∂f/∂u = " & df_du
+println "∂f/∂s = " & df_ds
+println "∂f/∂t = " & df_dt
 
 def g(x) = x^3 + ln(cos(x))*sin(x)
 
@@ -37,3 +37,23 @@ println f(x, y, z) grad {x, y, z}
 # Directional differentiation
 println "\nDirectional differentiation:"
 println dirDif(f(x, y, z), [a, b, c], {x, y, z})
+
+# Gradient at specific point
+def f(x, y, z) = z ^ 2 + 2y * x + x ^ 3
+def g = (f(x, y, z) grad {x, y, z} << x = 3 << y = 2 << z = 1)
+assert g == [31, 6, 2]
+
+# Another way to use point specific evaluation
+def f(x,y) = x^2 + x*y^2
+assert (f(x, y)'x << {x = 3, y = 4}) == 22
+assert (f(x, y)'y << {x = 3, y = 4}) == 24
+assert (f(y, x)'x << {x = 3, y = 4}) == 24
+assert (f(x, y)'x << {x = 3, y = 4}) == 22
+
+
+def f(x, y, z) = 2x * y + 3x + 2y + x^2 + z^3
+def g1 = (f(x, y, z) grad {x, y, z} << {x = 2, y = 2, z = 6})
+assert g1 = [13, 8, 108]
+
+def g2 = (f(x, y, z) grad {x, y, z} << {x = a, y = b, z = c})
+assert g2 == [2 * a + 2 * b + 3, 2 + 2 * a, 3 * c ^ 2]

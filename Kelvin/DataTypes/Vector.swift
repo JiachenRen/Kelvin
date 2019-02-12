@@ -35,6 +35,10 @@ public struct Vector: MutableListProtocol, NaN {
         return "[".red.bold + "\(e)" + "]".red.bold
     }
     
+    public var precedence: Keyword.Precedence {
+        return .node
+    }
+    
     init(_ components: [Node]) {
         self.elements = components
     }

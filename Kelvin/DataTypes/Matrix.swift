@@ -24,6 +24,10 @@ public struct Matrix: MutableListProtocol, NaN {
         return "[".red.bold + "\(r!)" + "]".red.bold
     }
     
+    public var precedence: Keyword.Precedence {
+        return .node
+    }
+    
     public typealias Row = Vector
     public typealias Dimension = (rows: Int, cols: Int)
     

@@ -404,12 +404,12 @@ public class Compiler {
             name($0) == .list
         }
         
-        // Restore tuple() to (:)
+        // Restore pair() to (:)
         parent = parent.replacing(by: {
             let elements = args($0).elements
-            return Tuple(elements[0], elements[1])
+            return Pair(elements[0], elements[1])
         }) {
-            name($0) == .tuple
+            name($0) == .pair
         }
         
         // Restore closures

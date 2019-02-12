@@ -61,9 +61,9 @@ public extension String {
     public static let outliers = "outliers"
     public static let oneVar = "oneVar"
     
-    // List & Tuple
+    // List & Pair
     public static let list = "list"
-    public static let tuple = "tuple"
+    public static let pair = "pair"
     public static let get = "get"
     public static let map = "map"
     public static let reduce = "reduce"
@@ -75,8 +75,9 @@ public extension String {
     public static let shuffle = "shuffle"
     public static let removeAtIdx = "rm"
     
-    // Differentiation
+    // Calculus
     public static let derivative = "derivative"
+    public static let tangent = "tangent"
     public static let implicitDifferentiation = "impDif"
     public static let directionalDifferentiation = "dirDif"
     public static let gradient = "grad"
@@ -115,7 +116,7 @@ public extension String {
     public static let ternaryConditional = "ternary"
     public static let `else` = "else"
     public static let pipe = "pipe"
-    public static let replace = "replace"
+    public static let evaluateAt = "at"
     public static let `repeat` = "repeat"
     public static let copy = "copy"
     public static let concat = "concat"

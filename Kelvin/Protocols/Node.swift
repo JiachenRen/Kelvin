@@ -31,6 +31,9 @@ public protocol Node {
 
     /// Computes the numerical value that the node represents.
     var evaluated: Value? { get }
+    
+    /// Used to determine if a parenthesis is needed
+    var precedence: Keyword.Precedence { get }
 
     /// The complexity of the node.
     /// Variables have a complexity of 2, constants have a complexity of 1;
