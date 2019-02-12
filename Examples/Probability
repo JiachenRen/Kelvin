@@ -1,32 +1,11 @@
-def dice1() = round random(1,6)
-def dice2() = int random(1, 7)
-
-seeds(x) := round random(1, 6) ... x
-def dice3() = seeds(10)[int random(0, 9)]
-
-# Roll dice 1 10000 times
-rolls1 := dice1()...10000
-
-# Roll dice 2 10000 times
-rolls2 := dice2()...10000
-
-# Roll dice 3 10000 times, but only randomly select 1000 values to count
-rolls3 := dice3()...1000
-
-# Find the average of the rollings
-print "Expected value of dice 1 rolls: "
-println mean(rolls1)
-
-print "Expected value of dice 2 rolls: "
-println mean(rolls2)
-
-print "Expected value of dice 3 rolls: "
-println mean(rolls3)
-
-# A function that approaches 1 as x approaches infinity.
-def f(x) = min(random()...x) + max(random()...x)
-
 # nCr, nPr
 println (9 ncr 3)
 println (9 npr 3)
 println ({1, 2, 3, x, a, b, 4, 5} ncr 4)
+
+# Random number generation
+println "Calculating average of 100000 random numbers..."
+println mean(random()...100000)
+
+# A function that approaches 1 as x approaches infinity.
+def f(x) = min(random()...x) + max(random()...x)

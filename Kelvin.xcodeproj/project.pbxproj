@@ -42,11 +42,10 @@
 		1F09370221F51EDD00E707BD /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09370021F51EC000E707BD /* Vector.swift */; };
 		1F09370421F54E6200E707BD /* Calculus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09370321F54E6200E707BD /* Calculus.swift */; };
 		1F09370521F5618200E707BD /* Calculus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09370321F54E6200E707BD /* Calculus.swift */; };
-		1F09370721F56F9C00E707BD /* Calculus in Resources */ = {isa = PBXBuildFile; fileRef = 1F09370621F56F9C00E707BD /* Calculus */; };
+		1F09370721F56F9C00E707BD /* Differentiation in Resources */ = {isa = PBXBuildFile; fileRef = 1F09370621F56F9C00E707BD /* Differentiation */; };
 		1F09370B21F57B0200E707BD /* Trigonometry in Resources */ = {isa = PBXBuildFile; fileRef = 1F09370A21F57B0200E707BD /* Trigonometry */; };
 		1F09370F21F5800B00E707BD /* String in Resources */ = {isa = PBXBuildFile; fileRef = 1F09370E21F5800B00E707BD /* String */; };
 		1F09371121F62BF700E707BD /* Loops in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371021F62BF700E707BD /* Loops */; };
-		1F09371521F64FC600E707BD /* Randomization in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371421F64FC600E707BD /* Randomization */; };
 		1F09371721F66C4B00E707BD /* Subscript in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371621F66C4B00E707BD /* Subscript */; };
 		1F09371921F672CD00E707BD /* DateTime in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371821F672CD00E707BD /* DateTime */; };
 		1F09371B21F67FDD00E707BD /* SystemCheck in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371A21F67FDD00E707BD /* SystemCheck */; };
@@ -55,7 +54,7 @@
 		1F0A90DF21F7E94200432B17 /* ErrorHandling in Resources */ = {isa = PBXBuildFile; fileRef = 1F0A90DE21F7E94200432B17 /* ErrorHandling */; };
 		1F0A90E221F8C32B00432B17 /* String+Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E121F8C32B00432B17 /* String+Colors.swift */; };
 		1F0A90E321F8C3C100432B17 /* String+Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E121F8C32B00432B17 /* String+Colors.swift */; };
-		1F0A90E521F93DCE00432B17 /* Statistics in Resources */ = {isa = PBXBuildFile; fileRef = 1F0A90E421F93DCE00432B17 /* Statistics */; };
+		1F0A90E521F93DCE00432B17 /* OneVar in Resources */ = {isa = PBXBuildFile; fileRef = 1F0A90E421F93DCE00432B17 /* OneVar */; };
 		1F0A90E721F97B5000432B17 /* String+Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E621F97B5000432B17 /* String+Regex.swift */; };
 		1F0A90E821F97B7200432B17 /* String+Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E621F97B5000432B17 /* String+Regex.swift */; };
 		1F0A90EA21FA0EF600432B17 /* DataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E921FA0EF600432B17 /* DataType.swift */; };
@@ -66,7 +65,6 @@
 		1F0CF2C521EA428000E40086 /* KString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* KString.swift */; };
 		1F0CF2C721EBA8C800E40086 /* Keyword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C621EBA8C800E40086 /* Keyword.swift */; };
 		1F0CF2CA21EBAAB500E40086 /* Keyword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C621EBA8C800E40086 /* Keyword.swift */; };
-		1F0CF2D321EEA74A00E40086 /* Misc in Resources */ = {isa = PBXBuildFile; fileRef = 1F0CF2D221EEA74A00E40086 /* Misc */; };
 		1F0CF2D521EEB69300E40086 /* Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2D421EEB69300E40086 /* Program.swift */; };
 		1F0CF2D621EEB6C100E40086 /* Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2D421EEB69300E40086 /* Program.swift */; };
 		1F2E82AC21966FC5005C3353 /* Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AB21966FC5005C3353 /* Operation.swift */; };
@@ -203,6 +201,12 @@
 		1F8DF7AB22095321006351B0 /* Deconstruct in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF7AA22095321006351B0 /* Deconstruct */; };
 		1F8DF7AD2209538A006351B0 /* FlatMap in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF7AC2209538A006351B0 /* FlatMap */; };
 		1FDC863722131CD200EAC346 /* Contains in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863622131CD200EAC346 /* Contains */; };
+		1FDC863A22132F4300EAC346 /* tangent_plane_grapher.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */; };
+		1FDC863B22132F4300EAC346 /* tangent_plane_kelvin.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863922132F4300EAC346 /* tangent_plane_kelvin.png */; };
+		1FDC8644221331A300EAC346 /* Distribution in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC8643221331A300EAC346 /* Distribution */; };
+		1FDC865022136AB600EAC346 /* Arcane in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC864A22136AB500EAC346 /* Arcane */; };
+		1FDC865122136AB600EAC346 /* FindBest in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC864B22136AB500EAC346 /* FindBest */; };
+		1FDC865222136AB600EAC346 /* DiceRoll in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC864C22136AB500EAC346 /* DiceRoll */; };
 		1FE1697321F28F1E0006712C /* Tests in Resources */ = {isa = PBXBuildFile; fileRef = 1FE1697221F28F1E0006712C /* Tests */; };
 		1FE1697621F2D44A0006712C /* Pair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Pair.swift */; };
 		1FE1697721F2D5D40006712C /* Pair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Pair.swift */; };
@@ -263,24 +267,22 @@
 		1F0936F921F518BB00E707BD /* NSNumber+Value.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSNumber+Value.swift"; sourceTree = "<group>"; };
 		1F09370021F51EC000E707BD /* Vector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vector.swift; sourceTree = "<group>"; };
 		1F09370321F54E6200E707BD /* Calculus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calculus.swift; sourceTree = "<group>"; };
-		1F09370621F56F9C00E707BD /* Calculus */ = {isa = PBXFileReference; lastKnownFileType = text; path = Calculus; sourceTree = "<group>"; };
+		1F09370621F56F9C00E707BD /* Differentiation */ = {isa = PBXFileReference; lastKnownFileType = text; path = Differentiation; sourceTree = "<group>"; };
 		1F09370A21F57B0200E707BD /* Trigonometry */ = {isa = PBXFileReference; lastKnownFileType = text; path = Trigonometry; sourceTree = "<group>"; };
 		1F09370E21F5800B00E707BD /* String */ = {isa = PBXFileReference; lastKnownFileType = text; path = String; sourceTree = "<group>"; };
 		1F09371021F62BF700E707BD /* Loops */ = {isa = PBXFileReference; lastKnownFileType = text; path = Loops; sourceTree = "<group>"; };
-		1F09371421F64FC600E707BD /* Randomization */ = {isa = PBXFileReference; lastKnownFileType = text; path = Randomization; sourceTree = "<group>"; };
 		1F09371621F66C4B00E707BD /* Subscript */ = {isa = PBXFileReference; lastKnownFileType = text; path = Subscript; sourceTree = "<group>"; };
 		1F09371821F672CD00E707BD /* DateTime */ = {isa = PBXFileReference; lastKnownFileType = text; path = DateTime; sourceTree = "<group>"; };
 		1F09371A21F67FDD00E707BD /* SystemCheck */ = {isa = PBXFileReference; lastKnownFileType = text; path = SystemCheck; sourceTree = "<group>"; };
 		1F09371C21F684D500E707BD /* Scope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scope.swift; sourceTree = "<group>"; };
 		1F0A90DE21F7E94200432B17 /* ErrorHandling */ = {isa = PBXFileReference; lastKnownFileType = text; path = ErrorHandling; sourceTree = "<group>"; };
 		1F0A90E121F8C32B00432B17 /* String+Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Colors.swift"; sourceTree = "<group>"; };
-		1F0A90E421F93DCE00432B17 /* Statistics */ = {isa = PBXFileReference; lastKnownFileType = text; path = Statistics; sourceTree = "<group>"; };
+		1F0A90E421F93DCE00432B17 /* OneVar */ = {isa = PBXFileReference; lastKnownFileType = text; path = OneVar; sourceTree = "<group>"; };
 		1F0A90E621F97B5000432B17 /* String+Regex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Regex.swift"; sourceTree = "<group>"; };
 		1F0A90E921FA0EF600432B17 /* DataType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataType.swift; sourceTree = "<group>"; };
 		1F0A90EC21FA27E700432B17 /* Vector & Matrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Vector & Matrix.swift"; sourceTree = "<group>"; };
 		1F0CF2C321EA420400E40086 /* KString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KString.swift; sourceTree = "<group>"; };
 		1F0CF2C621EBA8C800E40086 /* Keyword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keyword.swift; sourceTree = "<group>"; };
-		1F0CF2D221EEA74A00E40086 /* Misc */ = {isa = PBXFileReference; lastKnownFileType = text; path = Misc; sourceTree = "<group>"; };
 		1F0CF2D421EEB69300E40086 /* Program.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Program.swift; sourceTree = "<group>"; };
 		1F2E82AB21966FC5005C3353 /* Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operation.swift; sourceTree = "<group>"; };
 		1F2E82AD2197331F005C3353 /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
@@ -333,6 +335,12 @@
 		1F8DF7AA22095321006351B0 /* Deconstruct */ = {isa = PBXFileReference; lastKnownFileType = text; path = Deconstruct; sourceTree = "<group>"; };
 		1F8DF7AC2209538A006351B0 /* FlatMap */ = {isa = PBXFileReference; lastKnownFileType = text; path = FlatMap; sourceTree = "<group>"; };
 		1FDC863622131CD200EAC346 /* Contains */ = {isa = PBXFileReference; lastKnownFileType = text; path = Contains; sourceTree = "<group>"; };
+		1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tangent_plane_grapher.png; sourceTree = "<group>"; };
+		1FDC863922132F4300EAC346 /* tangent_plane_kelvin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tangent_plane_kelvin.png; sourceTree = "<group>"; };
+		1FDC8643221331A300EAC346 /* Distribution */ = {isa = PBXFileReference; lastKnownFileType = text; path = Distribution; sourceTree = "<group>"; };
+		1FDC864A22136AB500EAC346 /* Arcane */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Arcane; sourceTree = "<group>"; };
+		1FDC864B22136AB500EAC346 /* FindBest */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FindBest; sourceTree = "<group>"; };
+		1FDC864C22136AB500EAC346 /* DiceRoll */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = DiceRoll; sourceTree = "<group>"; };
 		1FE1697221F28F1E0006712C /* Tests */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tests; sourceTree = "<group>"; };
 		1FE1697521F2D44A0006712C /* Pair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pair.swift; sourceTree = "<group>"; };
 		1FE1697A21F2EC070006712C /* Conditionals */ = {isa = PBXFileReference; lastKnownFileType = text; path = Conditionals; sourceTree = "<group>"; };
@@ -470,20 +478,15 @@
 		1F0CF2CF21EEA6D600E40086 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
-				1F0CF2D221EEA74A00E40086 /* Misc */,
+				1FDC864922136AB500EAC346 /* Misc */,
 				1FE1697221F28F1E0006712C /* Tests */,
 				1F8DF7902208CEB9006351B0 /* Developer */,
 				1F0936BD21F3A54800E707BD /* Probability */,
-				1F09370E21F5800B00E707BD /* String */,
 				1F09371A21F67FDD00E707BD /* SystemCheck */,
-				1F09370621F56F9C00E707BD /* Calculus */,
-				1F09370A21F57B0200E707BD /* Trigonometry */,
-				1F09371421F64FC600E707BD /* Randomization */,
-				1F645FBF21FAA1260096AD1C /* Vector */,
-				1F570B5021FBF28C0006E342 /* Matrix */,
-				1F0A90E421F93DCE00432B17 /* Statistics */,
-				1F8DF72B22050110006351B0 /* List */,
-				1F3D31662202853000462F10 /* Factorization */,
+				1FDC86452213329900EAC346 /* Algebra */,
+				1FDC864822133A6100EAC346 /* Calculus */,
+				1FDC8641221330CD00EAC346 /* Linear Algebra */,
+				1FDC86422213317F00EAC346 /* Statistics */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
@@ -584,9 +587,11 @@
 				1F0A90DE21F7E94200432B17 /* ErrorHandling */,
 				1F8DF78C2208CCB0006351B0 /* ForLoop */,
 				1F8DF78E2208CCEE006351B0 /* FunctionDefinition */,
+				1F8DF72B22050110006351B0 /* List */,
 				1F09371021F62BF700E707BD /* Loops */,
 				1F8DF76D22074B9C006351B0 /* Multiline */,
 				1F8DF78A2208CC54006351B0 /* Recursion */,
+				1F09370E21F5800B00E707BD /* String */,
 				1F09371621F66C4B00E707BD /* Subscript */,
 				1F8DF7732207D53C006351B0 /* TrailingClosure */,
 				1F8DF7912208D2E5006351B0 /* WhileLoop */,
@@ -606,9 +611,56 @@
 			path = Developer;
 			sourceTree = "<group>";
 		};
+		1FDC8641221330CD00EAC346 /* Linear Algebra */ = {
+			isa = PBXGroup;
+			children = (
+				1F645FBF21FAA1260096AD1C /* Vector */,
+				1F570B5021FBF28C0006E342 /* Matrix */,
+			);
+			path = "Linear Algebra";
+			sourceTree = "<group>";
+		};
+		1FDC86422213317F00EAC346 /* Statistics */ = {
+			isa = PBXGroup;
+			children = (
+				1F0A90E421F93DCE00432B17 /* OneVar */,
+				1FDC8643221331A300EAC346 /* Distribution */,
+			);
+			path = Statistics;
+			sourceTree = "<group>";
+		};
+		1FDC86452213329900EAC346 /* Algebra */ = {
+			isa = PBXGroup;
+			children = (
+				1F09370A21F57B0200E707BD /* Trigonometry */,
+				1F3D31662202853000462F10 /* Factorization */,
+			);
+			path = Algebra;
+			sourceTree = "<group>";
+		};
+		1FDC864822133A6100EAC346 /* Calculus */ = {
+			isa = PBXGroup;
+			children = (
+				1F09370621F56F9C00E707BD /* Differentiation */,
+			);
+			path = Calculus;
+			sourceTree = "<group>";
+		};
+		1FDC864922136AB500EAC346 /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				1FDC864A22136AB500EAC346 /* Arcane */,
+				1FDC864B22136AB500EAC346 /* FindBest */,
+				1FDC864C22136AB500EAC346 /* DiceRoll */,
+			);
+			path = Misc;
+			sourceTree = "<group>";
+		};
 		1FE487FA220E8DC8005361AC /* Screenshots */ = {
 			isa = PBXGroup;
 			children = (
+				1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */,
+				1FDC863922132F4300EAC346 /* tangent_plane_kelvin.png */,
 				1FE487FF22126206005361AC /* finding_tangent.png */,
 				1FE487FC220E9028005361AC /* ruby_dracula_theme.png */,
 				1FE487FB220E9027005361AC /* ruby_github_theme.png */,
@@ -795,24 +847,28 @@
 			files = (
 				1FE1697321F28F1E0006712C /* Tests in Resources */,
 				1F8DF78F2208CCEE006351B0 /* FunctionDefinition in Resources */,
-				1F09371521F64FC600E707BD /* Randomization in Resources */,
 				1F8DF78D2208CCB0006351B0 /* ForLoop in Resources */,
+				1FDC865122136AB600EAC346 /* FindBest in Resources */,
 				1F09370F21F5800B00E707BD /* String in Resources */,
 				1FE487FE220E9028005361AC /* ruby_dracula_theme.png in Resources */,
 				1F570B5121FBF28C0006E342 /* Matrix in Resources */,
 				1FE487FD220E9028005361AC /* ruby_github_theme.png in Resources */,
 				1F09371B21F67FDD00E707BD /* SystemCheck in Resources */,
 				1F8DF78B2208CC54006351B0 /* Recursion in Resources */,
+				1FDC863B22132F4300EAC346 /* tangent_plane_kelvin.png in Resources */,
 				1F8DF7922208D2E5006351B0 /* WhileLoop in Resources */,
-				1F09370721F56F9C00E707BD /* Calculus in Resources */,
-				1F0A90E521F93DCE00432B17 /* Statistics in Resources */,
+				1FDC865222136AB600EAC346 /* DiceRoll in Resources */,
+				1F09370721F56F9C00E707BD /* Differentiation in Resources */,
+				1F0A90E521F93DCE00432B17 /* OneVar in Resources */,
 				1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */,
 				1FDC863722131CD200EAC346 /* Contains in Resources */,
 				1F8DF72C22050110006351B0 /* List in Resources */,
+				1FDC865022136AB600EAC346 /* Arcane in Resources */,
 				1F8DF7892208CC13006351B0 /* BinarySearch in Resources */,
 				1F09371921F672CD00E707BD /* DateTime in Resources */,
 				1F8DF7AD2209538A006351B0 /* FlatMap in Resources */,
-				1F0CF2D321EEA74A00E40086 /* Misc in Resources */,
+				1FDC863A22132F4300EAC346 /* tangent_plane_grapher.png in Resources */,
+				1FDC8644221331A300EAC346 /* Distribution in Resources */,
 				1F0A90DF21F7E94200432B17 /* ErrorHandling in Resources */,
 				1FE1697B21F2EC070006712C /* Conditionals in Resources */,
 				1F09371121F62BF700E707BD /* Loops in Resources */,

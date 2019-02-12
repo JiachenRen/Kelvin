@@ -5,18 +5,18 @@ def examples_dir = "/Users/jiachenren/Library/Mobile Documents/com~apple~CloudDo
 
 def start_time = time()
 def files = {
-    "Misc",
+    "Misc/Arcane",
+    "Misc/DiceRoll",
+    "Misc/FindBest",
     "Tests",
     "Probability",
-    "Calculus",
-    "Randomization",
-    "String",
-    "Trigonometry",
-    "Statistics",
-    "Vector",
-    "Matrix",
-    "Factorization",
-    "List"
+    "Algebra/Trigonometry",
+    "Algebra/Factorization",
+    "Calculus/Differentiation",
+    "Linear Algebra/Vector",
+    "Linear Algebra/Matrix",
+    "Statistics/OneVar",
+    "Statistics/Distribution",
 }
 
 def file_paths = (files | (examples_dir & $0))
@@ -24,16 +24,18 @@ file_paths | (run $0)
 
 def dev_files = {
     "Conditionals",
-    "Loops",
-    "Subscript",
     "DateTime",
     "ErrorHandling",
-    "Multiline",
-    "TrailingClosure",
-    "FunctionDefinition",
     "ForLoop",
-    "WhileLoop",
-    "Recursion"
+    "FunctionDefinition",
+    "List",
+    "Loops",
+    "Multiline",
+    "Recursion",
+    "String",
+    "Subscript",
+    "TrailingClosure",
+    "WhileLoop"
 }
 
 for (dev_file: dev_files) {
