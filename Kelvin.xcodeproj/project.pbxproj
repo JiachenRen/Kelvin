@@ -202,6 +202,7 @@
 		1F8DF7A722093B8F006351B0 /* Boolean Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF7982209381B006351B0 /* Boolean Logic.swift */; };
 		1F8DF7AB22095321006351B0 /* Deconstruct in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF7AA22095321006351B0 /* Deconstruct */; };
 		1F8DF7AD2209538A006351B0 /* FlatMap in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF7AC2209538A006351B0 /* FlatMap */; };
+		1FDC863722131CD200EAC346 /* Contains in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863622131CD200EAC346 /* Contains */; };
 		1FE1697321F28F1E0006712C /* Tests in Resources */ = {isa = PBXBuildFile; fileRef = 1FE1697221F28F1E0006712C /* Tests */; };
 		1FE1697621F2D44A0006712C /* Pair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Pair.swift */; };
 		1FE1697721F2D5D40006712C /* Pair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Pair.swift */; };
@@ -331,6 +332,7 @@
 		1F8DF79E220939CE006351B0 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		1F8DF7AA22095321006351B0 /* Deconstruct */ = {isa = PBXFileReference; lastKnownFileType = text; path = Deconstruct; sourceTree = "<group>"; };
 		1F8DF7AC2209538A006351B0 /* FlatMap */ = {isa = PBXFileReference; lastKnownFileType = text; path = FlatMap; sourceTree = "<group>"; };
+		1FDC863622131CD200EAC346 /* Contains */ = {isa = PBXFileReference; lastKnownFileType = text; path = Contains; sourceTree = "<group>"; };
 		1FE1697221F28F1E0006712C /* Tests */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tests; sourceTree = "<group>"; };
 		1FE1697521F2D44A0006712C /* Pair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pair.swift; sourceTree = "<group>"; };
 		1FE1697A21F2EC070006712C /* Conditionals */ = {isa = PBXFileReference; lastKnownFileType = text; path = Conditionals; sourceTree = "<group>"; };
@@ -530,6 +532,7 @@
 				1F8DF7882208CC13006351B0 /* BinarySearch */,
 				1F8DF7AA22095321006351B0 /* Deconstruct */,
 				1F8DF7AC2209538A006351B0 /* FlatMap */,
+				1FDC863622131CD200EAC346 /* Contains */,
 			);
 			path = Algorithms;
 			sourceTree = "<group>";
@@ -804,6 +807,7 @@
 				1F09370721F56F9C00E707BD /* Calculus in Resources */,
 				1F0A90E521F93DCE00432B17 /* Statistics in Resources */,
 				1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */,
+				1FDC863722131CD200EAC346 /* Contains in Resources */,
 				1F8DF72C22050110006351B0 /* List in Resources */,
 				1F8DF7892208CC13006351B0 /* BinarySearch in Resources */,
 				1F09371921F672CD00E707BD /* DateTime in Resources */,

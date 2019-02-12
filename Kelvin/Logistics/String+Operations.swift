@@ -110,6 +110,7 @@ public extension String {
     public static let mutatingSub = "-="
     public static let mutatingMult = "*="
     public static let mutatingDiv = "/="
+    public static let mutatingConcat = "&="
     
     // Developer
     public static let `if` = "if"

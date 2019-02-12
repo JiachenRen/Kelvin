@@ -51,7 +51,8 @@ let defaultConfiguration: [Operation.Attribute: [String]] = [
         .mutatingAdd,
         .mutatingSub,
         .mutatingMult,
-        .mutatingDiv
+        .mutatingDiv,
+        .mutatingConcat
     ],
     .forwardCommutative: [
         .div,

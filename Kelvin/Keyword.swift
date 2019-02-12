@@ -292,6 +292,7 @@ public struct Keyword {
         .init(for: .mutatingSub, associativity: .infix, precedence: .assignment, operator: .init("-=")),
         .init(for: .mutatingMult, associativity: .infix, precedence: .assignment, operator: .init("*=")),
         .init(for: .mutatingDiv, associativity: .infix, precedence: .assignment, operator: .init("/=")),
+        .init(for: .mutatingConcat, associativity: .infix, precedence: .assignment, operator: .init("&=")),
         .init(for: .define, associativity: .infix, precedence: .assignment, operator: .init(":=", padding: .bothSides)),
         .init(for: .def, associativity: .prefix, precedence: .assignment),
         .init(for: .del, associativity: .prefix),

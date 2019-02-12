@@ -1,15 +1,49 @@
-# A function that checks if list contains a
-def contains(list, a) {
-    for (e: list) {
-        if (e == a) {
-            return true
-        }
-    }
-    return false
+# Declare a list, l1
+def l1 = {1, 2, 3, x, a, f(x), x + a}
+
+# A simple for loop that iterates through every element in the list
+# Prints "1, 2, 3, x, a, f(x), a + x, " in console.
+for (e: l1) {
+    print e & ", "
+}
+println ""
+
+# Let's make it a bit more interesting.
+# using map(), we match every element in the list with its index, then print out each pair.
+# There are a few things happening here - $0 refers to the element in the list,
+# while $1 refers to the index of that element. The map function iterates through
+# the list and turns each element into a Pair, a unique DT in Kelvin that is essentially
+# an ordered list with only two elements.
+# The following loop prints "(1 : 0), (2 : 1), (3 : 2), (x : 3), (a : 4), (f(x) : 5), (a + x : 6), " to io.
+for (p: map(l1) {$0: $1}) {
+    print p & ", "
+}
+println ""
+
+# You can access list and elements with subscripts
+# There are two ways to subscript - with :: accessor and [].
+# The following code demonstrates the use of both
+l2 := {}
+for (p: map(l1) {$0: $1}) {
+    def element = p[0] + l1::p[1];
+    l2 := (l2 append element)
 }
 
-# Prints true
-println contains({1, 2, 3}, 2)
+# Prints {2, 4, 6, 2 * x, 2 * a, 2 * f(x), 2 * a + 2 * x}
+# See if you can figure out what's happening given that
+# p[0] refers to the element, while p[1], the second element
+# of the pair, refers to the index.
+println l2
+assert l2 == {2, 4, 6, 2 * x, 2 * a, 2 * f(x), 2 * a + 2 * x}
 
-# Prints false
-println contains({1, 2, 3}, x)
+# Iterate through a string with for loop
+def str = "hello world"
+def chars = ""
+for (c: str as list) {
+    chars &= c
+    print c
+}
+assert c == str
+
+
+

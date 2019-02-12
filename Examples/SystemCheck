@@ -43,7 +43,9 @@ for (dev_file: dev_files) {
 
 def alg_files = {
     "BinarySearch",
-    "FlatMap"
+    "FlatMap",
+    "Deconstruct",
+    "Contains"
 }
 
 map(alg_files) {
