@@ -74,7 +74,7 @@ public struct List: MutableListProtocol, NaN {
      */
     public func joined(with list: List, by bin: String? = nil) throws -> List {
         if count != list.count {
-            throw ExecutionError.dimensionMismatch
+            throw ExecutionError.dimensionMismatch(self, list)
         }
         return List(elements.enumerated().map {
             if let b = bin {
@@ -86,7 +86,7 @@ public struct List: MutableListProtocol, NaN {
     
     public func removing(at idx: Int) throws -> List {
         if isOutOfBounds(idx) {
-            throw ExecutionError.indexOutOfBounds
+            throw ExecutionError.indexOutOfBounds(self, maxIdx: self.count - 1, idx: idx)
         }
         var list = self
         list.elements.remove(at: idx)

@@ -119,7 +119,7 @@ public extension Stat {
      */
     public static func invNorm(_ p: Double) throws -> Double {
         if p >= 1 || p <= 0  {
-            throw ExecutionError.invalidDomain(0, 1)
+            throw ExecutionError.domain(Function(.invNorm, [p]), p, lowerBound: 0.0, upperBound: 1.0)
         }
         
         let a1 = -39.69683028665376

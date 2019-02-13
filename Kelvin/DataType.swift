@@ -8,10 +8,11 @@
 
 import Foundation
 
-enum DataType: String, CustomStringConvertible {
+public enum DataType: String, CustomStringConvertible {
     case string
     case list
     case number
+    case int
     case variable
     case vector
     case matrix
@@ -20,15 +21,18 @@ enum DataType: String, CustomStringConvertible {
     case function
     case bool
     
-    var description: String {
+    public var description: String {
         return rawValue
     }
     
+    /// - Todo: Resolve conflict b/w Number and Int
     static func resolve(_ node: Node) throws -> DataType {
         if node is KString {
             return .string
         } else if node is List {
             return .list
+        } else if node is Int {
+            return .int
         } else if node is NSNumber {
             return .number
         } else if node is Variable {

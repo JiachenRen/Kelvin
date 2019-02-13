@@ -116,7 +116,7 @@ public struct Matrix: MutableListProtocol, NaN {
         
         for i in 0..<rows.count - 1 {
             if rows[i].count != rows[i + 1].count {
-                throw ExecutionError.dimensionMismatch
+                throw ExecutionError.general(errMsg: "failed to initialize matrix due to non-uniform row dimension")
             }
         }
         
@@ -148,7 +148,7 @@ public struct Matrix: MutableListProtocol, NaN {
      */
     public func perform(_ bin: Binary, with mat: Matrix) throws -> Matrix {
         if dim != mat.dim {
-            throw ExecutionError.dimensionMismatch
+            throw ExecutionError.dimensionMismatch(self, mat)
         }
         
         var copy = self

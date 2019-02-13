@@ -67,7 +67,7 @@ public struct Vector: MutableListProtocol, NaN {
      */
     public func perform(_ operation: Binary, with vec: Vector) throws -> Vector {
         if vec.count != count {
-            throw ExecutionError.dimensionMismatch
+            throw ExecutionError.dimensionMismatch(self, vec)
         }
         
         let elements = zip(self.elements, vec.elements).map {
@@ -85,7 +85,7 @@ public struct Vector: MutableListProtocol, NaN {
      */
     public func dot(with vec: Vector) throws -> Node {
         if vec.count != count {
-            throw ExecutionError.dimensionMismatch
+            throw ExecutionError.dimensionMismatch(self, vec)
         }
         
         return zip(elements, vec.elements).map {
@@ -102,7 +102,7 @@ public struct Vector: MutableListProtocol, NaN {
      */
     public func cross(with vec: Vector) throws -> Vector {
         if count != vec.count {
-            throw ExecutionError.dimensionMismatch
+            throw ExecutionError.dimensionMismatch(self, vec)
         } else if count == 2 {
             return try appending(0)
                 .cross(with: vec.appending(0))

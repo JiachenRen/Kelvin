@@ -70,7 +70,10 @@ let listAndPairOperations: [Operation] = [
         case 1:
             return pair.rhs
         default:
-            throw ExecutionError.indexOutOfBounds
+            throw ExecutionError.indexOutOfBounds(
+                Function(.get, [pair, idx]),
+                maxIdx: 1,
+                idx: idx)
         }
     },
 
@@ -82,7 +85,10 @@ let listAndPairOperations: [Operation] = [
         let list = nodes[0] as! ListProtocol
         let idx = Int(nodes[1]≈!)
         if idx >= list.count || idx < 0 {
-            throw ExecutionError.indexOutOfBounds
+            throw ExecutionError.indexOutOfBounds(
+                Function(.get, [list, idx]),
+                maxIdx: list.count - 1,
+                idx: idx)
         } else {
             return list[idx]
         }
@@ -93,11 +99,11 @@ let listAndPairOperations: [Operation] = [
             if let i = n as? Int {
                 return i
             }
-            throw ExecutionError.invalidDT("\(n)")
+            throw ExecutionError.unexpectedType(n, expected: .int, found: try .resolve(n))
         }
         
         if indices.count != 2 {
-            throw ExecutionError.invalidSubscript("list", "\($1)")
+            throw ExecutionError.invalidSubscript(list, list, $1)
         }
         
         return try List(list.subsequence(from: indices[0], to: indices[1]))
@@ -137,7 +143,10 @@ let listAndPairOperations: [Operation] = [
                 if let b = try predicate.simplify() as? Bool {
                     return b ? idx : nil
                 }
-                throw ExecutionError.predicateException
+                throw ExecutionError.unexpectedType(
+                    Function(.filter, nodes),
+                    expected: .bool,
+                    found: try .resolve(predicate.simplify()))
             }.compactMap {
                 $0 == nil ? nil: list[$0!]
             }
@@ -170,7 +179,10 @@ let listAndPairOperations: [Operation] = [
                 if let b = predicate as? Bool {
                     return b
                 }
-                throw ExecutionError.predicateException
+                throw ExecutionError.unexpectedType(
+                    Function(.filter, nodes),
+                    expected: .bool,
+                    found: try .resolve(predicate.simplify()))
             }
         }
         return nil

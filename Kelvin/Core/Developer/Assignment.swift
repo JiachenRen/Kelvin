@@ -66,9 +66,7 @@ public extension Developer {
             try assign($1, to: $0, by: /)
         },
         .binary(.mutatingConcat, [.var, .any]) {
-            guard let v = $0 as? Variable else {
-                throw ExecutionError.unexpectedError
-            }
+            let v = $0 as! Variable
             try Equation(lhs: v, rhs: Function(.concat, [v, $1])).define()
             return v
         },

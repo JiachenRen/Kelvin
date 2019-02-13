@@ -35,33 +35,21 @@ indirect public enum CompilerError: KelvinError {
 }
 
 public enum ExecutionError: KelvinError {
-    static let indexOutOfBounds = ExecutionError.general(errMsg: "index out of bounds")
-    static let dimensionMismatch = ExecutionError.general(errMsg: "dimension mismatch")
-    static let predicateException = ExecutionError.general(errMsg: "predicate must be a boolean")
-    static let unexpectedError = ExecutionError.general(errMsg: "an unexpected error has occurred")
-    
     case general(errMsg: String)
     case on(line: Int, err: KelvinError)
     case cancelled
+    case unexpected(_ node: Node)
+    case invalidType(_ node: Node, invalidTypeLiteral: String)
+    case unexpectedType(_ node: Node, expected: DataType, found: DataType)
+    case indexOutOfBounds(_ node: Node, maxIdx: Int, idx: Int)
+    case dimensionMismatch(_ a: Node, _ b: Node)
+    case domain(_ node: Node, _ val: Double, lowerBound: Double, upperBound: Double)
+    case invalidRange(_ node: Node, lowerBound: Double, upperBound: Double)
+    case invalidSubscript(_ node: Node, _ target: Node, _ subscript: Node)
+    case invalidCast(from: Node, to: DataType)
     
-    static func invalidDT(_ invalid: String) -> ExecutionError {
-        return ExecutionError.general(errMsg: "invalid data type '\(invalid)'")
-    }
-    
-    static func inconvertibleDT(from d1: String, to d2: String) -> ExecutionError {
-        return ExecutionError.general(errMsg: "cannot convert \(d1) to \(d2)")
-    }
-    
-    static func incompatibleList(_ requiredType: DataType) -> ExecutionError {
-        return ExecutionError.general(errMsg: "every element in the list must be a \(requiredType)")
-    }
-    
-    static func invalidDomain(_ lb: Double, _ ub: Double) -> ExecutionError {
-        return ExecutionError.general(errMsg: "invalid domain - input must be between \(lb) and \(ub)")
-    }
-    
-    static func invalidSubscript(_ target: String, _ sub: String) -> ExecutionError {
-        return ExecutionError.general(errMsg: "cannot subscript \(target) by \(sub)")
+    private func err(on node: Node, _ errMsg: String) -> String {
+        return "error when executing statement `\(node.stringified)`: \(errMsg)"
     }
     
     public var localizedDescription: String {
@@ -81,6 +69,25 @@ public enum ExecutionError: KelvinError {
             return "error on line \(i) - \(msg)"
         case .cancelled:
             return "program execution has been cancelled"
+        case .unexpected(let node):
+            return err(on: node, " an unexpected error has occurred")
+        case .invalidType(let node, invalidTypeLiteral: let literal):
+            return err(on: node, "`\(literal)` is not a valid type")
+        case .unexpectedType(let node, let expected, let found):
+            return "error: expected \(expected) in `\(node.stringified)`, but found \(found) instead"
+        case .indexOutOfBounds(let node, maxIdx: let maxIdx, idx: let idx):
+            return err(on: node, "index out of bounds; max index is \(maxIdx), but an index of \(idx) is given")
+        case .dimensionMismatch(let a, let b):
+            return "error: dimension mismatch in \(a.stringified) and \(b.stringified)"
+        case .domain(let node, let val, lowerBound: let lb, upperBound: let ub):
+            return err(on: node, "expecting an input between \(lb) and \(ub), but found \(val)")
+        case .invalidSubscript(let node, let target, let sub):
+            return err(on: node, "cannot subscript \(target.stringified) by \(sub.stringified)")
+        case .invalidRange(let node, lowerBound: let lb, upperBound: let ub):
+            return err(on: node, "cannot form range from \(lb) to \(ub)")
+        case .invalidCast(from: let node, to: let type):
+            let nodeType = (try? DataType.resolve(node).description) ?? "unknown"
+            return "error: cannot convert node from `\(node.stringified)` aka. \(nodeType) to \(type)"
         }
     }
 }

@@ -50,7 +50,11 @@ public class Developer {
             let definitions = try list.map {
                 (n) -> Equation in
                 guard let eq = n as? Equation else {
-                    throw ExecutionError.incompatibleList(.equation)
+                    throw ExecutionError.unexpectedType(
+                        list,
+                        expected: .equation,
+                        found: try .resolve(n)
+                    )
                 }
                 return eq
             }
@@ -174,14 +178,16 @@ public class Developer {
         .binary(.as, [.any, .var]) {
             let n = $1 as! Variable, c = $0
             guard let dt = DataType(rawValue: n.name) else {
-                throw ExecutionError.invalidDT(n.name)
+                throw ExecutionError.invalidType(
+                    Function(.as, [c, n]),
+                    invalidTypeLiteral: n.name)
             }
             
             func bailOut(msg: String? = nil) throws {
                 if let m = msg {
                     throw ExecutionError.general(errMsg: m)
                 }
-                throw ExecutionError.inconvertibleDT(from: "\(c)", to: dt.rawValue)
+                throw ExecutionError.invalidCast(from: c, to: dt)
             }
             
             switch dt {
@@ -216,7 +222,7 @@ public class Developer {
         .binary(.is, [.any, .var]) {
             let v = $1 as! Variable
             guard let t1 = DataType(rawValue: v.name) else {
-                throw ExecutionError.invalidDT(v.name)
+                throw ExecutionError.invalidType(Function(.is, [$0, $1]), invalidTypeLiteral: v.name)
             }
             
             let t2 = try DataType.resolve($0)

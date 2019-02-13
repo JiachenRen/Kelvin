@@ -29,8 +29,15 @@ extension ListProtocol {
     }
     
     public func subsequence(from idx1: Int, to idx2: Int) throws -> [Node] {
-        if isOutOfBounds(idx1) || isOutOfBounds(idx2) || idx2 < idx1 {
-            throw ExecutionError.indexOutOfBounds
+        if isOutOfBounds(idx1) {
+            throw ExecutionError.indexOutOfBounds(self, maxIdx: self.count - 1, idx: idx1)
+        } else if isOutOfBounds(idx2) {
+            throw ExecutionError.indexOutOfBounds(self, maxIdx: self.count - 1, idx: idx2)
+        } else if idx2 < idx1 {
+            throw ExecutionError.invalidRange(
+                self,
+                lowerBound: Double(idx1),
+                upperBound: Double(idx2))
         }
         return Array(elements.suffix(from: idx1)
             .prefix(upTo: idx2 - idx1 + 1))

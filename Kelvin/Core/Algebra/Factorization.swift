@@ -47,7 +47,7 @@ public extension Algebra {
         
         var nodes = nodes
         if nodes.count == 0 {
-            throw ExecutionError.unexpectedError
+            fatalError("an unexpected error has occurred during factorization")
         } else if nodes.count == 1 {
             return nodes.first!
         }

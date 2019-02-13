@@ -31,7 +31,10 @@ public extension Developer {
                 return nil
             }
             if n >= s.string.count || n < 0{
-                throw ExecutionError.indexOutOfBounds
+                throw ExecutionError.indexOutOfBounds(
+                    Function(.get, [$0, $1]),
+                    maxIdx: s.string.count - 1,
+                    idx: n)
             } else {
                 return KString("\(s.string[n])")
             }

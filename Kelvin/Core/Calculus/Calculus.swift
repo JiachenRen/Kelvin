@@ -106,7 +106,10 @@ public class Calculus {
             if let v = n as? Variable {
                 return v
             }
-            throw ExecutionError.incompatibleList(.variable)
+            throw ExecutionError.unexpectedType(
+                list,
+                expected: .variable,
+                found: try .resolve(n))
         }
     }
 }

@@ -24,7 +24,11 @@ public extension Developer {
         .binary(.if, [.any, .closure]) {
             let node = try $0.simplify()
             guard let predicate = node as? Bool else {
-                throw ExecutionError.predicateException
+                throw ExecutionError.unexpectedType(
+                    Function(.if, [$0, $1]),
+                    expected: .bool,
+                    found: try .resolve($1)
+                )
             }
             if predicate {
                 let _ = try $1.simplify()
@@ -130,8 +134,11 @@ public extension Developer {
             
             loop: while true {
                 guard let b = try $0.simplify() as? Bool else {
-                    print($0)
-                    throw ExecutionError.predicateException
+                    throw ExecutionError.unexpectedType(
+                        Function(.while, [$0, $1]),
+                        expected: .bool,
+                        found: try .resolve($0.simplify())
+                    )
                 }
                 if !b {
                     break
