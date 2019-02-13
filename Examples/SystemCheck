@@ -8,6 +8,7 @@ def files = {
     "Misc/Arcane",
     "Misc/DiceRoll",
     "Misc/FindBest",
+    "Misc/RepeatMapDemo",
     "Tests",
     "Probability",
     "Algebra/Trigonometry",
@@ -47,7 +48,8 @@ def alg_files = {
     "BinarySearch",
     "FlatMap",
     "Deconstruct",
-    "Contains"
+    "Contains",
+    "Recursion"
 }
 
 map(alg_files) {

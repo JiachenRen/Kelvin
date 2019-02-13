@@ -341,6 +341,7 @@
 		1FDC864A22136AB500EAC346 /* Arcane */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Arcane; sourceTree = "<group>"; };
 		1FDC864B22136AB500EAC346 /* FindBest */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FindBest; sourceTree = "<group>"; };
 		1FDC864C22136AB500EAC346 /* DiceRoll */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = DiceRoll; sourceTree = "<group>"; };
+		1FDC86582214BFAF00EAC346 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		1FE1697221F28F1E0006712C /* Tests */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tests; sourceTree = "<group>"; };
 		1FE1697521F2D44A0006712C /* Pair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pair.swift; sourceTree = "<group>"; };
 		1FE1697A21F2EC070006712C /* Conditionals */ = {isa = PBXFileReference; lastKnownFileType = text; path = Conditionals; sourceTree = "<group>"; };
@@ -487,6 +488,7 @@
 				1FDC864822133A6100EAC346 /* Calculus */,
 				1FDC8641221330CD00EAC346 /* Linear Algebra */,
 				1FDC86422213317F00EAC346 /* Statistics */,
+				1FDC86582214BFAF00EAC346 /* README.md */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
@@ -532,6 +534,7 @@
 		1F6D09FA220A439200807377 /* Algorithms */ = {
 			isa = PBXGroup;
 			children = (
+				1F8DF78A2208CC54006351B0 /* Recursion */,
 				1F8DF7882208CC13006351B0 /* BinarySearch */,
 				1F8DF7AA22095321006351B0 /* Deconstruct */,
 				1F8DF7AC2209538A006351B0 /* FlatMap */,
@@ -589,7 +592,6 @@
 				1F8DF78E2208CCEE006351B0 /* FunctionDefinition */,
 				1F8DF72B22050110006351B0 /* List */,
 				1F8DF76D22074B9C006351B0 /* Multiline */,
-				1F8DF78A2208CC54006351B0 /* Recursion */,
 				1F09370E21F5800B00E707BD /* String */,
 				1F09371621F66C4B00E707BD /* Subscript */,
 				1F8DF7732207D53C006351B0 /* TrailingClosure */,
