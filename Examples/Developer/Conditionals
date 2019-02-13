@@ -1,1 +1,24 @@
+# A simple if statement (same syntax as in most languages)
+# Important - semicolons are mandatary in closures
+a := 1
+if (a == 1) {
+    # Prints 1 and increment a by 1
+    println "a is 1";
+    a++;
+}
 
+# Make sure that a is 2 at this point.
+assert a == 2
+
+# "a+=2" increments the value of a by 2, then returns the value of a.
+if ((a+=2) == 2) {
+    println "This should not happen!"
+} else if (a == 3) {
+    println "This shouldn't happen either!"
+} else {
+    println "a is actually " & a
+}
+
+# Ternary conditional statement
+a := (a < 10 ? 0 : 10)
+assert a == 0

@@ -45,7 +45,7 @@
 		1F09370721F56F9C00E707BD /* Differentiation in Resources */ = {isa = PBXBuildFile; fileRef = 1F09370621F56F9C00E707BD /* Differentiation */; };
 		1F09370B21F57B0200E707BD /* Trigonometry in Resources */ = {isa = PBXBuildFile; fileRef = 1F09370A21F57B0200E707BD /* Trigonometry */; };
 		1F09370F21F5800B00E707BD /* String in Resources */ = {isa = PBXBuildFile; fileRef = 1F09370E21F5800B00E707BD /* String */; };
-		1F09371121F62BF700E707BD /* Loops in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371021F62BF700E707BD /* Loops */; };
+		1F09371121F62BF700E707BD /* RepeatMapDemo in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371021F62BF700E707BD /* RepeatMapDemo */; };
 		1F09371721F66C4B00E707BD /* Subscript in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371621F66C4B00E707BD /* Subscript */; };
 		1F09371921F672CD00E707BD /* DateTime in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371821F672CD00E707BD /* DateTime */; };
 		1F09371B21F67FDD00E707BD /* SystemCheck in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371A21F67FDD00E707BD /* SystemCheck */; };
@@ -270,7 +270,7 @@
 		1F09370621F56F9C00E707BD /* Differentiation */ = {isa = PBXFileReference; lastKnownFileType = text; path = Differentiation; sourceTree = "<group>"; };
 		1F09370A21F57B0200E707BD /* Trigonometry */ = {isa = PBXFileReference; lastKnownFileType = text; path = Trigonometry; sourceTree = "<group>"; };
 		1F09370E21F5800B00E707BD /* String */ = {isa = PBXFileReference; lastKnownFileType = text; path = String; sourceTree = "<group>"; };
-		1F09371021F62BF700E707BD /* Loops */ = {isa = PBXFileReference; lastKnownFileType = text; path = Loops; sourceTree = "<group>"; };
+		1F09371021F62BF700E707BD /* RepeatMapDemo */ = {isa = PBXFileReference; lastKnownFileType = text; path = RepeatMapDemo; sourceTree = "<group>"; };
 		1F09371621F66C4B00E707BD /* Subscript */ = {isa = PBXFileReference; lastKnownFileType = text; path = Subscript; sourceTree = "<group>"; };
 		1F09371821F672CD00E707BD /* DateTime */ = {isa = PBXFileReference; lastKnownFileType = text; path = DateTime; sourceTree = "<group>"; };
 		1F09371A21F67FDD00E707BD /* SystemCheck */ = {isa = PBXFileReference; lastKnownFileType = text; path = SystemCheck; sourceTree = "<group>"; };
@@ -588,7 +588,6 @@
 				1F8DF78C2208CCB0006351B0 /* ForLoop */,
 				1F8DF78E2208CCEE006351B0 /* FunctionDefinition */,
 				1F8DF72B22050110006351B0 /* List */,
-				1F09371021F62BF700E707BD /* Loops */,
 				1F8DF76D22074B9C006351B0 /* Multiline */,
 				1F8DF78A2208CC54006351B0 /* Recursion */,
 				1F09370E21F5800B00E707BD /* String */,
@@ -649,6 +648,7 @@
 		1FDC864922136AB500EAC346 /* Misc */ = {
 			isa = PBXGroup;
 			children = (
+				1F09371021F62BF700E707BD /* RepeatMapDemo */,
 				1FDC864A22136AB500EAC346 /* Arcane */,
 				1FDC864B22136AB500EAC346 /* FindBest */,
 				1FDC864C22136AB500EAC346 /* DiceRoll */,
@@ -871,7 +871,7 @@
 				1FDC8644221331A300EAC346 /* Distribution in Resources */,
 				1F0A90DF21F7E94200432B17 /* ErrorHandling in Resources */,
 				1FE1697B21F2EC070006712C /* Conditionals in Resources */,
-				1F09371121F62BF700E707BD /* Loops in Resources */,
+				1F09371121F62BF700E707BD /* RepeatMapDemo in Resources */,
 				1F645FC021FAA1260096AD1C /* Vector in Resources */,
 				1F09371721F66C4B00E707BD /* Subscript in Resources */,
 				1F0936BE21F3A54800E707BD /* Probability in Resources */,
