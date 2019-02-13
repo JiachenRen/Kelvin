@@ -6,8 +6,8 @@ This directory contains various examples that demonstrate how to the Kelvin lang
     - [Trigonometry](/Examples/Algebra/Trigonometry)
     - [Factorization](/Examples/Algebra/Factorization)
 - Linear Algebra
-    - [Matrix](/Examples/Linear\ Algebra/Matrix)
-    - [Vector](/Examples/Linear\ Algebra/Vector)
+    - [Matrix](/Examples/Linear%20Algebra/Matrix)
+    - [Vector](/Examples/Linear%20Algebra/Vector)
 - Statistics
     - [One variable statistics](/Examples/Statistics/OneVar)
     - [Distribution](/Examples/Statistics/Distribution)
