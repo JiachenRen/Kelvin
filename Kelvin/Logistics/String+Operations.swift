@@ -46,6 +46,8 @@ public extension String {
     public static let normPdf = "normPdf"
     public static let randNorm = "randNorm"
     public static let invNorm = "invNorm"
+    public static let binomPdf = "binomPdf"
+    public static let binomCdf = "binomCdf"
     
     // One variable stats
     public static let mean = "mean"

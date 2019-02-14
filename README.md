@@ -235,6 +235,7 @@ For more examples (algebraic operations, calulus, stats, loops, conditional stat
   - [ ] Algebraic solve
 
 ### Calculus
+- [ ] Limit
 - [x] Differentiation
   - *Logarithmic differentiation*
   - *nth derivative*
@@ -265,7 +266,7 @@ For more examples (algebraic operations, calulus, stats, loops, conditional stat
   - [x] Normal Pdf
   - [x] Inverse Normal
   - [ ] Inverse t
-  - [ ] Binomial Cdf/Pdf
+  - [x] Binomial Cdf/Pdf
   - [ ] Geometric Cdf/Pdf
 - [ ] Confidence intervals
 - [ ] Regression

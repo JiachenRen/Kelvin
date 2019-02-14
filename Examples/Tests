@@ -165,3 +165,6 @@ assert bin_search(l1, 8.5) == "not found"
 assert bin_search(l1, 9) == 6
 
 println "Test completed. No errors identified. System operational."
+
+# Test binomCdf
+assert sum(binomPdf(10, 0.1)) == 1

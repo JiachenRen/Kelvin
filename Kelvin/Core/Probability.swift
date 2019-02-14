@@ -27,10 +27,10 @@ let probabilityOperations: [Operation] = [
 
     // Combination and permutation
     .binary(.npr, [.any, .any]) {
-        $0~! / ($0 - $1)~!
+        nPr($0≈!, $1≈!)
     },
     .binary(.ncr, [.any, .any]) {
-        Function(.npr, [$0, $1]) / $1~!
+        nCr($0≈!, $1≈!)
     },
     .binary(.ncr, [.list, .int]) {
         List(combinations(of: ($0 as! List).elements, $1 as! Int).map {List($0)})
@@ -38,12 +38,21 @@ let probabilityOperations: [Operation] = [
 
     // Factorial
     .unary(.factorial, [.number]) {
-        if let i = Int(exactly: $0≈!) {
-            return factorial(Double(i))
-        }
-        throw ExecutionError.general(errMsg: "can only perform factorial on an integer")
+        factorial($0≈!)
     },
 ]
+
+/// Combination
+/// - Returns: Number of possible permutations when selecting r ordered elements from a pool of n elements.
+public func nCr(_ n: Double, _ r: Double) -> Double {
+    return nPr(n, r) / factorial(r)
+}
+
+/// Permutation
+/// - Returns: Number of possible permutations when selecting r ordered elements from a pool of n elements.
+public func nPr(_ n: Double, _ r: Double) -> Double {
+    return n < (n - r) ? .nan : n == (n - r) ? 1 : n * nPr(n - 1, r - 1)
+}
 
 /// A very concise definition of factorial.
 public func factorial(_ n: Double) -> Double {

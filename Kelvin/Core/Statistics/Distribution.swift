@@ -15,6 +15,45 @@ import GameKit
 /// Confidence interval = estimate +/- margin of error.
 public extension Stat {
     
+    /// Binomial cummulative distribution
+    public static func binomCdf(trials: Int, prSuccess pr: Node, lowerBound lb: Int, upperBound ub: Int) throws -> Node {
+        try Constraint.domain(trials, 0, Double.infinity)
+        try Constraint.domain(lb, 0, trials)
+        try Constraint.domain(ub, 0, trials)
+        try Constraint.range(lb, ub)
+        return (lb...ub).map {
+            binomPdf(trials: trials, prSuccess: pr, $0)
+        }.reduce(0) {
+            $0 + $1
+        }
+    }
+    
+    /**
+     Calculates probability for obtaining x number of successes, where x every
+     an integer from 0 to number of trials.
+     
+     - Parameters:
+        - trials: Number of trials to be carried out
+        - prSuccess: A double b/w 0 and 1 that is the probability of success
+     */
+    public static func binomPdf(trials: Int, prSuccess pr: Node) -> [Node] {
+        return (0...trials).map {
+            binomPdf(trials: trials, prSuccess: pr, $0)
+        }
+    }
+    
+    /**
+     Calculates binominal probability distribution
+     - Parameters:
+        - trials: Number of trials to be carried out
+        - prSuccess: A double b/w 0 and 1 that is the probability of success
+        - x: Number of successes
+     - Returns: The probability of getting the specified number of successes.
+     */
+    public static func binomPdf(trials: Node, prSuccess pr: Node, _ x: Node) -> Node {
+        return Function(.ncr, [trials, x]) * (pr ^ x) * ((1 - pr) ^ (trials - x))
+    }
+    
     /// A lightweight algorithm for calculating cummulative distribution frequency.
     public static func normCdf(_ x: Double) -> Double {
         var L: Double, K: Double, w: Double
@@ -118,9 +157,7 @@ public extension Stat {
      - Credit: https://stackedboxes.org/2017/05/01/acklams-normal-quantile-function/
      */
     public static func invNorm(_ p: Double) throws -> Double {
-        if p >= 1 || p <= 0  {
-            throw ExecutionError.domain(Function(.invNorm, [p]), p, lowerBound: 0.0, upperBound: 1.0)
-        }
+        try Constraint.domain(p, 0, 1)
         
         let a1 = -39.69683028665376
         let a2 = 220.9460984245205

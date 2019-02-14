@@ -13,6 +13,25 @@ public class Stat {
     
     public static let operations: [Operation] = [
         // Distribution
+        
+        // Binomial Pdf/Cdf
+        .init(.binomPdf, [.any, .any, .any]) {
+            binomPdf(trials: $0[0], prSuccess: $0[1], $0[2])
+        },
+        
+        .binary(.binomPdf, [.int, .any]) {
+            List(binomPdf(trials: $0 as! Int, prSuccess: $1))
+        },
+        
+        .init(.binomCdf, [.int, .any, .int, .int]) {
+            try binomCdf(
+                trials: $0[0] as! Int,
+                prSuccess: $0[1],
+                lowerBound: $0[2] as! Int,
+                upperBound: $0[3] as! Int
+            )
+        },
+        
         // normCdf from -∞ to x
         .unary(.normCdf, [.number]) {
             normCdf($0≈!)

@@ -38,18 +38,18 @@ public enum ExecutionError: KelvinError {
     case general(errMsg: String)
     case on(line: Int, err: KelvinError)
     case cancelled
-    case unexpected(_ node: Node)
-    case invalidType(_ node: Node, invalidTypeLiteral: String)
-    case unexpectedType(_ node: Node, expected: DataType, found: DataType)
-    case indexOutOfBounds(_ node: Node, maxIdx: Int, idx: Int)
+    case unexpected(_ node: Node?)
+    case invalidType(_ node: Node?, invalidTypeLiteral: String)
+    case unexpectedType(_ node: Node?, expected: DataType, found: DataType)
+    case indexOutOfBounds(_ node: Node?, maxIdx: Int, idx: Int)
     case dimensionMismatch(_ a: Node, _ b: Node)
-    case domain(_ node: Node, _ val: Double, lowerBound: Double, upperBound: Double)
-    case invalidRange(_ node: Node, lowerBound: Double, upperBound: Double)
-    case invalidSubscript(_ node: Node, _ target: Node, _ subscript: Node)
+    case domain(_ node: Node?, _ val: Value, lowerBound: Value, upperBound: Value)
+    case invalidRange(_ node: Node?, lowerBound: Value, upperBound: Value)
+    case invalidSubscript(_ node: Node?, _ target: Node, _ subscript: Node)
     case invalidCast(from: Node, to: DataType)
     
-    private func err(on node: Node, _ errMsg: String) -> String {
-        return "error when executing statement `\(node.stringified)`: \(errMsg)"
+    private func err(on node: Node?, _ errMsg: String) -> String {
+        return "error when executing statement `\(node?.stringified ?? "")`: \(errMsg)"
     }
     
     public var localizedDescription: String {
@@ -74,7 +74,7 @@ public enum ExecutionError: KelvinError {
         case .invalidType(let node, invalidTypeLiteral: let literal):
             return err(on: node, "`\(literal)` is not a valid type")
         case .unexpectedType(let node, let expected, let found):
-            return "error: expected \(expected) in `\(node.stringified)`, but found \(found) instead"
+            return "error: expected \(expected) in `\(node?.stringified ?? "")`, but found \(found) instead"
         case .indexOutOfBounds(let node, maxIdx: let maxIdx, idx: let idx):
             return err(on: node, "index out of bounds; max index is \(maxIdx), but an index of \(idx) is given")
         case .dimensionMismatch(let a, let b):
@@ -88,6 +88,27 @@ public enum ExecutionError: KelvinError {
         case .invalidCast(from: let node, to: let type):
             let nodeType = (try? DataType.resolve(node).description) ?? "unknown"
             return "error: cannot convert node from `\(node.stringified)` aka. \(nodeType) to \(type)"
+        }
+    }
+}
+
+public class Constraint {
+    public static func domain(at node: Node? = nil, _ x: Value, _ lb: Value, _ ub: Value) throws {
+        if x≈! < lb≈! || x≈! > ub≈!  {
+            throw ExecutionError.domain(
+                node,
+                x,
+                lowerBound: lb,
+                upperBound: ub)
+        }
+    }
+    
+    public static func range(at node: Node? = nil, _ lb: Value, _ ub: Value) throws {
+        if lb≈! > ub≈! {
+            throw ExecutionError.invalidRange(
+                node,
+                lowerBound: lb,
+                upperBound: ub)
         }
     }
 }

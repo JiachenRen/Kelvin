@@ -207,6 +207,7 @@
 		1FDC865022136AB600EAC346 /* Arcane in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC864A22136AB500EAC346 /* Arcane */; };
 		1FDC865122136AB600EAC346 /* FindBest in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC864B22136AB500EAC346 /* FindBest */; };
 		1FDC865222136AB600EAC346 /* DiceRoll in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC864C22136AB500EAC346 /* DiceRoll */; };
+		1FDC865A2215C1F900EAC346 /* StatProblem in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC86592215C1F900EAC346 /* StatProblem */; };
 		1FE1697321F28F1E0006712C /* Tests in Resources */ = {isa = PBXBuildFile; fileRef = 1FE1697221F28F1E0006712C /* Tests */; };
 		1FE1697621F2D44A0006712C /* Pair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Pair.swift */; };
 		1FE1697721F2D5D40006712C /* Pair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Pair.swift */; };
@@ -342,6 +343,7 @@
 		1FDC864B22136AB500EAC346 /* FindBest */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FindBest; sourceTree = "<group>"; };
 		1FDC864C22136AB500EAC346 /* DiceRoll */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = DiceRoll; sourceTree = "<group>"; };
 		1FDC86582214BFAF00EAC346 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		1FDC86592215C1F900EAC346 /* StatProblem */ = {isa = PBXFileReference; lastKnownFileType = text; path = StatProblem; sourceTree = "<group>"; };
 		1FE1697221F28F1E0006712C /* Tests */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tests; sourceTree = "<group>"; };
 		1FE1697521F2D44A0006712C /* Pair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pair.swift; sourceTree = "<group>"; };
 		1FE1697A21F2EC070006712C /* Conditionals */ = {isa = PBXFileReference; lastKnownFileType = text; path = Conditionals; sourceTree = "<group>"; };
@@ -654,6 +656,7 @@
 				1FDC864A22136AB500EAC346 /* Arcane */,
 				1FDC864B22136AB500EAC346 /* FindBest */,
 				1FDC864C22136AB500EAC346 /* DiceRoll */,
+				1FDC86592215C1F900EAC346 /* StatProblem */,
 			);
 			path = Misc;
 			sourceTree = "<group>";
@@ -879,6 +882,7 @@
 				1F0936BE21F3A54800E707BD /* Probability in Resources */,
 				1FFD8CAD218F50870004ECEB /* Main.storyboard in Resources */,
 				1F09370B21F57B0200E707BD /* Trigonometry in Resources */,
+				1FDC865A2215C1F900EAC346 /* StatProblem in Resources */,
 				1FE4880022126206005361AC /* finding_tangent.png in Resources */,
 				1F3D31672202853000462F10 /* Factorization in Resources */,
 				1F8DF7AB22095321006351B0 /* Deconstruct in Resources */,
