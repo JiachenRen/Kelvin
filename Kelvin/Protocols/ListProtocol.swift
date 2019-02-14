@@ -33,12 +33,8 @@ extension ListProtocol {
             throw ExecutionError.indexOutOfBounds(self, maxIdx: self.count - 1, idx: idx1)
         } else if isOutOfBounds(idx2) {
             throw ExecutionError.indexOutOfBounds(self, maxIdx: self.count - 1, idx: idx2)
-        } else if idx2 < idx1 {
-            throw ExecutionError.invalidRange(
-                self,
-                lowerBound: Double(idx1),
-                upperBound: Double(idx2))
         }
+        try Constraint.range(at: self, idx1, idx2)
         return Array(elements.suffix(from: idx1)
             .prefix(upTo: idx2 - idx1 + 1))
     }

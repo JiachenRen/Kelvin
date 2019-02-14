@@ -26,10 +26,10 @@ let probabilityOperations: [Operation] = [
     },
 
     // Combination and permutation
-    .binary(.npr, [.any, .any]) {
+    .binary(.npr, [.int, .int]) {
         nPr($0≈!, $1≈!)
     },
-    .binary(.ncr, [.any, .any]) {
+    .binary(.ncr, [.int, .int]) {
         nCr($0≈!, $1≈!)
     },
     .binary(.ncr, [.list, .int]) {
