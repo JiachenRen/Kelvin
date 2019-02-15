@@ -11,11 +11,11 @@ import Foundation
 /// TODO: retention policy
 public struct Closure: UnaryNode, NaN {
     
-    public static var symbol = "#"
+    public static var symbol = "$"
     var capturesReturn: Bool
 
     public var stringified: String {
-        return "#(\(node.stringified))"
+        return "$(\(node.stringified))"
     }
     
     var node: Node

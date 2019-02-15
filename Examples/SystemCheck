@@ -9,6 +9,7 @@ def files = {
     "Misc/DiceRoll",
     "Misc/FindBest",
     "Misc/RepeatMapDemo",
+    "Misc/StatProblem",
     "Tests",
     "Probability",
     "Algebra/Trigonometry",

@@ -185,18 +185,6 @@ public struct Function: MutableListProtocol {
         // Make a copy of self.
         var copy = self
 
-        // If the function's name begins with "$", the compiler preserves it once
-        // This enables functions to be used as an input type.
-        // Suppose we have "repeat(random(), 5)", it only execute random 1 once
-        // and copy the value 5 times to create the list, say {0.1, 0.1, 0.1, 0.1, 0.1};
-        // Now if we change it to "repeat($random(),5), it will behave as what you would expect:
-        // a list of 5 random numbers.
-        if name.starts(with: "$") {
-            var name = self.name
-            name.removeFirst()
-            return Function(name, args)
-        }
-
         // Simplify each argument, if requested.
         if !Operation.has(attr: .preservesArguments, name) {
             let args = try copy.args.simplify() as! List

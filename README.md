@@ -63,7 +63,7 @@ $ kelvin
 
 # Define a function fib(x) that finds the nth element of the fibonacci series
 # In kelvin, this can be abbreviated into a single line: 
-# def fib(n, #((if(n <= 1, #(return n)); return fib(n - 1) + fib(n - 2))))
+# def fib(n, $((if(n <= 1, $(return n)); return fib(n - 1) + fib(n - 2))))
 # You don't want to do that! (Nobody would understand...)
 ← def fib(n) {
     if (n <= 1) {
@@ -79,7 +79,7 @@ $ kelvin
 
 # Define a function listFib(n) that generates a fibonacci series of up to n elements
 # Again, look at this one liner that means the same thing (seriously though, don't do this)
-# def listFib(n, #(return 0...n | #(fib($1 + 1))))
+# def listFib(n, $(return 0...n | $(fib($1 + 1))))
 ← def listFib(n) {
     return map(0...n) {fib($1+1)}
   }
