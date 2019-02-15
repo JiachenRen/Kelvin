@@ -93,7 +93,11 @@ public enum ExecutionError: KelvinError {
 }
 
 public class Constraint {
-    public static func domain(at node: Node? = nil, _ x: Value, _ lb: Value, _ ub: Value) throws {
+    public static func domain(
+        at node: Node? = nil,
+        _ x: Value,
+        _ lb: Value,
+        _ ub: Value) throws {
         if x≈! < lb≈! || x≈! > ub≈!  {
             throw ExecutionError.domain(
                 node,
@@ -103,12 +107,28 @@ public class Constraint {
         }
     }
     
-    public static func range(at node: Node? = nil, _ lb: Value, _ ub: Value) throws {
+    public static func range(
+        at node: Node? = nil,
+        _ lb: Value,
+        _ ub: Value) throws {
         if lb≈! > ub≈! {
             throw ExecutionError.invalidRange(
                 node,
                 lowerBound: lb,
                 upperBound: ub)
+        }
+    }
+    
+    public static func index(
+        at node: Node? = nil,
+        _ count: Int,
+        _ idx: Int) throws {
+        if idx >= count || idx < 0 {
+            throw ExecutionError.indexOutOfBounds(
+                node,
+                maxIdx: count - 1,
+                idx: idx
+            )
         }
     }
 }

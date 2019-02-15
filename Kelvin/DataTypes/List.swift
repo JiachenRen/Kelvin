@@ -85,9 +85,7 @@ public struct List: MutableListProtocol, NaN {
     }
     
     public func removing(at idx: Int) throws -> List {
-        if isOutOfBounds(idx) {
-            throw ExecutionError.indexOutOfBounds(self, maxIdx: self.count - 1, idx: idx)
-        }
+        try Constraint.index(self.count, idx)
         var list = self
         list.elements.remove(at: idx)
         return list

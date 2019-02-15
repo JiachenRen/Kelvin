@@ -84,14 +84,12 @@ let listAndPairOperations: [Operation] = [
     .init(.get, [.iterable, .number]) { nodes in
         let list = nodes[0] as! ListProtocol
         let idx = Int(nodes[1]≈!)
-        if idx >= list.count || idx < 0 {
-            throw ExecutionError.indexOutOfBounds(
-                Function(.get, [list, idx]),
-                maxIdx: list.count - 1,
-                idx: idx)
-        } else {
-            return list[idx]
-        }
+        try Constraint.index(
+            at: Function(.get, [list, idx]),
+            list.count,
+            idx
+        )
+        return list[idx]
     },
     .binary(.get, [.iterable, .list]) {
         let list = $0 as! ListProtocol

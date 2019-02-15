@@ -30,14 +30,12 @@ public extension Developer {
             guard let s = $0 as? KString, let n = $1 as? Int else {
                 return nil
             }
-            if n >= s.string.count || n < 0{
-                throw ExecutionError.indexOutOfBounds(
-                    Function(.get, [$0, $1]),
-                    maxIdx: s.string.count - 1,
-                    idx: n)
-            } else {
-                return KString("\(s.string[n])")
-            }
+            try Constraint.index(
+                at: Function(.get, [$0, $1]),
+                s.string.count,
+                n
+            )
+            return KString("\(s.string[n])")
         },
     ]
 }
