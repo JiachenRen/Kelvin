@@ -93,6 +93,11 @@ extension ListProtocol {
         return (s, o)
     }
     
+    /// Self explanatory
+    public func contains(where predicament: PUnary) -> Bool {
+        return elements.contains(where: predicament)
+    }
+    
     /**
      Check if the two lists are strictly equivalent, i.e. order does matter.
      

@@ -188,6 +188,11 @@ let listAndPairOperations: [Operation] = [
     .binary(.removeAtIdx, [.list, .int]) {
         try ($0 as! List).removing(at: $1 as! Int)
     },
+    .binary(.contains, [.iterable, .any]) {(list, e) in
+        (list as! ListProtocol).contains {
+            e === $0
+        }
+    },
     .unary(.shuffle, [.list]) {
         var elements = ($0 as! List).elements
         elements.shuffle()

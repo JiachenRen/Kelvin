@@ -76,6 +76,7 @@ public extension String {
     public static let zip = "zip"
     public static let shuffle = "shuffle"
     public static let removeAtIdx = "rm"
+    public static let contains = "contains"
     
     // Calculus
     public static let derivative = "derivative"
