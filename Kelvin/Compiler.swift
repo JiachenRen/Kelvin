@@ -640,7 +640,7 @@ public class Compiler {
 
             // Try turning the expr into a node by first trying it as a node reference,
             // then an integer, next a double, and finally a boolean.
-            if let node = dict[expr] ?? Int(expr) ?? Double(expr) ?? Bool(expr) {
+            if let node = dict[expr] ?? Int(expr) ?? Float80(expr) ?? Bool(expr) {
                 return node
             } else if let fun = Transfer.parse(expr) ?? Control.parse(expr) {
                 // Flow control & transfer (return, throw, continue, break)

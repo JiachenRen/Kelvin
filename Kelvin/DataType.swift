@@ -33,7 +33,7 @@ public enum DataType: String, CustomStringConvertible {
             return .list
         } else if node is Int {
             return .int
-        } else if node is NSNumber {
+        } else if node is Value {
             return .number
         } else if node is Variable {
             return .variable

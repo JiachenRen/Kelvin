@@ -9,8 +9,8 @@
 import Foundation
 
 extension Int: Value {
-    public var doubleValue: Double {
-        return Double(self)
+    public var float80: Float80 {
+        return Float80(self)
     }
     
     public var ansiColored: String {

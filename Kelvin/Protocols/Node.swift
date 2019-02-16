@@ -23,7 +23,7 @@ public typealias PBinary = (Node, Node) -> Bool
 public protocol Node {
 
     /// The string representation of the node.
-    /// This is used to override the description implemented in Double;
+    /// This is used to override the description implemented in Float80;
     /// It serves as an intermediate.
     var stringified: String { get }
     
@@ -285,13 +285,13 @@ public func sign(_ arg: Node) -> Node {
 
 postfix operator ≈
 
-public postfix func ≈(_ node: Node) -> Double? {
-    return node.evaluated?.doubleValue
+public postfix func ≈(_ node: Node) -> Float80? {
+    return node.evaluated?.float80
 }
 
 postfix operator ≈!
 
-public postfix func ≈!(_ node: Node) -> Double {
+public postfix func ≈!(_ node: Node) -> Float80 {
     return (node≈)!
 }
 

@@ -61,8 +61,8 @@ public struct Equation: BinaryNode, NaN {
         // If lhs and rhs comes down to a number, compare their numerical values.
         if let v1 = eq.lhs.evaluated, let v2 = eq.rhs.evaluated {
             // TODO: Implement tolerance?
-            let d1 = v1.doubleValue
-            let d2 = v2.doubleValue
+            let d1 = v1.float80
+            let d2 = v2.float80
 
             if d1 != .nan && d2 != .nan {
                 switch mode {

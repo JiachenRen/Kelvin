@@ -8,9 +8,16 @@
 
 import Foundation
 
-extension Bool: Value {
-    public var doubleValue: Double {
-        return Double(self ? 1 : 0)
+extension Bool: LeafNode, NaN {
+    public var stringified: String {
+        return "\(self)"
+    }
+    
+    public func equals(_ node: Node) -> Bool {
+        if let b = node as? Bool {
+            return b == self
+        }
+        return false
     }
     
     public var ansiColored: String {

@@ -17,7 +17,7 @@ public extension Stat {
     
     /// Binomial cummulative distribution
     public static func binomCdf(trials: Int, prSuccess pr: Node, lowerBound lb: Int, upperBound ub: Int) throws -> Node {
-        try Constraint.domain(trials, 0, Double.infinity)
+        try Constraint.domain(trials, 0, Float80.infinity)
         try Constraint.domain(lb, 0, trials)
         try Constraint.domain(ub, 0, trials)
         try Constraint.range(lb, ub)
@@ -34,7 +34,7 @@ public extension Stat {
      
      - Parameters:
         - trials: Number of trials to be carried out
-        - prSuccess: A double b/w 0 and 1 that is the probability of success
+        - prSuccess: A Float80 b/w 0 and 1 that is the probability of success
      */
     public static func binomPdf(trials: Int, prSuccess pr: Node) -> [Node] {
         return (0...trials).map {
@@ -46,7 +46,7 @@ public extension Stat {
      Calculates binominal probability distribution
      - Parameters:
         - trials: Number of trials to be carried out
-        - prSuccess: A double b/w 0 and 1 that is the probability of success
+        - prSuccess: A Float80 b/w 0 and 1 that is the probability of success
         - x: Number of successes
      - Returns: The probability of getting the specified number of successes.
      */
@@ -115,13 +115,13 @@ public extension Stat {
         return 1 / σ * normPdf((x - μ) / σ)
     }
     
-    public static func randNorm(μ: Double, σ: Double, n: Int) -> [Double] {
+    public static func randNorm(μ: Float80, σ: Float80, n: Int) -> [Float80] {
         let gaussianDist = GaussianDistribution(
             randomSource: GKRandomSource(),
             mean: Float(μ),
             deviation: Float(σ))
-        return [Double](repeating: 0, count: n).map {_ in
-            Double(gaussianDist.nextFloat())
+        return [Float80](repeating: 0, count: n).map {_ in
+            Float80(gaussianDist.nextFloat())
         }
     }
     
@@ -157,7 +157,7 @@ public extension Stat {
      - Credit: https://stackedboxes.org/2017/05/01/acklams-normal-quantile-function/
      */
     public static func invNorm(_ p: Double) throws -> Double {
-        try Constraint.domain(p, 0, 1)
+        try Constraint.domain(Float80(p), 0, 1)
         
         let a1 = -39.69683028665376
         let a2 = 220.9460984245205

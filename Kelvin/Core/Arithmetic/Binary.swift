@@ -156,9 +156,9 @@ let binaryOperations: [Operation] = [
         case .mult:
             let (nums, nans) = fun.split(by: isNumber)
             return (**nums ^ $1) * (**nans ^ $1)
-        case .exp where fun[0] is NSNumber:
+        case .exp where fun[0] is Value:
             return (fun[0] ^ $1) ^ fun[1]
-        case .exp where fun[1] is NSNumber:
+        case .exp where fun[1] is Value:
             return fun[0] ^ (fun[1] * $1)
         default:
             break
@@ -179,18 +179,18 @@ let binaryOperations: [Operation] = [
 ]
 
 fileprivate let isNumber: PUnary = {
-    $0 is NSNumber
+    $0 is Value
 }
 
 /// TODO: Implement mode exact vs approximate.
-fileprivate func bin(_ lhs: Node, _ rhs: Node, _ binary: NBinary) -> Double {
+fileprivate func bin(_ lhs: Node, _ rhs: Node, _ binary: NBinary) -> Float80 {
     return binary(lhs≈!, rhs≈!)
 }
 
-fileprivate func d(_ node: Node) -> Double {
-    return node.evaluated!.doubleValue
+fileprivate func d(_ node: Node) -> Float80 {
+    return node.evaluated!.float80
 }
 
-fileprivate func %(_ a: Double, _ b: Double) -> Double {
+fileprivate func %(_ a: Float80, _ b: Float80) -> Float80 {
     return a.truncatingRemainder(dividingBy: b)
 }

@@ -12,14 +12,14 @@ let probabilityOperations: [Operation] = [
 
     // Random number generation
     .init(.random, []) { _ in
-        Double.random(in: 0...1)
+        Float80.random(in: 0...1)
     },
     .binary(.random, [.number, .number]) {
         let lb = $0≈!
         let ub = $1≈!
         let i = min(lb, ub)
         let j = max(lb, ub)
-        return Double.random(in: i...j)
+        return Float80.random(in: i...j)
     },
     .unary(.random, [.list]) {
         ($0 as! List).elements.randomElement()
@@ -44,18 +44,18 @@ let probabilityOperations: [Operation] = [
 
 /// Combination
 /// - Returns: Number of possible permutations when selecting r ordered elements from a pool of n elements.
-public func nCr(_ n: Double, _ r: Double) -> Double {
+public func nCr(_ n: Float80, _ r: Float80) -> Float80 {
     return nPr(n, r) / factorial(r)
 }
 
 /// Permutation
 /// - Returns: Number of possible permutations when selecting r ordered elements from a pool of n elements.
-public func nPr(_ n: Double, _ r: Double) -> Double {
+public func nPr(_ n: Float80, _ r: Float80) -> Float80 {
     return n < (n - r) ? .nan : n == (n - r) ? 1 : n * nPr(n - 1, r - 1)
 }
 
 /// A very concise definition of factorial.
-public func factorial(_ n: Double) -> Double {
+public func factorial(_ n: Float80) -> Float80 {
     return n < 0 ? .nan : n == 0 ? 1 : n * factorial(n - 1)
 }
 

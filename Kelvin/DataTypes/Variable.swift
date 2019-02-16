@@ -16,10 +16,10 @@ public struct Variable: LeafNode, NaN {
         }
     }()
 
-    static var constants: [String: Double] = [
-        "e": M_E,
-        "pi": Double.pi,
-        "inf": Double.infinity,
+    static var constants: [String: Float80] = [
+        "e": Float80(exactly: M_E)!,
+        "pi": Float80.pi,
+        "inf": Float80.infinity,
     ]
 
     /// The name of the variable

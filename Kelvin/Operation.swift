@@ -11,10 +11,10 @@ import Foundation
 typealias Definition = ([Node]) throws -> Node?
 
 /// Numerical unary operation
-typealias NUnary = (Double) -> Double
+typealias NUnary = (Float80) -> Float80
 
 /// Numerical binary operation
-typealias NBinary = (Double, Double) -> Double
+typealias NBinary = (Float80, Float80) -> Float80
 
 public class Operation: Equatable {
 
@@ -259,9 +259,9 @@ public class Operation: Equatable {
                     fallthrough
                 case .iterable where !(arg is MutableListProtocol):
                     fallthrough
-                case .number where !(arg is NSNumber):
+                case .number where !(arg is Value):
                     fallthrough
-                case .nan where arg is NSNumber:
+                case .nan where arg is Value:
                     fallthrough
                 case .equation where !(arg is Equation):
                     fallthrough

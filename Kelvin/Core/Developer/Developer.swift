@@ -119,10 +119,10 @@ public class Developer {
             KString("\(Date())")
         },
         .init(.time, []) { _ in
-            Date().timeIntervalSince1970
+            Float80(Date().timeIntervalSince1970)
         },
         .unary(.delay, [.number]) {
-            Thread.sleep(forTimeInterval: $0≈!)
+            Thread.sleep(forTimeInterval: Double($0≈!))
             return KString("done")
         },
         .binary(.measure, [.any, .int]) {
@@ -131,7 +131,7 @@ public class Developer {
             for _ in 0..<n {
                 let _ = try $0.simplify()
             }
-            let avg = (Date().timeIntervalSince1970 - t) / Double(n)
+            let avg = Float80(Date().timeIntervalSince1970 - t) / Float80(n)
             return Pair("avg(s)", avg)
         },
         

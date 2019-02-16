@@ -30,14 +30,12 @@
 		1F0936ED21F5066100E707BD /* ListProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936EB21F5058B00E707BD /* ListProtocol.swift */; };
 		1F0936F021F513AF00E707BD /* MutableListProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936EF21F513AF00E707BD /* MutableListProtocol.swift */; };
 		1F0936F121F513CF00E707BD /* MutableListProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936EF21F513AF00E707BD /* MutableListProtocol.swift */; };
-		1F0936F421F5184400E707BD /* Double+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F321F5184400E707BD /* Double+Value.swift */; };
+		1F0936F421F5184400E707BD /* Float80+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F321F5184400E707BD /* Float80+Value.swift */; };
 		1F0936F621F5186200E707BD /* Int+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F521F5186200E707BD /* Int+Value.swift */; };
 		1F0936F821F5189500E707BD /* Bool+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F721F5189500E707BD /* Bool+Value.swift */; };
-		1F0936FA21F518BB00E707BD /* NSNumber+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F921F518BB00E707BD /* NSNumber+Value.swift */; };
 		1F0936FB21F518D000E707BD /* Bool+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F721F5189500E707BD /* Bool+Value.swift */; };
-		1F0936FC21F518D000E707BD /* Double+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F321F5184400E707BD /* Double+Value.swift */; };
+		1F0936FC21F518D000E707BD /* Float80+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F321F5184400E707BD /* Float80+Value.swift */; };
 		1F0936FD21F518D000E707BD /* Int+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F521F5186200E707BD /* Int+Value.swift */; };
-		1F0936FE21F518D000E707BD /* NSNumber+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F921F518BB00E707BD /* NSNumber+Value.swift */; };
 		1F09370121F51EC000E707BD /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09370021F51EC000E707BD /* Vector.swift */; };
 		1F09370221F51EDD00E707BD /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09370021F51EC000E707BD /* Vector.swift */; };
 		1F09370421F54E6200E707BD /* Calculus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09370321F54E6200E707BD /* Calculus.swift */; };
@@ -133,10 +131,9 @@
 		1F8DF74A220672BE006351B0 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936E521F4ED2300E707BD /* Configuration.swift */; };
 		1F8DF74B220672BE006351B0 /* Equation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974C421E633FD006D6DC2 /* Equation.swift */; };
 		1F8DF74C220672BE006351B0 /* Bool+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F721F5189500E707BD /* Bool+Value.swift */; };
-		1F8DF74D220672BE006351B0 /* Double+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F321F5184400E707BD /* Double+Value.swift */; };
+		1F8DF74D220672BE006351B0 /* Float80+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F321F5184400E707BD /* Float80+Value.swift */; };
 		1F8DF74E220672BE006351B0 /* Int+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F521F5186200E707BD /* Int+Value.swift */; };
 		1F8DF74F220672BE006351B0 /* KString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* KString.swift */; };
-		1F8DF750220672BE006351B0 /* NSNumber+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F921F518BB00E707BD /* NSNumber+Value.swift */; };
 		1F8DF751220672BE006351B0 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AD2197331F005C3353 /* Function.swift */; };
 		1F8DF752220672BE006351B0 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82B32197416D005C3353 /* List.swift */; };
 		1F8DF753220672BE006351B0 /* Pair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Pair.swift */; };
@@ -262,10 +259,9 @@
 		1F0936E521F4ED2300E707BD /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		1F0936EB21F5058B00E707BD /* ListProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListProtocol.swift; sourceTree = "<group>"; };
 		1F0936EF21F513AF00E707BD /* MutableListProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableListProtocol.swift; sourceTree = "<group>"; };
-		1F0936F321F5184400E707BD /* Double+Value.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Value.swift"; sourceTree = "<group>"; };
+		1F0936F321F5184400E707BD /* Float80+Value.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Float80+Value.swift"; sourceTree = "<group>"; };
 		1F0936F521F5186200E707BD /* Int+Value.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Value.swift"; sourceTree = "<group>"; };
 		1F0936F721F5189500E707BD /* Bool+Value.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bool+Value.swift"; sourceTree = "<group>"; };
-		1F0936F921F518BB00E707BD /* NSNumber+Value.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSNumber+Value.swift"; sourceTree = "<group>"; };
 		1F09370021F51EC000E707BD /* Vector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vector.swift; sourceTree = "<group>"; };
 		1F09370321F54E6200E707BD /* Calculus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calculus.swift; sourceTree = "<group>"; };
 		1F09370621F56F9C00E707BD /* Differentiation */ = {isa = PBXFileReference; lastKnownFileType = text; path = Differentiation; sourceTree = "<group>"; };
@@ -458,10 +454,9 @@
 			isa = PBXGroup;
 			children = (
 				1F0936F721F5189500E707BD /* Bool+Value.swift */,
-				1F0936F321F5184400E707BD /* Double+Value.swift */,
+				1F0936F321F5184400E707BD /* Float80+Value.swift */,
 				1F0936F521F5186200E707BD /* Int+Value.swift */,
 				1F0CF2C321EA420400E40086 /* KString.swift */,
-				1F0936F921F518BB00E707BD /* NSNumber+Value.swift */,
 				1F8DF7802207EE9A006351B0 /* KVoid.swift */,
 			);
 			path = ValueTypes;
@@ -951,9 +946,8 @@
 				1F09370521F5618200E707BD /* Calculus.swift in Sources */,
 				1F09370221F51EDD00E707BD /* Vector.swift in Sources */,
 				1F0936FB21F518D000E707BD /* Bool+Value.swift in Sources */,
-				1F0936FC21F518D000E707BD /* Double+Value.swift in Sources */,
+				1F0936FC21F518D000E707BD /* Float80+Value.swift in Sources */,
 				1F0936FD21F518D000E707BD /* Int+Value.swift in Sources */,
-				1F0936FE21F518D000E707BD /* NSNumber+Value.swift in Sources */,
 				1F0936F121F513CF00E707BD /* MutableListProtocol.swift in Sources */,
 				1F0936ED21F5066100E707BD /* ListProtocol.swift in Sources */,
 				1F0936E721F4EDA100E707BD /* Configuration.swift in Sources */,
@@ -1018,7 +1012,7 @@
 				1F09370421F54E6200E707BD /* Calculus.swift in Sources */,
 				1F8DF79F220939CE006351B0 /* String.swift in Sources */,
 				1F6D09FC220B98AA00807377 /* ConsoleViewController.swift in Sources */,
-				1F0936F421F5184400E707BD /* Double+Value.swift in Sources */,
+				1F0936F421F5184400E707BD /* Float80+Value.swift in Sources */,
 				1FFD8CA8218F50850004ECEB /* Kelvin.xcdatamodeld in Sources */,
 				1F0936CE21F4E36300E707BD /* Probability.swift in Sources */,
 				1F2E82AC21966FC5005C3353 /* Operation.swift in Sources */,
@@ -1038,7 +1032,6 @@
 				1F0CF2C721EBA8C800E40086 /* Keyword.swift in Sources */,
 				1F09371D21F684D500E707BD /* Scope.swift in Sources */,
 				1F8DF73022050B5B006351B0 /* IOProtocol.swift in Sources */,
-				1F0936FA21F518BB00E707BD /* NSNumber+Value.swift in Sources */,
 				1F0936D721F4E80A00E707BD /* List & Tuple.swift in Sources */,
 				1F0A90ED21FA27E700432B17 /* Vector & Matrix.swift in Sources */,
 				1F3974C821E67627006D6DC2 /* Mode.swift in Sources */,
@@ -1088,10 +1081,9 @@
 				1F8DF74A220672BE006351B0 /* Configuration.swift in Sources */,
 				1F8DF74B220672BE006351B0 /* Equation.swift in Sources */,
 				1F8DF74C220672BE006351B0 /* Bool+Value.swift in Sources */,
-				1F8DF74D220672BE006351B0 /* Double+Value.swift in Sources */,
+				1F8DF74D220672BE006351B0 /* Float80+Value.swift in Sources */,
 				1F8DF74E220672BE006351B0 /* Int+Value.swift in Sources */,
 				1F8DF74F220672BE006351B0 /* KString.swift in Sources */,
-				1F8DF750220672BE006351B0 /* NSNumber+Value.swift in Sources */,
 				1F8DF751220672BE006351B0 /* Function.swift in Sources */,
 				1F8DF752220672BE006351B0 /* List.swift in Sources */,
 				1F8DF753220672BE006351B0 /* Pair.swift in Sources */,

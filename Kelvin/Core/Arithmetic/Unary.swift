@@ -95,18 +95,18 @@ let unaryOperations: [Operation] = [
         u($0, sqrt)
     },
     .unary(.sqrt, [.any]) {
-        $0 ^ (0.5)
+        $0 ^ (Float80(0.5))
     },
     .unary(.sign, [.number]) {
         let n = $0≈!
-        return n == 0 ? Double.nan : n > 0 ? 1 : -1
+        return n == 0 ? Float80.nan : n > 0 ? 1 : -1
     }
 ]
 
-fileprivate func u(_ nodes: Node, _ unary: NUnary) -> Double {
+fileprivate func u(_ nodes: Node, _ unary: NUnary) -> Float80 {
     return unary(nodes≈ ?? .nan)
 }
 
-fileprivate func log10(_ a: Double) -> Double {
+fileprivate func log10(_ a: Float80) -> Float80 {
     return log(a) / log(10)
 }

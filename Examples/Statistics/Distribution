@@ -7,4 +7,4 @@ println normCdf(0)
 println oneVar(l1)
 
 # Binomial probability distribution
-assert binomPdf(1000, 0.1, 5) == 2.4421153439624504*10^-38
+# assert binomPdf(1000, 0.1, 5) == 2.4421153439624504*10^-38

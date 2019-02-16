@@ -8,12 +8,12 @@
 
 import Foundation
 
-extension Double: Value {
+extension Float80: Value {
     var isInteger: Bool {
         return floor(self) == self
     }
     
-    public var doubleValue: Double {
+    public var float80: Float80 {
         return self
     }
     

@@ -46,7 +46,7 @@ let listAndPairOperations: [Operation] = [
     },
     .binary(.exp, [.any, .list]) {
         let list = $1 as! List
-        let baseList = List([Double](repeating: $0≈!, count: list.count))
+        let baseList = List([Float80](repeating: $0≈!, count: list.count))
         return try join(by: .exp, baseList, list)
     },
     

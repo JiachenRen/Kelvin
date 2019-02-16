@@ -12,7 +12,7 @@ import GameKit
 // OneVar statistics
 public extension Stat {
     
-    public static func outliers(_ list: [Double]) throws -> (lowerEnd: [Double], upperEnd: [Double]) {
+    public static func outliers(_ list: [Float80]) throws -> (lowerEnd: [Float80], upperEnd: [Float80]) {
         let stats = try quartiles(list)
         let iqr = stats.q3 - stats.q1
         let ut = stats.q3 + 1.5 * iqr
@@ -30,8 +30,8 @@ public extension Stat {
     }
     
     public static func fiveNSummary(
-        _ numbers: [Double],
-        isSorted: Bool = false) throws -> [Double] {
+        _ numbers: [Float80],
+        isSorted: Bool = false) throws -> [Float80] {
         
         var numbers = numbers
         let c = numbers.count
@@ -54,8 +54,8 @@ public extension Stat {
     }
     
     public static func quartiles(
-        _ numbers: [Double],
-        isSorted: Bool = false) throws -> (q1: Double, m: Double, q3: Double) {
+        _ numbers: [Float80],
+        isSorted: Bool = false) throws -> (q1: Float80, m: Float80, q3: Float80) {
         
         var numbers = numbers
         let c = numbers.count
@@ -81,8 +81,8 @@ public extension Stat {
     }
     
     public static func median(
-        _ numbers: [Double],
-        isSorted: Bool = false) -> (Double, idx: Int?) {
+        _ numbers: [Float80],
+        isSorted: Bool = false) -> (Float80, idx: Int?) {
         
         var numbers = numbers
         let c = numbers.count
@@ -106,21 +106,21 @@ public extension Stat {
     }
     
     /// Sum of difference squared.
-    public static func ssx(_ numbers: [Double]) -> Double {
+    public static func ssx(_ numbers: [Float80]) -> Float80 {
         
         // Calculate average.
-        let sum: Double = numbers.reduce(0) {
+        let sum: Float80 = numbers.reduce(0) {
             $0 + $1
         }
-        let avg: Double = sum / Double(numbers.count)
+        let avg: Float80 = sum / Float80(numbers.count)
         
         // Sum of squared differences
         return numbers.map {pow($0 - avg, 2)}
             .reduce(0) {$0 + $1}
     }
     
-    public static func max(_ numbers: [Double]) -> Double {
-        var max: Double = -.infinity
+    public static func max(_ numbers: [Float80]) -> Float80 {
+        var max: Float80 = -.infinity
         for n in numbers {
             if n > max {
                 max = n
@@ -129,8 +129,8 @@ public extension Stat {
         return max
     }
     
-    public static func min(_ numbers: [Double]) -> Double {
-        var min: Double = .infinity
+    public static func min(_ numbers: [Float80]) -> Float80 {
+        var min: Float80 = .infinity
         for n in numbers {
             if n < min {
                 min = n
@@ -140,14 +140,14 @@ public extension Stat {
     }
     
     public static func sum(_ nodes: [Node]) -> Node {
-        var nSum: Double = 0
+        var nSum: Float80 = 0
         var nans = [Node]()
         
         for element in nodes {
             if element is Int {
-                nSum += Double(element as! Int)
-            } else if element is Double {
-                nSum += element as! Double
+                nSum += Float80(element as! Int)
+            } else if element is Float80 {
+                nSum += element as! Float80
             } else {
                 nans.append(element)
             }
@@ -155,22 +155,22 @@ public extension Stat {
         return ++nans + nSum
     }
     
-    public static func sumSquared(_ numbers: [Double]) -> Double {
+    public static func sumSquared(_ numbers: [Float80]) -> Float80 {
         return numbers.map {pow($0, 2)}.reduce(0) {$0 + $1}
     }
     
-    public static func variance(_ numbers: [Double]) -> (sample: Double, population: Double) {
+    public static func variance(_ numbers: [Float80]) -> (sample: Float80, population: Float80) {
         let s = ssx(numbers)
-        let c = Double(numbers.count)
+        let c = Float80(numbers.count)
         return (s / (c - 1), s / c)
     }
     
-    public static func stdev(_ numbers: [Double]) -> (sample: Double, population: Double) {
+    public static func stdev(_ numbers: [Float80]) -> (sample: Float80, population: Float80) {
         let v = variance(numbers)
         return (sqrt(v.sample), sqrt(v.population))
     }
     
-    public static func mean(_ numbers: [Double]) -> Double {
-        return numbers.reduce(0) {$0 + $1} / Double(numbers.count)
+    public static func mean(_ numbers: [Float80]) -> Float80 {
+        return numbers.reduce(0) {$0 + $1} / Float80(numbers.count)
     }
 }

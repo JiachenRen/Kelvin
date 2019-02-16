@@ -34,17 +34,17 @@ public class Stat {
         
         // normCdf from -∞ to x
         .unary(.normCdf, [.number]) {
-            normCdf($0≈!)
+            Float80(normCdf(Double($0≈!)))
         },
         
         // normCdf from a to b, centered at zero with stdev of 1
         .binary(.normCdf, [.number, .number]) {
-            normCdf(from: $0≈!, to: $1≈!)
+            Float80(normCdf(from: Double($0≈!), to: Double($1≈!)))
         },
         // normCdf from a to b, centered at zero with stdev of 1
         .init(.normCdf, [.number, .number, .number, .number]) {
-            let args: [Double] = $0.map {$0≈!}
-            return normCdf(from: args[0], to: args[1], μ: args[2], σ: args[3])
+            let args: [Double] = $0.map {Double($0≈!)}
+            return Float80(normCdf(from: args[0], to: args[1], μ: args[2], σ: args[3]))
         },
         .init(.randNorm, [.number, .number, .int]) {
             let elements = randNorm(μ: $0[0]≈!, σ: $0[1]≈!, n: $0[2] as! Int)
@@ -53,7 +53,7 @@ public class Stat {
         .init(.invNorm, [.number, .number, .number]) {
             let stdev = $0[2]≈!
             let mean = $0[1]≈!
-            return try invNorm($0[0]≈!) * stdev + mean
+            return try Float80(invNorm(Double($0[0]≈!))) * stdev + mean
         },
         .unary(.normPdf, [.any]) {
             normPdf($0)

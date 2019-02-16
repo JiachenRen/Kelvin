@@ -10,7 +10,7 @@ import Foundation
 
 
 public protocol Value: LeafNode {
-    var doubleValue: Double { get }
+    var float80: Float80 { get }
 }
 
 extension Value {
@@ -24,7 +24,7 @@ extension Value {
 
     public func equals(_ node: Node) -> Bool {
         if let d = node as? Value {
-            return d.doubleValue == doubleValue
+            return d.float80 == float80
         }
         return false
     }
