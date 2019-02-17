@@ -35,6 +35,8 @@ let defaultConfiguration: [Operation.Attribute: [String]] = [
         .pipe,
         .evaluateAt,
         .map,
+        .remove,
+        .sort,
         .reduce,
         .filter,
         

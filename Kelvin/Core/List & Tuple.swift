@@ -170,23 +170,50 @@ let listAndPairOperations: [Operation] = [
         }
         return nil
     },
-    .init(.sort, [.list, .any]) {nodes in
-        if let l1 = nodes[0] as? List {
-            return try l1.sorted {
-                let predicate = try nodes[1].replacingAnonymousArgs(with: [$0, $1]).simplify()
-                if let b = predicate as? Bool {
+    .init(.sort, [.any, .any]) {nodes in
+        guard let l1 = try nodes[0].simplify() as? List else {
+            throw ExecutionError.unexpectedType(
+                Function(.sort, nodes),
+                expected: .list,
+                found: try .resolve(nodes[0])
+            )
+        }
+        return try l1.sorted {
+            let predicate = try nodes[1].replacingAnonymousArgs(with: [$0, $1]).simplify()
+            if let b = predicate as? Bool {
+                return b
+            }
+            throw ExecutionError.unexpectedType(
+                Function(.sort, nodes),
+                expected: .bool,
+                found: try .resolve(predicate.simplify())
+            )
+        }
+    },
+    .binary(.remove, [.any, .any]) {(l, n) in
+        guard var list = try l.simplify() as? List else {
+            throw ExecutionError.unexpectedType(
+                Function(.remove, [l, n]),
+                expected: .list,
+                found: try .resolve(l)
+            )
+        }
+        if let idx = try n.simplify() as? Int {
+            return try list.removing(at: idx)
+        } else {
+            try list.elements.removeAll {e in
+                let predicate = n.replacingAnonymousArgs(with: [e])
+                if let b = try predicate.simplify() as? Bool {
                     return b
                 }
                 throw ExecutionError.unexpectedType(
-                    Function(.filter, nodes),
+                    predicate,
                     expected: .bool,
-                    found: try .resolve(predicate.simplify()))
+                    found: try .resolve(predicate.simplify())
+                )
             }
+            return list
         }
-        return nil
-    },
-    .binary(.removeAtIdx, [.list, .int]) {
-        try ($0 as! List).removing(at: $1 as! Int)
     },
     .binary(.contains, [.iterable, .any]) {(list, e) in
         (list as! ListProtocol).contains {

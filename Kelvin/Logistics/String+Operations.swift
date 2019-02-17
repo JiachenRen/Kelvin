@@ -75,7 +75,7 @@ public extension String {
     public static let sort = "sort"
     public static let zip = "zip"
     public static let shuffle = "shuffle"
-    public static let removeAtIdx = "rm"
+    public static let remove = "rm"
     public static let contains = "contains"
     
     // Calculus
