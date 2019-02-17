@@ -24,7 +24,7 @@ public struct Mode {
     func format(_ val: Float80) -> String {
         if val < Float80(Double.greatestFiniteMagnitude) && val > Float80(Double.leastNormalMagnitude) {
             let d = Double(round(1E10 * val) / 1E10)
-            if d > 1E15 || d < 1E-15 {
+            if abs(d) > 1E15 || abs(d) < 1E-4 {
                 return formatter.string(for: d)!
             }
             return d.description
