@@ -104,6 +104,12 @@ public class Developer {
         .init(.copy, [.any, .number]) {
             Function(.repeat, $0)
         },
+        .init(.readLine, []) {_ in
+            guard let io = Program.io else {
+                throw ExecutionError.general(errMsg: "program in/out protocol not found")
+            }
+            return KString(io.readLine())
+        },
         
         // Debug utilities
         .unary(.complexity, [.any]) {
@@ -218,8 +224,16 @@ public class Developer {
                     return try Variable(s.string)
                 }
                 try bailOut()
+            case .number:
+                if let s = $0 as? KString {
+                    if let n = Float80(s.string) {
+                        return n
+                    }
+                    throw ExecutionError.general(errMsg: "\(s.stringified) is not a valid number")
+                }
+                try bailOut()
             default:
-                break
+                throw ExecutionError.general(errMsg: "conversion to \(dt) is not yet supported")
             }
             
             return nil
