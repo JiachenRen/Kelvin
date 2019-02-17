@@ -45,5 +45,19 @@ for (c: str as list) {
 }
 assert c == str
 
+# How to use stride(lowerBound, upperBound, step)
+# Prints "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, "
+for (i: stride(0, 10, 1)) {
+    print i & ", "
+}
 
+# stride also works with decimals
+# This time, only "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, " is printed to output
+for (i: stride(0, 9.9, 1)) {
+    print i & ", "
+}
 
+# Prints 0, 0.1, 0.2, ..., 10
+for (i: stride(0, 10, 0.1)) {
+    print i & ", "
+}

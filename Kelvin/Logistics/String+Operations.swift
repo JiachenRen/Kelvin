@@ -145,6 +145,7 @@ public extension String {
     public static let `while` = "while"
     public static let `inout` = "inout"
     public static let readLine = "readLine"
+    public static let stride = "stride"
     
     // Matrix & vector
     public static let dotProduct = "dotP"

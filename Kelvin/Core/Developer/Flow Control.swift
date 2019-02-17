@@ -157,5 +157,14 @@ public extension Developer {
             }
             return KVoid()
         },
+        .init(.stride, [.number, .number, .number]) {
+            var elements = [Node]()
+            var args = $0.map {Double($0≈!)}
+            while args[0] <= args[1] {
+                elements.append(Float80(args[0]))
+                args[0] += args[2]
+            }
+            return List(elements)
+        }
     ]
 }
