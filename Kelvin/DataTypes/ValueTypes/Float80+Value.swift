@@ -27,8 +27,7 @@ extension Float80: Value {
     
     private var formatted: String {
         // Use the proper scientific notation
-        return "\(self)".replacingOccurrences(of: "e+", with: "*10^")
-            .replacingOccurrences(of: "e-", with: "*10^-")
+        return Mode.shared.format(self)
     }
     
     /// If the double is an integer, convert it to an integer.
