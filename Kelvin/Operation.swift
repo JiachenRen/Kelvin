@@ -392,5 +392,11 @@ public class Operation: Equatable {
         /// Operations with this flag are only commutative in the forward direction.
         /// e.g. division and subtraction.
         case forwardCommutative
+        
+        /// With this attribute, trailing curly brackets are forced into closures
+        /// even without preceding parenthesis.
+        /// e.g. code blockes like `do {}`, `deterministic {}`
+        /// should be marked with `implicitTrailingClosure` attribute.
+        case implicitTrailingClosure
     }
 }

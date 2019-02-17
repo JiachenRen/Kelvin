@@ -252,6 +252,33 @@ public class Compiler {
     
     private static func applyTrailingClosureSyntax(_ expr: inout String) {
         
+        // Convert f {} to f(#())
+        let regex = try! NSRegularExpression(pattern: "\\w+\\s*\\{", options: [])
+        var startIdx = 0
+        while let match = regex.firstMatch(in: expr, options: [], range: NSRange(location: startIdx, length: expr.count - startIdx)) {
+            let range = match.range
+            let _0 = expr.startIndex
+            let lb = expr.index(_0, offsetBy: range.lowerBound)
+            let leftBracketIdx = expr.index(_0, offsetBy: range.upperBound - 1)
+            let rightBracketIdx = find(expr, start: leftBracketIdx, close: "}")!
+            let left = expr[_0..<lb]
+            let right = expr[expr.index(after: rightBracketIdx)...]
+            let name = expr[lb..<leftBracketIdx].trimmingCharacters(in: .whitespaces)
+            
+            if Operation.configuration[.implicitTrailingClosure]!.contains(name) {
+                let closure = expr[expr.index(after: leftBracketIdx)..<rightBracketIdx]
+                let formatted = "\(name)(\(Closure.symbol)(\(closure)))"
+                expr = left + formatted + right
+                startIdx = left.count + formatted.count
+            } else {
+                startIdx = expr.distance(from: _0, to: rightBracketIdx)
+            }
+            
+            if startIdx >= expr.count {
+                break
+            }
+        }
+        
         // Remove white spaces b/w parenthesis and trailing closure
         expr = expr.replacingOccurrences(of: "\\)\\s*\\{", with: "){", options: .regularExpression)
         

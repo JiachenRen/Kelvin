@@ -125,14 +125,19 @@ public class Developer {
             Thread.sleep(forTimeInterval: Double($0≈!))
             return KString("done")
         },
-        .binary(.measure, [.any, .int]) {
-            let n = $1 as! Int
+        .binary(.measure, [.int, .any]) {
+            let n = $0 as! Int
             let t = Date().timeIntervalSince1970
             for _ in 0..<n {
-                let _ = try $0.simplify()
+                let _ = try $1.simplify()
             }
             let avg = Float80(Date().timeIntervalSince1970 - t) / Float80(n)
             return Pair("avg(s)", avg)
+        },
+        .unary(.measure, [.any]) {
+            let t = Date().timeIntervalSince1970
+            let _ = try $0.simplify()
+            return Float80(Date().timeIntervalSince1970 - t)
         },
         
         // Compilation & execution

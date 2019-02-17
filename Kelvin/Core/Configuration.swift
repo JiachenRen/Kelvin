@@ -58,5 +58,8 @@ let defaultConfiguration: [Operation.Attribute: [String]] = [
         .div,
         .sub,
         .pipe
+    ],
+    .implicitTrailingClosure: [
+        .measure
     ]
 ]
