@@ -15,6 +15,27 @@ import GameKit
 /// Confidence interval = estimate +/- margin of error.
 public extension Stat {
     
+    /// Geometric probability function
+    /// - Parameters:
+    ///     - k: The first trial that is successful
+    ///     - pr: Probability of success
+    public static func geomPdf(prSuccess pr: Node, _ k: Int) throws -> Node {
+        try Constraint.domain(k, 0, Float80.infinity)
+        return pr * ((1 - pr) ^ (k - 1))
+    }
+    
+    /// - Returns: Cumulative geometric probability distribution from `lowerBound` to `upperBound`
+    public static func geomCdf(prSuccess pr: Node, lowerBound lb: Int, upperBound ub: Int) throws -> Node {
+        try Constraint.domain(lb, 0, Float80.infinity)
+        try Constraint.domain(ub, 0, Float80.infinity)
+        try Constraint.range(lb, ub)
+        return try (lb...ub).map {
+            try geomPdf(prSuccess: pr, $0)
+        }.reduce(0) {
+            $0 + $1
+        }
+    }
+    
     /// Binomial cummulative distribution
     public static func binomCdf(trials: Int, prSuccess pr: Node, lowerBound lb: Int, upperBound ub: Int) throws -> Node {
         try Constraint.domain(trials, 0, Float80.infinity)

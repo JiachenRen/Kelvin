@@ -14,6 +14,18 @@ public class Stat {
     public static let operations: [Operation] = [
         // Distribution
         
+        // Geometric Pdf/Cdf
+        .binary(.geomPdf, [.any, .int]) {
+            try geomPdf(prSuccess: $0, $1 as! Int)
+        },
+        .init(.geomCdf, [.any, .int, .int]) {
+            try geomCdf(
+                prSuccess: $0[0],
+                lowerBound: $0[1] as! Int,
+                upperBound: $0[2] as! Int
+            )
+        },
+        
         // Binomial Pdf/Cdf
         .init(.binomPdf, [.any, .any, .any]) {
             binomPdf(trials: $0[0], prSuccess: $0[1], $0[2])

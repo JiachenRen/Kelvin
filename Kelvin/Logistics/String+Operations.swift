@@ -48,6 +48,8 @@ public extension String {
     public static let invNorm = "invNorm"
     public static let binomPdf = "binomPdf"
     public static let binomCdf = "binomCdf"
+    public static let geomPdf = "geomPdf"
+    public static let geomCdf = "geomCdf"
     
     // One variable stats
     public static let mean = "mean"

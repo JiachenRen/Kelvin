@@ -268,7 +268,7 @@ For more examples (algebraic operations, calulus, stats, loops, conditional stat
   - [ ] Inverse t
   - [ ] tPdf/tCdf
   - [x] Binomial Cdf/Pdf
-  - [ ] Geometric Cdf/Pdf
+  - [x] Geometric Cdf/Pdf
 - [ ] Confidence intervals
 - [ ] Regression
   - [ ] Linear
