@@ -197,6 +197,7 @@
 		1F8DF7A722093B8F006351B0 /* Boolean Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF7982209381B006351B0 /* Boolean Logic.swift */; };
 		1F8DF7AB22095321006351B0 /* Deconstruct in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF7AA22095321006351B0 /* Deconstruct */; };
 		1F8DF7AD2209538A006351B0 /* FlatMap in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF7AC2209538A006351B0 /* FlatMap */; };
+		1F985D4F221C3F8200EFC404 /* Gamma.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F985D4E221C3F8200EFC404 /* Gamma.swift */; };
 		1FDC863722131CD200EAC346 /* Contains in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863622131CD200EAC346 /* Contains */; };
 		1FDC863A22132F4300EAC346 /* tangent_plane_grapher.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */; };
 		1FDC863B22132F4300EAC346 /* tangent_plane_kelvin.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863922132F4300EAC346 /* tangent_plane_kelvin.png */; };
@@ -331,6 +332,7 @@
 		1F8DF79E220939CE006351B0 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		1F8DF7AA22095321006351B0 /* Deconstruct */ = {isa = PBXFileReference; lastKnownFileType = text; path = Deconstruct; sourceTree = "<group>"; };
 		1F8DF7AC2209538A006351B0 /* FlatMap */ = {isa = PBXFileReference; lastKnownFileType = text; path = FlatMap; sourceTree = "<group>"; };
+		1F985D4E221C3F8200EFC404 /* Gamma.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gamma.swift; sourceTree = "<group>"; };
 		1FDC863622131CD200EAC346 /* Contains */ = {isa = PBXFileReference; lastKnownFileType = text; path = Contains; sourceTree = "<group>"; };
 		1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tangent_plane_grapher.png; sourceTree = "<group>"; };
 		1FDC863922132F4300EAC346 /* tangent_plane_kelvin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tangent_plane_kelvin.png; sourceTree = "<group>"; };
@@ -398,7 +400,7 @@
 				1F0936C921F4E26700E707BD /* Arithmetic */,
 				1F3D316F2202875700462F10 /* Calculus */,
 				1F8DF7972209376B006351B0 /* Developer */,
-				1F0936CD21F4E36300E707BD /* Probability.swift */,
+				1F985D4D221C3F6B00EFC404 /* Probability */,
 				1F3D31612201FE0800462F10 /* Number.swift */,
 				1F0936D621F4E80A00E707BD /* List & Tuple.swift */,
 				1F0A90EC21FA27E700432B17 /* Vector & Matrix.swift */,
@@ -607,6 +609,15 @@
 				1F8DF7982209381B006351B0 /* Boolean Logic.swift */,
 			);
 			path = Developer;
+			sourceTree = "<group>";
+		};
+		1F985D4D221C3F6B00EFC404 /* Probability */ = {
+			isa = PBXGroup;
+			children = (
+				1F0936CD21F4E36300E707BD /* Probability.swift */,
+				1F985D4E221C3F8200EFC404 /* Gamma.swift */,
+			);
+			path = Probability;
 			sourceTree = "<group>";
 		};
 		1FDC8641221330CD00EAC346 /* Linear Algebra */ = {
@@ -990,6 +1001,7 @@
 				1F0A90E221F8C32B00432B17 /* String+Colors.swift in Sources */,
 				1F3974BF21E3B741006D6DC2 /* LeafNode.swift in Sources */,
 				1F8DF7812207EE9A006351B0 /* KVoid.swift in Sources */,
+				1F985D4F221C3F8200EFC404 /* Gamma.swift in Sources */,
 				1FE1697621F2D44A0006712C /* Pair.swift in Sources */,
 				1FE1697D21F380CA0006712C /* BinaryNode.swift in Sources */,
 				1F8DF7752207D755006351B0 /* Closure.swift in Sources */,

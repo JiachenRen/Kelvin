@@ -50,6 +50,7 @@ public extension String {
     public static let binomCdf = "binomCdf"
     public static let geomPdf = "geomPdf"
     public static let geomCdf = "geomCdf"
+    public static let tPdf = "tPdf"
     
     // One variable stats
     public static let mean = "mean"

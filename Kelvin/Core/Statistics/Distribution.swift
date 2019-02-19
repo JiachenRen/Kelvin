@@ -15,6 +15,20 @@ import GameKit
 /// Confidence interval = estimate +/- margin of error.
 public extension Stat {
     
+    /// Student's t probability density function:
+    /// tPdf(t,ν)= Γ((ν+1)/2)/(√(νπ)Γ(ν/2))*(1+t^2/ν)^(−1/2*(ν+1))
+    ///
+    /// - Parameters:
+    ///     - t: The value where PDF is to be evaluated
+    ///     - v: Degrees of freedom
+    
+    public static func tPdf(_ t: Float80, _ v: Int) throws -> Node {
+        let v: Float80 = Float80(v)
+        return try Gamma.gamma((v + 1) / 2.0) /
+            (√(v * Float80.pi) * Gamma.gamma(v / 2)) *
+            ((1 + (t ^ 2) / v) ^ ( -0.5 * (v + 1)))
+    }
+    
     /// Geometric probability function
     /// - Parameters:
     ///     - k: The first trial that is successful
