@@ -356,7 +356,6 @@ public class Operation: Equatable {
      */
     public enum ArgumentType: Int, Equatable {
         case int = 1
-        case double
         case number
         case nan
         case `var`
@@ -376,6 +375,10 @@ public class Operation: Equatable {
         case booleans = 1001
         case multivariate = 4000 // Takes in more than 1 argument
         case universal = 10000 // Takes in any # of args.
+        
+        var name: String {
+            return String(describing: self)
+        }
     }
 
     /// Flags that denote special attributes for certain operations.
@@ -398,5 +401,14 @@ public class Operation: Equatable {
         /// e.g. code blockes like `do {}`, `deterministic {}`
         /// should be marked with `implicitTrailingClosure` attribute.
         case implicitTrailingClosure
+    }
+}
+
+extension Operation: CustomStringConvertible {
+    public var description: String {
+        let parameterTypes = signature.reduce(nil) {
+            $0 == nil ? $1.name : "\($0!),\($1.name)"
+        } ?? ""
+        return "\(name)(\(parameterTypes))"
     }
 }

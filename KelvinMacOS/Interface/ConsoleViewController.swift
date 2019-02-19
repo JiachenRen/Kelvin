@@ -10,12 +10,12 @@ import Cocoa
 import Highlightr
 
 fileprivate let defaultTheme = "github"
-fileprivate let defaultLanguage = "elixir" // "ruby" and "crystal" also works fine
+fileprivate let defaultLanguage = "ruby" // "ruby" and "crystal" also works fine
 
 class ConsoleViewController: NSViewController, NSTextViewDelegate {
 
     @IBOutlet weak var outlineScrollView: NSScrollView!
-    @IBOutlet var editorTextView: NSTextView!
+    @IBOutlet var editorTextView: EditorTextView!
     @IBOutlet var consoleTextView: NSTextView!
     @IBOutlet var debuggerTextView: NSTextView!
     @IBOutlet weak var outlineView: NSOutlineView!
@@ -156,7 +156,31 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
         execTask = DispatchWorkItem {[unowned self] in
             self.compileAndRun(sourceCode, self.execTask)
         }
+        editorTextView.complete(nil)
         programExecQueue.asyncAfter(deadline: .now() + 0.1, execute: execTask!)
+    }
+    
+    func textView(
+        _ textView: NSTextView,
+        completions words: [String],
+        forPartialWordRange charRange: NSRange,
+        indexOfSelectedItem index: UnsafeMutablePointer<Int>?) -> [String] {
+        
+        let partialWord = editorTextView.string[charRange.lowerBound..<charRange.upperBound]
+        if partialWord == "" {
+            return []
+        }
+        
+        var operations = [Operation]()
+        for (key, value) in Operation.registered {
+            if key.starts(with: partialWord) {
+                operations.append(contentsOf: value)
+            }
+        }
+        
+        return operations.map {
+            $0.description
+        }
     }
     
     enum Buffer {

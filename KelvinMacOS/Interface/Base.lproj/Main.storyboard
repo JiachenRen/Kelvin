@@ -825,7 +825,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="581" height="343"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <textView verticallyResizable="YES" usesFontPanel="YES" findStyle="bar" allowsDocumentBackgroundColorChange="YES" allowsUndo="YES" usesRuler="YES" id="dm3-nc-3jl">
+                                                        <textView verticallyResizable="YES" usesFontPanel="YES" findStyle="bar" allowsDocumentBackgroundColorChange="YES" allowsUndo="YES" usesRuler="YES" id="dm3-nc-3jl" customClass="EditorTextView" customModule="macOS_Application" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="0.0" width="581" height="343"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

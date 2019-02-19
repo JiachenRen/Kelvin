@@ -197,6 +197,7 @@
 		1F8DF7A722093B8F006351B0 /* Boolean Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF7982209381B006351B0 /* Boolean Logic.swift */; };
 		1F8DF7AB22095321006351B0 /* Deconstruct in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF7AA22095321006351B0 /* Deconstruct */; };
 		1F8DF7AD2209538A006351B0 /* FlatMap in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF7AC2209538A006351B0 /* FlatMap */; };
+		1F94B7A6221C738000C47B1D /* EditorTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F94B7A5221C738000C47B1D /* EditorTextView.swift */; };
 		1F985D4F221C3F8200EFC404 /* Gamma.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F985D4E221C3F8200EFC404 /* Gamma.swift */; };
 		1FDC863722131CD200EAC346 /* Contains in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863622131CD200EAC346 /* Contains */; };
 		1FDC863A22132F4300EAC346 /* tangent_plane_grapher.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */; };
@@ -332,6 +333,7 @@
 		1F8DF79E220939CE006351B0 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		1F8DF7AA22095321006351B0 /* Deconstruct */ = {isa = PBXFileReference; lastKnownFileType = text; path = Deconstruct; sourceTree = "<group>"; };
 		1F8DF7AC2209538A006351B0 /* FlatMap */ = {isa = PBXFileReference; lastKnownFileType = text; path = FlatMap; sourceTree = "<group>"; };
+		1F94B7A5221C738000C47B1D /* EditorTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextView.swift; sourceTree = "<group>"; };
 		1F985D4E221C3F8200EFC404 /* Gamma.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gamma.swift; sourceTree = "<group>"; };
 		1FDC863622131CD200EAC346 /* Contains */ = {isa = PBXFileReference; lastKnownFileType = text; path = Contains; sourceTree = "<group>"; };
 		1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tangent_plane_grapher.png; sourceTree = "<group>"; };
@@ -747,6 +749,7 @@
 			isa = PBXGroup;
 			children = (
 				1F6D09FB220B98AA00807377 /* ConsoleViewController.swift */,
+				1F94B7A5221C738000C47B1D /* EditorTextView.swift */,
 				1FE487F4220E416F005361AC /* ConsoleViewController+NSOutlineView.swift */,
 				1FFD8CAB218F50870004ECEB /* Main.storyboard */,
 				1FE487F2220E4132005361AC /* ConsoleViewController+IOProtocol.swift */,
@@ -1043,6 +1046,7 @@
 				1F3D31622201FE0800462F10 /* Number.swift in Sources */,
 				1F0CF2C721EBA8C800E40086 /* Keyword.swift in Sources */,
 				1F09371D21F684D500E707BD /* Scope.swift in Sources */,
+				1F94B7A6221C738000C47B1D /* EditorTextView.swift in Sources */,
 				1F8DF73022050B5B006351B0 /* IOProtocol.swift in Sources */,
 				1F0936D721F4E80A00E707BD /* List & Tuple.swift in Sources */,
 				1F0A90ED21FA27E700432B17 /* Vector & Matrix.swift in Sources */,
