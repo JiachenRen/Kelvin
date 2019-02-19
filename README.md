@@ -276,6 +276,9 @@ For more examples (algebraic operations, calulus, stats, loops, conditional stat
   - [ ] Exponential/logarithmic
   - [ ] Sinusoidal
   - [ ] Logistic
+- [ ] Stat Tests
+  - [ ] One/two sample/prop t test
+  - [ ] One/two sample/prop z test
 
 ### Probability
 - [x] Permutation/combination
