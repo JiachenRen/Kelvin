@@ -15,116 +15,6 @@ import GameKit
 /// Confidence interval = estimate +/- margin of error.
 public extension Stat {
     
-    /// Internal function used by StudentCdf;
-    /// Ported to Swift from Java implementation.
-    ///
-    /// - Source: https://github.com/datumbox/datumbox-framework/blob/develop/datumbox-framework-core/src/main/java/com/datumbox/framework/core/statistics/distributions/ContinuousDistributions.java
-    private static func betinc(_ x: Float80, _ A: Float80, _ B: Float80) -> Float80{
-        var A0: Float80 = 0.0
-        var B0: Float80 = 1.0
-        var A1: Float80 = 1.0
-        var B1: Float80 = 1.0
-        var M9: Float80 = 0.0
-        var A2: Float80 = 0.0
-        
-        // The accuracy of the approximation
-        let accuracy: Float80 = 0.0000001
-        while (abs((A1 - A2) / A1) > accuracy) {
-            A2 = A1
-            var C9 = -(A + M9) * (A + B + M9) * x / (A + 2.0 * M9) / (A + 2.0 * M9 + 1.0)
-            A0 = A1 + C9 * A0
-            B0 = B1 + C9 * B0
-            M9 = M9 + 1
-            C9 = M9 * (B - M9) * x / (A + 2.0 * M9 - 1.0) / (A + 2.0 * M9)
-            A1 = A0 + C9 * A1
-            B1 = B0 + C9 * B1
-            A0 = A0 / B1
-            B0 = B0 / B1
-            A1 = A1 / B1
-            B1 = 1.0
-        }
-        
-        return A1 / A
-    }
-    
-    /// Calculates the probability from `-inf` to `x` under `tPdf`.
-    /// Ported to Swift from Java implementation.
-    ///
-    /// - Source: https://github.com/datumbox/datumbox-framework/blob/develop/datumbox-framework-core/src/main/java/com/datumbox/framework/core/statistics/distributions/ContinuousDistributions.java
-    ///
-    /// - Parameters:
-    ///     - x: The value at which tCdf is evaluated
-    ///     - df: Degrees of freedom
-    public static func tCdf(_ x: Float80, _ df: Int) throws -> Float80 {
-        try Constraint.domain(df, 1, Float80.infinity)
-        let df = Float80(df)
-        let A: Float80 = df / 2.0
-        let S: Float80 = A + 0.5
-        let Z: Float80 = df / (df + x * x)
-        let BT: Float80 = exp(
-            logGamma(S) -
-            logGamma(0.5) -
-            logGamma(A) +
-            A * log(Z) +
-            0.5 * log(1.0 - Z)
-        )
-        
-        let betacdf: Float80
-        
-        if  Z < (A + 1.0) / (S + 2.0) {
-            betacdf = BT * betinc(Z, A, 0.5)
-        }
-        else {
-            betacdf = 1 - BT * betinc(1.0 - Z, 0.5, A)
-        }
-        
-        var tcdf: Float80
-        if x < 0 {
-            tcdf = betacdf / 2.0
-        } else {
-            tcdf = 1.0 - betacdf / 2.0
-        }
-        
-        return tcdf
-    }
-    
-    /// Calculates the probability from `lowerBound` to `upperBound` under `tPdf`.
-    ///
-    /// - Parameters:
-    ///     - x: The value at which tCdf is evaluated
-    ///     - df: Degrees of freedom
-    public static func tCdf(lowerBound lb: Float80, upperBound ub: Float80, _ df: Int) throws -> Float80 {
-        try Constraint.range(lb, ub)
-        return try tCdf(ub, df) - tCdf(lb, df)
-    }
-    
-    /// Internal log for gamma function used to compute tCdf.
-    /// - SeeAlso: Gamma.logForGamma(_:)
-    private static func logGamma(_ Z: Float80) -> Float80 {
-        let S = 1 + 76.18009173 / Z - 86.50532033 /
-            (Z + 1) + 24.01409822 /
-            (Z + 2) - 1.231739516 /
-            (Z + 3) + 0.00120858003 /
-            (Z + 4) - 0.00000536382 /
-            (Z + 5)
-        return (Z - 0.5) * log(Z + 4.5) -
-            (Z + 4.5) + log(S * 2.50662827465)
-    }
-    
-    /// Student's t probability density function:
-    /// tPdf(t,ν)= Γ((ν+1)/2)/(√(νπ)Γ(ν/2))*(1+t^2/ν)^(−1/2*(ν+1))
-    ///
-    /// - Parameters:
-    ///     - t: The value where PDF is to be evaluated
-    ///     - v: Degrees of freedom
-    
-    public static func tPdf(_ t: Float80, _ v: Int) throws -> Node {
-        let v: Float80 = Float80(v)
-        return try Gamma.gamma((v + 1) / 2.0) /
-            (√(v * Float80.pi) * Gamma.gamma(v / 2)) *
-            ((1 + (t ^ 2) / v) ^ ( -0.5 * (v + 1)))
-    }
-    
     /// Geometric probability function
     /// - Parameters:
     ///     - k: The first trial that is successful
@@ -348,5 +238,290 @@ public extension Stat {
         }
         
         return x
+    }
+}
+
+/// Implementations for invT, tPdf, tCdf
+public extension Stat {
+    
+    /// Calculates inverse T value.
+    /// Transcribed from JavaScript, slightly modified to match the behavior of TI-nSpire CX CAS.
+    /// - Source: http://onlinestatbook.com/2/calculators/inverse_t_dist.html
+    ///
+    /// - Parameters:
+    ///     - p: Area under the `tPdf` curve
+    ///     - df: Degrees of freedom (a positive integer)
+    /// - Precondition: p is between 0 and 1
+    public static func invT(_ p: Float80, _ df: Int) throws -> Float80 {
+        try Constraint.domain(p, 0, 1)
+        try Constraint.domain(df, 0, Float80.infinity)
+        let df = Float80(df)
+        var x = ibetainv(2 * Swift.min(p, 1 - p), 0.5 * df, 0.5)
+        x = sqrt(df * (1 - x) / x)
+        return (p > 0.5) ? x : -x
+    }
+    
+    /// Helper function used by `invt`.
+    /// Transcribed from JavaScript
+    /// - Source: http://onlinestatbook.com/2/calculators/inverse_t_dist.html
+    private static func ibetainv(_ p: Float80, _ a: Float80, _ b: Float80) -> Float80 {
+        let EPS: Float80 = 1e-8, a1 = a - 1, b1 = b - 1
+        var lna: Float80, lnb: Float80, pp: Float80, t: Float80, u: Float80, err: Float80, x: Float80, al: Float80, h: Float80, w: Float80, afac: Float80
+        
+        if p <= 0 {
+            return 0
+        } else if p >= 1 {
+            return 1
+        }
+        
+        if(a >= 1 && b >= 1) {
+            pp = (p < 0.5) ? p : 1 - p
+            t = sqrt(-2 * log(pp))
+            x = (2.30753 + t * 0.27061) / (1 + t * (0.99229 + t * 0.04481)) - t
+            if(p < 0.5) {
+                x = -x
+            }
+            al = (x * x - 3) / 6;
+            h = 2 / (1 / (2 * a - 1)  + 1 / (2 * b - 1));
+            w = (x * sqrt(al + h) / h) - (1 / (2 * b - 1) - 1 / (2 * a - 1)) * (al + 5 / 6 - 2 / (3 * h));
+            x = a / (a + b * exp(2 * w));
+        } else {
+            lna = log(a / (a + b));
+            lnb = log(b / (a + b));
+            t = exp(a * lna) / a;
+            u = exp(b * lnb) / b;
+            w = t + u;
+            if(p < t / w) {
+                x = pow(a * w * p, 1 / a)
+                
+            } else {
+                x = 1 - pow(b * w * (1 - p), 1 / b)
+            }
+        }
+        
+        afac = -logGamma(a) - logGamma(b) + logGamma(a + b);
+        for j in 0..<10 {
+            if x == 0 || x == 1 {
+                return x
+            }
+            err = ibeta(x, a, b) - p;
+            t = exp(a1 * log(x) + b1 * log(1 - x) + afac);
+            u = err / t;
+            t = u / (1 - 0.5 * Swift.min(1, u * (a1 / x - b1 / (1 - x))))
+            x -= t;
+            if x <= 0 {
+                x = 0.5 * (x + t)
+            } else if x >= 1 {
+                x = 0.5 * (x + t + 1)
+            }
+            if abs(t) < EPS * x && j > 0 {
+                break
+            }
+        }
+        return x;
+    }
+    
+    /// Helper function used by `invt`.
+    /// Transcribed from JavaScript
+    /// - Source: http://onlinestatbook.com/2/calculators/inverse_t_dist.html
+    private static func betacf(_ x: Float80, _ a: Float80, _ b: Float80) -> Float80{
+        let fpmin: Float80 = 1e-30
+        var m2: Float80, aa: Float80, c: Float80, d: Float80, del: Float80, h: Float80, qab: Float80, qam: Float80, qap: Float80
+        
+        // These q's will be used in factors that occur in the coefficients
+        qab = a + b
+        qap = a + 1
+        qam = a - 1
+        c = 1
+        d = 1 - qab * x / qap
+        if abs(d) < fpmin {
+            d = fpmin
+        }
+        d = 1 / d;
+        h = d;
+        for m in 1...100 {
+            let m = Float80(m)
+            m2 = 2.0 * m
+            aa = m * (b - m) * x / ((qam + m2) * (a + m2))
+            
+            // One step (the even one) of the recurrence
+            d = 1 + aa * d;
+            if abs(d) < fpmin  {
+                d = fpmin
+            }
+            c = 1 + aa / c;
+            if abs(c) < fpmin {
+                c = fpmin
+            }
+            d = 1 / d;
+            h *= d * c;
+            aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
+            
+            // Next step of the recurrence (the odd one)
+            d = 1 + aa * d;
+            if abs(d) < fpmin {
+                d = fpmin
+            }
+            c = 1 + aa / c;
+            if abs(c) < fpmin {
+                c = fpmin
+            }
+            d = 1 / d;
+            del = d * c;
+            h *= del;
+            if abs(del - 1.0) < 3e-7 {
+                break
+            }
+        }
+        return h;
+    }
+    
+    /// Helper function used by `invt`.
+    /// Transcribed from JavaScript
+    /// - Source: http://onlinestatbook.com/2/calculators/inverse_t_dist.html
+    private static func ibeta(_ x: Float80, _ a: Float80, _ b: Float80) -> Float80 {
+        // Factors in front of the continued fraction.
+        let bt = (x == 0 || x == 1) ?  0 :
+            exp(logGamma(a + b) - logGamma(a) -
+                logGamma(b) + a * log(x) + b *
+                log(1 - x));
+        
+        if x < (a + 1) / (a + b + 2) {
+            // Use continued fraction directly.
+            return bt * betacf(x, a, b) / a
+        }
+        // else use continued fraction after making the symmetry transformation.
+        return 1 - bt * betacf(1 - x, b, a) / b;
+    }
+    
+    /// Helper function used by `invt`
+    /// Transcribed from JavaScript
+    /// - Source: http://onlinestatbook.com/2/calculators/inverse_t_dist.html
+    private static func ibeat(_ x: Float80, _ a: Float80, _ b: Float80) throws -> Float80 {
+        // Factors in front of the continued fraction.
+        let bt = (x == 0 || x == 1) ?  0 :
+            exp(logGamma(a + b) - logGamma(a) -
+                logGamma(b) + a * log(x) + b *
+                log(1 - x))
+        
+        if x < (a + 1) / (a + b + 2) {
+            // Use continued fraction directly.
+            return bt * betacf(x, a, b) / a
+        }
+        
+        // Otherwise use continued fraction after making the symmetry transformation.
+        return 1 - bt * betacf(1 - x, b, a) / b
+    }
+    
+    /// Internal function used by `tCdf`;
+    /// Ported to Swift from Java implementation.
+    ///
+    /// - Source: https://github.com/datumbox/datumbox-framework/blob/develop/datumbox-framework-core/src/main/java/com/datumbox/framework/core/statistics/distributions/ContinuousDistributions.java
+    private static func betinc(_ x: Float80, _ A: Float80, _ B: Float80) -> Float80{
+        var A0: Float80 = 0.0
+        var B0: Float80 = 1.0
+        var A1: Float80 = 1.0
+        var B1: Float80 = 1.0
+        var M9: Float80 = 0.0
+        var A2: Float80 = 0.0
+        
+        // The accuracy of the approximation
+        let accuracy: Float80 = 0.0000001
+        while (abs((A1 - A2) / A1) > accuracy) {
+            A2 = A1
+            var C9 = -(A + M9) * (A + B + M9) * x / (A + 2.0 * M9) / (A + 2.0 * M9 + 1.0)
+            A0 = A1 + C9 * A0
+            B0 = B1 + C9 * B0
+            M9 = M9 + 1
+            C9 = M9 * (B - M9) * x / (A + 2.0 * M9 - 1.0) / (A + 2.0 * M9)
+            A1 = A0 + C9 * A1
+            B1 = B0 + C9 * B1
+            A0 = A0 / B1
+            B0 = B0 / B1
+            A1 = A1 / B1
+            B1 = 1.0
+        }
+        
+        return A1 / A
+    }
+    
+    // Mark: tCdf
+    
+    /// Calculates the probability from `-inf` to `x` under `tPdf`.
+    /// Ported to Swift from Java implementation.
+    ///
+    /// - Source: https://github.com/datumbox/datumbox-framework/blob/develop/datumbox-framework-core/src/main/java/com/datumbox/framework/core/statistics/distributions/ContinuousDistributions.java
+    ///
+    /// - Parameters:
+    ///     - x: The value at which tCdf is evaluated
+    ///     - df: Degrees of freedom
+    public static func tCdf(_ x: Float80, _ df: Int) throws -> Float80 {
+        try Constraint.domain(df, 1, Float80.infinity)
+        let df = Float80(df)
+        let A: Float80 = df / 2.0
+        let S: Float80 = A + 0.5
+        let Z: Float80 = df / (df + x * x)
+        let BT: Float80 = exp(
+            logGamma(S) -
+                logGamma(0.5) -
+                logGamma(A) +
+                A * log(Z) +
+                0.5 * log(1.0 - Z)
+        )
+        
+        let betacdf: Float80
+        
+        if  Z < (A + 1.0) / (S + 2.0) {
+            betacdf = BT * betinc(Z, A, 0.5)
+        }
+        else {
+            betacdf = 1 - BT * betinc(1.0 - Z, 0.5, A)
+        }
+        
+        var tcdf: Float80
+        if x < 0 {
+            tcdf = betacdf / 2.0
+        } else {
+            tcdf = 1.0 - betacdf / 2.0
+        }
+        
+        return tcdf
+    }
+    
+    /// Calculates the probability from `lowerBound` to `upperBound` under `tPdf`.
+    ///
+    /// - Parameters:
+    ///     - x: The value at which tCdf is evaluated
+    ///     - df: Degrees of freedom
+    public static func tCdf(lowerBound lb: Float80, upperBound ub: Float80, _ df: Int) throws -> Float80 {
+        try Constraint.range(lb, ub)
+        return try tCdf(ub, df) - tCdf(lb, df)
+    }
+    
+    /// Internal log for gamma function used to compute tCdf.
+    /// - SeeAlso: Gamma.logForGamma(_:)
+    private static func logGamma(_ Z: Float80) -> Float80 {
+        let S = 1 + 76.18009173 / Z - 86.50532033 /
+            (Z + 1) + 24.01409822 /
+            (Z + 2) - 1.231739516 /
+            (Z + 3) + 0.00120858003 /
+            (Z + 4) - 0.00000536382 /
+            (Z + 5)
+        return (Z - 0.5) * log(Z + 4.5) -
+            (Z + 4.5) + log(S * 2.50662827465)
+    }
+    
+    /// Student's t probability density function:
+    /// tPdf(t,ν)= Γ((ν+1)/2)/(√(νπ)Γ(ν/2))*(1+t^2/ν)^(−1/2*(ν+1))
+    ///
+    /// - Parameters:
+    ///     - t: The value where PDF is to be evaluated
+    ///     - v: Degrees of freedom
+    
+    public static func tPdf(_ t: Float80, _ v: Int) throws -> Node {
+        let v: Float80 = Float80(v)
+        return try Gamma.gamma((v + 1) / 2.0) /
+            (√(v * Float80.pi) * Gamma.gamma(v / 2)) *
+            ((1 + (t ^ 2) / v) ^ ( -0.5 * (v + 1)))
     }
 }

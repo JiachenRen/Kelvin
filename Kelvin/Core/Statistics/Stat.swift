@@ -14,7 +14,10 @@ public class Stat {
     public static let operations: [Operation] = [
         // Distribution
         
-        // tPdf/Cdf
+        // tPdf, tCdf, and invt
+        .binary(.invT, [.number, .int]) {
+            try invT($0≈!, $1 as! Int)
+        },
         .binary(.tPdf, [.number, .int]) {
             try tPdf($0≈!, $1 as! Int)
         },

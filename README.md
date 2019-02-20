@@ -265,7 +265,7 @@ For more examples (algebraic operations, calulus, stats, loops, conditional stat
   - [x] Random normal distribution (randNorm)
   - [x] Normal Pdf
   - [x] Inverse Normal
-  - [ ] Inverse t
+  - [x] Inverse t
   - [x] tPdf/tCdf
   - [x] Binomial Cdf/Pdf
   - [x] Geometric Cdf/Pdf
