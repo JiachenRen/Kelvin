@@ -11,11 +11,11 @@ import Foundation
 public struct Pair: BinaryNode, NaN {
     
     public var stringified: String {
-        return "(\(lhs.stringified) : \(rhs.stringified))"
+        return "\(lhs.stringified) : \(rhs.stringified)"
     }
     
     public var ansiColored: String {
-        return "(".bold.yellow + "\(lhs.ansiColored) : \(rhs.ansiColored)" + ")".bold.yellow
+        return "\(lhs.ansiColored) : \(rhs.ansiColored)"
     }
     
     public var precedence: Keyword.Precedence {

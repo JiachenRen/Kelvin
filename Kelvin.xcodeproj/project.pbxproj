@@ -18,8 +18,8 @@
 		1F0936CF21F4E3A600E707BD /* Probability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936CD21F4E36300E707BD /* Probability.swift */; };
 		1F0936D121F4E45900E707BD /* Developer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936D021F4E45900E707BD /* Developer.swift */; };
 		1F0936D421F4E6BF00E707BD /* Developer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936D021F4E45900E707BD /* Developer.swift */; };
-		1F0936D721F4E80A00E707BD /* List & Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936D621F4E80A00E707BD /* List & Tuple.swift */; };
-		1F0936D821F4E83A00E707BD /* List & Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936D621F4E80A00E707BD /* List & Tuple.swift */; };
+		1F0936D721F4E80A00E707BD /* List & Pair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936D621F4E80A00E707BD /* List & Pair.swift */; };
+		1F0936D821F4E83A00E707BD /* List & Pair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936D621F4E80A00E707BD /* List & Pair.swift */; };
 		1F0936DD21F4EADE00E707BD /* Algebra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936DC21F4EADE00E707BD /* Algebra.swift */; };
 		1F0936DF21F4EB7A00E707BD /* Relation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936DE21F4EB7A00E707BD /* Relation.swift */; };
 		1F0936E221F4EBF900E707BD /* Algebra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936DC21F4EADE00E707BD /* Algebra.swift */; };
@@ -125,7 +125,7 @@
 		1F8DF743220672BE006351B0 /* Probability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936CD21F4E36300E707BD /* Probability.swift */; };
 		1F8DF744220672BE006351B0 /* Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3D31612201FE0800462F10 /* Number.swift */; };
 		1F8DF745220672BE006351B0 /* Developer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936D021F4E45900E707BD /* Developer.swift */; };
-		1F8DF746220672BE006351B0 /* List & Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936D621F4E80A00E707BD /* List & Tuple.swift */; };
+		1F8DF746220672BE006351B0 /* List & Pair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936D621F4E80A00E707BD /* List & Pair.swift */; };
 		1F8DF747220672BE006351B0 /* Vector & Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90EC21FA27E700432B17 /* Vector & Matrix.swift */; };
 		1F8DF748220672BE006351B0 /* Relation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936DE21F4EB7A00E707BD /* Relation.swift */; };
 		1F8DF74A220672BE006351B0 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936E521F4ED2300E707BD /* Configuration.swift */; };
@@ -257,7 +257,7 @@
 		1F0936CA21F4E2A300E707BD /* Unary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unary.swift; sourceTree = "<group>"; };
 		1F0936CD21F4E36300E707BD /* Probability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Probability.swift; sourceTree = "<group>"; };
 		1F0936D021F4E45900E707BD /* Developer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Developer.swift; sourceTree = "<group>"; };
-		1F0936D621F4E80A00E707BD /* List & Tuple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "List & Tuple.swift"; sourceTree = "<group>"; };
+		1F0936D621F4E80A00E707BD /* List & Pair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "List & Pair.swift"; sourceTree = "<group>"; };
 		1F0936DC21F4EADE00E707BD /* Algebra.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Algebra.swift; sourceTree = "<group>"; };
 		1F0936DE21F4EB7A00E707BD /* Relation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Relation.swift; sourceTree = "<group>"; };
 		1F0936E521F4ED2300E707BD /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
@@ -406,7 +406,7 @@
 				1F8DF7972209376B006351B0 /* Developer */,
 				1F985D4D221C3F6B00EFC404 /* Probability */,
 				1F3D31612201FE0800462F10 /* Number.swift */,
-				1F0936D621F4E80A00E707BD /* List & Tuple.swift */,
+				1F0936D621F4E80A00E707BD /* List & Pair.swift */,
 				1F0A90EC21FA27E700432B17 /* Vector & Matrix.swift */,
 				1F0936DE21F4EB7A00E707BD /* Relation.swift */,
 				1F0936E521F4ED2300E707BD /* Configuration.swift */,
@@ -970,7 +970,7 @@
 				1F0936E721F4EDA100E707BD /* Configuration.swift in Sources */,
 				1F0936E221F4EBF900E707BD /* Algebra.swift in Sources */,
 				1F0936E321F4EBF900E707BD /* Relation.swift in Sources */,
-				1F0936D821F4E83A00E707BD /* List & Tuple.swift in Sources */,
+				1F0936D821F4E83A00E707BD /* List & Pair.swift in Sources */,
 				1F0936D421F4E6BF00E707BD /* Developer.swift in Sources */,
 				1F0936CF21F4E3A600E707BD /* Probability.swift in Sources */,
 				1F0936CC21F4E2FF00E707BD /* Unary.swift in Sources */,
@@ -1051,7 +1051,7 @@
 				1F09371D21F684D500E707BD /* Scope.swift in Sources */,
 				1F94B7A6221C738000C47B1D /* EditorTextView.swift in Sources */,
 				1F8DF73022050B5B006351B0 /* IOProtocol.swift in Sources */,
-				1F0936D721F4E80A00E707BD /* List & Tuple.swift in Sources */,
+				1F0936D721F4E80A00E707BD /* List & Pair.swift in Sources */,
 				1F0A90ED21FA27E700432B17 /* Vector & Matrix.swift in Sources */,
 				1F3974C821E67627006D6DC2 /* Mode.swift in Sources */,
 				1FFD8CA3218F50850004ECEB /* AppDelegate.swift in Sources */,
@@ -1095,7 +1095,7 @@
 				1F8DF743220672BE006351B0 /* Probability.swift in Sources */,
 				1F8DF744220672BE006351B0 /* Number.swift in Sources */,
 				1F8DF745220672BE006351B0 /* Developer.swift in Sources */,
-				1F8DF746220672BE006351B0 /* List & Tuple.swift in Sources */,
+				1F8DF746220672BE006351B0 /* List & Pair.swift in Sources */,
 				1F8DF747220672BE006351B0 /* Vector & Matrix.swift in Sources */,
 				1F8DF748220672BE006351B0 /* Relation.swift in Sources */,
 				1F8DF74A220672BE006351B0 /* Configuration.swift in Sources */,
