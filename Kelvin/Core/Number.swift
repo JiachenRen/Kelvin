@@ -24,6 +24,9 @@ let numberOperations: [Operation] = [
     .unary(.percent, [.any]) {
         $0 / 100
     },
+    .binary(.round, [.number, .int]) {
+        round($0≈!, toDecimalPlaces: $1 as! Int)
+    }
 ]
 
 public func gcd(_ a: Int, _ b: Int) -> Int {
@@ -81,4 +84,10 @@ public func primeFactors(of n: Int) -> [Int] {
     }
     
     return factors
+}
+
+/// Rounds `x` to specified `dp` decimal places.
+public func round(_ x: Float80, toDecimalPlaces dp: Int) -> Float80 {
+    let p = pow(Float80(10.0), Float80(dp))
+    return round(x * p) / p
 }

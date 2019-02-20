@@ -25,7 +25,7 @@ assert a * a * 4 * 3 == a ^ 2 * 12
 assert a * 4 + a * 3 == a * 7
 assert (a * 3) ^ 2 == a ^ 2 * 9
 assert c + (b + a ^ 2 * 2 + a ^ 2 - b) - a ^ 2 * 3 == c
-# assert cos(12) ^ log(4) % 0.1 + (43 + 33 - 23 * (5 + 47) ^ 2 / 2) == -31019.997164792938
+assert round(cos(12) ^ log(4) % 0.1 + (43 + 33 - 23 * (5 + 47) ^ 2 / 2), 10) == -31019.9971647929
 assert ((3!)!)° / 4 / pi == 1
 
 x:=factor(f * a * 2 + d * a + c * a + b * a)
@@ -93,7 +93,7 @@ assert normCdf(-1, 1) == 0.6826894808737367093
 assert normCdf(0) == 0.500000000524808641
 
 # Test map, reduce, oneVar, repeat, subscript, and closure arguments
-# assert (oneVar(0...1000 | 1 + $1) | $0::1 ~ $1 + $0) == 417671830.49442637
+assert round((oneVar(0...1000 | 1 + $1) | $0::1 ~ $1 + $0), 5) == 417671830.49443
 
 # Test list operations
 def l1 = {1, 2, 3, 4, 5}
