@@ -51,6 +51,7 @@ public extension String {
     public static let geomPdf = "geomPdf"
     public static let geomCdf = "geomCdf"
     public static let tPdf = "tPdf"
+    public static let tCdf = "tCdf"
     
     // One variable stats
     public static let mean = "mean"

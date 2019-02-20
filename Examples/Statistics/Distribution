@@ -8,4 +8,5 @@ println oneVar(l1)
 
 # Binomial probability distribution
 # assert binomPdf(1000, 0.1, 5) == 2.4421153439624504*10^-38
-assert geomCdf(0.5, 2, 4) = 0.4375
+assert geomCdf(0.5, 2, 4) == 0.4375
+assert tCdf(-inf, inf, 20) == 1

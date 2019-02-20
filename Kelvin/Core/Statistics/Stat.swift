@@ -18,6 +18,16 @@ public class Stat {
         .binary(.tPdf, [.number, .int]) {
             try tPdf($0≈!, $1 as! Int)
         },
+        .binary(.tCdf, [.number, .int]) {
+            try tCdf($0≈!, $1 as! Int)
+        },
+        .init(.tCdf, [.number, .number, .int]) {
+            try tCdf(
+                lowerBound: $0[0]≈!,
+                upperBound: $0[1]≈!,
+                $0[2] as! Int
+            )
+        },
         
         // Geometric Pdf/Cdf
         .binary(.geomPdf, [.any, .int]) {

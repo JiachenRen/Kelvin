@@ -15,6 +15,102 @@ import GameKit
 /// Confidence interval = estimate +/- margin of error.
 public extension Stat {
     
+    /// Internal function used by StudentCdf;
+    /// Ported to Swift from Java implementation.
+    ///
+    /// - Source: https://github.com/datumbox/datumbox-framework/blob/develop/datumbox-framework-core/src/main/java/com/datumbox/framework/core/statistics/distributions/ContinuousDistributions.java
+    private static func betinc(_ x: Float80, _ A: Float80, _ B: Float80) -> Float80{
+        var A0: Float80 = 0.0
+        var B0: Float80 = 1.0
+        var A1: Float80 = 1.0
+        var B1: Float80 = 1.0
+        var M9: Float80 = 0.0
+        var A2: Float80 = 0.0
+        
+        // The accuracy of the approximation
+        let accuracy: Float80 = 0.0000001
+        while (abs((A1 - A2) / A1) > accuracy) {
+            A2 = A1
+            var C9 = -(A + M9) * (A + B + M9) * x / (A + 2.0 * M9) / (A + 2.0 * M9 + 1.0)
+            A0 = A1 + C9 * A0
+            B0 = B1 + C9 * B0
+            M9 = M9 + 1
+            C9 = M9 * (B - M9) * x / (A + 2.0 * M9 - 1.0) / (A + 2.0 * M9)
+            A1 = A0 + C9 * A1
+            B1 = B0 + C9 * B1
+            A0 = A0 / B1
+            B0 = B0 / B1
+            A1 = A1 / B1
+            B1 = 1.0
+        }
+        
+        return A1 / A
+    }
+    
+    /// Calculates the probability from `-inf` to `x` under `tPdf`.
+    /// Ported to Swift from Java implementation.
+    ///
+    /// - Source: https://github.com/datumbox/datumbox-framework/blob/develop/datumbox-framework-core/src/main/java/com/datumbox/framework/core/statistics/distributions/ContinuousDistributions.java
+    ///
+    /// - Parameters:
+    ///     - x: The value at which tCdf is evaluated
+    ///     - df: Degrees of freedom
+    public static func tCdf(_ x: Float80, _ df: Int) throws -> Float80 {
+        try Constraint.domain(df, 1, Float80.infinity)
+        let df = Float80(df)
+        let A: Float80 = df / 2.0
+        let S: Float80 = A + 0.5
+        let Z: Float80 = df / (df + x * x)
+        let BT: Float80 = exp(
+            logGamma(S) -
+            logGamma(0.5) -
+            logGamma(A) +
+            A * log(Z) +
+            0.5 * log(1.0 - Z)
+        )
+        
+        let betacdf: Float80
+        
+        if  Z < (A + 1.0) / (S + 2.0) {
+            betacdf = BT * betinc(Z, A, 0.5)
+        }
+        else {
+            betacdf = 1 - BT * betinc(1.0 - Z, 0.5, A)
+        }
+        
+        var tcdf: Float80
+        if x < 0 {
+            tcdf = betacdf / 2.0
+        } else {
+            tcdf = 1.0 - betacdf / 2.0
+        }
+        
+        return tcdf
+    }
+    
+    /// Calculates the probability from `lowerBound` to `upperBound` under `tPdf`.
+    ///
+    /// - Parameters:
+    ///     - x: The value at which tCdf is evaluated
+    ///     - df: Degrees of freedom
+    public static func tCdf(lowerBound lb: Float80, upperBound ub: Float80, _ df: Int) throws -> Float80 {
+        try Constraint.range(lb, ub)
+        return try tCdf(ub, df) - tCdf(lb, df)
+    }
+    
+    /// Internal log for gamma function used to compute tCdf.
+    /// - SeeAlso: Gamma.logForGamma(_:)
+    private static func logGamma(_ Z: Float80) -> Float80 {
+        let S = 1 + 76.18009173 / Z - 86.50532033 /
+            (Z + 1) + 24.01409822 /
+            (Z + 2) - 1.231739516 /
+            (Z + 3) + 0.00120858003 /
+            (Z + 4) - 0.00000536382 /
+            (Z + 5)
+        return (Z - 0.5) * log(Z + 4.5) -
+            (Z + 4.5) + log(S * 2.50662827465)
+    }
+    
     /// Student's t probability density function:
     /// tPdf(t,ν)= Γ((ν+1)/2)/(√(νπ)Γ(ν/2))*(1+t^2/ν)^(−1/2*(ν+1))
     ///
@@ -185,11 +281,13 @@ public extension Stat {
     }
     
     /**
-     Convert an area representing cummulative distribution frequency to its
+     Converts an area representing cummulative distribution frequency to its
      corresponding standard deviation. Of course I didn't come up with this
      beast myself!
      
-     - Credit: https://stackedboxes.org/2017/05/01/acklams-normal-quantile-function/
+     **Source:**
+     
+     https://stackedboxes.org/2017/05/01/acklams-normal-quantile-function/
      */
     public static func invNorm(_ p: Double) throws -> Double {
         try Constraint.domain(Float80(p), 0, 1)

@@ -266,7 +266,7 @@ For more examples (algebraic operations, calulus, stats, loops, conditional stat
   - [x] Normal Pdf
   - [x] Inverse Normal
   - [ ] Inverse t
-  - [ ] tPdf/tCdf
+  - [x] tPdf/tCdf
   - [x] Binomial Cdf/Pdf
   - [x] Geometric Cdf/Pdf
 - [ ] Confidence intervals

@@ -54,9 +54,9 @@ public class Gamma {
         
         switch value {
         case let x where x < 0.5:
-            return try Float80.pi / (sin(Float80.pi * value) * logForGamma(of: (1 - value)))
+            return try Float80.pi / (sin(Float80.pi * value) * logForGamma(1 - value))
         case let x where x > 100:
-            return try exp(logForGamma(of: value))
+            return try exp(logForGamma(value))
         default:
             let decreasedValue: Float80 = value - 1
             var x = pArr[0]
@@ -76,7 +76,7 @@ public class Gamma {
         }
     }
     
-    private static func logForGamma(of value: Float80) throws -> Float80 {
+    public static func logForGamma(_ value: Float80) throws -> Float80 {
         
         if value < 0 {
             throw ExecutionError.domain(
