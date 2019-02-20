@@ -73,7 +73,7 @@ public extension Stat {
         var l = numbers, r = numbers
         let idx = i ?? c / 2
         l = Array(numbers.prefix(upTo: idx))
-        r = Array(numbers.suffix(from: idx + 1))
+        r = Array(numbers.suffix(from: idx + ((c % 2 == 0) ? 0 : 1)))
         
         let (q1, _) = median(l, isSorted: true)
         let (q3, _) = median(r, isSorted: true)
