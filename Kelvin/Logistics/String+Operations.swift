@@ -129,6 +129,7 @@ public extension String {
     public static let `repeat` = "repeat"
     public static let copy = "copy"
     public static let concat = "concat"
+    public static let split = "split"
     public static let complexity = "complexity"
     public static let eval = "eval"
     public static let exit = "exit"

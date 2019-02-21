@@ -10,6 +10,13 @@ import Foundation
 
 public extension Developer {
     static let stringOperations: [Operation] = [
+        // Splitting a string
+        .binary(.split, [.string, .string]) {
+            List(($0 as! KString).string
+                .components(separatedBy: ($1 as! KString).string)
+                .map {KString($0)}
+            )
+        },
         
         // String concatenation
         .binary(.concat, [.any, .any]) {
