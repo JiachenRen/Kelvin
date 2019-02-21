@@ -89,6 +89,7 @@ public extension String {
     public static let implicitDifferentiation = "impDif"
     public static let directionalDifferentiation = "dirDif"
     public static let gradient = "grad"
+    public static let numericalIntegration = "nIntegrate"
     
     // Algebra
     public static let factorize = "factor" // Also used for factorizing an integer

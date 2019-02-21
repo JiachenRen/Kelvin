@@ -97,6 +97,17 @@ public class Calculus {
                 at: vec)
             Scope.releaseRestrictions()
             return tangent
+        },
+        
+        // Mark: Integration
+        .init(.numericalIntegration, [.any, .var, .number, .number]) {
+            let integral = try Quadrature.integrate(
+                $0[0],
+                from: Double($0[2]≈!),
+                to: Double($0[3]≈!),
+                withRespectTo: $0[1] as! Variable
+            )
+            return Float80(integral)
         }
     ]
     

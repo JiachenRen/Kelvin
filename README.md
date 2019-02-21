@@ -247,7 +247,10 @@ For more examples (algebraic operations, calulus, stats, loops, conditional stat
     - Derivative/gradient at point/vector
     - Tangent line/plane/surface/hyperplane/etc for multivariate functions
   
-- [ ] Integration
+- [x] Integration
+    - [x] Numerical integration (QAGS - accelerated by Peter Wynn’s epsilon algorithm)
+    - [ ] Algebraic integration
+    - [ ] Riemann sum
 
 ### Statistics
 - [x] One variable statistics
