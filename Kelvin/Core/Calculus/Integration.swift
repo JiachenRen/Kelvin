@@ -60,6 +60,7 @@ public class Quadrature {
     
     /// Computes the definite integral of `integrand` from `lb` to `ub` with respect to variable `v`.
     ///
+    /// - Todo: Prevent crash if an invalid integrand is passed in as argument
     /// - Parameters:
     ///     - integrand: The function to be integrated
     ///     - lb: Lower bound of the definite integral
@@ -93,15 +94,16 @@ public class Quadrature {
             nil
         )
         Scope.restore()
-        
-        if status.rawValue == 0 {
-            return integral
-        } else if status.rawValue > 0 {
-            let msg = "poor accuracy when attempting to integrate \(integrand.stringified)" +
-            " with respect to \(v.stringified) - abs_tolerance: \(quad_int_options.abs_tolerance);" +
+        switch status.rawValue {
+        case -101:
+            let msg = "the requested accuracy could not be reached when attempting to integrate. \(integrand.stringified)" +
+                " with respect to \(v.stringified) - abs_tolerance: \(quad_int_options.abs_tolerance);" +
             " abs_err: \(absErr); integral: \(integral)"
-            throw ExecutionError.general(errMsg: msg)
-        } else {
+            Program.io?.warning(msg)
+            fallthrough
+        case 0:
+            return integral
+        default:
             let msg = "an unknown error has occurred when integrating \(integrand.stringified)" +
             " with respect to \(v.stringified) - error code: \(status);"
             throw ExecutionError.general(errMsg: msg)

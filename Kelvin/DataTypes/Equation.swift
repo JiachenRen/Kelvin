@@ -116,7 +116,7 @@ public struct Equation: BinaryNode, NaN {
                 // Check if variable is used within its own initial value
                 // to prevent circular definition.
                 if def.contains(where: {$0 === v}, depth: Int.max) {
-                    throw ExecutionError.general(errMsg: "circular definition")
+                    throw ExecutionError.circularDefinition
                 }
                 Variable.define(v.name, def)
                 return

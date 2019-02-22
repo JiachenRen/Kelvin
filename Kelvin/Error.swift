@@ -47,6 +47,7 @@ public enum ExecutionError: KelvinError {
     case invalidRange(_ node: Node?, lowerBound: Value, upperBound: Value)
     case invalidSubscript(_ node: Node?, _ target: Node, _ subscript: Node)
     case invalidCast(from: Node, to: DataType)
+    case circularDefinition
     
     private func err(on node: Node?, _ errMsg: String) -> String {
         return "error when executing statement `\(node?.stringified ?? "")`: \(errMsg)"
@@ -88,6 +89,8 @@ public enum ExecutionError: KelvinError {
         case .invalidCast(from: let node, to: let type):
             let nodeType = (try? DataType.resolve(node).description) ?? "unknown"
             return "error: cannot convert node from `\(node.stringified)` aka. \(nodeType) to \(type)"
+        case .circularDefinition:
+            return "error: circular definition"
         }
     }
 }

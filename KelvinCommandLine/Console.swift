@@ -48,6 +48,10 @@ public class Console: IOProtocol {
         Swift.print("→ \(colored ? e.red : e)", terminator: "\n\n")
     }
     
+    public func warning(_ w: String) {
+        Swift.print("→ \(colored ? w.yellow : w)", terminator: "\n\n")
+    }
+    
     public func readLine() -> String {
         return Swift.readLine() ?? ""
     }

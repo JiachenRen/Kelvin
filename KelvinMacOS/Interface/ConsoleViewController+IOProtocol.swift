@@ -51,6 +51,10 @@ extension ConsoleViewController: IOProtocol {
         buffers[.console] = ""
     }
     
+    func warning(_ w: String) {
+        append(to: .debugger, "warning: \(w)\n")
+    }
+    
     func flush() {
         
     }

@@ -15,6 +15,7 @@ public protocol IOProtocol {
     func log(_ l: String)
     func log(_ l: Program.Log)
     func error(_ e: String)
+    func warning(_ w: String)
     func clear()
     func flush()
 }

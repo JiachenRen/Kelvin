@@ -203,6 +203,7 @@
 		1FC67C7E221DF44300A8E6BC /* Gamma.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F985D4E221C3F8200EFC404 /* Gamma.swift */; };
 		1FC67C80221E307A00A8E6BC /* TwoSampleTTest in Resources */ = {isa = PBXBuildFile; fileRef = 1FC67C7F221E307A00A8E6BC /* TwoSampleTTest */; };
 		1FC67C82221F362A00A8E6BC /* Integration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67C81221F362A00A8E6BC /* Integration.swift */; };
+		1FC67C832220374500A8E6BC /* Integration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67C81221F362A00A8E6BC /* Integration.swift */; };
 		1FDC863722131CD200EAC346 /* Contains in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863622131CD200EAC346 /* Contains */; };
 		1FDC863A22132F4300EAC346 /* tangent_plane_grapher.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */; };
 		1FDC863B22132F4300EAC346 /* tangent_plane_kelvin.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863922132F4300EAC346 /* tangent_plane_kelvin.png */; };
@@ -942,6 +943,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FC67C832220374500A8E6BC /* Integration.swift in Sources */,
 				1FC67C7E221DF44300A8E6BC /* Gamma.swift in Sources */,
 				1F8DF7A422093B8F006351B0 /* String.swift in Sources */,
 				1F8DF7A522093B8F006351B0 /* Flow Control.swift in Sources */,
