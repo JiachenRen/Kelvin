@@ -11,8 +11,14 @@ import Foundation
 /// A collection of stat functions and operations.
 public class Stat {
     
+    public enum DatasetType {
+        case sample
+        case population
+    }
+    
     public static let operations: [Operation] = [
-        // Distribution
+        
+        // Mark: Distribution
         
         // tPdf, tCdf, and invt
         .binary(.invT, [.number, .int]) {
@@ -92,7 +98,8 @@ public class Stat {
             normPdf($0[0], μ: $0[1], σ: $0[2])
         },
         
-        // Statistics, s stands for sample, p stands for population
+        // Mark: One-variable statistics
+        
         .unary(.mean, [.list]) {
             Function(.sum, [$0]) / ($0 as! List).count
         },
@@ -112,20 +119,22 @@ public class Stat {
             ++nodes / nodes.count
         },
         .unary(.sumOfDiffSq, [.list]) {
-            try ssx(($0 as! List).convertToDoubles())
+            try ssx(($0 as! List).toNumerics())
         },
         .unary(.variance, [.list]) {
-            let list = $0 as! List
-            let variance = Stat.variance(try list.convertToDoubles())
+            let list = try ($0 as! List).toNumerics()
             return List([
-                Pair("sample", variance.sample),
-                Pair("population", variance.population)
+                Pair("sample", variance(.sample, list)),
+                Pair("population", variance(.population, list))
             ])
         },
         .unary(.stdev, [.list]) {
-            let list = $0 as! List
-            let stdev = Stat.stdev(try list.convertToDoubles())
-            let es = [Pair("Sₓ", stdev.sample), Pair("σₓ", stdev.population)]
+            let list = try ($0 as! List).toNumerics()
+
+            let es = [
+                Pair("Sₓ", stdev(.sample, list)),
+                Pair("σₓ", stdev(.population, list))
+            ]
             return List(es)
         },
         
@@ -139,7 +148,7 @@ public class Stat {
         
         // IQR, 5 number summary
         .unary(.fiveNumberSummary, [.list]) {
-            let list = try ($0 as! List).convertToDoubles()
+            let list = try ($0 as! List).toNumerics()
             let sum5n = try fiveNSummary(list)
             let stats: [Pair] = [
                 .init("min", sum5n[0]),
@@ -151,17 +160,17 @@ public class Stat {
             return List(stats)
         },
         .unary(.interQuartileRange, [.list]) {
-            let list = try ($0 as! List).convertToDoubles()
+            let list = try ($0 as! List).toNumerics()
             let stat = try quartiles(list)
             return stat.q3 - stat.q1
         },
         .unary(.median, [.list]) {
-            let list = try ($0 as! List).convertToDoubles()
+            let list = try ($0 as! List).toNumerics()
             let (m, _) = median(list)
             return m
         },
         .unary(.outliers, [.list]) {
-            let list = try ($0 as! List).convertToDoubles()
+            let list = try ($0 as! List).toNumerics()
             let outliers = try Stat.outliers(list)
             return List([
                 Pair("lower end", List(outliers.lowerEnd)),
@@ -169,11 +178,12 @@ public class Stat {
             ])
         },
         .unary(.oneVar, [.list]) {
-            let list = try ($0 as! List).convertToDoubles()
+            let list = try ($0 as! List).toNumerics()
             let mean = Stat.mean(list)
             let sum = Stat.sum(list)
             let sumSq = Stat.sumSquared(list)
-            let (s_stdev, p_stdev) = Stat.stdev(list)
+            let s_stdev = stdev(.sample, list)
+            let p_stdev = stdev(.population, list)
             let n = list.count
             let sum5n = try Stat.fiveNSummary(list)
             let ssx = Stat.ssx(list)
@@ -194,6 +204,33 @@ public class Stat {
             ]
             
             return List(stats)
-        }
+        },
+        
+        // Mark: Two-variable statistics
+        
+        .binary(.covariance, [.list, .list]) {
+            let datasetX = try ($0 as! List).toNumerics()
+            let datasetY = try ($1 as! List).toNumerics()
+            
+            return try List([
+                Pair("sample", covariance(.sample, datasetX, datasetY)),
+                Pair("population", covariance(.population, datasetX, datasetY))
+            ])
+        },
+        
+        .binary(.correlation, [.list, .list]) {
+            let datasetX = try ($0 as! List).toNumerics()
+            let datasetY = try ($1 as! List).toNumerics()
+            
+            return try correlation(datasetX, datasetY)
+        },
+        
+        .binary(.determination, [.list, .list]) {
+            let datasetX = try ($0 as! List).toNumerics()
+            let datasetY = try ($1 as! List).toNumerics()
+            
+            return try determination(datasetX, datasetY)
+        },
+        
     ]
 }

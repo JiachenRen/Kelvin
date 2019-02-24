@@ -117,7 +117,7 @@ public struct List: MutableListProtocol, NaN {
      Convert every element in the list into a double.
      An error is thrown if not all the elements in the list is a double.
      */
-    public func convertToDoubles() throws -> [Float80] {
+    public func toNumerics() throws -> [Float80] {
         return try elements.map {
             if let d = $0≈ {
                 return d

@@ -12,17 +12,17 @@ import GameKit
 // OneVar statistics
 public extension Stat {
     
-    public static func outliers(_ list: [Float80]) throws -> (lowerEnd: [Float80], upperEnd: [Float80]) {
-        let stats = try quartiles(list)
+    public static func outliers(_ dataset: [Float80]) throws -> (lowerEnd: [Float80], upperEnd: [Float80]) {
+        let stats = try quartiles(dataset)
         let iqr = stats.q3 - stats.q1
         let ut = stats.q3 + 1.5 * iqr
         let lt = stats.q1 - 1.5 * iqr
         
-        let leOutliers = list.filter {
+        let leOutliers = dataset.filter {
             $0 < lt
         }
         
-        let ueOutliers = list.filter {
+        let ueOutliers = dataset.filter {
             $0 > ut
         }
         
@@ -30,50 +30,50 @@ public extension Stat {
     }
     
     public static func fiveNSummary(
-        _ numbers: [Float80],
+        _ dataset: [Float80],
         isSorted: Bool = false) throws -> [Float80] {
         
-        var numbers = numbers
-        let c = numbers.count
+        var dataset = dataset
+        let c = dataset.count
         if c == 0 {
             throw ExecutionError.general(errMsg: "cannot perform summary statistics on empty list.")
         }
         
         if !isSorted {
-            numbers = numbers.sorted {
+            dataset = dataset.sorted {
                 $0 < $1
             }
         }
         
-        let min = numbers.first!
-        let max = numbers.last!
+        let min = dataset.first!
+        let max = dataset.last!
         
-        let m = try quartiles(numbers, isSorted: true)
+        let m = try quartiles(dataset, isSorted: true)
         
         return [min, m.q1, m.m, m.q3, max]
     }
     
     public static func quartiles(
-        _ numbers: [Float80],
+        _ dataset: [Float80],
         isSorted: Bool = false) throws -> (q1: Float80, m: Float80, q3: Float80) {
         
-        var numbers = numbers
-        let c = numbers.count
+        var dataset = dataset
+        let c = dataset.count
         if c == 0 {
             throw ExecutionError.general(errMsg: "cannot perform summary statistics on empty list.")
         }
         
         if !isSorted {
-            numbers = numbers.sorted {
+            dataset = dataset.sorted {
                 $0 < $1
             }
         }
         
-        let (m, i) = median(numbers, isSorted: true)
-        var l = numbers, r = numbers
+        let (m, i) = median(dataset, isSorted: true)
+        var l = dataset, r = dataset
         let idx = i ?? c / 2
-        l = Array(numbers.prefix(upTo: idx))
-        r = Array(numbers.suffix(from: idx + ((c % 2 == 0) ? 0 : 1)))
+        l = Array(dataset.prefix(upTo: idx))
+        r = Array(dataset.suffix(from: idx + ((c % 2 == 0) ? 0 : 1)))
         
         let (q1, _) = median(l, isSorted: true)
         let (q3, _) = median(r, isSorted: true)
@@ -81,47 +81,47 @@ public extension Stat {
     }
     
     public static func median(
-        _ numbers: [Float80],
+        _ dataset: [Float80],
         isSorted: Bool = false) -> (Float80, idx: Int?) {
         
-        var numbers = numbers
-        let c = numbers.count
+        var dataset = dataset
+        let c = dataset.count
         if c == 0 {
             return (.nan, nil)
         }
         
         if !isSorted {
-            numbers = numbers.sorted {
+            dataset = dataset.sorted {
                 $0 < $1
             }
         }
         
         if c % 2 == 0 {
-            let m = ((numbers[c / 2] + numbers[c / 2 - 1])) / 2
+            let m = ((dataset[c / 2] + dataset[c / 2 - 1])) / 2
             return (m, nil)
         } else {
             let i = c / 2
-            return (numbers[i], i)
+            return (dataset[i], i)
         }
     }
     
     /// Sum of difference squared.
-    public static func ssx(_ numbers: [Float80]) -> Float80 {
+    public static func ssx(_ dataset: [Float80]) -> Float80 {
         
         // Calculate average.
-        let sum: Float80 = numbers.reduce(0) {
+        let sum: Float80 = dataset.reduce(0) {
             $0 + $1
         }
-        let avg: Float80 = sum / Float80(numbers.count)
+        let avg: Float80 = sum / Float80(dataset.count)
         
         // Sum of squared differences
-        return numbers.map {pow($0 - avg, 2)}
+        return dataset.map {pow($0 - avg, 2)}
             .reduce(0) {$0 + $1}
     }
     
-    public static func max(_ numbers: [Float80]) -> Float80 {
+    public static func max(_ dataset: [Float80]) -> Float80 {
         var max: Float80 = -.infinity
-        for n in numbers {
+        for n in dataset {
             if n > max {
                 max = n
             }
@@ -129,9 +129,9 @@ public extension Stat {
         return max
     }
     
-    public static func min(_ numbers: [Float80]) -> Float80 {
+    public static func min(_ dataset: [Float80]) -> Float80 {
         var min: Float80 = .infinity
-        for n in numbers {
+        for n in dataset {
             if n < min {
                 min = n
             }
@@ -155,22 +155,26 @@ public extension Stat {
         return ++nans + nSum
     }
     
-    public static func sumSquared(_ numbers: [Float80]) -> Float80 {
-        return numbers.map {pow($0, 2)}.reduce(0) {$0 + $1}
+    public static func sumSquared(_ dataset: [Float80]) -> Float80 {
+        return dataset.map {pow($0, 2)}.reduce(0) {$0 + $1}
     }
     
-    public static func variance(_ numbers: [Float80]) -> (sample: Float80, population: Float80) {
-        let s = ssx(numbers)
-        let c = Float80(numbers.count)
-        return (s / (c - 1), s / c)
+    public static func variance(_ type: DatasetType, _ dataset: [Float80]) -> Float80 {
+        let s = ssx(dataset)
+        let c = Float80(dataset.count)
+        switch type {
+        case .sample:
+            return s / (c - 1)
+        case .population:
+            return s / c
+        }
     }
     
-    public static func stdev(_ numbers: [Float80]) -> (sample: Float80, population: Float80) {
-        let v = variance(numbers)
-        return (sqrt(v.sample), sqrt(v.population))
+    public static func stdev(_ type: DatasetType, _ dataset: [Float80]) -> Float80 {
+        return sqrt(variance(type, dataset))
     }
     
-    public static func mean(_ numbers: [Float80]) -> Float80 {
-        return numbers.reduce(0) {$0 + $1} / Float80(numbers.count)
+    public static func mean(_ dataset: [Float80]) -> Float80 {
+        return dataset.reduce(0) {$0 + $1} / Float80(dataset.count)
     }
 }

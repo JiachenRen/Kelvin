@@ -262,7 +262,9 @@ For more examples (algebraic operations, calulus, stats, loops, conditional stat
   - *Five-number summary, IQR*
   - *Outliers*
   
-- [ ] Two variable statistics
+- [x] Two variable statistics
+    - [x] Covariance
+    - [x] Correlation/determination
 - [x] Distributions
   - [x] Normal Cdf (-∞ to x, from lb to ub, from lb to ub with μ and σ)
   - [x] Random normal distribution (randNorm)

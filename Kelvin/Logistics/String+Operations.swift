@@ -68,6 +68,12 @@ public extension String {
     public static let outliers = "outliers"
     public static let oneVar = "oneVar"
     
+    // Two variable statistics
+    public static let correlation = "correlation"
+    public static let covariance = "covariance"
+    public static let twoVar = "twoVar"
+    public static let determination = "determination"
+    
     // List & Pair
     public static let list = "list"
     public static let pair = "pair"
