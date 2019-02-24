@@ -166,9 +166,9 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 ### Calculus
 - [ ] Limit
 - [x] Differentiation
-  - *Logarithmic differentiation*
-  - *nth derivative*
-  - *Multivariate (Calculus III)*
+  - Logarithmic differentiation
+  - nth derivative
+  - Multivariate (Calculus III)
     - Partial derivatives
     - Implicit differentiation
     - Directional differentiation
@@ -250,57 +250,57 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 
 ### Boolean logic
 - [x] Basic boolean operators
-  - *And, or, xor, and not.*
+  - And, or, xor, and not.
 - [ ] Commutative simplification 
-  - *Only handles and & or for now*
+  - Only handles and & or for now
 
 ### Programs/functions
 - [x] Variables & Functions
-  - *Definition & deletion*
-  - *Overloading of functions*
-  - *Automatic scope management*
-  - *Closures*
-  - *Anonymous closure arguments (e.g. $0, $1, ...)*
+  - Definition & deletion
+  - Overloading of functions
+  - Automatic scope management
+  - Closures
+  - Anonymous closure arguments (e.g. $0, $1, ...)
 - [x] Runtime compilation
 - [x] Flow control
   - Execution
-    - *Line break (;)*
-    - *Pipeline (->)*
+    - Line break (;)
+    - Pipeline (->)
   - Loops
-    - *Copy*
-    - *Repeat*
-    - *for (a: list) {...}*
-    - *while (a) {...}*
+    - Copy
+    - Repeat
+    - for (a: list) {...}
+    - while (a) {...}
   - Conditional statements
-    - *Ternary operator '?'*
-    - *If (predicate) {...}*
-    - *Else {...}*
-    - *Else if (predicate) {...}*
+    - Ternary operator '?'
+    - If (predicate) {...}
+    - Else {...}
+    - Else if (predicate) {...}
   - Transfer
-    - *Return*
+    - Return
   - Control
-    - *Break*
-    - *Continue*
+    - Break
+    - Continue
 - [x] I/O
-  - *Program execution*
-  - *Print, println*
-  - *Log*
-  - *Recursion*
-  - *Return*
-  - *Throw*
+  - Program execution
+  - Print, println
+  - Log
+  - Recursion
+  - Return
+  - Throw
 - [x] Strings
-  - *Concatenation*
-  - *Subscript access*
+  - Concatenation
+  - Subscript access
 - [x] Pairs
-  - *Compilation*
-  - *Subscript access*
+  - Compilation
+  - Subscript access
 - [x] Error handling
-  - *Try*
-  - *Assert*
-  - *Throw*
+  - Try
+  - Assert
+  - Throw
 - [x] System
-  - *Precise date & time (down to nano seconds)*
-  - *Performance measurement*
+  - Precise date & time (down to nano seconds)
+  - Performance measurement
 - [x] Scope management
   - Lock/unlock variables
   - Save/restore
