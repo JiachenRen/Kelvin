@@ -181,11 +181,11 @@ public class Stat {
             let list = try ($0 as! List).toNumerics()
             let mean = Stat.mean(list)
             let sum = Stat.sum(list)
-            let sumSq = Stat.sumSquared(list)
+            let sumSq = sumSquared(list)
             let s_stdev = stdev(.sample, list)
             let p_stdev = stdev(.population, list)
             let n = list.count
-            let sum5n = try Stat.fiveNSummary(list)
+            let sum5n = try fiveNSummary(list)
             let ssx = Stat.ssx(list)
             
             let stats: [Pair] = [
@@ -232,5 +232,67 @@ public class Stat {
             return try determination(datasetX, datasetY)
         },
         
+        .binary(.twoVar, [.list, .list]) {
+            let datasetX = try ($0 as! List).toNumerics()
+            let datasetY = try ($1 as! List).toNumerics()
+            
+            let meanX = mean(datasetX)
+            let sumX = sum(datasetX)
+            let sumSqX = sumSquared(datasetX)
+            let sStdevX = stdev(.sample, datasetX)
+            let pStdevX = stdev(.population, datasetX)
+            let ssx = Stat.ssx(datasetX)
+            let sum5nX = try fiveNSummary(datasetX)
+            
+            let meanY = mean(datasetY)
+            let sumY = sum(datasetY)
+            let sumSqY = sumSquared(datasetY)
+            let sStdevY = stdev(.sample, datasetY)
+            let pStdevY = stdev(.population, datasetY)
+            let ssy = Stat.ssx(datasetY)
+            let sum5nY = try fiveNSummary(datasetY)
+            
+            let n = datasetX.count
+            let sumXY = try Stat.sumXY(datasetX, datasetY)
+            let sCov = try covariance(.sample, datasetX, datasetY)
+            let pCov = try covariance(.population, datasetX, datasetY)
+            let cor = try correlation(datasetX, datasetY)
+            let det = try determination(datasetX, datasetY)
+            
+            let stats: [Pair] = [
+                .init("x̅", meanX),
+                .init("∑x", sumX),
+                .init("∑x²", sumSqX),
+                .init("Sx", sStdevX),
+                .init("σx", pStdevX),
+                .init("MinX", sum5nX[0]),
+                .init("Q₁X", sum5nX[1]),
+                .init("MedianX", sum5nX[2]),
+                .init("Q₃X", sum5nX[3]),
+                .init("MaxX", sum5nX[4]),
+                .init("SSX", ssx),
+                
+                .init("ȳ", meanY),
+                .init("∑y", sumY),
+                .init("∑y²", sumSqY),
+                .init("Sy", sStdevY),
+                .init("σy", pStdevY),
+                .init("MinY", sum5nY[0]),
+                .init("Q₁Y", sum5nY[1]),
+                .init("MedianY", sum5nY[2]),
+                .init("Q₃Y", sum5nY[3]),
+                .init("MaxY", sum5nY[4]),
+                .init("SSY", ssy),
+                
+                .init("n", n),
+                .init("∑xy", sumXY),
+                .init("R", cor),
+                .init("R²", det),
+                .init("Sample COV", sCov),
+                .init("Population COV", pCov)
+            ]
+            
+            return List(stats)
+        }
     ]
 }

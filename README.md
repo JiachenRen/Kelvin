@@ -191,8 +191,11 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - Five-number summary, IQR
   - Outliers
 - [x] Two variable statistics
-  - Covariance
-  - Correlation/determination
+  - Sample/population covariance
+  - Correlation
+  - Coefficient of determination
+  - ∑xy
+  - OneVar X/Y
 - [x] Distributions
   - Normal Cdf (-∞ to x, from lb to ub, from lb to ub with μ and σ)
   - Random normal distribution (randNorm)

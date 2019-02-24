@@ -51,10 +51,24 @@ extension Stat {
             stdev(.sample, datasetY)
     }
     
-    /// Correlation squared
+    /// Correlation squared (coefficient of determination)
     public static func determination(
         _ datasetX: [Float80],
         _ datasetY: [Float80]) throws -> Float80 {
-        return try correlation(datasetX, datasetY)
+        return try pow(correlation(datasetX, datasetY), 2.0)
+    }
+    
+    /// ∑xy
+    public static func sumXY(
+        _ datasetX: [Float80],
+        _ datasetY: [Float80]) throws -> Float80 {
+        
+        if datasetX.count != datasetY.count {
+            throw ExecutionError.dimensionMismatch(List(datasetX), List(datasetY))
+        }
+        
+        return zip(datasetX, datasetY).reduce(0) {
+            $0 + $1.0 * $1.1
+        }
     }
 }
