@@ -30,6 +30,75 @@ This directory contains various examples that demonstrate how to the Kelvin lang
     - [Subscript access](/Examples/Developer/Subscript)
     - [Trailing closure syntax](/Examples/Developer/TrailingClosure)
     
+### Just to whet your appetite...
+
+- Binary search algorithm written in `Kelvin`:
+```ruby
+# The conventional binary search algorithm written in kelvin language
+# - arr: a sorted array of values (kelvin only has value types, but the inout modifier '&' makes up for it.)
+# - search: the value to look up in arr. (kelvin does not have type safety, like js.)
+def bin_search(arr, search) {
+    c := 0;
+    first := 0;
+    n := size(arr);
+    last := n - 1;
+    middle := int((first + last) / 2);
+
+    while (first <= last) {
+
+        if (arr[middle] < search) {
+            first := middle + 1;
+            b := true;
+        } else {
+            middle := int((first + last) / 2);
+        }
+
+        if (arr[middle] == search) {
+            return middle;
+        } 
+    }
+
+    return "not found";
+}
+
+# Define a list l1
+def l1 = {1, 2, 3, 5, 7, 8, 9, 10}
+
+# 
+println bin_search(l1, 8.5)
+assert bin_search(l1, 9) == 6
+```
+- For loops, if statements, and while loops, etc. written in `Kelvin`:
+```ruby
+# A function that demonstrates if statement, while loop, map, and
+# flow control keywords like return, continue, and break in kelvin.
+def whatTheHeckDoesThisDo(a, b) {
+    while (a < 100 || b < 100) {
+        println "a = " & a;
+        a := a + 1;
+        if (a > 50) {
+            b++;
+        }
+        if (b % 3 == 0) {
+            println b & " is a multiple of 3";
+            for (i: map(0...10) {$1}) {
+                print i
+            }
+            print "\n";
+            continue;
+        }
+        println "b = " & b;
+        if (b > 66) {
+            break;
+        }
+    }
+
+    return {a, b}
+}
+
+def result = whatTheHeckDoesThisDo(1, 3)
+assert print(result) == {114, 67}
+```
 
 ## Using Kelvin with macOS built-in Grapher
 

@@ -136,85 +136,18 @@ The Kelvin programming language is developed by a high school senior. Yes, reall
 > As a side note, _Kelvin_ even has trailing closure syntax and anonymous arguments, a feature loved by Swift users!
 
 ### Examples
-- Binary search algorithm written in `Kelvin`:
-```ruby
-# The conventional binary search algorithm written in kelvin language
-# - arr: a sorted array of values (kelvin only has value types, but the inout modifier '&' makes up for it.)
-# - search: the value to look up in arr. (kelvin does not have type safety, like js.)
-def bin_search(arr, search) {
-    c := 0;
-    first := 0;
-    n := size(arr);
-    last := n - 1;
-    middle := int((first + last) / 2);
 
-    while (first <= last) {
-
-        if (arr[middle] < search) {
-            first := middle + 1;
-            b := true;
-        } else {
-            middle := int((first + last) / 2);
-        }
-
-        if (arr[middle] == search) {
-            return middle;
-        } 
-    }
-
-    return "not found";
-}
-
-# Define a list l1
-def l1 = {1, 2, 3, 5, 7, 8, 9, 10}
-
-# 
-println bin_search(l1, 8.5)
-assert bin_search(l1, 9) == 6
-```
-- For loops, if statements, and while loops, etc. written in `Kelvin`:
-```ruby
-# A function that demonstrates if statement, while loop, map, and
-# flow control keywords like return, continue, and break in kelvin.
-def whatTheHeckDoesThisDo(a, b) {
-    while (a < 100 || b < 100) {
-        println "a = " & a;
-        a := a + 1;
-        if (a > 50) {
-            b++;
-        }
-        if (b % 3 == 0) {
-            println b & " is a multiple of 3";
-            for (i: map(0...10) {$1}) {
-                print i
-            }
-            print "\n";
-            continue;
-        }
-        println "b = " & b;
-        if (b > 66) {
-            break;
-        }
-    }
-
-    return {a, b}
-}
-
-def result = whatTheHeckDoesThisDo(1, 3)
-assert print(result) == {114, 67}
-```
-
-For more examples (algebraic operations, calulus, stats, loops, conditional statements, error handling, closures, list operations, etc.), please refer to [Examples](Examples).
+Please refer to [Examples](Examples) for detailed documentation/examples over algebraic operations, calulus, stats, loops, conditional statements, error handling, closures, list operations, etc.
 
 ## Capabilities
 
 ### Arithmetic
 - [x] Standard binary operations
-  - *Addition*
-  - *Subtraction*
-  - *Multiplication*
-  - *Division*
-  - *Exponentiation*
+  - Addition
+  - Subtraction
+  - Multiplication
+  - Division
+  - Exponentiation
 - [x] Unary operations (many, see below)
 
 ### Number
@@ -254,26 +187,25 @@ For more examples (algebraic operations, calulus, stats, loops, conditional stat
 
 ### Statistics
 - [x] One variable statistics
-  - *Summation*
-  - *Average*
-  - *Sum of difference squared*
-  - *Variance*
-  - *Std. deviation*
-  - *Five-number summary, IQR*
-  - *Outliers*
-  
+  - Summation
+  - Average
+  - Sum of difference squared
+  - Variance
+  - Std. deviation
+  - Five-number summary, IQR
+  - Outliers
 - [x] Two variable statistics
-    - [x] Covariance
-    - [x] Correlation/determination
+  - Covariance
+  - Correlation/determination
 - [x] Distributions
-  - [x] Normal Cdf (-∞ to x, from lb to ub, from lb to ub with μ and σ)
-  - [x] Random normal distribution (randNorm)
-  - [x] Normal Pdf
-  - [x] Inverse Normal
-  - [x] Inverse t
-  - [x] tPdf/tCdf
-  - [x] Binomial Cdf/Pdf
-  - [x] Geometric Cdf/Pdf
+  - Normal Cdf (-∞ to x, from lb to ub, from lb to ub with μ and σ)
+  - Random normal distribution (randNorm)
+  - Normal Pdf
+  - Inverse Normal
+  - Inverse t
+  - tPdf/tCdf
+  - Binomial Cdf/Pdf
+  - Geometric Cdf/Pdf
 - [ ] Confidence intervals
 - [ ] Regression
   - [ ] Linear
