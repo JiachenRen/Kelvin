@@ -14,11 +14,7 @@ Finally, the UI is here! Well, it is rather simple, but isn't that a good thing?
 ### Integrated Development Environment
 Well, it is primitive as of now... but it gets the job done! It sort of works like the old [Swift Playground](https://developer.apple.com/swift-playgrounds/ "Apple's Introduction on Swift Playgrounds") - that is, as you edit your code, the editor automatically compiles and runs it for you! Only this time, it is faster (imo of course...). The window on the lower left is the `console`, all program outputs go in there. The window on the lower right is the `debugger`, all execution logs including compilation time, run time, errors, and step by step execution result go in there. 
 
-Below is the Kelvin IDE in default `github` theme, highlighted using `ruby`'s syntax (keep in mind that you can choose from a large poo of candidates).
-
-![Screenshot of IDE with GitHub Theme](/Misc/Screenshots/ruby_github_theme.png "IDE with GitHub theme")
-
-The following screenshot demonstrates using Kelvin IDE to find the **tangent line/plane** of multivariate functions. (Notice how the whole script is compiled and evaluated in under **0.1 seconds**! Blazing fast, indeed. Even if the execution time lasts longer, there won't be any lagging since the scripts run on a separate thread and are cancelled/started automatically. 
+Below is a screenshot of Kelvin IDE in default `github` theme, highlighted using `ruby`'s syntax (keep in mind that you can choose from a large poo of candidates). The screenshot demonstrates how to find the **tangent line/plane** of multivariate functions. (Notice how the whole script is compiled and evaluated in under **0.1 seconds**!) Even if the execution time lasts longer, there won't be any lagging since the scripts run on a separate thread and are cancelled/started automatically. 
 
 ![Finding Tangent with IDE and Kelvin](/Misc/Screenshots/finding_tangent.png "Finding Tangent")
 
