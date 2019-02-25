@@ -83,6 +83,7 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
         editorTextView.delegate = self
         editorTextView.enabledTextCheckingTypes = 0
         editorTextView.layoutManager?.replaceTextStorage(editorTextStorage)
+        editorTextView.setUpLineNumberView()
         updateInterfaceByTheme()
         
         Program.io = self
@@ -107,6 +108,7 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
             
         // Editor text view
         editorTextView.backgroundColor = bgdColor
+        editorTextView.lineNumberView.backgroundColor = bgdColor
         
         // Set the color of cursor to the inverse of background color
         var c = editorTextView.backgroundColor
@@ -116,6 +118,7 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
         let b = 1 - c.blueComponent
         let inverted = NSColor(calibratedRed: r, green: g, blue: b, alpha: 1)
         editorTextView.insertionPointColor = inverted
+        editorTextView.lineNumberView.foregroundColor = inverted.withAlphaComponent(0.5)
         
         // Console text view
         consoleTextView.backgroundColor = bgdColor

@@ -149,6 +149,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 ### Number
 - [x] Greatest common divisor & least common multiple
 - [x] Prime factors
+- [x] Round to decimal places
 - [ ] Fraction
 - [ ] Exact vs. approximate
 
