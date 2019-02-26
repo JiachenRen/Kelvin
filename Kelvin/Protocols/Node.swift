@@ -97,6 +97,11 @@ extension Node {
             ($0 as? Variable)?.name.starts(with: "$") ?? false
         }
     }
+    
+    /// Finalizes the node such that it is left as-is during simplification.
+    func finalize() -> Final {
+        return Final(node: self)
+    }
 }
 
 /// Infix shorthand for lhs.equals(rhs)

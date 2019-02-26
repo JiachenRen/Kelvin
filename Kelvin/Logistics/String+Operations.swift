@@ -74,6 +74,9 @@ public extension String {
     public static let twoVar = "twoVar"
     public static let determination = "determination"
     
+    // Regression
+    public static let linReg = "linReg"
+    
     // List & Pair
     public static let list = "list"
     public static let pair = "pair"

@@ -207,8 +207,9 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - Binomial Cdf/Pdf
   - Geometric Cdf/Pdf
 - [ ] Confidence intervals
-- [ ] Regression
-  - [ ] Linear
+- [x] Regression
+  - [x] Linear (least squares regression)
+    - Residuals
   - [ ] Quadratic, cubic, quartic, power
   - [ ] Exponential/logarithmic
   - [ ] Sinusoidal

@@ -8,8 +8,7 @@
 
 import Foundation
 
-public protocol NaN {
-}
+public protocol NaN {}
 
 extension NaN {
 

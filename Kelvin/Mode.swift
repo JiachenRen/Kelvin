@@ -22,9 +22,11 @@ public struct Mode {
     }()
     
     func format(_ val: Float80) -> String {
-        if val < Float80(Double.greatestFiniteMagnitude) && val > Float80(Double.leastNormalMagnitude) {
+        let absVal = abs(val)
+        if absVal < Float80(Double.greatestFiniteMagnitude) && absVal > Float80(Double.leastNormalMagnitude) {
             let d = Double(round(1E10 * val) / 1E10)
-            if abs(d) > 1E15 || abs(d) < 1E-4 {
+            let absD = abs(d)
+            if absD > 1E15 || absD < 1E-4 {
                 return formatter.string(for: d)!
             }
             return d.description

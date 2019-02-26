@@ -206,6 +206,8 @@
 		1FC67C832220374500A8E6BC /* Integration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67C81221F362A00A8E6BC /* Integration.swift */; };
 		1FC67C862222EAEC00A8E6BC /* TwoVar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67C852222EAEC00A8E6BC /* TwoVar.swift */; };
 		1FC67C882224259700A8E6BC /* NSTextView+LineNumberRulerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67C872224259700A8E6BC /* NSTextView+LineNumberRulerView.swift */; };
+		1FC67C8A22247E2A00A8E6BC /* Regression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67C8922247E2A00A8E6BC /* Regression.swift */; };
+		1FC67C902224C3C600A8E6BC /* Final.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67C8F2224C3C600A8E6BC /* Final.swift */; };
 		1FDC863722131CD200EAC346 /* Contains in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863622131CD200EAC346 /* Contains */; };
 		1FDC863A22132F4300EAC346 /* tangent_plane_grapher.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */; };
 		1FDC863B22132F4300EAC346 /* tangent_plane_kelvin.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863922132F4300EAC346 /* tangent_plane_kelvin.png */; };
@@ -346,6 +348,8 @@
 		1FC67C81221F362A00A8E6BC /* Integration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Integration.swift; sourceTree = "<group>"; };
 		1FC67C852222EAEC00A8E6BC /* TwoVar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoVar.swift; sourceTree = "<group>"; };
 		1FC67C872224259700A8E6BC /* NSTextView+LineNumberRulerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextView+LineNumberRulerView.swift"; sourceTree = "<group>"; };
+		1FC67C8922247E2A00A8E6BC /* Regression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Regression.swift; sourceTree = "<group>"; };
+		1FC67C8F2224C3C600A8E6BC /* Final.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Final.swift; sourceTree = "<group>"; };
 		1FDC863622131CD200EAC346 /* Contains */ = {isa = PBXFileReference; lastKnownFileType = text; path = Contains; sourceTree = "<group>"; };
 		1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tangent_plane_grapher.png; sourceTree = "<group>"; };
 		1FDC863922132F4300EAC346 /* tangent_plane_kelvin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tangent_plane_kelvin.png; sourceTree = "<group>"; };
@@ -457,6 +461,7 @@
 				1F8DF7742207D755006351B0 /* Closure.swift */,
 				1F2E82B32197416D005C3353 /* List.swift */,
 				1F8DF78422089E30006351B0 /* Pipeline.swift */,
+				1FC67C8F2224C3C600A8E6BC /* Final.swift */,
 				1FE1697521F2D44A0006712C /* Pair.swift */,
 				1F2E82B521974368005C3353 /* Variable.swift */,
 				1F570B4D21FBE7150006E342 /* Matrix.swift */,
@@ -541,6 +546,7 @@
 				1F570B5321FF6DB90006E342 /* Distribution.swift */,
 				1F570B5521FF6F670006E342 /* Stat.swift */,
 				1FC67C852222EAEC00A8E6BC /* TwoVar.swift */,
+				1FC67C8922247E2A00A8E6BC /* Regression.swift */,
 			);
 			path = Statistics;
 			sourceTree = "<group>";
@@ -1061,6 +1067,7 @@
 				1F570B5621FF6F670006E342 /* Stat.swift in Sources */,
 				1F8DF7992209381B006351B0 /* Boolean Logic.swift in Sources */,
 				1F0CF2D521EEB69300E40086 /* Program.swift in Sources */,
+				1FC67C902224C3C600A8E6BC /* Final.swift in Sources */,
 				1F0936C321F3C13100E707BD /* OneVar.swift in Sources */,
 				1F8DF78522089E30006351B0 /* Pipeline.swift in Sources */,
 				1F3D31622201FE0800462F10 /* Number.swift in Sources */,
@@ -1072,6 +1079,7 @@
 				1F0A90ED21FA27E700432B17 /* Vector & Matrix.swift in Sources */,
 				1FC67C862222EAEC00A8E6BC /* TwoVar.swift in Sources */,
 				1F3974C821E67627006D6DC2 /* Mode.swift in Sources */,
+				1FC67C8A22247E2A00A8E6BC /* Regression.swift in Sources */,
 				1FFD8CA3218F50850004ECEB /* AppDelegate.swift in Sources */,
 				1F3D31692202863900462F10 /* Factorization.swift in Sources */,
 				1F8DF79D22093909006351B0 /* Flow Control.swift in Sources */,

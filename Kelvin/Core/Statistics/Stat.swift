@@ -217,21 +217,18 @@ public class Stat {
                 Pair("population", covariance(.population, datasetX, datasetY))
             ])
         },
-        
         .binary(.correlation, [.list, .list]) {
             let datasetX = try ($0 as! List).toNumerics()
             let datasetY = try ($1 as! List).toNumerics()
             
             return try correlation(datasetX, datasetY)
         },
-        
         .binary(.determination, [.list, .list]) {
             let datasetX = try ($0 as! List).toNumerics()
             let datasetY = try ($1 as! List).toNumerics()
             
             return try determination(datasetX, datasetY)
         },
-        
         .binary(.twoVar, [.list, .list]) {
             let datasetX = try ($0 as! List).toNumerics()
             let datasetY = try ($1 as! List).toNumerics()
@@ -293,6 +290,45 @@ public class Stat {
             ]
             
             return List(stats)
+        },
+        
+        // Mark: Regression
+        
+        .binary(.linReg, [.list, .list]) {
+            let X = try ($0 as! List).toNumerics()
+            let Y = try ($1 as! List).toNumerics()
+            let (slope, yInt) = try linearRegression(X, Y)
+            
+            let eq = Equation(
+                lhs: "y"&,
+                rhs: slope * "x"& + yInt
+            ).finalize()
+            let cor = try correlation(X, Y)
+            let det = try determination(X, Y)
+            let resid = try residuals(X, Y)
+            
+            return List([
+                Pair("RegEqn", eq),
+                Pair("slope(m)", slope),
+                Pair("y-int(b)", yInt),
+                Pair("r²", det),
+                Pair("r", cor),
+                Pair("Resid", List(resid))
+            ])
+        },
+        .init(.linReg, [.list, .list, .var]) {
+            guard let result = try Function(.linReg, [$0[0], $0[1]]).simplify() as? List else {
+                throw ExecutionError.unexpected(nil)
+            }
+            
+            guard let regEqn = (result[0] as? Pair)?.rhs as? Equation else {
+                throw ExecutionError.unexpected(nil)
+            }
+            
+            try Function(($0[2] as! Variable).name, ["x"&])
+                .implement(using: regEqn.rhs)
+            
+            return result
         }
     ]
 }

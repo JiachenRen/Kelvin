@@ -8,8 +8,7 @@
 
 import Foundation
 
-public protocol LeafNode: Node {
-}
+public protocol LeafNode: Node {}
 
 extension LeafNode {
     
