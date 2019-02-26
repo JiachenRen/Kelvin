@@ -5,8 +5,8 @@ Kelvin CAS
 [![License: MIT](https://img.shields.io/apm/l/vim-mode.svg?colorB=blue&style=flat)](/LICENSE)
 ![Carthage - Compatible](https://img.shields.io/badge/carthage-✓-orange.svg?style=flat)
 
-Kelvin is a powerful computer algebra system built with _Swift 4_. Aside from APIs that support many advanced statistic, algebraic, and calculus operations, it incorporates many popular syntactic constructs from many different languages (lua, python, swift, java, javascript, bash, etc.) For a full list of what it can do, please refer to [Capabilities](#Capabilities)
-tac
+Kelvin is a powerful computer algebra system built with _Swift 4_. Aside from APIs that support advanced **statistic**, **algebra**, **linear algebra**, **probability**, **list** and **calculus** operations, it incorporates many popular syntactic constructs from many different languages (lua, python, swift, java, javascript, bash). For a full list of what it can do, please refer to [Capabilities](#Capabilities).
+
 ## MacOS User Interface
 
 Finally, the UI is here! Well, it is rather simple, but isn't that a good thing? Using `Highlightr` (which uses [highlight.js](https://highlightjs.org "highlight.js homepage") at its core), the editor supports **185** languages and **89** themes. That's just something extra and useless imo but hey, it looks great!
