@@ -225,7 +225,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - Shuffle list
   - Random element of list
 
-### Vector/Matrix
+### Linear Algebra
 - [x] Vector
   - [x] Compilation
   - [x] Dot product
@@ -241,6 +241,9 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - [x] Multiplication
   - [x] Addition/Subtraction
   - [x] Transposition
+  - [ ] LU decomposition
+  - [ ] Inversion
+  - [ ] Gaussian elimination
 
 ### List math/operations
 - [x] Zip, map, and reduce w/ anonymous closure arguments.
