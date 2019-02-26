@@ -30,14 +30,13 @@ public class Operation: Equatable {
         Algebra.operations,
         Calculus.operations,
         Developer.operations,
+        LinearAlgebra.operations,
         Stat.operations,
         binaryOperations,
         unaryOperations,
         probabilityOperations,
         listAndPairOperations,
         relationalOperations,
-        vectorOperations,
-        matrixOperations,
         numberOperations
     ].flatMap {
         $0

@@ -57,8 +57,8 @@
 		1F0A90E821F97B7200432B17 /* String+Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E621F97B5000432B17 /* String+Regex.swift */; };
 		1F0A90EA21FA0EF600432B17 /* DataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E921FA0EF600432B17 /* DataType.swift */; };
 		1F0A90EB21FA10D800432B17 /* DataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E921FA0EF600432B17 /* DataType.swift */; };
-		1F0A90ED21FA27E700432B17 /* Vector & Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90EC21FA27E700432B17 /* Vector & Matrix.swift */; };
-		1F0A90EE21FA2A5C00432B17 /* Vector & Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90EC21FA27E700432B17 /* Vector & Matrix.swift */; };
+		1F0A90ED21FA27E700432B17 /* LinearAlgebra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90EC21FA27E700432B17 /* LinearAlgebra.swift */; };
+		1F0A90EE21FA2A5C00432B17 /* LinearAlgebra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90EC21FA27E700432B17 /* LinearAlgebra.swift */; };
 		1F0CF2C421EA420400E40086 /* KString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* KString.swift */; };
 		1F0CF2C521EA428000E40086 /* KString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* KString.swift */; };
 		1F0CF2C721EBA8C800E40086 /* Keyword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C621EBA8C800E40086 /* Keyword.swift */; };
@@ -126,7 +126,7 @@
 		1F8DF744220672BE006351B0 /* Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3D31612201FE0800462F10 /* Number.swift */; };
 		1F8DF745220672BE006351B0 /* Developer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936D021F4E45900E707BD /* Developer.swift */; };
 		1F8DF746220672BE006351B0 /* List & Pair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936D621F4E80A00E707BD /* List & Pair.swift */; };
-		1F8DF747220672BE006351B0 /* Vector & Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90EC21FA27E700432B17 /* Vector & Matrix.swift */; };
+		1F8DF747220672BE006351B0 /* LinearAlgebra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90EC21FA27E700432B17 /* LinearAlgebra.swift */; };
 		1F8DF748220672BE006351B0 /* Relation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936DE21F4EB7A00E707BD /* Relation.swift */; };
 		1F8DF74A220672BE006351B0 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936E521F4ED2300E707BD /* Configuration.swift */; };
 		1F8DF74B220672BE006351B0 /* Equation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974C421E633FD006D6DC2 /* Equation.swift */; };
@@ -217,6 +217,9 @@
 		1FC67C992224D02500A8E6BC /* Final.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67C8F2224C3C600A8E6BC /* Final.swift */; };
 		1FC67C9B2224D1B200A8E6BC /* Integration in Resources */ = {isa = PBXBuildFile; fileRef = 1FC67C9A2224D1B200A8E6BC /* Integration */; };
 		1FC67C9D2224D25F00A8E6BC /* Regression in Resources */ = {isa = PBXBuildFile; fileRef = 1FC67C9C2224D25F00A8E6BC /* Regression */; };
+		1FC67CA32225B7EA00A8E6BC /* GaussianElimination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67CA22225B7EA00A8E6BC /* GaussianElimination.swift */; };
+		1FC67CA42225B8A400A8E6BC /* GaussianElimination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67CA22225B7EA00A8E6BC /* GaussianElimination.swift */; };
+		1FC67CA52225B8B100A8E6BC /* GaussianElimination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67CA22225B7EA00A8E6BC /* GaussianElimination.swift */; };
 		1FDC863722131CD200EAC346 /* Contains in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863622131CD200EAC346 /* Contains */; };
 		1FDC863A22132F4300EAC346 /* tangent_plane_grapher.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */; };
 		1FDC863B22132F4300EAC346 /* tangent_plane_kelvin.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863922132F4300EAC346 /* tangent_plane_kelvin.png */; };
@@ -297,7 +300,7 @@
 		1F0A90E421F93DCE00432B17 /* OneVar */ = {isa = PBXFileReference; lastKnownFileType = text; path = OneVar; sourceTree = "<group>"; };
 		1F0A90E621F97B5000432B17 /* String+Regex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Regex.swift"; sourceTree = "<group>"; };
 		1F0A90E921FA0EF600432B17 /* DataType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataType.swift; sourceTree = "<group>"; };
-		1F0A90EC21FA27E700432B17 /* Vector & Matrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Vector & Matrix.swift"; sourceTree = "<group>"; };
+		1F0A90EC21FA27E700432B17 /* LinearAlgebra.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearAlgebra.swift; sourceTree = "<group>"; };
 		1F0CF2C321EA420400E40086 /* KString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KString.swift; sourceTree = "<group>"; };
 		1F0CF2C621EBA8C800E40086 /* Keyword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keyword.swift; sourceTree = "<group>"; };
 		1F0CF2D421EEB69300E40086 /* Program.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Program.swift; sourceTree = "<group>"; };
@@ -361,6 +364,7 @@
 		1FC67C8F2224C3C600A8E6BC /* Final.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Final.swift; sourceTree = "<group>"; };
 		1FC67C9A2224D1B200A8E6BC /* Integration */ = {isa = PBXFileReference; lastKnownFileType = text; path = Integration; sourceTree = "<group>"; };
 		1FC67C9C2224D25F00A8E6BC /* Regression */ = {isa = PBXFileReference; lastKnownFileType = text; path = Regression; sourceTree = "<group>"; };
+		1FC67CA22225B7EA00A8E6BC /* GaussianElimination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaussianElimination.swift; sourceTree = "<group>"; };
 		1FDC863622131CD200EAC346 /* Contains */ = {isa = PBXFileReference; lastKnownFileType = text; path = Contains; sourceTree = "<group>"; };
 		1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tangent_plane_grapher.png; sourceTree = "<group>"; };
 		1FDC863922132F4300EAC346 /* tangent_plane_kelvin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tangent_plane_kelvin.png; sourceTree = "<group>"; };
@@ -428,10 +432,10 @@
 				1F0936C921F4E26700E707BD /* Arithmetic */,
 				1F3D316F2202875700462F10 /* Calculus */,
 				1F8DF7972209376B006351B0 /* Developer */,
+				1FC67CA12225B7C000A8E6BC /* LinearAlgebra */,
 				1F985D4D221C3F6B00EFC404 /* Probability */,
 				1F3D31612201FE0800462F10 /* Number.swift */,
 				1F0936D621F4E80A00E707BD /* List & Pair.swift */,
-				1F0A90EC21FA27E700432B17 /* Vector & Matrix.swift */,
 				1F0936DE21F4EB7A00E707BD /* Relation.swift */,
 				1F0936E521F4ED2300E707BD /* Configuration.swift */,
 			);
@@ -650,6 +654,15 @@
 				1F985D4E221C3F8200EFC404 /* Gamma.swift */,
 			);
 			path = Probability;
+			sourceTree = "<group>";
+		};
+		1FC67CA12225B7C000A8E6BC /* LinearAlgebra */ = {
+			isa = PBXGroup;
+			children = (
+				1F0A90EC21FA27E700432B17 /* LinearAlgebra.swift */,
+				1FC67CA22225B7EA00A8E6BC /* GaussianElimination.swift */,
+			);
+			path = LinearAlgebra;
 			sourceTree = "<group>";
 		};
 		1FDC8641221330CD00EAC346 /* Linear Algebra */ = {
@@ -970,6 +983,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FC67CA42225B8A400A8E6BC /* GaussianElimination.swift in Sources */,
 				1FC67C972224D02500A8E6BC /* TwoVar.swift in Sources */,
 				1FC67C982224D02500A8E6BC /* Regression.swift in Sources */,
 				1FC67C992224D02500A8E6BC /* Final.swift in Sources */,
@@ -993,7 +1007,7 @@
 				1F570B5821FF6FD30006E342 /* Stat.swift in Sources */,
 				1F8DF73722063067006351B0 /* Option.swift in Sources */,
 				1F570B4F21FBEB960006E342 /* Matrix.swift in Sources */,
-				1F0A90EE21FA2A5C00432B17 /* Vector & Matrix.swift in Sources */,
+				1F0A90EE21FA2A5C00432B17 /* LinearAlgebra.swift in Sources */,
 				1F0A90EB21FA10D800432B17 /* DataType.swift in Sources */,
 				1F0A90E821F97B7200432B17 /* String+Regex.swift in Sources */,
 				1F0A90E321F8C3C100432B17 /* String+Colors.swift in Sources */,
@@ -1094,13 +1108,14 @@
 				1F94B7A6221C738000C47B1D /* EditorTextView.swift in Sources */,
 				1F8DF73022050B5B006351B0 /* IOProtocol.swift in Sources */,
 				1F0936D721F4E80A00E707BD /* List & Pair.swift in Sources */,
-				1F0A90ED21FA27E700432B17 /* Vector & Matrix.swift in Sources */,
+				1F0A90ED21FA27E700432B17 /* LinearAlgebra.swift in Sources */,
 				1FC67C862222EAEC00A8E6BC /* TwoVar.swift in Sources */,
 				1F3974C821E67627006D6DC2 /* Mode.swift in Sources */,
 				1FC67C8A22247E2A00A8E6BC /* Regression.swift in Sources */,
 				1FFD8CA3218F50850004ECEB /* AppDelegate.swift in Sources */,
 				1F3D31692202863900462F10 /* Factorization.swift in Sources */,
 				1F8DF79D22093909006351B0 /* Flow Control.swift in Sources */,
+				1FC67CA32225B7EA00A8E6BC /* GaussianElimination.swift in Sources */,
 				1F3D316D2202874700462F10 /* Differentiation.swift in Sources */,
 				1F2E82B02197338B005C3353 /* Node.swift in Sources */,
 				1F09370121F51EC000E707BD /* Vector.swift in Sources */,
@@ -1116,6 +1131,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FC67CA52225B8B100A8E6BC /* GaussianElimination.swift in Sources */,
 				1FC67C912224CF1700A8E6BC /* TwoVar.swift in Sources */,
 				1FC67C922224CF1700A8E6BC /* Regression.swift in Sources */,
 				1FC67C932224CF1700A8E6BC /* Integration.swift in Sources */,
@@ -1144,7 +1160,7 @@
 				1F8DF744220672BE006351B0 /* Number.swift in Sources */,
 				1F8DF745220672BE006351B0 /* Developer.swift in Sources */,
 				1F8DF746220672BE006351B0 /* List & Pair.swift in Sources */,
-				1F8DF747220672BE006351B0 /* Vector & Matrix.swift in Sources */,
+				1F8DF747220672BE006351B0 /* LinearAlgebra.swift in Sources */,
 				1F8DF748220672BE006351B0 /* Relation.swift in Sources */,
 				1F8DF74A220672BE006351B0 /* Configuration.swift in Sources */,
 				1F8DF74B220672BE006351B0 /* Equation.swift in Sources */,

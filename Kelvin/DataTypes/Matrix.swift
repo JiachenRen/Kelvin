@@ -201,6 +201,19 @@ public struct Matrix: MutableListProtocol, NaN {
         return try Matrix.determinant(of: self, dim.rows)
     }
     
+    /// Converts the matrix to a 2D array of specified type
+    public func specialize<T>(as type: T.Type) throws -> [[T]] {
+        return try rows.map {row in
+            try row.map {
+                guard let specialized = $0 as? T else {
+                    let msg = "cannot cast \($0.stringified) to \(T.self)"
+                    throw ExecutionError.general(errMsg: msg)
+                }
+                return specialized
+            }
+        }
+    }
+    
     /**
      Recursive function for finding determinant of matrix.
      n is current dimension of mat[][].

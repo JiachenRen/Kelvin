@@ -243,7 +243,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - [x] Transposition
   - [ ] LU decomposition
   - [ ] Inversion
-  - [ ] Gaussian elimination
+  - [x] Gaussian elimination
 
 ### List math/operations
 - [x] Zip, map, and reduce w/ anonymous closure arguments.

@@ -163,7 +163,7 @@ public extension String {
     public static let readLine = "readLine"
     public static let stride = "stride"
     
-    // Matrix & vector
+    // Linear algebra
     public static let dotProduct = "dotP"
     public static let crossProduct = "crossP"
     public static let unitVector = "unitVec"
@@ -174,6 +174,7 @@ public extension String {
     public static let createMatrix = "mat"
     public static let identityMatrix = "idMat"
     public static let transpose = "trans"
+    public static let gaussianElimination = "gausElim"
     
     // Equality
     public static let equals = "=="
