@@ -16,10 +16,12 @@ def files = {
     "Algebra/Trigonometry",
     "Algebra/Factorization",
     "Calculus/Differentiation",
+    "Calculus/Integration",
     "Linear Algebra/Vector",
     "Linear Algebra/Matrix",
     "Statistics/OneVar",
     "Statistics/Distribution",
+    "Statistics/Regression"
 }
 
 def file_paths = (files | (examples_dir & $0))

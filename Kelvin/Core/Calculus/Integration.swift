@@ -20,7 +20,7 @@ public class Quadrature {
         abs_tolerance: 1E-10,
         rel_tolerance: 0,
         qag_points_per_interval: 0,
-        max_intervals: 20
+        max_intervals: 35 // Higher max interval leads to more accurate result
     )
     
     /// Status of the integration result.

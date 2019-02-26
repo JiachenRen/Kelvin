@@ -208,6 +208,15 @@
 		1FC67C882224259700A8E6BC /* NSTextView+LineNumberRulerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67C872224259700A8E6BC /* NSTextView+LineNumberRulerView.swift */; };
 		1FC67C8A22247E2A00A8E6BC /* Regression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67C8922247E2A00A8E6BC /* Regression.swift */; };
 		1FC67C902224C3C600A8E6BC /* Final.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67C8F2224C3C600A8E6BC /* Final.swift */; };
+		1FC67C912224CF1700A8E6BC /* TwoVar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67C852222EAEC00A8E6BC /* TwoVar.swift */; };
+		1FC67C922224CF1700A8E6BC /* Regression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67C8922247E2A00A8E6BC /* Regression.swift */; };
+		1FC67C932224CF1700A8E6BC /* Integration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67C81221F362A00A8E6BC /* Integration.swift */; };
+		1FC67C942224CF1700A8E6BC /* Final.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67C8F2224C3C600A8E6BC /* Final.swift */; };
+		1FC67C972224D02500A8E6BC /* TwoVar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67C852222EAEC00A8E6BC /* TwoVar.swift */; };
+		1FC67C982224D02500A8E6BC /* Regression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67C8922247E2A00A8E6BC /* Regression.swift */; };
+		1FC67C992224D02500A8E6BC /* Final.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67C8F2224C3C600A8E6BC /* Final.swift */; };
+		1FC67C9B2224D1B200A8E6BC /* Integration in Resources */ = {isa = PBXBuildFile; fileRef = 1FC67C9A2224D1B200A8E6BC /* Integration */; };
+		1FC67C9D2224D25F00A8E6BC /* Regression in Resources */ = {isa = PBXBuildFile; fileRef = 1FC67C9C2224D25F00A8E6BC /* Regression */; };
 		1FDC863722131CD200EAC346 /* Contains in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863622131CD200EAC346 /* Contains */; };
 		1FDC863A22132F4300EAC346 /* tangent_plane_grapher.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */; };
 		1FDC863B22132F4300EAC346 /* tangent_plane_kelvin.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863922132F4300EAC346 /* tangent_plane_kelvin.png */; };
@@ -350,6 +359,8 @@
 		1FC67C872224259700A8E6BC /* NSTextView+LineNumberRulerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextView+LineNumberRulerView.swift"; sourceTree = "<group>"; };
 		1FC67C8922247E2A00A8E6BC /* Regression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Regression.swift; sourceTree = "<group>"; };
 		1FC67C8F2224C3C600A8E6BC /* Final.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Final.swift; sourceTree = "<group>"; };
+		1FC67C9A2224D1B200A8E6BC /* Integration */ = {isa = PBXFileReference; lastKnownFileType = text; path = Integration; sourceTree = "<group>"; };
+		1FC67C9C2224D25F00A8E6BC /* Regression */ = {isa = PBXFileReference; lastKnownFileType = text; path = Regression; sourceTree = "<group>"; };
 		1FDC863622131CD200EAC346 /* Contains */ = {isa = PBXFileReference; lastKnownFileType = text; path = Contains; sourceTree = "<group>"; };
 		1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tangent_plane_grapher.png; sourceTree = "<group>"; };
 		1FDC863922132F4300EAC346 /* tangent_plane_kelvin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tangent_plane_kelvin.png; sourceTree = "<group>"; };
@@ -655,6 +666,7 @@
 			children = (
 				1F0A90E421F93DCE00432B17 /* OneVar */,
 				1FDC8643221331A300EAC346 /* Distribution */,
+				1FC67C9C2224D25F00A8E6BC /* Regression */,
 			);
 			path = Statistics;
 			sourceTree = "<group>";
@@ -672,6 +684,7 @@
 			isa = PBXGroup;
 			children = (
 				1F09370621F56F9C00E707BD /* Differentiation */,
+				1FC67C9A2224D1B200A8E6BC /* Integration */,
 			);
 			path = Calculus;
 			sourceTree = "<group>";
@@ -893,6 +906,7 @@
 				1FDC863B22132F4300EAC346 /* tangent_plane_kelvin.png in Resources */,
 				1F8DF7922208D2E5006351B0 /* WhileLoop in Resources */,
 				1FDC865222136AB600EAC346 /* DiceRoll in Resources */,
+				1FC67C9B2224D1B200A8E6BC /* Integration in Resources */,
 				1F09370721F56F9C00E707BD /* Differentiation in Resources */,
 				1F0A90E521F93DCE00432B17 /* OneVar in Resources */,
 				1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */,
@@ -907,6 +921,7 @@
 				1FDC8644221331A300EAC346 /* Distribution in Resources */,
 				1F0A90DF21F7E94200432B17 /* ErrorHandling in Resources */,
 				1FE1697B21F2EC070006712C /* Conditionals in Resources */,
+				1FC67C9D2224D25F00A8E6BC /* Regression in Resources */,
 				1F09371121F62BF700E707BD /* RepeatMapDemo in Resources */,
 				1F645FC021FAA1260096AD1C /* Vector in Resources */,
 				1F09371721F66C4B00E707BD /* Subscript in Resources */,
@@ -955,6 +970,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FC67C972224D02500A8E6BC /* TwoVar.swift in Sources */,
+				1FC67C982224D02500A8E6BC /* Regression.swift in Sources */,
+				1FC67C992224D02500A8E6BC /* Final.swift in Sources */,
 				1FC67C832220374500A8E6BC /* Integration.swift in Sources */,
 				1FC67C7E221DF44300A8E6BC /* Gamma.swift in Sources */,
 				1F8DF7A422093B8F006351B0 /* String.swift in Sources */,
@@ -1098,6 +1116,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FC67C912224CF1700A8E6BC /* TwoVar.swift in Sources */,
+				1FC67C922224CF1700A8E6BC /* Regression.swift in Sources */,
+				1FC67C932224CF1700A8E6BC /* Integration.swift in Sources */,
+				1FC67C942224CF1700A8E6BC /* Final.swift in Sources */,
 				1FC67C7D221DF3C800A8E6BC /* Gamma.swift in Sources */,
 				1F8DF7A022093B51006351B0 /* String.swift in Sources */,
 				1F8DF7A122093B51006351B0 /* Flow Control.swift in Sources */,
