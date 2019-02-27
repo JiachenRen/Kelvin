@@ -76,6 +76,7 @@ public extension String {
     
     // Regression
     public static let linReg = "linReg"
+    public static let polyReg = "polyReg"
     
     // List & Pair
     public static let list = "list"
@@ -91,6 +92,7 @@ public extension String {
     public static let shuffle = "shuffle"
     public static let remove = "rm"
     public static let contains = "contains"
+    public static let reverse = "reverse"
     
     // Calculus
     public static let derivative = "derivative"

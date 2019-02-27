@@ -210,7 +210,10 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 - [x] Regression
   - [x] Linear (least squares regression)
     - Residuals
-  - [ ] Quadratic, cubic, quartic, power
+  - [ ] Multiple linear regression
+  - [x] Polynomial
+    - [ ] Quadratic, cubic, quartic
+  - [ ] Power
   - [ ] Exponential/logarithmic
   - [ ] Sinusoidal
   - [ ] Logistic
@@ -250,6 +253,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 - [x] Sort and filter
 - [x] Append and remove
 - [ ] Insert
+- [x] Reverse
 - [x] Contains
 - [x] Chained subscript access
   - Access by index

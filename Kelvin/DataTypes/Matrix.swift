@@ -123,6 +123,10 @@ public struct Matrix: MutableListProtocol, NaN {
         self.dim = (rows: rows.count, cols: rows[0].count)
     }
     
+    init(_ mat: [[Node]]) throws {
+        try self.init(mat.map {Row($0)})
+    }
+    
     public func equals(_ node: Node) -> Bool {
         guard let matrix = node as? Matrix else {
             return false
@@ -212,6 +216,16 @@ public struct Matrix: MutableListProtocol, NaN {
                 return specialized
             }
         }
+    }
+    
+    public func setColumn(_ i: Int, _ column: Vector) throws -> Matrix {
+        try Constraint.domain(i, 0, dim.cols)
+        guard column.count == dim.rows else {
+            throw ExecutionError.dimensionMismatch(self, column)
+        }
+        var t = transposed
+        t[i] = column
+        return t
     }
     
     /**

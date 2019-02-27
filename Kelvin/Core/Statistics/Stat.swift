@@ -254,7 +254,7 @@ public class Stat {
             let sCov = try covariance(.sample, datasetX, datasetY)
             let pCov = try covariance(.population, datasetX, datasetY)
             let cor = try correlation(datasetX, datasetY)
-            let det = try determination(datasetX, datasetY)
+            let cod = try determination(datasetX, datasetY)
             
             let stats: [Pair] = [
                 .init("x̅", meanX),
@@ -284,7 +284,7 @@ public class Stat {
                 .init("n", n),
                 .init("∑xy", sumXY),
                 .init("R", cor),
-                .init("R²", det),
+                .init("R²", cod),
                 .init("Sample COV", sCov),
                 .init("Population COV", pCov)
             ]
@@ -304,14 +304,14 @@ public class Stat {
                 rhs: slope * "x"& + yInt
             ).finalize()
             let cor = try correlation(X, Y)
-            let det = try determination(X, Y)
+            let cod = try determination(X, Y)
             let resid = try residuals(X, Y)
             
             return List([
                 Pair("RegEqn", eq),
                 Pair("slope(m)", slope),
                 Pair("y-int(b)", yInt),
-                Pair("r²", det),
+                Pair("r²", cod),
                 Pair("r", cor),
                 Pair("Resid", List(resid))
             ])
@@ -329,6 +329,19 @@ public class Stat {
                 .implement(using: regEqn.rhs)
             
             return result
+        },
+        .init(.polyReg, [.int, .list, .list]) {
+            let l1 = try ($0[1] as! List).toNumerics()
+            let l2 = try ($0[2] as! List).toNumerics()
+            let k = $0[0] as! Int
+            let (eq, coefs, cod, resid) = try polynomialRegression(degrees: k, l1, l2)
+            
+            return List([
+                Pair("RegEqn", eq),
+                Pair("Coef(s)", List(coefs)),
+                Pair("R²", cod),
+                Pair("Resid", List(resid)),
+            ])
         }
     ]
 }

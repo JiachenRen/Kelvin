@@ -224,6 +224,9 @@ let listAndPairOperations: [Operation] = [
         var elements = ($0 as! List).elements
         elements.shuffle()
         return List(elements)
+    },
+    .unary(.reverse, [.list]) {
+        List(($0 as! List).elements.reversed())
     }
 ]
 
