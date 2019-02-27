@@ -119,10 +119,11 @@ public struct Variable: LeafNode, NaN {
      
      - Returns: The simplified variable.
      */
-    public func simplify() -> Node {
+    public func simplify() throws -> Node {
         if let def = definition {
             // If the definition is not a constant, return the definition
-            return isConstant && Mode.shared.rounding == .exact ? self : def
+            return try isConstant && Mode.shared.rounding == .exact ?
+                self : def.simplify()
         }
         return self
     }

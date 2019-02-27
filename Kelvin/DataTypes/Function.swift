@@ -280,7 +280,7 @@ public struct Function: MutableListProtocol {
                         let msg = "variable \(iv.stringified) is undefined; inout modifier can only be used on variables with definitions"
                         throw ExecutionError.general(errMsg: msg)
                     }
-                    arg = iv.simplify()
+                    arg = try iv.simplify()
                 }
                 Variable.define(dict[par.name]!, arg)
             }
