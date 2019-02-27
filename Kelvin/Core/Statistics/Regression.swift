@@ -18,31 +18,34 @@ public extension Stat {
     public static func linearRegression(
         _ datasetX: [Float80],
         _ datasetY: [Float80]
-    ) throws -> (slope: Float80, yIntercept: Float80) {
+    ) throws -> (eqn: Equation, slope: Float80, yIntercept: Float80, r: Float80, cod: Float80, resid: [Float80]) {
         
         let r = try correlation(datasetX, datasetY)
         let sy = stdev(.sample, datasetY)
         let sx = stdev(.sample, datasetX)
         let m = r * sy / sx
         
+        // Calcuate y intercept
         let meanX = mean(datasetX)
         let meanY = mean(datasetY)
         let b = meanY - m * meanX
         
-        return (m, b)
-    }
-    
-    /// Residual = Observed value - Predicted value;
-    /// e = y - ŷ
-    public static func residuals(
-        _ datasetX: [Float80],
-        _ datasetY: [Float80]
-    ) throws -> [Float80] {
-        
-        let (m, b) = try linearRegression(datasetX, datasetY)
-        return zip(datasetX, datasetY).map {(x, y) in
+        // Residual = Observed value - Predicted value
+        // e = y - ŷ
+        let resid = zip(datasetX, datasetY).map {(x, y) in
             y - (x * m + b)
         }
+        
+        // Regression equation y = mx + b
+        let eqn = Equation(
+            lhs: "y"&,
+            rhs: m * "x"& + b
+        )
+        
+        // Another definition of cod is correlation squared
+        let cod = pow(r, 2.0)
+        
+        return (eqn, m, b, r, cod, resid)
     }
     
     /// Polynomial least squares regression based on
@@ -50,10 +53,6 @@ public extension Stat {
     /// The original article that describes the procedure
     /// can be found here:
     /// https://neutrium.net/mathematics/least-squares-fitting-of-a-polynomial/
-    ///
-    /// For calculation of R², the general definition is used:
-    /// R² = 1 - ssRes / ssTot.
-    /// Refer to https://en.wikipedia.org/wiki/Coefficient_of_determination
     ///
     /// **Example**
     ///
@@ -68,7 +67,7 @@ public extension Stat {
         degrees: Int,
         _ datasetX: [Float80],
         _ datasetY: [Float80]
-    ) throws -> (eqn: Equation, coefs: [Float80], cod: Float80, resids: [Float80]) {
+    ) throws -> (eqn: Equation, coefs: [Float80], cod: Float80, resid: [Float80]) {
         
         guard datasetX.count == datasetY.count else {
             throw ExecutionError.dimensionMismatch(List(datasetX), List(datasetY))
@@ -112,6 +111,7 @@ public extension Stat {
             coefs[i] = detMi / detM
         }
         
+        // Generate definition template for f(x)
         Scope.withholdAccess(to: ["x"&])
         let rhs = try coefs.enumerated()
             .map {(i, a) in
@@ -121,35 +121,25 @@ public extension Stat {
             }.simplify()
         Scope.releaseRestrictions()
         
+        // Regression eqn
         let eqn = Equation(lhs: "y"&, rhs: rhs)
         
+        // Calculate y-hat (estimated y)
         Scope.save()
         let estimatedY = try datasetX.map {x -> Float80 in
             Variable.define("x", x)
             return try eqn.rhs.simplify()≈!
         }
-        let meanY = mean(datasetY)
-        
-        // Total sum of squares
-        let ssTot: Float80 = datasetY.reduce(0) {
-            $0 + pow($1 - meanY, 2.0)
-        }
+        Scope.restore()
         
         // Residuals
-        let res: [Float80] = zip(datasetY, estimatedY)
+        let resid: [Float80] = zip(datasetY, estimatedY)
             .map {(yi, fi) in
                 yi - fi
-            }
-        
-        // Sum of squares of residuals
-        let ssRes: Float80 = res.reduce(0) {
-            $0 + pow($1, 2.0)
         }
         
-        // R² = 1 - ssRes / ssTot
-        let cod = 1.0 - ssRes / ssTot
-            
-        Scope.restore()
-        return (eqn, coefs, cod, res)
+        let cod = try determination(datasetY, resid)
+        
+        return (eqn, coefs, cod, resid)
     }
 }

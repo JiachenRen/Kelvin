@@ -44,18 +44,37 @@ extension Stat {
     /// - returns: Correlation, a value between -1 and 1
     public static func correlation(
         _ datasetX: [Float80],
-        _ datasetY: [Float80]) throws -> Float80 {
+        _ datasetY: [Float80]
+        ) throws -> Float80 {
         
         return try covariance(.sample, datasetX, datasetY) /
             stdev(.sample, datasetX) /
             stdev(.sample, datasetY)
     }
     
-    /// Correlation squared (coefficient of determination)
+    /// Calculates coefficient of determination, R².
+    /// For calculation of R², the general definition is used:
+    /// R² = 1 - ssRes / ssTot.
+    /// Refer to https://en.wikipedia.org/wiki/Coefficient_of_determination
     public static func determination(
-        _ datasetX: [Float80],
-        _ datasetY: [Float80]) throws -> Float80 {
-        return try pow(correlation(datasetX, datasetY), 2.0)
+        _ datasetY: [Float80],
+        _ resid: [Float80]
+        ) throws -> Float80 {
+        
+        let meanY = mean(datasetY)
+        
+        // Total sum of squares
+        let ssTot: Float80 = datasetY.reduce(0) {
+            $0 + pow($1 - meanY, 2.0)
+        }
+        
+        // Sum of squares of residuals
+        let ssRes: Float80 = resid.reduce(0) {
+            $0 + pow($1, 2.0)
+        }
+        
+        // R² = 1 - ssRes / ssTot
+        return 1.0 - ssRes / ssTot
     }
     
     /// ∑xy

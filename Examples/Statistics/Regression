@@ -1,6 +1,9 @@
 def l1 = {1,2,3,7,9,10}
 def l2 = {2,5,7,6,9,10}
 
-linReg(l1,l2,regEq)
+def result = linReg(l1,l2)
+def definition = result[0][1][1]
+def regEq(a) = (definition << x = a)
 
+regEq(3)
 assert round(regEq(3) - (3.00909 + 0.654545 * 3), 3) == 0
