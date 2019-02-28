@@ -220,6 +220,9 @@
 		1FC67CA32225B7EA00A8E6BC /* GaussianElimination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67CA22225B7EA00A8E6BC /* GaussianElimination.swift */; };
 		1FC67CA42225B8A400A8E6BC /* GaussianElimination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67CA22225B7EA00A8E6BC /* GaussianElimination.swift */; };
 		1FC67CA52225B8B100A8E6BC /* GaussianElimination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67CA22225B7EA00A8E6BC /* GaussianElimination.swift */; };
+		1FC67CA7222741FA00A8E6BC /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67CA6222741FA00A8E6BC /* Assert.swift */; };
+		1FC67CA82227446900A8E6BC /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67CA6222741FA00A8E6BC /* Assert.swift */; };
+		1FC67CA92227447F00A8E6BC /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67CA6222741FA00A8E6BC /* Assert.swift */; };
 		1FDC863722131CD200EAC346 /* Contains in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863622131CD200EAC346 /* Contains */; };
 		1FDC863A22132F4300EAC346 /* tangent_plane_grapher.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */; };
 		1FDC863B22132F4300EAC346 /* tangent_plane_kelvin.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863922132F4300EAC346 /* tangent_plane_kelvin.png */; };
@@ -365,6 +368,7 @@
 		1FC67C9A2224D1B200A8E6BC /* Integration */ = {isa = PBXFileReference; lastKnownFileType = text; path = Integration; sourceTree = "<group>"; };
 		1FC67C9C2224D25F00A8E6BC /* Regression */ = {isa = PBXFileReference; lastKnownFileType = text; path = Regression; sourceTree = "<group>"; };
 		1FC67CA22225B7EA00A8E6BC /* GaussianElimination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaussianElimination.swift; sourceTree = "<group>"; };
+		1FC67CA6222741FA00A8E6BC /* Assert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assert.swift; sourceTree = "<group>"; };
 		1FDC863622131CD200EAC346 /* Contains */ = {isa = PBXFileReference; lastKnownFileType = text; path = Contains; sourceTree = "<group>"; };
 		1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tangent_plane_grapher.png; sourceTree = "<group>"; };
 		1FDC863922132F4300EAC346 /* tangent_plane_kelvin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tangent_plane_kelvin.png; sourceTree = "<group>"; };
@@ -587,6 +591,7 @@
 				1F0936EE21F5132200E707BD /* Protocols */,
 				1FFD8CD4218F52430004ECEB /* Compiler.swift */,
 				1F3974BB21E3970F006D6DC2 /* Error.swift */,
+				1FC67CA6222741FA00A8E6BC /* Assert.swift */,
 				1F0A90E921FA0EF600432B17 /* DataType.swift */,
 				1F3974C721E67627006D6DC2 /* Mode.swift */,
 				1F2E82AB21966FC5005C3353 /* Operation.swift */,
@@ -983,6 +988,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FC67CA82227446900A8E6BC /* Assert.swift in Sources */,
 				1FC67CA42225B8A400A8E6BC /* GaussianElimination.swift in Sources */,
 				1FC67C972224D02500A8E6BC /* TwoVar.swift in Sources */,
 				1FC67C982224D02500A8E6BC /* Regression.swift in Sources */,
@@ -1088,6 +1094,7 @@
 				1FFD8CA8218F50850004ECEB /* Kelvin.xcdatamodeld in Sources */,
 				1F0936CE21F4E36300E707BD /* Probability.swift in Sources */,
 				1F2E82AC21966FC5005C3353 /* Operation.swift in Sources */,
+				1FC67CA7222741FA00A8E6BC /* Assert.swift in Sources */,
 				1F0936DF21F4EB7A00E707BD /* Relation.swift in Sources */,
 				1F570B5421FF6DB90006E342 /* Distribution.swift in Sources */,
 				1F0936F021F513AF00E707BD /* MutableListProtocol.swift in Sources */,
@@ -1131,6 +1138,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FC67CA92227447F00A8E6BC /* Assert.swift in Sources */,
 				1FC67CA52225B8B100A8E6BC /* GaussianElimination.swift in Sources */,
 				1FC67C912224CF1700A8E6BC /* TwoVar.swift in Sources */,
 				1FC67C922224CF1700A8E6BC /* Regression.swift in Sources */,

@@ -177,6 +177,8 @@ public extension String {
     public static let identityMatrix = "idMat"
     public static let transpose = "trans"
     public static let gaussianElimination = "gausElim"
+    public static let transform = "transform"
+    public static let cofactor = "cofactor"
     
     // Equality
     public static let equals = "=="

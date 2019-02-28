@@ -241,11 +241,13 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - [x] Conversion to/from list/matrix
   - [x] Determinant
   - [x] Identity
+  - [x] Cofactor
+  - [x] Transformation
   - [x] Multiplication
   - [x] Addition/Subtraction
   - [x] Transposition
   - [ ] LU decomposition
-  - [ ] Inversion
+  - [ ] Inverse
   - [x] Gaussian elimination
 
 ### List math/operations

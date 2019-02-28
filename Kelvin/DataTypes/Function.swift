@@ -28,7 +28,7 @@ public struct Function: MutableListProtocol {
     /// Conform to MutableListProtocol by returning the list of arguments
     /// as elements; since the function itself is immutable, a new function
     /// is created every time the elements are changed.
-    var elements: [Node] {
+    public var elements: [Node] {
         get {
             return args.elements
         }

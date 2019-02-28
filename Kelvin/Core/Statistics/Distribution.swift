@@ -20,15 +20,15 @@ public extension Stat {
     ///     - k: The first trial that is successful
     ///     - pr: Probability of success
     public static func geomPdf(prSuccess pr: Node, _ k: Int) throws -> Node {
-        try Constraint.domain(k, 0, Float80.infinity)
+        try Assert.domain(k, 0, Float80.infinity)
         return pr * ((1 - pr) ^ (k - 1))
     }
     
     /// - Returns: Cumulative geometric probability distribution from `lowerBound` to `upperBound`
     public static func geomCdf(prSuccess pr: Node, lowerBound lb: Int, upperBound ub: Int) throws -> Node {
-        try Constraint.domain(lb, 0, Float80.infinity)
-        try Constraint.domain(ub, 0, Float80.infinity)
-        try Constraint.range(lb, ub)
+        try Assert.domain(lb, 0, Float80.infinity)
+        try Assert.domain(ub, 0, Float80.infinity)
+        try Assert.range(lb, ub)
         return try (lb...ub).map {
             try geomPdf(prSuccess: pr, $0)
         }.reduce(0) {
@@ -38,10 +38,10 @@ public extension Stat {
     
     /// Binomial cummulative distribution
     public static func binomCdf(trials: Int, prSuccess pr: Node, lowerBound lb: Int, upperBound ub: Int) throws -> Node {
-        try Constraint.domain(trials, 0, Float80.infinity)
-        try Constraint.domain(lb, 0, trials)
-        try Constraint.domain(ub, 0, trials)
-        try Constraint.range(lb, ub)
+        try Assert.domain(trials, 0, Float80.infinity)
+        try Assert.domain(lb, 0, trials)
+        try Assert.domain(ub, 0, trials)
+        try Assert.range(lb, ub)
         return (lb...ub).map {
             binomPdf(trials: trials, prSuccess: pr, $0)
         }.reduce(0) {
@@ -180,7 +180,7 @@ public extension Stat {
      https://stackedboxes.org/2017/05/01/acklams-normal-quantile-function/
      */
     public static func invNorm(_ p: Double) throws -> Double {
-        try Constraint.domain(Float80(p), 0, 1)
+        try Assert.domain(Float80(p), 0, 1)
         
         let a1 = -39.69683028665376
         let a2 = 220.9460984245205
@@ -253,8 +253,8 @@ public extension Stat {
     ///     - df: Degrees of freedom (a positive integer)
     /// - Precondition: p is between 0 and 1
     public static func invT(_ p: Float80, _ df: Int) throws -> Float80 {
-        try Constraint.domain(p, 0, 1)
-        try Constraint.domain(df, 0, Float80.infinity)
+        try Assert.domain(p, 0, 1)
+        try Assert.domain(df, 0, Float80.infinity)
         let df = Float80(df)
         var x = ibetainv(2 * Swift.min(p, 1 - p), 0.5 * df, 0.5)
         x = sqrt(df * (1 - x) / x)
@@ -456,7 +456,7 @@ public extension Stat {
     ///     - x: The value at which tCdf is evaluated
     ///     - df: Degrees of freedom
     public static func tCdf(_ x: Float80, _ df: Int) throws -> Float80 {
-        try Constraint.domain(df, 1, Float80.infinity)
+        try Assert.domain(df, 1, Float80.infinity)
         let df = Float80(df)
         let A: Float80 = df / 2.0
         let S: Float80 = A + 0.5
@@ -494,7 +494,7 @@ public extension Stat {
     ///     - x: The value at which tCdf is evaluated
     ///     - df: Degrees of freedom
     public static func tCdf(lowerBound lb: Float80, upperBound ub: Float80, _ df: Int) throws -> Float80 {
-        try Constraint.range(lb, ub)
+        try Assert.range(lb, ub)
         return try tCdf(ub, df) - tCdf(lb, df)
     }
     

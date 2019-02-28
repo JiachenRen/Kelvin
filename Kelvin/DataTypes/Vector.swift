@@ -10,7 +10,7 @@ import Foundation
 
 public struct Vector: MutableListProtocol, NaN {
     
-    var elements: [Node]
+    public var elements: [Node]
     
     var magnitude: Node {
         return √(++elements.map {$0 ^ 2})

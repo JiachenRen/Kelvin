@@ -20,25 +20,40 @@ public class LinearAlgebra {
             try m($0).perform(+, with: m($1))
         },
         .binary(.add, [.matrix, .any]) {(lhs, rhs) in
-            m(lhs).performOnEach {$0 + rhs}
+            m(lhs).transform {$0 + rhs}
         },
         .binary(.sub, [.matrix, .matrix]) {
             try m($0).perform(-, with: m($1))
         },
         .binary(.sub, [.matrix, .any]) {(lhs, rhs) in
-            m(lhs).performOnEach {$0 - rhs}
+            m(lhs).transform {$0 - rhs}
         },
         .binary(.mult, [.matrix, .any]) {(lhs, rhs) in
-            m(lhs).performOnEach {$0 * rhs}
+            m(lhs).transform {$0 * rhs}
         },
         .binary(.div, [.matrix, .any]) {(lhs, rhs) in
-            m(lhs).performOnEach {$0 / rhs}
+            m(lhs).transform {$0 / rhs}
+        },
+        .binary(.transform, [.any, .any]) {(a, b) in
+            let mat = try Assert.cast(a.simplify(), to: Matrix.self)
+            return mat.transform {(cell: Matrix.Cell) -> Node in
+                b.replacingAnonymousArgs(with: [cell.node, cell.row, cell.col])
+            }
+        },
+        .unary(.cofactor, [.matrix]) {
+            try Assert.cast($0, to: Matrix.self).cofactorMatrix()
+        },
+        .init(.cofactor, [.matrix, .int, .int]) {
+            let r = try Assert.cast($0[1], to: Int.self)
+            let c = try Assert.cast($0[2], to: Int.self)
+            return try Assert.cast($0[0], to: Matrix.self)
+                .cofactor(row: r, col: c)
         },
         .binary(.matrixMultiplication, [.matrix, .matrix]) {
             try m($0).mult(m($1))
         },
         .unary(.determinant, [.matrix]) {
-            return try m($0).determinant()
+            try m($0).determinant()
         },
         .binary(.createMatrix, [.int, .int]) {
             Matrix(rows: i($0), cols: i($1))

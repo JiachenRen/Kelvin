@@ -14,7 +14,7 @@ protocol BinaryNode: MutableListProtocol {
 }
 
 extension BinaryNode {
-    var elements: [Node] {
+    public var elements: [Node] {
         get {
             return [lhs, rhs]
         }

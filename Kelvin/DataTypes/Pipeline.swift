@@ -14,7 +14,7 @@ public struct Pipeline: MutableListProtocol, NaN {
         return .pipeline
     }
     
-    var elements: [Node]
+    public var elements: [Node]
     
     public var stringified: String {
         let statements: String? = elements.reduce(nil) {

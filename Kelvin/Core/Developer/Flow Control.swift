@@ -95,15 +95,9 @@ public extension Developer {
         
         // Loops
         .init(.for, [.pair, .closure]) {
-            guard let pair = $0[0] as? Pair, let closure = $0[1] as? Closure else {
-                throw ExecutionError.general(errMsg: "invalid for loop construct")
-            }
-            
-            guard let v = pair.lhs as? Variable else {
-                let msg = "variable name expected in lhs of \"\(pair.stringified)\", but found \"\(pair.lhs.stringified)\" instead."
-                throw ExecutionError.general(errMsg: msg)
-            }
-            
+            let pair = try Assert.cast($0[0], to: Pair.self)
+            let closure = try Assert.cast($0[1], to: Closure.self)
+            let v = try Assert.cast(pair.lhs, to: Variable.self)
             guard let list = try pair.rhs.simplify() as? ListProtocol else {
                 let msg = "list expected in rhs of \"\(pair.stringified)\", but found \"\(pair.rhs.stringified)\" instead"
                 throw ExecutionError.general(errMsg: msg)
@@ -128,19 +122,9 @@ public extension Developer {
             return KVoid()
         },
         .binary(.while, [.any, .closure]) {
-            guard let closure = $1 as? Closure else {
-                throw ExecutionError.general(errMsg: "invalid while loop construct")
-            }
-            
+            let closure = try Assert.cast($1, to: Closure.self)
             loop: while true {
-                guard let b = try $0.simplify() as? Bool else {
-                    throw ExecutionError.unexpectedType(
-                        Function(.while, [$0, $1]),
-                        expected: .bool,
-                        found: try .resolve($0.simplify())
-                    )
-                }
-                if !b {
+                if !(try Assert.cast($0.simplify(), to: Bool.self)) {
                     break
                 }
                 

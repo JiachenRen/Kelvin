@@ -39,6 +39,7 @@ let defaultConfiguration: [Operation.Attribute: [String]] = [
         .sort,
         .reduce,
         .filter,
+        .transform,
         
         .derivative,
         .implicitDifferentiation,

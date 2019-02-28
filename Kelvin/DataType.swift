@@ -25,6 +25,33 @@ public enum DataType: String, CustomStringConvertible {
         return rawValue
     }
     
+    static func resolve<T>(_ type: T.Type) throws -> DataType {
+        if type == KString.self {
+            return .string
+        } else if type == List.self || type == ListProtocol.self || type == MutableListProtocol.self {
+            return .list
+        } else if type == Int.self {
+            return .int
+        } else if type == Float80.self || type == Value.self {
+            return .number
+        } else if type == Variable.self {
+            return .variable
+        } else if type == Vector.self {
+            return .vector
+        } else if type == Matrix.self {
+            return .matrix
+        } else if type == Equation.self {
+            return .equation
+        } else if type == Pair.self {
+            return .pair
+        } else if type == Function.self {
+            return .function
+        } else if type == Bool.self {
+            return .bool
+        }
+        throw ExecutionError.general(errMsg: "\(String(describing: type)) is not a valid type")
+    }
+    
     /// - Todo: Resolve conflict b/w Number and Int
     static func resolve(_ node: Node) throws -> DataType {
         if node is KString {

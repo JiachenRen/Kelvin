@@ -10,7 +10,7 @@ import Foundation
 
 public struct List: MutableListProtocol, NaN {
 
-    var elements: [Node]
+    public var elements: [Node]
 
     public var stringified: String {
         let pars = elements.map {
@@ -85,7 +85,7 @@ public struct List: MutableListProtocol, NaN {
     }
     
     public func removing(at idx: Int) throws -> List {
-        try Constraint.index(self.count, idx)
+        try Assert.index(count, idx)
         var list = self
         list.elements.remove(at: idx)
         return list

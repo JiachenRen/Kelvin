@@ -371,7 +371,7 @@ public class Compiler {
         }
 
         // Replace infix function names with operator
-        if let _ = try? Variable(n) {
+        if let _ = Variable(n) {
             
             switch keyword.associativity {
             case .infix:
@@ -674,7 +674,10 @@ public class Compiler {
                 return fun
             } else {
                 // If none of the types above apply, then try to use it as a variable name.
-                return try Variable(expr)
+                guard let v = Variable(expr) else {
+                    throw CompilerError.syntax(errMsg: "illegal variable name '\(expr)'")
+                }
+                return v
             }
         }
     }

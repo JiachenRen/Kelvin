@@ -48,6 +48,7 @@ public enum ExecutionError: KelvinError {
     case invalidSubscript(_ node: Node?, _ target: Node, _ subscript: Node)
     case invalidCast(from: Node, to: DataType)
     case circularDefinition
+    case nonSquareMatrix
     
     private func err(on node: Node?, _ errMsg: String) -> String {
         return "error when executing statement `\(node?.stringified ?? "")`: \(errMsg)"
@@ -91,47 +92,8 @@ public enum ExecutionError: KelvinError {
             return "error: cannot convert node from `\(node.stringified)` aka. \(nodeType) to \(type)"
         case .circularDefinition:
             return "error: circular definition"
-        }
-    }
-}
-
-public class Constraint {
-    public static func domain(
-        at node: Node? = nil,
-        _ x: Value,
-        _ lb: Value,
-        _ ub: Value) throws {
-        if x≈! < lb≈! || x≈! > ub≈!  {
-            throw ExecutionError.domain(
-                node,
-                x,
-                lowerBound: lb,
-                upperBound: ub)
-        }
-    }
-    
-    public static func range(
-        at node: Node? = nil,
-        _ lb: Value,
-        _ ub: Value) throws {
-        if lb≈! > ub≈! {
-            throw ExecutionError.invalidRange(
-                node,
-                lowerBound: lb,
-                upperBound: ub)
-        }
-    }
-    
-    public static func index(
-        at node: Node? = nil,
-        _ count: Int,
-        _ idx: Int) throws {
-        if idx >= count || idx < 0 {
-            throw ExecutionError.indexOutOfBounds(
-                node,
-                maxIdx: count - 1,
-                idx: idx
-            )
+        case .nonSquareMatrix:
+            return "error: non-square matrix"
         }
     }
 }

@@ -73,7 +73,8 @@ let listAndPairOperations: [Operation] = [
             throw ExecutionError.indexOutOfBounds(
                 Function(.get, [pair, idx]),
                 maxIdx: 1,
-                idx: idx)
+                idx: idx
+            )
         }
     },
 
@@ -84,7 +85,7 @@ let listAndPairOperations: [Operation] = [
     .init(.get, [.iterable, .number]) { nodes in
         let list = nodes[0] as! ListProtocol
         let idx = Int(nodes[1]≈!)
-        try Constraint.index(
+        try Assert.index(
             at: Function(.get, [list, idx]),
             list.count,
             idx
@@ -93,12 +94,7 @@ let listAndPairOperations: [Operation] = [
     },
     .binary(.get, [.iterable, .list]) {
         let list = $0 as! ListProtocol
-        let indices = try ($1 as! List).map {(n: Node) throws -> Int in
-            if let i = n as? Int {
-                return i
-            }
-            throw ExecutionError.unexpectedType(n, expected: .int, found: try .resolve(n))
-        }
+        let indices = try Assert.specialize(list: $1 as! ListProtocol, as: Int.self)
         
         if indices.count != 2 {
             throw ExecutionError.invalidSubscript(list, list, $1)
@@ -110,41 +106,30 @@ let listAndPairOperations: [Operation] = [
         return ($0[0] as! ListProtocol).count
     },
     .init(.map, [.any, .any]) { nodes in
-        guard var list = try nodes[0].simplify() as? MutableListProtocol else {
-            return nil
-        }
-        let updated = try list.elements.enumerated().map { (idx, e) in
-            try nodes[1].replacingAnonymousArgs(with: [e, idx]).simplify()
+        var list = try Assert.cast(nodes[0].simplify(), to: MutableListProtocol.self)
+        let updated = list.elements.enumerated().map { (idx, e) in
+            nodes[1].replacingAnonymousArgs(with: [e, idx])
         }
         list.elements = updated
         return list
     },
     .init(.reduce, [.any, .any]) { nodes in
-        guard let list = try nodes[0].simplify() as? List else {
-            return nil
-        }
-        let reduced = try list.elements.reduce(nil) { (e1, e2) -> Node in
+        let list = try Assert.cast(nodes[0].simplify(), to: List.self)
+        let reduced = list.elements.reduce(nil) { (e1, e2) -> Node in
             if e1 == nil {
                 return e2
             }
-            return try nodes[1].replacingAnonymousArgs(with: [e1!, e2]).simplify()
+            return nodes[1].replacingAnonymousArgs(with: [e1!, e2])
         }
         return reduced ?? List([])
     },
     .init(.filter, [.any, .any]) { nodes in
-        guard let list = try nodes[0].simplify() as? List else {
-            return nil
-        }
+        let list = try Assert.cast(nodes[0].simplify(), to: List.self)
         let updated = try list.elements.enumerated().map {(idx, e) in
                 nodes[1].replacingAnonymousArgs(with: [e, idx])
             }.enumerated().map {(idx, predicate) in
-                if let b = try predicate.simplify() as? Bool {
-                    return b ? idx : nil
-                }
-                throw ExecutionError.unexpectedType(
-                    Function(.filter, nodes),
-                    expected: .bool,
-                    found: try .resolve(predicate.simplify()))
+                let b = try Assert.cast(predicate.simplify(), to: Bool.self)
+                return b ? idx : nil
             }.compactMap {
                 $0 == nil ? nil: list[$0!]
             }
@@ -171,46 +156,21 @@ let listAndPairOperations: [Operation] = [
         return nil
     },
     .init(.sort, [.any, .any]) {nodes in
-        guard let l1 = try nodes[0].simplify() as? List else {
-            throw ExecutionError.unexpectedType(
-                Function(.sort, nodes),
-                expected: .list,
-                found: try .resolve(nodes[0])
-            )
-        }
+        var l1 = try Assert.cast(nodes[0].simplify(), to: List.self)
         return try l1.sorted {
-            let predicate = try nodes[1].replacingAnonymousArgs(with: [$0, $1]).simplify()
-            if let b = predicate as? Bool {
-                return b
-            }
-            throw ExecutionError.unexpectedType(
-                Function(.sort, nodes),
-                expected: .bool,
-                found: try .resolve(predicate.simplify())
-            )
+            let predicate = try nodes[1].replacingAnonymousArgs(with: [$0, $1])
+                .simplify()
+            return try Assert.cast(predicate, to: Bool.self)
         }
     },
     .binary(.remove, [.any, .any]) {(l, n) in
-        guard var list = try l.simplify() as? List else {
-            throw ExecutionError.unexpectedType(
-                Function(.remove, [l, n]),
-                expected: .list,
-                found: try .resolve(l)
-            )
-        }
+        var list = try Assert.cast(l.simplify(), to: List.self)
         if let idx = try n.simplify() as? Int {
             return try list.removing(at: idx)
         } else {
             try list.elements.removeAll {e in
                 let predicate = n.replacingAnonymousArgs(with: [e])
-                if let b = try predicate.simplify() as? Bool {
-                    return b
-                }
-                throw ExecutionError.unexpectedType(
-                    predicate,
-                    expected: .bool,
-                    found: try .resolve(predicate.simplify())
-                )
+                return try Assert.cast(predicate, to: Bool.self)
             }
             return list
         }

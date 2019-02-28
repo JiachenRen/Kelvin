@@ -8,11 +8,11 @@
 
 import Foundation
 
-protocol ListProtocol: Node {
+public protocol ListProtocol: Node {
     var elements: [Node] {get}
 }
 
-extension ListProtocol {
+public extension ListProtocol {
     
     var count: Int {
         return elements.count
@@ -29,9 +29,9 @@ extension ListProtocol {
     }
     
     public func subsequence(from idx1: Int, to idx2: Int) throws -> [Node] {
-        try Constraint.index(at: self, count, idx1)
-        try Constraint.index(at: self, count, idx2)
-        try Constraint.range(at: self, idx1, idx2)
+        try Assert.index(at: self, count, idx1)
+        try Assert.index(at: self, count, idx2)
+        try Assert.range(at: self, idx1, idx2)
         return Array(elements.suffix(from: idx1)
             .prefix(upTo: idx2 - idx1 + 1))
     }

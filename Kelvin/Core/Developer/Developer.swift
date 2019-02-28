@@ -221,7 +221,10 @@ public class Developer {
                 return KString(c.stringified)
             case .variable:
                 if let s = $0 as? KString  {
-                    return try Variable(s.string)
+                    guard let v = Variable(s.string) else {
+                        let msg = "illegal variable name \(s.string)"
+                        throw ExecutionError.general(errMsg: msg)
+                    }
                 }
                 try bailOut()
             case .number:

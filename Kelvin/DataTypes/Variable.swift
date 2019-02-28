@@ -64,11 +64,11 @@ public struct Variable: LeafNode, NaN {
         return 3
     }
 
-    init(_ name: String) throws {
+    init?(_ name: String) {
 
         // Check if the variable name is valid
         if !(name ~ Variable.validationRegex) {
-            throw CompilerError.syntax(errMsg: "illegal variable name '\(name)'")
+            return nil
         }
 
         self.name = name

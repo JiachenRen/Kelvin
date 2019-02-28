@@ -303,5 +303,5 @@ public postfix func ≈!(_ node: Node) -> Float80 {
 postfix operator &
 
 public postfix func &(_ str: String) -> Variable {
-    return try! Variable(str)
+    return Variable(str)!
 }

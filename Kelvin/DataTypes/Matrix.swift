@@ -30,22 +30,20 @@ public struct Matrix: MutableListProtocol, NaN {
     
     public typealias Row = Vector
     public typealias Dimension = (rows: Int, cols: Int)
+    public typealias Cell = (row: Int, col: Int, node: Node)
     
     var rows: [Row]
-    
     var cols: [Vector] {
         return transposed.rows
     }
     
     var transposed: Matrix {
         var trans = Matrix(rows: dim.cols, cols: dim.rows)
-        
         for (i, r) in rows.enumerated() {
             for (j, e) in r.elements.enumerated() {
                 trans[j][i] = e
             }
         }
-        
         return trans
     }
     
@@ -53,6 +51,14 @@ public struct Matrix: MutableListProtocol, NaN {
     
     var isSquareMatrix: Bool {
         return rows.count == rows.first!.count
+    }
+    
+    var cells: [Cell] {
+        return rows.enumerated().map {(i, r) in
+            r.elements.enumerated().map {(j, e) in
+                (i, j, e)
+            }
+        }.flatMap {$0}
     }
     
     subscript(_ idx: Int) -> Row {
@@ -99,12 +105,10 @@ public struct Matrix: MutableListProtocol, NaN {
                 break
             }
         }
-        
         if !isProperMatrix {
             rows = [Row]()
             rows.append(Vector(list)!)
         }
-        
         try self.init(rows)
     }
     
@@ -113,13 +117,11 @@ public struct Matrix: MutableListProtocol, NaN {
         if rows.count < 1 || rows.first!.count < 1 {
             throw ExecutionError.general(errMsg: "cannot create empty matrix")
         }
-        
         for i in 0..<rows.count - 1 {
             if rows[i].count != rows[i + 1].count {
                 throw ExecutionError.general(errMsg: "failed to initialize matrix due to non-uniform row dimension")
             }
         }
-        
         self.dim = (rows: rows.count, cols: rows[0].count)
     }
     
@@ -131,17 +133,14 @@ public struct Matrix: MutableListProtocol, NaN {
         guard let matrix = node as? Matrix else {
             return false
         }
-        
         if matrix.dim != dim {
             return false
         }
-        
         for (i, r) in matrix.rows.enumerated() {
             if r !== self[i] {
                 return false
             }
         }
-        
         return true
     }
     
@@ -151,30 +150,27 @@ public struct Matrix: MutableListProtocol, NaN {
      - Warning: Do not pass in mult or div as binary operations, as matrices have no such definitions!
      */
     public func perform(_ bin: Binary, with mat: Matrix) throws -> Matrix {
-        if dim != mat.dim {
-            throw ExecutionError.dimensionMismatch(self, mat)
-        }
-        
+        try Assert.dimension(self, mat)
         var copy = self
-        
-        for (i, r) in rows.enumerated() {
-            for (j, e) in r.elements.enumerated() {
-                copy[i][j] = bin(e, mat[i][j])
-            }
+        cells.forEach {(i, j, e) in
+            copy[i][j] = bin(e, mat[i][j])
         }
-        
         return copy
     }
     
-    public func performOnEach(_ unary: Unary) -> Matrix {
+    public func transform(by unary: Unary) -> Matrix {
         var mat = self
-        
-        for (i, r) in rows.enumerated() {
-            for (j, e) in r.elements.enumerated() {
-                mat[i][j] = unary(e)
-            }
+        cells.forEach {(i, j, e) in
+            mat[i][j] = unary(e)
         }
-        
+        return mat
+    }
+    
+    public func transform(by unary: (Cell) -> Node) -> Matrix {
+        var mat = self
+        cells.forEach {cell in
+            mat[cell.row][cell.col] = unary(cell)
+        }
         return mat
     }
     
@@ -184,7 +180,6 @@ public struct Matrix: MutableListProtocol, NaN {
      */
     public func mult(_ mat: Matrix) throws -> Matrix {
         let trans = mat.transposed
-        
         var newRows = [Row]()
         for r in rows {
             var row = [Node]()
@@ -196,13 +191,6 @@ public struct Matrix: MutableListProtocol, NaN {
         }
         
         return try Matrix(newRows)
-    }
-    
-    /**
-     - Note: The determinant only exists for square matrices.
-     */
-    public func determinant() throws -> Node {
-        return try Matrix.determinant(of: self, dim.rows)
     }
     
     /// Converts the matrix to a 2D array of specified type
@@ -219,7 +207,7 @@ public struct Matrix: MutableListProtocol, NaN {
     }
     
     public func setColumn(_ i: Int, _ column: Vector) throws -> Matrix {
-        try Constraint.domain(i, 0, dim.cols)
+        try Assert.index(dim.cols, i)
         guard column.count == dim.rows else {
             throw ExecutionError.dimensionMismatch(self, column)
         }
@@ -229,42 +217,43 @@ public struct Matrix: MutableListProtocol, NaN {
     }
     
     /**
-     Recursive function for finding determinant of matrix.
-     n is current dimension of mat[][].
+     Calculates the determinant of the matrix using cofactor expansion.
+     Pick any i∈{1,…,n}, then
+     det(A)=(−1)^(i+1)*A(i,1)*det(A(i,1))+(−1)^(i+2)*A(i,2)*det(A(i∣2))+⋯+(−1)^(i+n)*A(i,n)*det(A(i∣n)).
+     Refer to http://people.math.carleton.ca/~kcheung/math/notes/MATH1107/wk07/07_cofactor_expansion.html.
+     
+     - Note: The determinant only exists for square matrices.
      */
-    public static func determinant(of mat: Matrix, _ n: Int) throws -> Node {
-        if !mat.isSquareMatrix {
-            let msg = "cannot calculate determinant of non-square matrix"
-            throw ExecutionError.general(errMsg: msg)
+    public func determinant() throws -> Node {
+        try Assert.squareMatrix(self)
+        if count == 1 { // Base case
+            return self[0][0]
         }
         
-        var d: Node = 0 // Initialize result
-        
-        //  Base case : if matrix contains single element
-        if (n == 1) {
-            return mat[0][0]
-        }
-        
-        var temp = mat
-        var sign = 1  // To store sign multiplier
-        
-        // Iterate for each element of first row
-        for f in 0..<n {
-            // Getting Cofactor of mat[0][f]
-            getCofactor(mat, &temp, 0, f, n)
-            let det = try determinant(of: temp, n - 1)
-            d = (d + sign * mat[0][f] * det)
+        // Expand along the first row
+        return try rows[0].elements.enumerated().reduce(0) {
+            (det, e) -> Node in
+            let sign = e.offset % 2 == 0 ? 1 : -1
+            let cofDet = try cofactor(row: 0, col: e.offset).determinant()
             
-            // Terms are to be added with alternate sign
-            sign = -sign
+            // Accelerate by simplifying the expression on the fly
+            return try (det + e.element * cofDet * sign)
+                .simplify()
         }
-        
-        return d
     }
     
-    private static func getCofactor(_ mat: Matrix, _ temp: inout Matrix, _ p: Int, _ q: Int, _ n: Int) {
-        var i = 0, j = 0;
-    
+    /// Computes the minor cofactor of the matrix
+    /// - Parameters:
+    ///     - row: The row to be excluded
+    ///     - col: The column to be excluded
+    public func cofactor(row r: Int, col c: Int) throws -> Matrix {
+        try Assert.squareMatrix(self)
+        try Assert.index(dim.rows, r)
+        try Assert.index(dim.cols, c)
+        
+        var i = 0, j = 0, n = count
+        var cofactor = Matrix(n - 1)
+        
         // Looping for each element of the matrix
         for row in 0..<n {
             for col in 0..<n {
@@ -272,8 +261,8 @@ public struct Matrix: MutableListProtocol, NaN {
                 // Copying into temporary matrix
                 // only those element which are
                 // not in given row and column
-                if (row != p && col != q) {
-                    temp[i][j] = mat[row][col]
+                if (row != r && col != c) {
+                    cofactor[i][j] = self[row][col]
                     j += 1
                     
                     // Row is filled, so increase
@@ -285,6 +274,18 @@ public struct Matrix: MutableListProtocol, NaN {
                 }
             }
         }
+        
+        return cofactor
+    }
+    
+    /// Computes the cofactor matrix.
+    /// - Note: Cofactor matrix only exists for square matrices
+    public func cofactorMatrix() throws -> Matrix {
+        var coMat = Matrix(count)
+        try cells.forEach {(i, j, _) in
+            coMat[i][j] = try cofactor(row: i, col: j).determinant()
+        }
+        return coMat
     }
     
     /**
@@ -298,11 +299,9 @@ public struct Matrix: MutableListProtocol, NaN {
      */
     public static func identityMatrix(_ dim: Int) -> Matrix {
         var mat = Matrix(dim)
-        
         for i in 0..<dim {
             mat[i][i] = 1
         }
-        
         return mat
     }
     

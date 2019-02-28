@@ -34,10 +34,9 @@ public extension Developer {
         
         // String subscript
         .binary(.get, [.string, .number]) {
-            guard let s = $0 as? KString, let n = $1 as? Int else {
-                return nil
-            }
-            try Constraint.index(
+            let s = try Assert.cast($0, to: KString.self)
+            let n = try Assert.cast($1, to: Int.self)
+            try Assert.index(
                 at: Function(.get, [$0, $1]),
                 s.string.count,
                 n
