@@ -183,6 +183,9 @@ public class Developer {
             Program.io?.log(($0 as! KString).string)
             return $0
         },
+        .init(.getWorkingDirectory, []) {_ in
+            KString(Process().currentDirectoryPath)
+        },
         
         /// Type casting (coersion)
         /// - Todo: Implement all possible type coersions.

@@ -302,6 +302,9 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - Recursion
   - Return
   - Throw
+  - Get current directory path
+  - Read line
+  - [ ] Read file
 - [x] Strings
   - Concatenation
   - Subscript access

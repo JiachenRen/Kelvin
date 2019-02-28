@@ -164,6 +164,7 @@ public extension String {
     public static let `inout` = "inout"
     public static let readLine = "readLine"
     public static let stride = "stride"
+    public static let getWorkingDirectory = "getWorkingDir"
     
     // Linear algebra
     public static let dotProduct = "dotP"
