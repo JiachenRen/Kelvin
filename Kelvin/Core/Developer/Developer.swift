@@ -108,7 +108,7 @@ public class Developer {
             guard let io = Program.io else {
                 throw ExecutionError.general(errMsg: "program in/out protocol not found")
             }
-            return KString(io.readLine())
+            return try KString(io.readLine())
         },
         
         // Debug utilities

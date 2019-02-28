@@ -9,7 +9,7 @@
 import Foundation
 
 public protocol IOProtocol {
-    func readLine() -> String
+    func readLine() throws -> String
     func print(_ n: Node)
     func println(_ n: Node)
     func log(_ l: String)

@@ -852,7 +852,7 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="298" height="123"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <textView verticallyResizable="YES" usesFontPanel="YES" findStyle="bar" allowsDocumentBackgroundColorChange="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="1vq-lh-hHV">
+                                                                <textView verticallyResizable="YES" usesFontPanel="YES" findStyle="bar" allowsDocumentBackgroundColorChange="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="1vq-lh-hHV" customClass="ConsoleTextView" customModule="macOS_Application" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="298" height="123"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

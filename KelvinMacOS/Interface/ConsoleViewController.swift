@@ -16,7 +16,7 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
 
     @IBOutlet weak var outlineScrollView: NSScrollView!
     @IBOutlet var editorTextView: EditorTextView!
-    @IBOutlet var consoleTextView: NSTextView!
+    @IBOutlet var consoleTextView: ConsoleTextView!
     @IBOutlet var debuggerTextView: NSTextView!
     @IBOutlet weak var outlineView: NSOutlineView!
     
@@ -79,8 +79,12 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Setup text views
+        // Delegation
         editorTextView.delegate = self
+        consoleTextView.consoleDelegate = self
+        consoleTextView.delegate = self
+        
+        // Setup text views
         editorTextView.enabledTextCheckingTypes = 0
         editorTextView.layoutManager?.replaceTextStorage(editorTextStorage)
         editorTextView.setUpLineNumberView()
@@ -153,7 +157,20 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
         }
     }
     
+    func textView(_ textView: NSTextView, shouldChangeTextIn affectedCharRange: NSRange, replacementString: String?) -> Bool {
+        guard textView === consoleTextView else {
+            return true
+        }
+        if !consoleTextView.isReceivingInput || affectedCharRange.lowerBound <= consoleTextView.editableAfterCharAtIndex {
+            return false
+        }
+        return true
+    }
+    
     func textDidChange(_ notification: Notification) {
+        guard notification.object as? NSTextView === editorTextView else {
+            return
+        }
         execTask?.cancel()
         let sourceCode = self.editorTextView.string
         execTask = DispatchWorkItem {[unowned self] in
@@ -167,20 +184,21 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
         _ textView: NSTextView,
         completions words: [String],
         forPartialWordRange charRange: NSRange,
-        indexOfSelectedItem index: UnsafeMutablePointer<Int>?) -> [String] {
-        
+        indexOfSelectedItem index: UnsafeMutablePointer<Int>?
+    ) -> [String] {
+        guard textView === editorTextView else {
+            return []
+        }
         let partialWord = editorTextView.string[charRange.lowerBound..<charRange.upperBound]
         if partialWord == "" {
             return []
         }
-        
         var operations = [Operation]()
         for (key, value) in Operation.registered {
             if key.starts(with: partialWord) {
                 operations.append(contentsOf: value)
             }
         }
-        
         return operations.map {
             $0.description
         }

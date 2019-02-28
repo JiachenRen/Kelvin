@@ -21,10 +21,6 @@ extension ConsoleViewController: IOProtocol {
         buffers[buffer] = (buffers[buffer] ?? "") + content
     }
     
-    func readLine() -> String {
-        return ""
-    }
-    
     func print(_ n: Node) {
         append(to: .console, format(n))
     }
@@ -55,8 +51,37 @@ extension ConsoleViewController: IOProtocol {
         append(to: .debugger, "warning: \(w)\n")
     }
     
-    func flush() {
+    func flush() {}
+}
+
+extension ConsoleViewController: ConsoleDelegate {
+    func readLine() throws -> String {
+        var inputBuffer: String? = nil
+        DispatchQueue.main.async {
+            self.consoleTextView.readLine {
+                inputBuffer = $0
+            }
+        }
         
+        // Capture the reference to the current task
+        let task = execTask!
+        while inputBuffer == nil {
+            Thread.sleep(forTimeInterval: 0.001)
+            if task.isCancelled {
+                consoleTextView.reset()
+                throw ExecutionError.cancelled
+            }
+        }
+        defer {
+            inputBuffer = nil
+        }
+        if let input = inputBuffer {
+            return input
+        }
+        throw ExecutionError.unexpected(nil)
     }
     
+    func editableAfterIndex() -> Int {
+        return (buffers[.console]?.count ?? 0) - 1
+    }
 }

@@ -223,6 +223,8 @@
 		1FC67CA7222741FA00A8E6BC /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67CA6222741FA00A8E6BC /* Assert.swift */; };
 		1FC67CA82227446900A8E6BC /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67CA6222741FA00A8E6BC /* Assert.swift */; };
 		1FC67CA92227447F00A8E6BC /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67CA6222741FA00A8E6BC /* Assert.swift */; };
+		1FC67CAB22278C5500A8E6BC /* ConsoleTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67CAA22278C5500A8E6BC /* ConsoleTextView.swift */; };
+		1FC67CAD2228715B00A8E6BC /* Greeting in Resources */ = {isa = PBXBuildFile; fileRef = 1FC67CAC2228715B00A8E6BC /* Greeting */; };
 		1FDC863722131CD200EAC346 /* Contains in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863622131CD200EAC346 /* Contains */; };
 		1FDC863A22132F4300EAC346 /* tangent_plane_grapher.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */; };
 		1FDC863B22132F4300EAC346 /* tangent_plane_kelvin.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863922132F4300EAC346 /* tangent_plane_kelvin.png */; };
@@ -369,6 +371,8 @@
 		1FC67C9C2224D25F00A8E6BC /* Regression */ = {isa = PBXFileReference; lastKnownFileType = text; path = Regression; sourceTree = "<group>"; };
 		1FC67CA22225B7EA00A8E6BC /* GaussianElimination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaussianElimination.swift; sourceTree = "<group>"; };
 		1FC67CA6222741FA00A8E6BC /* Assert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assert.swift; sourceTree = "<group>"; };
+		1FC67CAA22278C5500A8E6BC /* ConsoleTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleTextView.swift; sourceTree = "<group>"; };
+		1FC67CAC2228715B00A8E6BC /* Greeting */ = {isa = PBXFileReference; lastKnownFileType = text; path = Greeting; sourceTree = "<group>"; };
 		1FDC863622131CD200EAC346 /* Contains */ = {isa = PBXFileReference; lastKnownFileType = text; path = Contains; sourceTree = "<group>"; };
 		1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tangent_plane_grapher.png; sourceTree = "<group>"; };
 		1FDC863922132F4300EAC346 /* tangent_plane_kelvin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tangent_plane_kelvin.png; sourceTree = "<group>"; };
@@ -716,6 +720,7 @@
 				1FDC864C22136AB500EAC346 /* DiceRoll */,
 				1FDC86592215C1F900EAC346 /* StatProblem */,
 				1FC67C7F221E307A00A8E6BC /* TwoSampleTTest */,
+				1FC67CAC2228715B00A8E6BC /* Greeting */,
 			);
 			path = Misc;
 			sourceTree = "<group>";
@@ -800,11 +805,12 @@
 			isa = PBXGroup;
 			children = (
 				1F6D09FB220B98AA00807377 /* ConsoleViewController.swift */,
+				1FC67CAA22278C5500A8E6BC /* ConsoleTextView.swift */,
 				1F94B7A5221C738000C47B1D /* EditorTextView.swift */,
 				1FE487F4220E416F005361AC /* ConsoleViewController+NSOutlineView.swift */,
-				1FFD8CAB218F50870004ECEB /* Main.storyboard */,
 				1FE487F2220E4132005361AC /* ConsoleViewController+IOProtocol.swift */,
 				1FC67C872224259700A8E6BC /* NSTextView+LineNumberRulerView.swift */,
+				1FFD8CAB218F50870004ECEB /* Main.storyboard */,
 			);
 			path = Interface;
 			sourceTree = "<group>";
@@ -932,6 +938,7 @@
 				1F8DF72C22050110006351B0 /* List in Resources */,
 				1FDC865022136AB600EAC346 /* Arcane in Resources */,
 				1F8DF7892208CC13006351B0 /* BinarySearch in Resources */,
+				1FC67CAD2228715B00A8E6BC /* Greeting in Resources */,
 				1F09371921F672CD00E707BD /* DateTime in Resources */,
 				1F8DF7AD2209538A006351B0 /* FlatMap in Resources */,
 				1FDC863A22132F4300EAC346 /* tangent_plane_grapher.png in Resources */,
@@ -1085,6 +1092,7 @@
 				1F8DF7782207DC0B006351B0 /* UnaryNode.swift in Sources */,
 				1F3974C121E3B761006D6DC2 /* NaN.swift in Sources */,
 				1F3974BC21E3970F006D6DC2 /* Error.swift in Sources */,
+				1FC67CAB22278C5500A8E6BC /* ConsoleTextView.swift in Sources */,
 				1F0A90E721F97B5000432B17 /* String+Regex.swift in Sources */,
 				1F570B4E21FBE7150006E342 /* Matrix.swift in Sources */,
 				1F09370421F54E6200E707BD /* Calculus.swift in Sources */,
