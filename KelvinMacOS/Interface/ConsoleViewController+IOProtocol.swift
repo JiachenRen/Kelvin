@@ -76,6 +76,7 @@ extension ConsoleViewController: ConsoleDelegate {
             inputBuffer = nil
         }
         if let input = inputBuffer {
+            self.println(KString(input))
             return input
         }
         throw ExecutionError.unexpected(nil)

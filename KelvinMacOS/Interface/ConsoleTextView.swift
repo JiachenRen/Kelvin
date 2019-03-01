@@ -39,6 +39,14 @@ class ConsoleTextView: NSTextView {
         default:
             super.keyDown(with: event)
         }
+        
+        if isReceivingInput {
+            let idx = editableAfterCharAtIndex + 1
+            textStorage?.addAttributes(
+                [NSAttributedString.Key.],
+                range: NSRange(location: idx, length: string.count - idx)
+            )
+        }
     }
 }
 
