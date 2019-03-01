@@ -13,23 +13,13 @@ public extension Developer {
         
         // Pileline, conditional statements
         .binary(.ternaryConditional, [.any, .pair]) {
-            let node = try $0.simplify()
-            guard let predicament = node as? Bool else {
-                return nil
-            }
+            let predicate = try Assert.cast($0.simplify(), to: Bool.self)
             let pair = $1 as! Pair
             
-            return try (predicament ? pair.lhs : pair.rhs).simplify() // Should this be simplified?
+            return predicate ? pair.lhs : pair.rhs
         },
-        .binary(.if, [.any, .closure]) {
-            let node = try $0.simplify()
-            guard let predicate = node as? Bool else {
-                throw ExecutionError.unexpectedType(
-                    Function(.if, [$0, $1]),
-                    expected: .bool,
-                    found: try .resolve($1)
-                )
-            }
+        .binary(.if, [.any, .any]) {
+            let predicate = try Assert.cast($0.simplify(), to: Bool.self)
             if predicate {
                 let _ = try $1.simplify()
                 return true
@@ -37,7 +27,8 @@ public extension Developer {
             return KVoid()
         },
         .binary(.else, [.func, .any]) {
-            guard let name = ($0 as? Function)?.name, name == .if || name == .else else {
+            let fun = try Assert.cast($0, to: Function.self)
+            guard fun.name == .if || fun.name == .else else {
                 throw ExecutionError.general(errMsg: "left hand side of 'else' must be a if statement or else statement")
             }
             
@@ -98,10 +89,7 @@ public extension Developer {
             let pair = try Assert.cast($0[0], to: Pair.self)
             let closure = try Assert.cast($0[1], to: Closure.self)
             let v = try Assert.cast(pair.lhs, to: Variable.self)
-            guard let list = try pair.rhs.simplify() as? ListProtocol else {
-                let msg = "list expected in rhs of \"\(pair.stringified)\", but found \"\(pair.rhs.stringified)\" instead"
-                throw ExecutionError.general(errMsg: msg)
-            }
+            let list = try Assert.cast(pair.rhs.simplify(), to: ListProtocol.self)
             
             loop: for e in list.elements {
                 let def = Variable.definitions[v.name]

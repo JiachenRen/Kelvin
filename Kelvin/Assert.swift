@@ -50,12 +50,12 @@ public class Assert {
         }
     }
     
-    public static func cast<T>(_ node: Node, to type: T.Type) throws -> T {
+    public static func cast<T>(_ node: Node?, to type: T.Type) throws -> T {
         guard let instance = node as? T else {
             throw try ExecutionError.unexpectedType(
-                nil, expected:
-                .resolve(type),
-                found: .resolve(node)
+                nil,
+                expected: .resolve(type),
+                found: .resolve(node ?? KVoid())
             )
         }
         return instance
@@ -72,5 +72,12 @@ public class Assert {
                 found: .resolve(n)
             )
         }
+    }
+    
+    public static func dataType(_ typeLiteral: String) throws -> DataType {
+        guard let t1 = DataType(rawValue: typeLiteral) else {
+            throw ExecutionError.invalidType(nil, invalidTypeLiteral: typeLiteral)
+        }
+        return t1
     }
 }

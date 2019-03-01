@@ -43,10 +43,10 @@ public class LinearAlgebra {
         .unary(.cofactor, [.matrix]) {
             try Assert.cast($0, to: Matrix.self).cofactorMatrix()
         },
-        .init(.cofactor, [.matrix, .int, .int]) {
-            let r = try Assert.cast($0[1], to: Int.self)
-            let c = try Assert.cast($0[2], to: Int.self)
-            return try Assert.cast($0[0], to: Matrix.self)
+        .ternary(.cofactor, [.matrix, .int, .int]) {
+            let r = try Assert.cast($1, to: Int.self)
+            let c = try Assert.cast($2, to: Int.self)
+            return try Assert.cast($0, to: Matrix.self)
                 .cofactor(row: r, col: c)
         },
         .binary(.matrixMultiplication, [.matrix, .matrix]) {

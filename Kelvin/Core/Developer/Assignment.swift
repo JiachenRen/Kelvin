@@ -13,22 +13,13 @@ public extension Developer {
     /// Variable/function definition and deletion;
     /// increment, decrement, assignment...
     static let assignmentOperations: [Operation] = [
-        
         .unary(.def, [.equation]) {
-            guard let eq = $0 as? Equation else {
-                throw ExecutionError.general(errMsg: "cannot create definition using \($0.stringified) as template.")
-            }
-            try eq.define()
+            try ($0 as! Equation).define()
             return KString("done")
         },
         .unary(.def, [.func]) {
-            guard var fun = $0 as? Function else {
-                throw ExecutionError.general(errMsg: "cannot create definition using \($0.stringified) as template.")
-            }
-            guard var closure = fun.elements.last as? Closure else {
-                let msg = "last element in function \($0.stringified) must be a closure to be used as definition"
-                throw ExecutionError.general(errMsg: msg)
-            }
+            var fun = $0 as! Function
+            var closure = try Assert.cast(fun.elements.last, to: Closure.self)
             fun.elements.removeLast()
             closure.capturesReturn = true
             try fun.implement(using: closure)
@@ -38,12 +29,10 @@ public extension Developer {
             return Function(.def, [Equation(lhs: $0, rhs: $1)])
         },
         .unary(.del, [.var]) {
-            if let v = $0 as? Variable {
-                Variable.delete(v.name)
-                Operation.remove(v.name)
-                return KString("deleted '\(v.stringified)'")
-            }
-            return nil
+            let v = $0 as! Variable
+            Variable.delete(v.name)
+            Operation.remove(v.name)
+            return KString("deleted '\(v.stringified)'")
         },
         
         // C like assignment shorthand

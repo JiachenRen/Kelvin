@@ -22,12 +22,8 @@ public class Developer {
         // Utilities
         .binary(.evaluateAt, [.any, .equation]) {
             let eq = $1 as! Equation
-            guard let v = eq.lhs as? Variable else {
-                let msg = "left hand side of definition \(eq.stringified) must be a variable"
-                throw ExecutionError.general(errMsg: msg)
-            }
+            let v = try Assert.cast(eq.lhs, to: Variable.self)
             Scope.save()
-            
             defer {
                 Scope.restore()
             }
@@ -45,33 +41,16 @@ public class Developer {
             return simplified
         },
         .binary(.evaluateAt, [.any, .list]) {
-            let list = $1 as! List
             Scope.save()
-            let definitions = try list.map {
-                (n) -> Equation in
-                guard let eq = n as? Equation else {
-                    throw ExecutionError.unexpectedType(
-                        list,
-                        expected: .equation,
-                        found: try .resolve(n)
-                    )
-                }
-                return eq
-            }
-            
-            for eq in definitions {
-                guard let v = eq.lhs as? Variable else {
-                    let msg = "left hand side of definition \(eq.stringified) must be a variable"
-                    throw ExecutionError.general(errMsg: msg)
-                }
-                Variable.define(v.name, eq.rhs)
-            }
-            
             defer {
                 Scope.restore()
             }
-            
-            
+            let definitions = try Assert.specialize(list: $1 as! List, as: Equation.self)
+            try definitions.forEach {
+                let v = try Assert.cast($0.lhs, to: Variable.self)
+                Variable.define(v.name, $0.rhs)
+            }
+
             let simplified = try $0.simplify()
             var unresolved = [Equation]()
             for eq in definitions {
@@ -92,13 +71,8 @@ public class Developer {
             return simplified
         },
         .binary(.repeat, [.any, .any]) {(lhs, rhs) in
-            guard let times = try rhs.simplify() as? Int else {
-                return nil
-            }
-            var elements = [Node]()
-            (0..<times).forEach { _ in
-                elements.append(lhs)
-            }
+            let n = try Assert.cast(rhs.simplify(), to: Int.self)
+            var elements = [Node](repeating: lhs, count: n)
             return List(elements)
         },
         .init(.copy, [.any, .number]) {
@@ -191,65 +165,44 @@ public class Developer {
         /// - Todo: Implement all possible type coersions.
         .binary(.as, [.any, .var]) {
             let n = $1 as! Variable, c = $0
-            guard let dt = DataType(rawValue: n.name) else {
-                throw ExecutionError.invalidType(
-                    Function(.as, [c, n]),
-                    invalidTypeLiteral: n.name)
-            }
-            
-            func bailOut(msg: String? = nil) throws {
-                if let m = msg {
-                    throw ExecutionError.general(errMsg: m)
-                }
-                throw ExecutionError.invalidCast(from: c, to: dt)
-            }
+            let dt = try Assert.dataType(n.name)
             
             switch dt {
             case .list:
                 if let list = List($0) {
                     return list
                 }
-                try bailOut()
+                throw ExecutionError.invalidCast(from: c, to: dt)
             case .vector:
                 if let vec = Vector($0) {
                     return vec
                 }
-                try bailOut()
+                throw ExecutionError.invalidCast(from: c, to: dt)
             case .matrix:
-                if let list = $0 as? ListProtocol {
-                    return try Matrix(list)
-                }
-                try bailOut()
+                let list = try Assert.cast($0, to: ListProtocol.self)
+                return try Matrix(list)
             case .string:
                 return KString(c.stringified)
             case .variable:
-                if let s = $0 as? KString  {
-                    guard let v = Variable(s.string) else {
-                        let msg = "illegal variable name \(s.string)"
-                        throw ExecutionError.general(errMsg: msg)
-                    }
+                let s = try Assert.cast($0, to: KString.self)
+                guard let v = Variable(s.string) else {
+                    let msg = "illegal variable name \(s.string)"
+                    throw ExecutionError.general(errMsg: msg)
                 }
-                try bailOut()
+                return v
             case .number:
-                if let s = $0 as? KString {
-                    if let n = Float80(s.string) {
-                        return n
-                    }
-                    throw ExecutionError.general(errMsg: "\(s.stringified) is not a valid number")
+                let s = try Assert.cast($0, to: KString.self)
+                if let n = Float80(s.string) {
+                    return n
                 }
-                try bailOut()
+                throw ExecutionError.general(errMsg: "\(s.stringified) is not a valid number")
             default:
                 throw ExecutionError.general(errMsg: "conversion to \(dt) is not yet supported")
             }
-            
-            return nil
         },
         .binary(.is, [.any, .var]) {
             let v = $1 as! Variable
-            guard let t1 = DataType(rawValue: v.name) else {
-                throw ExecutionError.invalidType(Function(.is, [$0, $1]), invalidTypeLiteral: v.name)
-            }
-            
+            let t1 = try Assert.dataType(v.name)
             let t2 = try DataType.resolve($0)
             return t2 == t1
         }

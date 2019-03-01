@@ -54,9 +54,9 @@ public class Operation: Equatable {
 
     let def: Definition
     let name: String
-    let signature: [ArgumentType]
+    let signature: [Parameter]
 
-    init(_ name: String, _ signature: [ArgumentType], definition: @escaping Definition) {
+    init(_ name: String, _ signature: [Parameter], definition: @escaping Definition) {
         self.name = name
         self.def = definition
         self.signature = signature
@@ -67,11 +67,34 @@ public class Operation: Equatable {
         }
     }
     
+    /// Convenient factory function for quaternary operation
+    public static func quaternary(
+        _ name: String,
+        _ signature: [Parameter],
+        quaternary: @escaping (Node, Node, Node, Node) throws -> Node?
+    ) -> Operation {
+        return Operation(name, signature) {
+            try quaternary($0[0], $0[1], $0[2], $0[3])
+        }
+    }
+    
+    /// Convenient factory function for ternary operation
+    public static func ternary(
+        _ name: String,
+        _ signature: [Parameter],
+        ternary: @escaping (Node, Node, Node) throws -> Node?
+    ) -> Operation {
+        return Operation(name, signature) {
+            try ternary($0[0], $0[1], $0[2])
+        }
+    }
+    
     /// Convenient factory function for binary operation
     public static func binary(
         _ name: String,
-        _ signature: [ArgumentType],
-        binary: @escaping (Node, Node) throws -> Node?) -> Operation {
+        _ signature: [Parameter],
+        binary: @escaping (Node, Node) throws -> Node?
+    ) -> Operation {
         return Operation(name, signature) {
             try binary($0[0], $0[1])
         }
@@ -80,8 +103,9 @@ public class Operation: Equatable {
     /// Convenient factory function for unary operation
     public static func unary(
         _ name: String,
-        _ signature: [ArgumentType],
-        unary: @escaping (Node) throws -> Node?) -> Operation {
+        _ signature: [Parameter],
+        unary: @escaping (Node) throws -> Node?
+    ) -> Operation {
         return Operation(name, signature) {
             try unary($0[0])
         }
@@ -178,7 +202,7 @@ public class Operation: Equatable {
      - name: The name of the operation to be removed.
      - signature: The signature of the operation to be removed.
      */
-    static func remove(_ name: String, _ signature: [ArgumentType]) {
+    static func remove(_ name: String, _ signature: [Parameter]) {
         let parOp = Operation(name, signature) { _ in
             nil
         }
@@ -221,11 +245,11 @@ public class Operation: Equatable {
                 case .multivariate:
                     fallthrough
                 case .universal:
-                    signature = [ArgumentType](repeating: .any, count: fun.count)
+                    signature = [Parameter](repeating: .any, count: fun.count)
                 case .numbers:
-                    signature = [ArgumentType](repeating: .number, count: fun.count)
+                    signature = [Parameter](repeating: .number, count: fun.count)
                 case .booleans:
-                    signature = [ArgumentType](repeating: .bool, count: fun.count)
+                    signature = [Parameter](repeating: .bool, count: fun.count)
                 default: break
                 }
             }
@@ -348,12 +372,12 @@ public class Operation: Equatable {
     }
 
     /**
-     This enum is used to represent the type of the arguments.
+     This enum is used to represent specify parameter type requirement.
      By giving a function a name, the number of arguments,
      and the types of arguments, we can generate a unique signature
      that is used later to find definitions.
      */
-    public enum ArgumentType: Int, Equatable {
+    public enum Parameter: Int, Equatable {
         case int = 1
         case number
         case nan

@@ -42,29 +42,29 @@ public class Stat {
         .binary(.geomPdf, [.any, .int]) {
             try geomPdf(prSuccess: $0, $1 as! Int)
         },
-        .init(.geomCdf, [.any, .int, .int]) {
+        .ternary(.geomCdf, [.any, .int, .int]) {
             try geomCdf(
-                prSuccess: $0[0],
-                lowerBound: $0[1] as! Int,
-                upperBound: $0[2] as! Int
+                prSuccess: $0,
+                lowerBound: $1 as! Int,
+                upperBound: $2 as! Int
             )
         },
         
         // Binomial Pdf/Cdf
-        .init(.binomPdf, [.any, .any, .any]) {
-            binomPdf(trials: $0[0], prSuccess: $0[1], $0[2])
+        .ternary(.binomPdf, [.any, .any, .any]) {
+            binomPdf(trials: $0, prSuccess: $1, $2)
         },
         
         .binary(.binomPdf, [.int, .any]) {
             List(binomPdf(trials: $0 as! Int, prSuccess: $1))
         },
         
-        .init(.binomCdf, [.int, .any, .int, .int]) {
+        .quaternary(.binomCdf, [.int, .any, .int, .int]) {
             try binomCdf(
-                trials: $0[0] as! Int,
-                prSuccess: $0[1],
-                lowerBound: $0[2] as! Int,
-                upperBound: $0[3] as! Int
+                trials: $0 as! Int,
+                prSuccess: $1,
+                lowerBound: $2 as! Int,
+                upperBound: $3 as! Int
             )
         },
         
@@ -94,8 +94,8 @@ public class Stat {
         .unary(.normPdf, [.any]) {
             normPdf($0)
         },
-        .init(.normPdf, [.any, .any, .any]) {
-            normPdf($0[0], μ: $0[1], σ: $0[2])
+        .ternary(.normPdf, [.any, .any, .any]) {
+            normPdf($0, μ: $1, σ: $2)
         },
         
         // Mark: One-variable statistics
@@ -308,10 +308,10 @@ public class Stat {
                 Pair("Resid", List(result.resid))
             ])
         },
-        .init(.polyReg, [.int, .list, .list]) {
-            let l1 = try ($0[1] as! List).toNumerics()
-            let l2 = try ($0[2] as! List).toNumerics()
-            let k = $0[0] as! Int
+        .ternary(.polyReg, [.int, .list, .list]) {
+            let l1 = try ($1 as! List).toNumerics()
+            let l2 = try ($2 as! List).toNumerics()
+            let k = $0 as! Int
             let (eq, coefs, cod, resid) = try polynomialRegression(degrees: k, l1, l2)
             
             return List([

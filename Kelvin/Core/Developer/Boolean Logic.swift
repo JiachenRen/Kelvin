@@ -15,7 +15,7 @@ public extension Developer {
     static let booleanLogicOperations: [Operation] = [
         .init(.and, [.booleans]) {
             for n in $0 {
-                if let b = n as? Bool, !b {
+                if !(n as! Bool) {
                     return false
                 }
             }
@@ -23,7 +23,7 @@ public extension Developer {
         },
         .init(.or, [.booleans]) {
             for n in $0 {
-                if let b = n as? Bool, b {
+                if n as! Bool {
                     return true
                 }
             }
