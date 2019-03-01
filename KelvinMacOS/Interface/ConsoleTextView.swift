@@ -43,7 +43,7 @@ class ConsoleTextView: NSTextView {
         if isReceivingInput {
             let idx = editableAfterCharAtIndex + 1
             textStorage?.addAttributes(
-                [NSAttributedString.Key.],
+                [NSAttributedString.Key.underlineStyle: 1],
                 range: NSRange(location: idx, length: string.count - idx)
             )
         }
