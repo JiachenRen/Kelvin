@@ -90,7 +90,7 @@ public enum DataType: String, CustomStringConvertible {
  and the types of arguments, we can generate a unique signature
  that is used later to find definitions.
  */
-public enum ArgumentType: Int, Equatable {
+public enum ParameterType: Int, Equatable {
     case int = 1
     case number
     case nan
@@ -116,7 +116,7 @@ public enum ArgumentType: Int, Equatable {
         return String(describing: self)
     }
     
-    static func resolve<T>(_ type: T.Type) throws -> ArgumentType {
+    static func resolve<T>(_ type: T.Type) throws -> ParameterType {
         if type == KString.self {
             return .string
         } else if type == List.self {

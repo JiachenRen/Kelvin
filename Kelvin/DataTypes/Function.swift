@@ -218,7 +218,7 @@ public struct Function: MutableListProtocol {
     
     public func implement(using template: Node) throws {
         // Create function signature
-        let signature = [ArgumentType](repeating: .any, count: args.count)
+        let signature = [ParameterType](repeating: .any, count: args.count)
         
         // Make sure the old definition is removed from registry
         Operation.remove(name, signature)

@@ -52,7 +52,7 @@ public struct Variable: LeafNode, NaN {
     /// Anonymous arguments are replaced by their callers
     /// with supplied expressions.
     var isAnonymous: Bool {
-        return name.starts(with: "$") && Int(name[1...name.count]) != nil
+        return name.starts(with: "$") && Int(name[1..<name.count]) != nil
     }
 
     public var evaluated: Value? {

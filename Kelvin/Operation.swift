@@ -54,9 +54,9 @@ public class Operation: Equatable {
 
     let def: Definition
     let name: String
-    let signature: [ArgumentType]
+    let signature: [ParameterType]
 
-    init(_ name: String, _ signature: [ArgumentType], definition: @escaping Definition) {
+    init(_ name: String, _ signature: [ParameterType], definition: @escaping Definition) {
         self.name = name
         self.def = definition
         self.signature = signature
@@ -158,7 +158,7 @@ public class Operation: Equatable {
      - name: The name of the operation to be removed.
      - signature: The signature of the operation to be removed.
      */
-    static func remove(_ name: String, _ signature: [ArgumentType]) {
+    static func remove(_ name: String, _ signature: [ParameterType]) {
         let parOp = Operation(name, signature) { _ in
             nil
         }
@@ -201,11 +201,11 @@ public class Operation: Equatable {
                 case .multivariate:
                     fallthrough
                 case .universal:
-                    signature = [ArgumentType](repeating: .any, count: fun.count)
+                    signature = [ParameterType](repeating: .any, count: fun.count)
                 case .numbers:
-                    signature = [ArgumentType](repeating: .number, count: fun.count)
+                    signature = [ParameterType](repeating: .number, count: fun.count)
                 case .booleans:
-                    signature = [ArgumentType](repeating: .bool, count: fun.count)
+                    signature = [ParameterType](repeating: .bool, count: fun.count)
                 default: break
                 }
             }
@@ -370,11 +370,11 @@ public extension Operation {
         _ type4: T4.Type,
         quaternary: @escaping (T1, T2, T3, T4) throws -> Node?
     ) -> Operation {
-        let argType1: ArgumentType = try! .resolve(type1)
-        let argType2: ArgumentType = try! .resolve(type2)
-        let argType3: ArgumentType = try! .resolve(type3)
-        let argType4: ArgumentType = try! .resolve(type4)
-        return .quaternary(name, [argType1, argType2, argType3, argType4]) {
+        let parType1: ParameterType = try! .resolve(type1)
+        let parType2: ParameterType = try! .resolve(type2)
+        let parType3: ParameterType = try! .resolve(type3)
+        let parType4: ParameterType = try! .resolve(type4)
+        return .quaternary(name, [parType1, parType2, parType3, parType4]) {
             try quaternary(
                 Assert.cast($0, to: T1.self),
                 Assert.cast($1, to: T2.self),
@@ -387,7 +387,7 @@ public extension Operation {
     /// Factory function for quaternary operation
     public static func quaternary(
         _ name: String,
-        _ signature: [ArgumentType],
+        _ signature: [ParameterType],
         quaternary: @escaping (Node, Node, Node, Node) throws -> Node?
         ) -> Operation {
         return Operation(name, signature) {
@@ -403,10 +403,10 @@ public extension Operation {
         _ type3: T3.Type,
         ternary: @escaping (T1, T2, T3) throws -> Node?
         ) -> Operation {
-        let argType1: ArgumentType = try! .resolve(type1)
-        let argType2: ArgumentType = try! .resolve(type2)
-        let argType3: ArgumentType = try! .resolve(type3)
-        return .ternary(name, [argType1, argType2, argType3]) {
+        let parType1: ParameterType = try! .resolve(type1)
+        let parType2: ParameterType = try! .resolve(type2)
+        let parType3: ParameterType = try! .resolve(type3)
+        return .ternary(name, [parType1, parType2, parType3]) {
             try ternary(
                 Assert.cast($0, to: T1.self),
                 Assert.cast($1, to: T2.self),
@@ -418,7 +418,7 @@ public extension Operation {
     /// Factory function for ternary operation
     public static func ternary(
         _ name: String,
-        _ signature: [ArgumentType],
+        _ signature: [ParameterType],
         ternary: @escaping (Node, Node, Node) throws -> Node?
         ) -> Operation {
         return Operation(name, signature) {
@@ -433,9 +433,9 @@ public extension Operation {
         _ type2: T2.Type,
         binary: @escaping (T1, T2) throws -> Node?
         ) -> Operation {
-        let argType1: ArgumentType = try! .resolve(type1)
-        let argType2: ArgumentType = try! .resolve(type2)
-        return .binary(name, [argType1, argType2]) {
+        let parType1: ParameterType = try! .resolve(type1)
+        let parType2: ParameterType = try! .resolve(type2)
+        return .binary(name, [parType1, parType2]) {
             try binary(Assert.cast($0, to: T1.self), Assert.cast($1, to: T2.self))
         }
     }
@@ -443,7 +443,7 @@ public extension Operation {
     /// Factory function for binary operation
     public static func binary(
         _ name: String,
-        _ signature: [ArgumentType],
+        _ signature: [ParameterType],
         binary: @escaping (Node, Node) throws -> Node?
         ) -> Operation {
         return Operation(name, signature) {
@@ -457,8 +457,8 @@ public extension Operation {
         _ type: T.Type,
         unary: @escaping (T) throws -> Node?
         ) -> Operation {
-        let argType: ArgumentType = try! .resolve(type)
-        return .unary(name, [argType]) {
+        let parType: ParameterType = try! .resolve(type)
+        return .unary(name, [parType]) {
             try unary(Assert.cast($0, to: T.self))
         }
     }
@@ -466,7 +466,7 @@ public extension Operation {
     /// Factory function for unary operation
     public static func unary(
         _ name: String,
-        _ signature: [ArgumentType],
+        _ signature: [ParameterType],
         unary: @escaping (Node) throws -> Node?
         ) -> Operation {
         return Operation(name, signature) {
