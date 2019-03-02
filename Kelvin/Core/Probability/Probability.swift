@@ -14,31 +14,29 @@ let probabilityOperations: [Operation] = [
     .init(.random, []) { _ in
         Float80.random(in: 0...1)
     },
-    .binary(.random, [.number, .number]) {
-        let lb = $0≈!
-        let ub = $1≈!
-        let i = min(lb, ub)
-        let j = max(lb, ub)
+    .binary(.random, Value.self, Value.self) {(lb, ub) in
+        let i = min(lb.float80, ub.float80)
+        let j = max(lb.float80, ub.float80)
         return Float80.random(in: i...j)
     },
-    .unary(.random, [.list]) {
-        ($0 as! List).elements.randomElement()
+    .unary(.random, List.self) {
+        $0.elements.randomElement()
     },
 
     // Combination and permutation
-    .binary(.npr, [.int, .int]) {
-        nPr($0≈!, $1≈!)
+    .binary(.npr, Int.self, Int.self) {
+        nPr($0.float80, $1.float80)
     },
-    .binary(.ncr, [.int, .int]) {
-        nCr($0≈!, $1≈!)
+    .binary(.ncr, Int.self, Int.self) {
+        nCr($0.float80, $1.float80)
     },
-    .binary(.ncr, [.list, .int]) {
-        List(combinations(of: ($0 as! List).elements, $1 as! Int).map {List($0)})
+    .binary(.ncr, List.self, Int.self) {
+        List(combinations(of: $0.elements, $1).map {List($0)})
     },
 
     // Factorial
-    .unary(.factorial, [.number]) {
-        factorial($0≈!)
+    .unary(.factorial, Int.self) {
+        factorial($0.float80)
     },
 ]
 

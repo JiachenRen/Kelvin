@@ -57,6 +57,9 @@ let defaultConfiguration: [Operation.Attribute: [String]] = [
         .mutatingDiv,
         .mutatingConcat
     ],
+    .preservesFirstArgument: [
+        
+    ],
     .forwardCommutative: [
         .div,
         .sub,

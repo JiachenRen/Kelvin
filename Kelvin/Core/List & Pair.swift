@@ -9,61 +9,57 @@
 import Foundation
 
 let listAndPairOperations: [Operation] = [
-    
-    .init(.add, [.list, .list]) {
-        try join(by: .add, $0[0], $0[1])
+    .binary(.add, List.self, List.self) {
+        try $0.joined(with: $1, by: .add)
     },
-    .init(.add, [.list, .any]) {
-        map(by: .add, $0[0], $0[1])
-    },
-    
-    .init(.sub, [.list, .list]) {
-        try join(by: .sub, $0[0], $0[1])
-    },
-    .init(.sub, [.list, .any]) {
-        map(by: .sub, $0[0], $0[1])
+    .binary(.add, List.self, Node.self) {
+        map(by: .add, $0, $1)
     },
     
-    .init(.mult, [.list, .list]) {
-        try join(by: .mult, $0[0], $0[1])
+    .binary(.sub, List.self, List.self) {
+        try $0.joined(with: $1, by: .sub)
     },
-    .init(.mult, [.list, .any]) {
-        map(by: .mult, $0[0], $0[1])
-    },
-    
-    .init(.div, [.list, .list]) {
-        try join(by: .div, $0[0], $0[1])
-    },
-    .init(.div, [.list, .any]) {
-        map(by: .div, $0[0], $0[1])
+    .binary(.sub, List.self, Node.self) {
+        map(by: .sub, $0, $1)
     },
     
-    .init(.exp, [.list, .list]) {
-        try join(by: .exp, $0[0], $0[1])
+    .binary(.mult, List.self, List.self) {
+        try $0.joined(with: $1, by: .mult)
     },
-    .init(.exp, [.list, .any]) {
-        map(by: .exp, $0[0], $0[1])
-    },
-    .binary(.exp, [.any, .list]) {
-        let list = $1 as! List
-        let baseList = List([Float80](repeating: $0≈!, count: list.count))
-        return try join(by: .exp, baseList, list)
+    .binary(.mult, List.self, Node.self) {
+        map(by: .mult, $0, $1)
     },
     
-    .init(.mod, [.list, .list]) {
-        try join(by: .mod, $0[0], $0[1])
+    .binary(.div, List.self, List.self) {
+        try $0.joined(with: $1, by: .div)
     },
-    .init(.mod, [.list, .any]) {
-        map(by: .mod, $0[0], $0[1])
+    .binary(.div, List.self, Node.self) {
+        map(by: .div, $0, $1)
+    },
+    
+    .binary(.exp, List.self, List.self) {
+        try $0.joined(with: $1, by: .exp)
+    },
+    .binary(.exp, List.self, Node.self) {
+        map(by: .exp, $0, $1)
+    },
+    .binary(.exp, Node.self, List.self) {(base, list) in
+        let baseList = List([Node](repeating: base, count: list.count))
+        return try baseList.joined(with: list, by: .exp)
+    },
+    
+    .binary(.mod, List.self, List.self) {
+        try $0.joined(with: $1, by: .mod)
+    },
+    .binary(.mod, List.self, Node.self) {
+        map(by: .mod, $0, $1)
     },
 
     // Pair operations
-    .init(.pair, [.leaf, .leaf]) {
-        Pair($0[0], $0[1])
+    .binary(.pair, [.any, .any]) {
+        Pair($0, $1)
     },
-    .init(.get, [.pair, .number]) { nodes in
-        let pair = nodes[0] as! Pair
-        let idx = Int(nodes[1]≈!)
+    .binary(.get, Pair.self, Int.self) {(pair, idx) in
         switch idx {
         case 0:
             return pair.lhs
@@ -71,7 +67,7 @@ let listAndPairOperations: [Operation] = [
             return pair.rhs
         default:
             throw ExecutionError.indexOutOfBounds(
-                Function(.get, [pair, idx]),
+                nil,
                 maxIdx: 1,
                 idx: idx
             )
@@ -82,28 +78,19 @@ let listAndPairOperations: [Operation] = [
     .init(.list, [.universal]) {
         List($0)
     },
-    .init(.get, [.iterable, .number]) { nodes in
-        let list = nodes[0] as! ListProtocol
-        let idx = Int(nodes[1]≈!)
-        try Assert.index(
-            at: Function(.get, [list, idx]),
-            list.count,
-            idx
-        )
+    .binary(.get, ListProtocol.self, Int.self) {(list, idx) in
+        try Assert.index(list.count, idx)
         return list[idx]
     },
-    .binary(.get, [.iterable, .list]) {
-        let list = $0 as! ListProtocol
-        let indices = try Assert.specialize(list: $1 as! ListProtocol, as: Int.self)
-        
-        if indices.count != 2 {
-            throw ExecutionError.invalidSubscript(list, list, $1)
+    .binary(.get, ListProtocol.self, List.self) {(list, idxList) in
+        let indices = try Assert.specialize(list: idxList, as: Int.self)
+        guard indices.count == 2 else {
+            throw ExecutionError.invalidSubscript(nil, list, idxList)
         }
-        
         return try List(list.subsequence(from: indices[0], to: indices[1]))
     },
-    .init(.size, [.iterable]) {
-        return ($0[0] as! ListProtocol).count
+    .unary(.size, ListProtocol.self) {
+        return $0.count
     },
     .init(.map, [.any, .any]) { nodes in
         var list = try Assert.cast(nodes[0].simplify(), to: MutableListProtocol.self)
@@ -135,25 +122,14 @@ let listAndPairOperations: [Operation] = [
             }
         return List(updated)
     },
-    .init(.zip, [.list, .list]) {
-        if let l1 = $0[0] as? List, let l2 = $0[1] as? List {
-            return try l1.joined(with: l2)
-        }
-        return nil
+    .binary(.zip, List.self, List.self) {
+        try $0.joined(with: $1)
     },
-    .init(.append, [.list, .list]) {
-        if let l1 = $0[0] as? List, let l2 = $0[1] as? List {
-            let elements = [l1.elements, l2.elements].flatMap {$0}
-            return List(elements)
-        }
-        return nil
+    .binary(.append, List.self, List.self) {
+        List([$0.elements, $1.elements].flatMap {$0})
     },
-    .init(.append, [.list, .any]) {
-        if let l1 = $0[0] as? List {
-            let elements = [l1.elements, [$0[1]]].flatMap {$0}
-            return List(elements)
-        }
-        return nil
+    .binary(.append, List.self, Node.self) {
+        List([$0.elements, [$1]].flatMap {$0})
     },
     .init(.sort, [.any, .any]) {nodes in
         var l1 = try Assert.cast(nodes[0].simplify(), to: List.self)
@@ -175,31 +151,20 @@ let listAndPairOperations: [Operation] = [
             return list
         }
     },
-    .binary(.contains, [.iterable, .any]) {(list, e) in
-        (list as! ListProtocol).contains {
-            e === $0
-        }
+    .binary(.contains, ListProtocol.self, Node.self) {(list, e) in
+        list.contains {e === $0}
     },
-    .unary(.shuffle, [.list]) {
-        var elements = ($0 as! List).elements
+    .unary(.shuffle, List.self) {
+        var elements = $0.elements
         elements.shuffle()
         return List(elements)
     },
-    .unary(.reverse, [.list]) {
-        List(($0 as! List).elements.reversed())
+    .unary(.reverse, List.self) {
+        List($0.elements.reversed())
     }
 ]
 
-fileprivate func join(by bin: String, _ l1: Node, _ l2: Node) throws -> Node {
-    let l1 = l1 as! List
-    let l2 = l2 as! List
-    
-    return try l1.joined(with: l2, by: bin)
-}
-
-fileprivate func map(by bin: String, _ l: Node, _ n: Node) -> Node {
-    let l = l as! List
-    
+fileprivate func map(by bin: String, _ l: List, _ n: Node) -> Node {
     let elements = l.map {
         Function(bin, [$0, n])
     }

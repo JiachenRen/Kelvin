@@ -32,8 +32,8 @@ public extension Developer {
         .binary(.xor, [.any, .any]) {
             (!!$0 &&& $1) ||| ($0 &&& !!$1)
         },
-        .unary(.not, [.bool]) {
-            !($0 as! Bool)
+        .unary(.not, Bool.self) {
+            !$0
         },
     ]
 }

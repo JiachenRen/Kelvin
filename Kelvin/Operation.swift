@@ -54,9 +54,9 @@ public class Operation: Equatable {
 
     let def: Definition
     let name: String
-    let signature: [Parameter]
+    let signature: [ArgumentType]
 
-    init(_ name: String, _ signature: [Parameter], definition: @escaping Definition) {
+    init(_ name: String, _ signature: [ArgumentType], definition: @escaping Definition) {
         self.name = name
         self.def = definition
         self.signature = signature
@@ -67,50 +67,6 @@ public class Operation: Equatable {
         }
     }
     
-    /// Convenient factory function for quaternary operation
-    public static func quaternary(
-        _ name: String,
-        _ signature: [Parameter],
-        quaternary: @escaping (Node, Node, Node, Node) throws -> Node?
-    ) -> Operation {
-        return Operation(name, signature) {
-            try quaternary($0[0], $0[1], $0[2], $0[3])
-        }
-    }
-    
-    /// Convenient factory function for ternary operation
-    public static func ternary(
-        _ name: String,
-        _ signature: [Parameter],
-        ternary: @escaping (Node, Node, Node) throws -> Node?
-    ) -> Operation {
-        return Operation(name, signature) {
-            try ternary($0[0], $0[1], $0[2])
-        }
-    }
-    
-    /// Convenient factory function for binary operation
-    public static func binary(
-        _ name: String,
-        _ signature: [Parameter],
-        binary: @escaping (Node, Node) throws -> Node?
-    ) -> Operation {
-        return Operation(name, signature) {
-            try binary($0[0], $0[1])
-        }
-    }
-    
-    /// Convenient factory function for unary operation
-    public static func unary(
-        _ name: String,
-        _ signature: [Parameter],
-        unary: @escaping (Node) throws -> Node?
-    ) -> Operation {
-        return Operation(name, signature) {
-            try unary($0[0])
-        }
-    }
-
     /**
      Generate the conjugate definition for the given operation.
      e.g. The signature type [.any, .func] becomes [.func, .any].
@@ -202,7 +158,7 @@ public class Operation: Equatable {
      - name: The name of the operation to be removed.
      - signature: The signature of the operation to be removed.
      */
-    static func remove(_ name: String, _ signature: [Parameter]) {
+    static func remove(_ name: String, _ signature: [ArgumentType]) {
         let parOp = Operation(name, signature) { _ in
             nil
         }
@@ -245,11 +201,11 @@ public class Operation: Equatable {
                 case .multivariate:
                     fallthrough
                 case .universal:
-                    signature = [Parameter](repeating: .any, count: fun.count)
+                    signature = [ArgumentType](repeating: .any, count: fun.count)
                 case .numbers:
-                    signature = [Parameter](repeating: .number, count: fun.count)
+                    signature = [ArgumentType](repeating: .number, count: fun.count)
                 case .booleans:
-                    signature = [Parameter](repeating: .bool, count: fun.count)
+                    signature = [ArgumentType](repeating: .bool, count: fun.count)
                 default: break
                 }
             }
@@ -266,8 +222,6 @@ public class Operation: Equatable {
                 switch argType {
                 case .any:
                     continue
-                case .leaf where !(arg is LeafNode):
-                    fallthrough
                 case .pair where !(arg is Pair):
                     fallthrough
                 case .var where !(arg is Variable):
@@ -371,45 +325,13 @@ public class Operation: Equatable {
         return lhs.name == rhs.name && lhs.signature == rhs.signature
     }
 
-    /**
-     This enum is used to represent specify parameter type requirement.
-     By giving a function a name, the number of arguments,
-     and the types of arguments, we can generate a unique signature
-     that is used later to find definitions.
-     */
-    public enum Parameter: Int, Equatable {
-        case int = 1
-        case number
-        case nan
-        case `var`
-        case `func`
-        case closure
-        case bool
-        case equation
-        case string
-        case vec
-        case matrix
-        case list
-        case pair
-        case iterable
-        case leaf
-        case any = 100
-        case numbers = 1000
-        case booleans = 1001
-        case multivariate = 4000 // Takes in more than 1 argument
-        case universal = 10000 // Takes in any # of args.
-        
-        var name: String {
-            return String(describing: self)
-        }
-    }
-
     /// Flags that denote special attributes for certain operations.
     public enum Attribute: Hashable {
 
         /// Debugging and flow control functions like "complexity" and "repeat"
         /// should not simplify args before their execution.
         case preservesArguments
+        case preservesFirstArgument
 
         /// Addition, multiplication, and boolean logic are all commutative
         /// Commutative functions with the same name should only be marked once.
@@ -433,5 +355,122 @@ extension Operation: CustomStringConvertible {
             $0 == nil ? $1.name : "\($0!),\($1.name)"
         } ?? ""
         return "\(name)(\(parameterTypes))"
+    }
+}
+
+/// Factory functions
+public extension Operation {
+    
+    /// Factory function for type safe quaternary operation
+    public static func quaternary<T1, T2, T3, T4>(
+        _ name: String,
+        _ type1: T1.Type,
+        _ type2: T2.Type,
+        _ type3: T3.Type,
+        _ type4: T4.Type,
+        quaternary: @escaping (T1, T2, T3, T4) throws -> Node?
+    ) -> Operation {
+        let argType1: ArgumentType = try! .resolve(type1)
+        let argType2: ArgumentType = try! .resolve(type2)
+        let argType3: ArgumentType = try! .resolve(type3)
+        let argType4: ArgumentType = try! .resolve(type4)
+        return .quaternary(name, [argType1, argType2, argType3, argType4]) {
+            try quaternary(
+                Assert.cast($0, to: T1.self),
+                Assert.cast($1, to: T2.self),
+                Assert.cast($2, to: T3.self),
+                Assert.cast($3, to: T4.self)
+            )
+        }
+    }
+    
+    /// Factory function for quaternary operation
+    public static func quaternary(
+        _ name: String,
+        _ signature: [ArgumentType],
+        quaternary: @escaping (Node, Node, Node, Node) throws -> Node?
+        ) -> Operation {
+        return Operation(name, signature) {
+            try quaternary($0[0], $0[1], $0[2], $0[3])
+        }
+    }
+    
+    /// Factory function for type safe ternary operation
+    public static func ternary<T1, T2, T3>(
+        _ name: String,
+        _ type1: T1.Type,
+        _ type2: T2.Type,
+        _ type3: T3.Type,
+        ternary: @escaping (T1, T2, T3) throws -> Node?
+        ) -> Operation {
+        let argType1: ArgumentType = try! .resolve(type1)
+        let argType2: ArgumentType = try! .resolve(type2)
+        let argType3: ArgumentType = try! .resolve(type3)
+        return .ternary(name, [argType1, argType2, argType3]) {
+            try ternary(
+                Assert.cast($0, to: T1.self),
+                Assert.cast($1, to: T2.self),
+                Assert.cast($2, to: T3.self)
+            )
+        }
+    }
+    
+    /// Factory function for ternary operation
+    public static func ternary(
+        _ name: String,
+        _ signature: [ArgumentType],
+        ternary: @escaping (Node, Node, Node) throws -> Node?
+        ) -> Operation {
+        return Operation(name, signature) {
+            try ternary($0[0], $0[1], $0[2])
+        }
+    }
+    
+    /// Factory function for type safe binary operation
+    public static func binary<T1, T2>(
+        _ name: String,
+        _ type1: T1.Type,
+        _ type2: T2.Type,
+        binary: @escaping (T1, T2) throws -> Node?
+        ) -> Operation {
+        let argType1: ArgumentType = try! .resolve(type1)
+        let argType2: ArgumentType = try! .resolve(type2)
+        return .binary(name, [argType1, argType2]) {
+            try binary(Assert.cast($0, to: T1.self), Assert.cast($1, to: T2.self))
+        }
+    }
+    
+    /// Factory function for binary operation
+    public static func binary(
+        _ name: String,
+        _ signature: [ArgumentType],
+        binary: @escaping (Node, Node) throws -> Node?
+        ) -> Operation {
+        return Operation(name, signature) {
+            try binary($0[0], $0[1])
+        }
+    }
+    
+    /// Factory function for type safe unary operation
+    public static func unary<T>(
+        _ name: String,
+        _ type: T.Type,
+        unary: @escaping (T) throws -> Node?
+        ) -> Operation {
+        let argType: ArgumentType = try! .resolve(type)
+        return .unary(name, [argType]) {
+            try unary(Assert.cast($0, to: T.self))
+        }
+    }
+    
+    /// Factory function for unary operation
+    public static func unary(
+        _ name: String,
+        _ signature: [ArgumentType],
+        unary: @escaping (Node) throws -> Node?
+        ) -> Operation {
+        return Operation(name, signature) {
+            try unary($0[0])
+        }
     }
 }

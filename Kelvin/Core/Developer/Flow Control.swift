@@ -12,10 +12,8 @@ public extension Developer {
     static let flowControlOperations: [Operation] = [
         
         // Pileline, conditional statements
-        .binary(.ternaryConditional, [.any, .pair]) {
-            let predicate = try Assert.cast($0.simplify(), to: Bool.self)
-            let pair = $1 as! Pair
-            
+        .binary(.ternaryConditional, Node.self, Pair.self) {(n, pair) in
+            let predicate = try Assert.cast(n.simplify(), to: Bool.self)
             return predicate ? pair.lhs : pair.rhs
         },
         .binary(.if, [.any, .any]) {
@@ -26,20 +24,17 @@ public extension Developer {
             }
             return KVoid()
         },
-        .binary(.else, [.func, .any]) {
-            let fun = try Assert.cast($0, to: Function.self)
+        .binary(.else, Function.self, Node.self) {(fun, rhs) in
             guard fun.name == .if || fun.name == .else else {
                 throw ExecutionError.general(errMsg: "left hand side of 'else' must be a if statement or else statement")
             }
-            
-            guard ($1 as? Function)?.name == .if || $1 is Closure else {
+            guard (rhs as? Function)?.name == .if || rhs is Closure else {
                 throw ExecutionError.general(errMsg: "right hand side of 'else' must be a if statement or closure")
             }
-            
-            if try $0.simplify() === true {
+            if try fun.simplify() === true {
                 return true
             } else {
-                return try $1.simplify()
+                return try rhs.simplify()
             }
         },
         .binary(.pipe, [.any, .any]) {
@@ -62,12 +57,11 @@ public extension Developer {
         .unary(.throw, [.any]) {
             throw ExecutionError.general(errMsg: $0.stringified)
         },
-        .unary(.try, [.pair]) {
-            let pair = $0 as! Pair
+        .unary(.try, Pair.self) {
             do {
-                return try pair.lhs.simplify()
+                return try $0.lhs.simplify()
             } catch {
-                return try pair.rhs.simplify()
+                return try $0.rhs.simplify()
             }
         },
         .unary(.try, [.any]) {
@@ -77,20 +71,17 @@ public extension Developer {
                 return KString(e.localizedDescription)
             }
         },
-        .unary(.assert, [.bool]) {
-            if !($0 as! Bool) {
+        .unary(.assert, Bool.self) {predicate in
+            if !predicate {
                 throw ExecutionError.general(errMsg: "assertion failed")
             }
             return true
         },
         
         // Loops
-        .init(.for, [.pair, .closure]) {
-            let pair = try Assert.cast($0[0], to: Pair.self)
-            let closure = try Assert.cast($0[1], to: Closure.self)
+        .binary(.for, Pair.self, Closure.self) {(pair, closure) in
             let v = try Assert.cast(pair.lhs, to: Variable.self)
             let list = try Assert.cast(pair.rhs.simplify(), to: ListProtocol.self)
-            
             loop: for e in list.elements {
                 let def = Variable.definitions[v.name]
                 Variable.define(v.name, e)
@@ -106,13 +97,11 @@ public extension Developer {
                 }
                 Variable.definitions[v.name] = def
             }
-            
             return KVoid()
         },
-        .binary(.while, [.any, .closure]) {
-            let closure = try Assert.cast($1, to: Closure.self)
+        .binary(.while, Node.self, Closure.self) {(predicate, closure) in
             loop: while true {
-                if !(try Assert.cast($0.simplify(), to: Bool.self)) {
+                if !(try Assert.cast(predicate.simplify(), to: Bool.self)) {
                     break
                 }
                 
@@ -129,12 +118,12 @@ public extension Developer {
             }
             return KVoid()
         },
-        .init(.stride, [.number, .number, .number]) {
+        .ternary(.stride, Value.self, Value.self, Value.self) {
+            var lb = $0.float80, ub = $1.float80, step = $2.float80
             var elements = [Node]()
-            var args = $0.map {Double($0≈!)}
-            while args[0] <= args[1] {
-                elements.append(Float80(args[0]))
-                args[0] += args[2]
+            while lb <= ub {
+                elements.append(lb)
+                lb += step
             }
             return List(elements)
         }

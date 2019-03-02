@@ -16,23 +16,23 @@ public class LinearAlgebra {
     ].flatMap {$0}
     
     public static let matrixOperations: [Operation] = [
-        .binary(.add, [.matrix, .matrix]) {
-            try m($0).perform(+, with: m($1))
+        .binary(.add, Matrix.self, Matrix.self) {
+            try $0.perform(+, with: $1)
         },
-        .binary(.add, [.matrix, .any]) {(lhs, rhs) in
-            m(lhs).transform {$0 + rhs}
+        .binary(.add, Matrix.self, Node.self) {(lhs, rhs) in
+            lhs.transform {$0 + rhs}
         },
-        .binary(.sub, [.matrix, .matrix]) {
-            try m($0).perform(-, with: m($1))
+        .binary(.sub, Matrix.self, Matrix.self) {
+            try $0.perform(-, with: $1)
         },
-        .binary(.sub, [.matrix, .any]) {(lhs, rhs) in
-            m(lhs).transform {$0 - rhs}
+        .binary(.sub, Matrix.self, Node.self) {(lhs, rhs) in
+            lhs.transform {$0 - rhs}
         },
-        .binary(.mult, [.matrix, .any]) {(lhs, rhs) in
-            m(lhs).transform {$0 * rhs}
+        .binary(.mult, Matrix.self, Node.self) {(lhs, rhs) in
+            lhs.transform {$0 * rhs}
         },
-        .binary(.div, [.matrix, .any]) {(lhs, rhs) in
-            m(lhs).transform {$0 / rhs}
+        .binary(.div, Matrix.self, Node.self) {(lhs, rhs) in
+            lhs.transform {$0 / rhs}
         },
         .binary(.transform, [.any, .any]) {(a, b) in
             let mat = try Assert.cast(a.simplify(), to: Matrix.self)
@@ -40,7 +40,7 @@ public class LinearAlgebra {
                 b.replacingAnonymousArgs(with: [cell.node, cell.row, cell.col])
             }
         },
-        .unary(.cofactor, [.matrix]) {
+        .unary(.cofactor, Matrix.self) {
             try Assert.cast($0, to: Matrix.self).cofactorMatrix()
         },
         .ternary(.cofactor, [.matrix, .int, .int]) {
@@ -49,74 +49,62 @@ public class LinearAlgebra {
             return try Assert.cast($0, to: Matrix.self)
                 .cofactor(row: r, col: c)
         },
-        .binary(.matrixMultiplication, [.matrix, .matrix]) {
-            try m($0).mult(m($1))
+        .binary(.matrixMultiplication, Matrix.self, Matrix.self) {
+            try $0.mult($1)
         },
-        .unary(.determinant, [.matrix]) {
-            try m($0).determinant()
+        .unary(.determinant, Matrix.self) {
+            try $0.determinant()
         },
-        .binary(.createMatrix, [.int, .int]) {
-            Matrix(rows: i($0), cols: i($1))
+        .binary(.createMatrix, Int.self, Int.self) {
+            Matrix(rows: $0, cols: $1)
         },
-        .unary(.createMatrix, [.int]) {
-            Matrix(i($0))
+        .unary(.createMatrix, Int.self) {
+            Matrix($0)
         },
-        .unary(.identityMatrix, [.int]) {
-            Matrix.identityMatrix(i($0))
+        .unary(.identityMatrix, Int.self) {
+            Matrix.identityMatrix($0)
         },
-        .unary(.transpose, [.matrix]) {
-            m($0).transposed
+        .unary(.transpose, Matrix.self) {
+            $0.transposed
         },
-        .unary(.gaussianElimination, [.matrix]) {
-            try gaussianElimination($0 as! Matrix)
+        .unary(.gaussianElimination, Matrix.self) {
+            try gaussianElimination($0)
         }
     ]
     
     public static let vectorOperations: [Operation] = [
-        .binary(.add, [.vec, .vec]) {
-            try v($0).perform(+, with: v($1))
+        .binary(.add, Vector.self, Vector.self) {
+            try $0.perform(+, with: $1)
         },
-        .binary(.add, [.vec, .number]) {(lhs, rhs) in
-            Vector(v(lhs).map {$0 + rhs})
+        .binary(.add, Vector.self, Value.self) {(lhs, rhs) in
+            Vector(lhs.map {$0 + rhs})
         },
-        .binary(.sub, [.vec, .vec]) {
-            try v($0).perform(-, with: v($1))
+        .binary(.sub, Vector.self, Vector.self) {
+            try $0.perform(-, with: $1)
         },
-        .binary(.sub, [.vec, .number]) {(lhs, rhs) in
-            Vector(v(lhs).map {$0 - rhs})
+        .binary(.sub, Vector.self, Value.self) {(lhs, rhs) in
+            Vector(lhs.map {$0 - rhs})
         },
-        .binary(.dotProduct, [.vec, .vec]) {
-            try v($0).dot(with: v($1))
+        .binary(.dotProduct, Vector.self, Vector.self) {
+            try $0.dot(with: $1)
         },
-        .binary(.crossProduct, [.vec, .vec]) {
-            try v($0).cross(with: v($1))
+        .binary(.crossProduct, Vector.self, Vector.self) {
+            try $0.cross(with: $1)
         },
-        .binary(.mult, [.vec, .number]) {(lhs, rhs) in
-            Vector(v(lhs).map {$0 * rhs})
+        .binary(.mult, Vector.self, Value.self) {(lhs, rhs) in
+            Vector(lhs.map {$0 * rhs})
         },
-        .binary(.div, [.vec, .number]) {(lhs, rhs) in
-            Vector(v(lhs).map {$0 / rhs})
+        .binary(.div, Vector.self, Value.self) {(lhs, rhs) in
+            Vector(lhs.map {$0 / rhs})
         },
-        .unary(.unitVector, [.vec]) {
-            v($0).unitVector
+        .unary(.unitVector, Vector.self) {
+            $0.unitVector
         },
-        .unary(.magnitude, [.vec]) {
-            v($0).magnitude
+        .unary(.magnitude, Vector.self) {
+            $0.magnitude
         },
-        .binary(.angleBetween, [.vec, .vec]) {
-            try Vector.angleBetween(v($0), v($1))
+        .binary(.angleBetween, Vector.self, Vector.self) {
+            try Vector.angleBetween($0, $1)
         }
     ]
-}
-
-fileprivate func v(_ node: Node) -> Vector {
-    return node as! Vector
-}
-
-fileprivate func m(_ node: Node) -> Matrix {
-    return node as! Matrix
-}
-
-fileprivate func i(_ node: Node) -> Int {
-    return node as! Int
 }

@@ -21,75 +21,61 @@ public class Stat {
         // Mark: Distribution
         
         // tPdf, tCdf, and invt
-        .binary(.invT, [.number, .int]) {
-            try invT($0≈!, $1 as! Int)
+        .binary(.invT, Value.self, Int.self) {
+            try invT($0.float80, $1)
         },
-        .binary(.tPdf, [.number, .int]) {
-            try tPdf($0≈!, $1 as! Int)
+        .binary(.tPdf, Value.self, Int.self) {
+            try tPdf($0.float80, $1)
         },
-        .binary(.tCdf, [.number, .int]) {
-            try tCdf($0≈!, $1 as! Int)
+        .binary(.tCdf, Value.self, Int.self) {
+            try tCdf($0.float80, $1)
         },
-        .init(.tCdf, [.number, .number, .int]) {
-            try tCdf(
-                lowerBound: $0[0]≈!,
-                upperBound: $0[1]≈!,
-                $0[2] as! Int
-            )
+        .ternary(.tCdf, Value.self, Value.self, Int.self) {
+            try tCdf(lowerBound: $0.float80, upperBound: $1.float80, $2)
         },
         
         // Geometric Pdf/Cdf
-        .binary(.geomPdf, [.any, .int]) {
-            try geomPdf(prSuccess: $0, $1 as! Int)
+        .binary(.geomPdf, Node.self, Int.self) {
+            try geomPdf(prSuccess: $0, $1)
         },
-        .ternary(.geomCdf, [.any, .int, .int]) {
-            try geomCdf(
-                prSuccess: $0,
-                lowerBound: $1 as! Int,
-                upperBound: $2 as! Int
-            )
+        .ternary(.geomCdf, Node.self, Int.self, Int.self) {
+            try geomCdf(prSuccess: $0, lowerBound: $1, upperBound: $2)
         },
         
         // Binomial Pdf/Cdf
         .ternary(.binomPdf, [.any, .any, .any]) {
             binomPdf(trials: $0, prSuccess: $1, $2)
         },
-        
-        .binary(.binomPdf, [.int, .any]) {
-            List(binomPdf(trials: $0 as! Int, prSuccess: $1))
+        .binary(.binomPdf, Int.self, Node.self) {
+            List(binomPdf(trials: $0, prSuccess: $1))
         },
-        
-        .quaternary(.binomCdf, [.int, .any, .int, .int]) {
-            try binomCdf(
-                trials: $0 as! Int,
-                prSuccess: $1,
-                lowerBound: $2 as! Int,
-                upperBound: $3 as! Int
-            )
+        .quaternary(.binomCdf, Int.self, Node.self, Int.self, Int.self) {
+            try binomCdf(trials: $0, prSuccess: $1, lowerBound: $2, upperBound: $3)
         },
         
         // normCdf from -∞ to x
-        .unary(.normCdf, [.number]) {
-            Float80(normCdf(Double($0≈!)))
+        .unary(.normCdf, Value.self) {
+            Float80(normCdf(Double($0.float80)))
         },
         
         // normCdf from a to b, centered at zero with stdev of 1
-        .binary(.normCdf, [.number, .number]) {
+        .binary(.normCdf, Value.self, Value.self) {
             Float80(normCdf(from: Double($0≈!), to: Double($1≈!)))
         },
+        
         // normCdf from a to b, centered at zero with stdev of 1
         .init(.normCdf, [.number, .number, .number, .number]) {
             let args: [Double] = $0.map {Double($0≈!)}
             return Float80(normCdf(from: args[0], to: args[1], μ: args[2], σ: args[3]))
         },
-        .init(.randNorm, [.number, .number, .int]) {
-            let elements = randNorm(μ: $0[0]≈!, σ: $0[1]≈!, n: $0[2] as! Int)
+        .ternary(.randNorm, Value.self, Value.self, Int.self) {
+            let elements = randNorm(μ: $0.float80, σ: $1.float80, n: $2)
             return List(elements)
         },
-        .init(.invNorm, [.number, .number, .number]) {
-            let stdev = $0[2]≈!
-            let mean = $0[1]≈!
-            return try Float80(invNorm(Double($0[0]≈!))) * stdev + mean
+        .ternary(.invNorm, Value.self, Value.self, Value.self) {
+            let stdev = $2
+            let mean = $1
+            return try Float80(invNorm(Double($0.float80))) * stdev + mean
         },
         .unary(.normPdf, [.any]) {
             normPdf($0)
@@ -100,17 +86,17 @@ public class Stat {
         
         // Mark: One-variable statistics
         
-        .unary(.mean, [.list]) {
-            Function(.sum, [$0]) / ($0 as! List).count
+        .unary(.mean, List.self) {
+            Function(.sum, [$0]) / $0.count
         },
-        .unary(.max, [.list]) {
-            Function(.max, ($0 as! List).elements)
+        .unary(.max, List.self) {
+            Function(.max, $0.elements)
         },
         .init(.max, [.numbers]) {
             max($0.map {$0≈!})
         },
-        .unary(.min, [.list]) {
-            Function(.min, ($0 as! List).elements)
+        .unary(.min, List.self) {
+            Function(.min, $0.elements)
         },
         .init(.min, [.numbers]) {
             min($0.map {$0≈!})
@@ -118,18 +104,18 @@ public class Stat {
         .init(.mean, [.universal]) { nodes in
             ++nodes / nodes.count
         },
-        .unary(.sumOfDiffSq, [.list]) {
-            try ssx(($0 as! List).toNumerics())
+        .unary(.sumOfDiffSq, List.self) {
+            try ssx($0.toNumerics())
         },
-        .unary(.variance, [.list]) {
-            let list = try ($0 as! List).toNumerics()
+        .unary(.variance, List.self) {
+            let list = try $0.toNumerics()
             return List([
                 Pair("sample", variance(.sample, list)),
                 Pair("population", variance(.population, list))
             ])
         },
-        .unary(.stdev, [.list]) {
-            let list = try ($0 as! List).toNumerics()
+        .unary(.stdev, List.self) {
+            let list = try $0.toNumerics()
 
             let es = [
                 Pair("Sₓ", stdev(.sample, list)),
@@ -139,16 +125,16 @@ public class Stat {
         },
         
         // Summation
-        .unary(.sum, [.list]) {
-            sum(($0 as! List).elements)
+        .unary(.sum, List.self) {
+            sum($0.elements)
         },
         .init(.sum, [.universal]) { nodes in
             ++nodes
         },
         
         // IQR, 5 number summary
-        .unary(.fiveNumberSummary, [.list]) {
-            let list = try ($0 as! List).toNumerics()
+        .unary(.fiveNumberSummary, List.self) {
+            let list = try $0.toNumerics()
             let sum5n = try fiveNSummary(list)
             let stats: [Pair] = [
                 .init("min", sum5n[0]),
@@ -159,26 +145,26 @@ public class Stat {
             ]
             return List(stats)
         },
-        .unary(.interQuartileRange, [.list]) {
-            let list = try ($0 as! List).toNumerics()
+        .unary(.interQuartileRange, List.self) {
+            let list = try $0.toNumerics()
             let stat = try quartiles(list)
             return stat.q3 - stat.q1
         },
-        .unary(.median, [.list]) {
-            let list = try ($0 as! List).toNumerics()
+        .unary(.median, List.self) {
+            let list = try $0.toNumerics()
             let (m, _) = median(list)
             return m
         },
-        .unary(.outliers, [.list]) {
-            let list = try ($0 as! List).toNumerics()
+        .unary(.outliers, List.self) {
+            let list = try $0.toNumerics()
             let outliers = try Stat.outliers(list)
             return List([
                 Pair("lower end", List(outliers.lowerEnd)),
                 Pair("upper end", List(outliers.upperEnd))
             ])
         },
-        .unary(.oneVar, [.list]) {
-            let list = try ($0 as! List).toNumerics()
+        .unary(.oneVar, List.self) {
+            let list = try $0.toNumerics()
             let mean = Stat.mean(list)
             let sum = Stat.sum(list)
             let sumSq = sumSquared(list)
@@ -208,30 +194,30 @@ public class Stat {
         
         // Mark: Two-variable statistics
         
-        .binary(.covariance, [.list, .list]) {
-            let datasetX = try ($0 as! List).toNumerics()
-            let datasetY = try ($1 as! List).toNumerics()
+        .binary(.covariance, List.self, List.self) {
+            let datasetX = try $0.toNumerics()
+            let datasetY = try $1.toNumerics()
             
             return try List([
                 Pair("sample", covariance(.sample, datasetX, datasetY)),
                 Pair("population", covariance(.population, datasetX, datasetY))
             ])
         },
-        .binary(.correlation, [.list, .list]) {
-            let datasetX = try ($0 as! List).toNumerics()
-            let datasetY = try ($1 as! List).toNumerics()
+        .binary(.correlation, List.self, List.self) {
+            let datasetX = try $0.toNumerics()
+            let datasetY = try $1.toNumerics()
             
             return try correlation(datasetX, datasetY)
         },
-        .binary(.determination, [.list, .list]) {
-            let datasetY = try ($0 as! List).toNumerics()
-            let resid = try ($1 as! List).toNumerics()
+        .binary(.determination, List.self, List.self) {
+            let datasetY = try $0.toNumerics()
+            let resid = try $1.toNumerics()
             
             return try determination(datasetY, resid)
         },
-        .binary(.twoVar, [.list, .list]) {
-            let datasetX = try ($0 as! List).toNumerics()
-            let datasetY = try ($1 as! List).toNumerics()
+        .binary(.twoVar, List.self, List.self) {
+            let datasetX = try $0.toNumerics()
+            let datasetY = try $1.toNumerics()
             
             let meanX = mean(datasetX)
             let sumX = sum(datasetX)
@@ -294,9 +280,9 @@ public class Stat {
         
         // Mark: Regression
         
-        .binary(.linReg, [.list, .list]) {
-            let X = try ($0 as! List).toNumerics()
-            let Y = try ($1 as! List).toNumerics()
+        .binary(.linReg, List.self, List.self) {
+            let X = try $0.toNumerics()
+            let Y = try $1.toNumerics()
             let result = try linearRegression(X, Y)
             
             return List([
@@ -308,11 +294,10 @@ public class Stat {
                 Pair("Resid", List(result.resid))
             ])
         },
-        .ternary(.polyReg, [.int, .list, .list]) {
-            let l1 = try ($1 as! List).toNumerics()
-            let l2 = try ($2 as! List).toNumerics()
-            let k = $0 as! Int
-            let (eq, coefs, cod, resid) = try polynomialRegression(degrees: k, l1, l2)
+        .ternary(.polyReg, Int.self, List.self, List.self) {
+            let l1 = try $1.toNumerics()
+            let l2 = try $2.toNumerics()
+            let (eq, coefs, cod, resid) = try polynomialRegression(degrees: $0, l1, l2)
             
             return List([
                 Pair("RegEqn", eq),

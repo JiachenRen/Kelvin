@@ -187,7 +187,14 @@ public struct Function: MutableListProtocol {
 
         // Simplify each argument, if requested.
         if !Operation.has(attr: .preservesArguments, name) {
-            let args = try copy.args.simplify() as! List
+            let preservesFirst = Operation.has(attr: .preservesFirstArgument, name)
+            let args = try copy.elements.enumerated().map {(arg) -> Node in
+                let (i, e) = arg
+                if preservesFirst && i == 0 {
+                    return e
+                }
+                return try e.simplify()
+            }
             copy = Function(name, args)
         }
 
@@ -211,7 +218,7 @@ public struct Function: MutableListProtocol {
     
     public func implement(using template: Node) throws {
         // Create function signature
-        let signature = [Operation.Parameter](repeating: .any, count: args.count)
+        let signature = [ArgumentType](repeating: .any, count: args.count)
         
         // Make sure the old definition is removed from registry
         Operation.remove(name, signature)

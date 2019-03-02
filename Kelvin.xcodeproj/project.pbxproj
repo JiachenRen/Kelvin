@@ -55,8 +55,8 @@
 		1F0A90E521F93DCE00432B17 /* OneVar in Resources */ = {isa = PBXBuildFile; fileRef = 1F0A90E421F93DCE00432B17 /* OneVar */; };
 		1F0A90E721F97B5000432B17 /* String+Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E621F97B5000432B17 /* String+Regex.swift */; };
 		1F0A90E821F97B7200432B17 /* String+Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E621F97B5000432B17 /* String+Regex.swift */; };
-		1F0A90EA21FA0EF600432B17 /* DataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E921FA0EF600432B17 /* DataType.swift */; };
-		1F0A90EB21FA10D800432B17 /* DataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E921FA0EF600432B17 /* DataType.swift */; };
+		1F0A90EA21FA0EF600432B17 /* TypeSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E921FA0EF600432B17 /* TypeSystem.swift */; };
+		1F0A90EB21FA10D800432B17 /* TypeSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E921FA0EF600432B17 /* TypeSystem.swift */; };
 		1F0A90ED21FA27E700432B17 /* LinearAlgebra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90EC21FA27E700432B17 /* LinearAlgebra.swift */; };
 		1F0A90EE21FA2A5C00432B17 /* LinearAlgebra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90EC21FA27E700432B17 /* LinearAlgebra.swift */; };
 		1F0CF2C421EA420400E40086 /* KString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* KString.swift */; };
@@ -153,7 +153,7 @@
 		1F8DF761220672BE006351B0 /* Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82B121973FF7005C3353 /* Value.swift */; };
 		1F8DF762220672BE006351B0 /* Compiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD8CD4218F52430004ECEB /* Compiler.swift */; };
 		1F8DF763220672BE006351B0 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974BB21E3970F006D6DC2 /* Error.swift */; };
-		1F8DF764220672BE006351B0 /* DataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E921FA0EF600432B17 /* DataType.swift */; };
+		1F8DF764220672BE006351B0 /* TypeSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90E921FA0EF600432B17 /* TypeSystem.swift */; };
 		1F8DF765220672BE006351B0 /* Mode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974C721E67627006D6DC2 /* Mode.swift */; };
 		1F8DF766220672BE006351B0 /* Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AB21966FC5005C3353 /* Operation.swift */; };
 		1F8DF767220672BE006351B0 /* Scope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09371C21F684D500E707BD /* Scope.swift */; };
@@ -304,7 +304,7 @@
 		1F0A90E121F8C32B00432B17 /* String+Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Colors.swift"; sourceTree = "<group>"; };
 		1F0A90E421F93DCE00432B17 /* OneVar */ = {isa = PBXFileReference; lastKnownFileType = text; path = OneVar; sourceTree = "<group>"; };
 		1F0A90E621F97B5000432B17 /* String+Regex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Regex.swift"; sourceTree = "<group>"; };
-		1F0A90E921FA0EF600432B17 /* DataType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataType.swift; sourceTree = "<group>"; };
+		1F0A90E921FA0EF600432B17 /* TypeSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeSystem.swift; sourceTree = "<group>"; };
 		1F0A90EC21FA27E700432B17 /* LinearAlgebra.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearAlgebra.swift; sourceTree = "<group>"; };
 		1F0CF2C321EA420400E40086 /* KString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KString.swift; sourceTree = "<group>"; };
 		1F0CF2C621EBA8C800E40086 /* Keyword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keyword.swift; sourceTree = "<group>"; };
@@ -596,7 +596,7 @@
 				1FFD8CD4218F52430004ECEB /* Compiler.swift */,
 				1F3974BB21E3970F006D6DC2 /* Error.swift */,
 				1FC67CA6222741FA00A8E6BC /* Assert.swift */,
-				1F0A90E921FA0EF600432B17 /* DataType.swift */,
+				1F0A90E921FA0EF600432B17 /* TypeSystem.swift */,
 				1F3974C721E67627006D6DC2 /* Mode.swift */,
 				1F2E82AB21966FC5005C3353 /* Operation.swift */,
 				1F09371C21F684D500E707BD /* Scope.swift */,
@@ -1021,7 +1021,7 @@
 				1F8DF73722063067006351B0 /* Option.swift in Sources */,
 				1F570B4F21FBEB960006E342 /* Matrix.swift in Sources */,
 				1F0A90EE21FA2A5C00432B17 /* LinearAlgebra.swift in Sources */,
-				1F0A90EB21FA10D800432B17 /* DataType.swift in Sources */,
+				1F0A90EB21FA10D800432B17 /* TypeSystem.swift in Sources */,
 				1F0A90E821F97B7200432B17 /* String+Regex.swift in Sources */,
 				1F0A90E321F8C3C100432B17 /* String+Colors.swift in Sources */,
 				1F09371E21F684EC00E707BD /* Scope.swift in Sources */,
@@ -1083,7 +1083,7 @@
 				1F2E82B621974368005C3353 /* Variable.swift in Sources */,
 				1F8DF79B22093876006351B0 /* Assignment.swift in Sources */,
 				1FE487F5220E416F005361AC /* ConsoleViewController+NSOutlineView.swift in Sources */,
-				1F0A90EA21FA0EF600432B17 /* DataType.swift in Sources */,
+				1F0A90EA21FA0EF600432B17 /* TypeSystem.swift in Sources */,
 				1F0936CB21F4E2A300E707BD /* Unary.swift in Sources */,
 				1F0936EC21F5058B00E707BD /* ListProtocol.swift in Sources */,
 				1F0936E621F4ED2300E707BD /* Configuration.swift in Sources */,
@@ -1204,7 +1204,7 @@
 				1F8DF761220672BE006351B0 /* Value.swift in Sources */,
 				1F8DF762220672BE006351B0 /* Compiler.swift in Sources */,
 				1F8DF763220672BE006351B0 /* Error.swift in Sources */,
-				1F8DF764220672BE006351B0 /* DataType.swift in Sources */,
+				1F8DF764220672BE006351B0 /* TypeSystem.swift in Sources */,
 				1F8DF765220672BE006351B0 /* Mode.swift in Sources */,
 				1F8DF766220672BE006351B0 /* Operation.swift in Sources */,
 				1F8DF767220672BE006351B0 /* Scope.swift in Sources */,

@@ -9,14 +9,14 @@
 import Foundation
 
 let numberOperations: [Operation] = [
-    .binary(.greatestCommonDivisor, [.int, .int]) {
-        gcd($0 as! Int, $1 as! Int)
+    .binary(.greatestCommonDivisor, Int.self, Int.self) {
+        gcd($0, $1)
     },
-    .binary(.leastCommonMultiple, [.int, .int]) {
-        lcm($0 as! Int, $1 as! Int)
+    .binary(.leastCommonMultiple, Int.self, Int.self) {
+        lcm($0, $1)
     },
-    .unary(.factorize, [.int]) {
-        List(primeFactors(of: $0 as! Int))
+    .unary(.factorize, Int.self) {
+        List(primeFactors(of: $0))
     },
     .unary(.degrees, [.any]) {
         $0 / 180 * ("pi"&)
@@ -24,8 +24,8 @@ let numberOperations: [Operation] = [
     .unary(.percent, [.any]) {
         $0 / 100
     },
-    .binary(.round, [.number, .int]) {
-        round($0≈!, toDecimalPlaces: $1 as! Int)
+    .binary(.round, Value.self, Int.self) {
+        round($0.float80, toDecimalPlaces: $1)
     }
 ]
 

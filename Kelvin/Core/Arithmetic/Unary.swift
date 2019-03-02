@@ -70,8 +70,7 @@ let unaryOperations: [Operation] = [
     .unary(.negate, [.number]) {
         u($0, -)
     },
-    .unary(.negate, [.func]) {node in
-        var fun = node as! Function
+    .unary(.negate, Function.self) {fun in
         switch fun.name {
         case .negate:
             return fun[0]
@@ -97,8 +96,8 @@ let unaryOperations: [Operation] = [
     .unary(.sqrt, [.any]) {
         $0 ^ (Float80(0.5))
     },
-    .unary(.sign, [.number]) {
-        let n = $0≈!
+    .unary(.sign, Value.self) {
+        let n = $0.float80
         return n == 0 ? Float80.nan : n > 0 ? 1 : -1
     }
 ]

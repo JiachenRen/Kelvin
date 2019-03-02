@@ -11,9 +11,8 @@ import Foundation
 public extension Developer {
     static let stringOperations: [Operation] = [
         // Splitting a string
-        .binary(.split, [.string, .string]) {
-            List(($0 as! KString).string
-                .components(separatedBy: ($1 as! KString).string)
+        .binary(.split, KString.self, KString.self) {
+            List($0.string.components(separatedBy: $1.string)
                 .map {KString($0)}
             )
         },
@@ -22,25 +21,19 @@ public extension Developer {
         .binary(.concat, [.any, .any]) {
             KString("\($0.stringified)").concat(KString("\($1.stringified)"))
         },
-        .binary(.concat, [.string, .any]) {
-            ($0 as! KString).concat(KString("\($1.stringified)"))
+        .binary(.concat, KString.self, Node.self) {
+            $0.concat(KString("\($1.stringified)"))
         },
-        .binary(.concat, [.any, .string]) {
-            KString("\($0.stringified)").concat($1 as! KString)
+        .binary(.concat, Node.self, KString.self) {
+            KString("\($0.stringified)").concat($1)
         },
-        .binary(.concat, [.string, .string]) {
-            ($0 as! KString).concat($1 as! KString)
+        .binary(.concat, KString.self, KString.self) {
+            $0.concat($1)
         },
         
         // String subscript
-        .binary(.get, [.string, .number]) {
-            let s = try Assert.cast($0, to: KString.self)
-            let n = try Assert.cast($1, to: Int.self)
-            try Assert.index(
-                at: Function(.get, [$0, $1]),
-                s.string.count,
-                n
-            )
+        .binary(.get, KString.self, Int.self) {(s, n) in
+            try Assert.index(s.string.count, n)
             return KString("\(s.string[n])")
         },
     ]

@@ -19,13 +19,12 @@ let binaryOperations: [Operation] = [
     .binary(.add, [.number, .nan]) {
         $0 === 0 ? $1 : nil
     },
-    .binary(.add, [.any, .func]) {
-        let fun = $1 as! Function
+    .binary(.add, Node.self, Function.self) {(lhs, fun) in
         switch fun.name {
         case .mult:
             var args = fun.elements
             for (i, arg) in args.enumerated() {
-                if arg === $0 {
+                if arg === lhs {
                     let a = args.remove(at: i)
                     if args.count != 1 {
                         continue
@@ -33,7 +32,7 @@ let binaryOperations: [Operation] = [
                     let n = args[0] + 1
                     let s = try n.simplify()
                     if s.complexity < n.complexity {
-                        return s * $0
+                        return s * lhs
                     } else {
                         return nil
                     }
@@ -43,15 +42,12 @@ let binaryOperations: [Operation] = [
         }
         return nil
     },
-    .binary(.add, [.func, .func]) {
-        let f1 = $0 as! Function
-        let f2 = $1 as! Function
-
-        if f1.name == f2.name {
-            switch f1.name {
+    .binary(.add, Function.self, Function.self) {(lhs, rhs) in
+        if lhs.name == rhs.name {
+            switch lhs.name {
             case .mult:
-                let (n1, r1) = f1.split(by: isNumber)
-                let (n2, r2) = f2.split(by: isNumber)
+                let (n1, r1) = lhs.split(by: isNumber)
+                let (n2, r2) = rhs.split(by: isNumber)
                 if **r1 === **r2 {
                     return **r1 * (**n1 + **n2)
                 }
@@ -59,7 +55,6 @@ let binaryOperations: [Operation] = [
                 break
             }
         }
-
         return nil
     },
     
@@ -83,37 +78,32 @@ let binaryOperations: [Operation] = [
     .binary(.mult, [.any, .any]) {
         $0 === $1 ? $0 ^ 2 : nil
     },
-    .binary(.mult, [.any, .func]) {
-        let fun = $1 as! Function
+    .binary(.mult, Node.self, Function.self) {(lhs, fun) in
         switch fun.name {
-        case .exp where fun[0] === $0:
-            return $0 ^ (fun[1] + 1)
+        case .exp where fun[0] === lhs:
+            return lhs ^ (fun[1] + 1)
         default:
             break
         }
         return nil
     },
-    .binary(.mult, [.func, .func]) {
-        let f1 = $0 as! Function
-        let f2 = $1 as! Function
-
-        if f1.name == f2.name {
-            switch f1.name {
-            case .exp where f1[0] === f2[0]:
-                return f1[0] ^ (f1[1] + f2[1])
+    .binary(.mult, Function.self, Function.self) {(lhs, rhs) in
+        if lhs.name == rhs.name {
+            switch lhs.name {
+            case .exp where lhs[0] === rhs[0]:
+                return lhs[0] ^ (lhs[1] + rhs[1])
             default:
                 break
             }
         }
         return nil
     },
-    .binary(.mult, [.any, .int]) {
-        let n = $1 as! Int
-        switch n {
+    .binary(.mult, Node.self, Int.self) {(lhs, rhs) in
+        switch rhs {
         case 0:
             return 0
         case 1:
-            return $0
+            return lhs
         default:
             return nil
         }
@@ -148,29 +138,28 @@ let binaryOperations: [Operation] = [
     .binary(.exp, [.number, .nan]) {(lhs, _) in
         lhs === 0 ? 0 : nil
     },
-    .binary(.exp, [.func, .number]) {
-        guard let fun = $0 as? Function, fun.contains(where: isNumber, depth: 1) else {
+    .binary(.exp, Function.self, Value.self) {(fun, rhs) in
+        guard fun.contains(where: isNumber, depth: 1) else {
             return nil
         }
         switch fun.name {
         case .mult:
             let (nums, nans) = fun.split(by: isNumber)
-            return (**nums ^ $1) * (**nans ^ $1)
+            return (**nums ^ rhs) * (**nans ^ rhs)
         case .exp where fun[0] is Value:
-            return (fun[0] ^ $1) ^ fun[1]
+            return (fun[0] ^ rhs) ^ fun[1]
         case .exp where fun[1] is Value:
-            return fun[0] ^ (fun[1] * $1)
+            return fun[0] ^ (fun[1] * rhs)
         default:
             break
         }
         return nil
     },
-    .binary(.exp, [.number, .func]) {
-        let fun = $1 as! Function
+    .binary(.exp, Value.self, Function.self) {(lhs, fun) in
         switch fun.name {
         case .mult where fun.contains(where: isNumber, depth: 1):
             let (nums, nans) = fun.split(by: isNumber)
-            return ($0 ^ **nums) * ($0 ^ **nans)
+            return (lhs ^ **nums) * (lhs ^ **nans)
         default: break
         }
         return nil
