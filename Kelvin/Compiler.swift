@@ -265,7 +265,7 @@ public class Compiler {
             let right = expr[expr.index(after: rightBracketIdx)...]
             let name = expr[lb..<leftBracketIdx].trimmingCharacters(in: .whitespaces)
             
-            if Operation.configuration[.implicitTrailingClosure]!.contains(name) {
+            if name[.implicitTrailingClosure] {
                 let closure = expr[expr.index(after: leftBracketIdx)..<rightBracketIdx]
                 let formatted = "\(name)(\(Closure.symbol)(\(closure)))"
                 expr = left + formatted + right

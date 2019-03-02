@@ -51,13 +51,10 @@ public struct Function: MutableListProtocol {
 
     init(_ name: String, _ args: List) {
         self.name = name
-        
-        let isCommutative = Operation.has(attr: .commutative, name)
-        self.isCommutative = isCommutative
+        self.isCommutative = name[.commutative]
         
         // If the function is commutative, order its arguments.
         self.args = isCommutative ? args.ordered() : args
-
         flatten()
     }
 
@@ -150,7 +147,7 @@ public struct Function: MutableListProtocol {
             // If the child's precedence is lower, a parenthesis is always needed.
             return true
         } else if child.precedence == precedence {
-            if idx != 0 && Operation.has(attr: .forwardCommutative, name) {
+            if idx != 0 && name[.forwardCommutative] {
                 return true
             }
         }
@@ -186,8 +183,8 @@ public struct Function: MutableListProtocol {
         var copy = self
 
         // Simplify each argument, if requested.
-        if !Operation.has(attr: .preservesArguments, name) {
-            let preservesFirst = Operation.has(attr: .preservesFirstArgument, name)
+        if !name[.preservesArguments] {
+            let preservesFirst = name[.preservesFirstArgument]
             let args = try copy.elements.enumerated().map {(arg) -> Node in
                 let (i, e) = arg
                 if preservesFirst && i == 0 {
@@ -203,7 +200,7 @@ public struct Function: MutableListProtocol {
         // otherwise returns a copy of the original function with each argument simplified.
         if let s = try copy.invoke()?.simplify() {
             return s
-        } else if Operation.has(attr: .commutative, name) {
+        } else if name[.commutative] {
             
             // Try simplifying in the reserve order if the function is commutative
             if copy.count > 2 {

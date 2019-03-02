@@ -20,7 +20,7 @@ public class Operation: Equatable {
 
     /// Registered operations are resolved dynamically during runtime
     /// and assigned to functions with matching signature as definitions.
-    public static var registered: [String: [Operation]] = {
+    public static var registered: [OperationName: [Operation]] = {
         return process(defaults)
     }()
     
@@ -42,21 +42,15 @@ public class Operation: Equatable {
         $0
     }
 
-    /// Use this dictionary to assign special attributes to operations.
-    /// e.g. since + and * are commutative, the "commutative" flag should be assigned to them.
-    public static var configuration: [Attribute: [String]] = {
-        defaultConfiguration
-    }()
-
     /// A value that represents the scope of the signature
     /// The larger the scope, the more universally applicable the function.
     let scope: Int
 
     let def: Definition
-    let name: String
+    let name: OperationName
     let signature: [ParameterType]
 
-    init(_ name: String, _ signature: [ParameterType], definition: @escaping Definition) {
+    init(_ name: OperationName, _ signature: [ParameterType], definition: @escaping Definition) {
         self.name = name
         self.def = definition
         self.signature = signature
@@ -76,7 +70,7 @@ public class Operation: Equatable {
      - Returns: The conjugate definition for the operation, that is, if it exists at all.
      */
     private static func conjugate(for operation: Operation) -> Operation? {
-        if operation.signature.count == 2 && has(attr: .commutative, operation.name) {
+        if operation.signature.count == 2 && operation.name[.commutative] {
 
             // The original com. op. w/ signature and def. reversed.
             let op = Operation(operation.name, operation.signature.reversed()) {
@@ -105,7 +99,7 @@ public class Operation: Equatable {
 
     /// Find the conjugates of commutative operations, then assort all operations by
     /// their names into a dictionary. This results in a 75% performance boost!
-    private static func process(_ operations: [Operation]) -> [String: [Operation]] {
+    private static func process(_ operations: [Operation]) -> [OperationName: [Operation]] {
         var operations = operations
 
         let conjugates = operations.map {
@@ -119,7 +113,7 @@ public class Operation: Equatable {
                 }
 
         operations.append(contentsOf: conjugates)
-        var dict = [String: [Operation]]()
+        var dict = [OperationName: [Operation]]()
         for operation in operations {
             let name = operation.name
             if var arr = dict[name] {
@@ -140,14 +134,9 @@ public class Operation: Equatable {
         return dict
     }
 
-    /// Clear the existing registered operations, then
-    /// load the default definitions and configurations from Definitions.swift
+    /// Clear existing registered operations, then
+    /// register default operations
     public static func restoreDefault() {
-
-        // Restore to default configuration
-        self.configuration = defaultConfiguration
-
-        // Process and register default operations.
         registered = process(defaults)
     }
 
@@ -158,7 +147,7 @@ public class Operation: Equatable {
      - name: The name of the operation to be removed.
      - signature: The signature of the operation to be removed.
      */
-    static func remove(_ name: String, _ signature: [ParameterType]) {
+    static func remove(_ name: OperationName, _ signature: [ParameterType]) {
         let parOp = Operation(name, signature) { _ in
             nil
         }
@@ -169,7 +158,7 @@ public class Operation: Equatable {
 
     /// Remove the parametric operations with the given name.
     /// - Parameter name: The name of the operations to be removed.
-    static func remove(_ name: String) {
+    static func remove(_ name: OperationName) {
         registered[name] = nil
     }
 
@@ -272,7 +261,7 @@ public class Operation: Equatable {
      - Parameter fun: A function that performs binary simplification.
      - Returns: A node resulting from the simplification.
      */
-    public static func simplifyCommutatively(_ nodes: [Node], by fun: String) throws -> Node {
+    public static func simplifyCommutatively(_ nodes: [Node], by fun: OperationName) throws -> Node {
         var nodes = nodes
 
         if nodes.count == 2 {
@@ -308,44 +297,11 @@ public class Operation: Equatable {
     }
 
     /**
-     - Parameters:
-     - name: The name of the function
-     - attr: The attribute in question such as .commutative
-     - Returns: Whether the function w/ the given name has the designated attribute
-     */
-    public static func has(attr: Attribute, _ name: String) -> Bool {
-        return configuration[attr]!.contains(name)
-    }
-
-    /**
      Two parametric operations are equal to each other if they have the same name
      and the same signature
      */
     public static func ==(lhs: Operation, rhs: Operation) -> Bool {
         return lhs.name == rhs.name && lhs.signature == rhs.signature
-    }
-
-    /// Flags that denote special attributes for certain operations.
-    public enum Attribute: Hashable {
-
-        /// Debugging and flow control functions like "complexity" and "repeat"
-        /// should not simplify args before their execution.
-        case preservesArguments
-        case preservesFirstArgument
-
-        /// Addition, multiplication, and boolean logic are all commutative
-        /// Commutative functions with the same name should only be marked once.
-        case commutative
-
-        /// Operations with this flag are only commutative in the forward direction.
-        /// e.g. division and subtraction.
-        case forwardCommutative
-        
-        /// With this attribute, trailing curly brackets are forced into closures
-        /// even without preceding parenthesis.
-        /// e.g. code blockes like `do {}`, `deterministic {}`
-        /// should be marked with `implicitTrailingClosure` attribute.
-        case implicitTrailingClosure
     }
 }
 
@@ -363,7 +319,7 @@ public extension Operation {
     
     /// Factory function for type safe quaternary operation
     public static func quaternary<T1, T2, T3, T4>(
-        _ name: String,
+        _ name: OperationName,
         _ type1: T1.Type,
         _ type2: T2.Type,
         _ type3: T3.Type,
@@ -386,10 +342,10 @@ public extension Operation {
     
     /// Factory function for quaternary operation
     public static func quaternary(
-        _ name: String,
+        _ name: OperationName,
         _ signature: [ParameterType],
         quaternary: @escaping (Node, Node, Node, Node) throws -> Node?
-        ) -> Operation {
+    ) -> Operation {
         return Operation(name, signature) {
             try quaternary($0[0], $0[1], $0[2], $0[3])
         }
@@ -397,12 +353,12 @@ public extension Operation {
     
     /// Factory function for type safe ternary operation
     public static func ternary<T1, T2, T3>(
-        _ name: String,
+        _ name: OperationName,
         _ type1: T1.Type,
         _ type2: T2.Type,
         _ type3: T3.Type,
         ternary: @escaping (T1, T2, T3) throws -> Node?
-        ) -> Operation {
+    ) -> Operation {
         let parType1: ParameterType = try! .resolve(type1)
         let parType2: ParameterType = try! .resolve(type2)
         let parType3: ParameterType = try! .resolve(type3)
@@ -417,10 +373,10 @@ public extension Operation {
     
     /// Factory function for ternary operation
     public static func ternary(
-        _ name: String,
+        _ name: OperationName,
         _ signature: [ParameterType],
         ternary: @escaping (Node, Node, Node) throws -> Node?
-        ) -> Operation {
+    ) -> Operation {
         return Operation(name, signature) {
             try ternary($0[0], $0[1], $0[2])
         }
@@ -428,11 +384,11 @@ public extension Operation {
     
     /// Factory function for type safe binary operation
     public static func binary<T1, T2>(
-        _ name: String,
+        _ name: OperationName,
         _ type1: T1.Type,
         _ type2: T2.Type,
         binary: @escaping (T1, T2) throws -> Node?
-        ) -> Operation {
+    ) -> Operation {
         let parType1: ParameterType = try! .resolve(type1)
         let parType2: ParameterType = try! .resolve(type2)
         return .binary(name, [parType1, parType2]) {
@@ -442,10 +398,10 @@ public extension Operation {
     
     /// Factory function for binary operation
     public static func binary(
-        _ name: String,
+        _ name: OperationName,
         _ signature: [ParameterType],
         binary: @escaping (Node, Node) throws -> Node?
-        ) -> Operation {
+    ) -> Operation {
         return Operation(name, signature) {
             try binary($0[0], $0[1])
         }
@@ -453,10 +409,10 @@ public extension Operation {
     
     /// Factory function for type safe unary operation
     public static func unary<T>(
-        _ name: String,
+        _ name: OperationName,
         _ type: T.Type,
         unary: @escaping (T) throws -> Node?
-        ) -> Operation {
+    ) -> Operation {
         let parType: ParameterType = try! .resolve(type)
         return .unary(name, [parType]) {
             try unary(Assert.cast($0, to: T.self))
@@ -465,10 +421,10 @@ public extension Operation {
     
     /// Factory function for unary operation
     public static func unary(
-        _ name: String,
+        _ name: OperationName,
         _ signature: [ParameterType],
         unary: @escaping (Node) throws -> Node?
-        ) -> Operation {
+    ) -> Operation {
         return Operation(name, signature) {
             try unary($0[0])
         }

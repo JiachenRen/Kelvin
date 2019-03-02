@@ -8,7 +8,9 @@
 
 import Foundation
 
-public extension String {
+public typealias OperationName = String
+
+public extension OperationName {
     
     // Binary arithmetic operations
     public static let add = "+"
