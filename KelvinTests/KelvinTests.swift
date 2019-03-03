@@ -46,8 +46,6 @@ class KelvinTests: XCTestCase {
     
     func testPerformance() {
         self.measure {
-            restoreDefault()
-            
             do {
                 let _ = try Compiler.compile("run \"\(testUrl)\"").simplify()
             } catch let e as KelvinError {

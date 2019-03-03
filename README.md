@@ -275,6 +275,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - Automatic scope management
   - Closures
   - Anonymous closure arguments (e.g. $0, $1, ...)
+  - Inout variables (behaves like the reference operator "&", but not quite)
 - [x] Runtime compilation
 - [x] Flow control
   - Execution

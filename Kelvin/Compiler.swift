@@ -35,11 +35,6 @@ public class Compiler {
         return ",;\(brackets)\(operators)"
     }
 
-    /// Digits from 0 to 9
-    private static var digits = (0...9).reduce("") {
-        "\($0)\($1)"
-    }
-
     /// A dictionary that maps a operator reference to its encoding.
     typealias OperatorReference = Dictionary<String, Keyword.Encoding>
 

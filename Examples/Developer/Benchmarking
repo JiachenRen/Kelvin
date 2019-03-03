@@ -1,0 +1,16 @@
+# Calculate the time to compute 10000 random numbers
+a := time();
+random()...10000;
+println("time = " & time() - a)
+
+# Get the current date
+println date()
+
+# Alternatively, use a measure block
+def expr = factor(x * f * c + x * f * b + x * d * c + x * d * b + f * c * a + f * b * a + d * c * a + d * b * a)
+
+# Measure the time it takes to factor 'expr'
+measure {factor(expr)}
+
+# Measure the time average of factorizing 'expr' 10 times
+measure(10) {factor(expr)}

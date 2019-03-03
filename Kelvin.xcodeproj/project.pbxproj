@@ -43,7 +43,7 @@
 		1F09370F21F5800B00E707BD /* String in Resources */ = {isa = PBXBuildFile; fileRef = 1F09370E21F5800B00E707BD /* String */; };
 		1F09371121F62BF700E707BD /* RepeatMapDemo in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371021F62BF700E707BD /* RepeatMapDemo */; };
 		1F09371721F66C4B00E707BD /* Subscript in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371621F66C4B00E707BD /* Subscript */; };
-		1F09371921F672CD00E707BD /* DateTime in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371821F672CD00E707BD /* DateTime */; };
+		1F09371921F672CD00E707BD /* Benchmarking in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371821F672CD00E707BD /* Benchmarking */; };
 		1F09371B21F67FDD00E707BD /* SystemCheck in Resources */ = {isa = PBXBuildFile; fileRef = 1F09371A21F67FDD00E707BD /* SystemCheck */; };
 		1F09371D21F684D500E707BD /* Scope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09371C21F684D500E707BD /* Scope.swift */; };
 		1F09371E21F684EC00E707BD /* Scope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09371C21F684D500E707BD /* Scope.swift */; };
@@ -60,6 +60,7 @@
 		1F0AC9DE222B29C300870367 /* OperationName+Attribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0AC9DD222B29C300870367 /* OperationName+Attribute.swift */; };
 		1F0AC9DF222B2DAA00870367 /* OperationName+Attribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0AC9DD222B29C300870367 /* OperationName+Attribute.swift */; };
 		1F0AC9E0222B2E2500870367 /* OperationName+Attribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0AC9DD222B29C300870367 /* OperationName+Attribute.swift */; };
+		1F0AC9E2222B5E4500870367 /* Variable in Resources */ = {isa = PBXBuildFile; fileRef = 1F0AC9E1222B5E4500870367 /* Variable */; };
 		1F0CF2C421EA420400E40086 /* KString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* KString.swift */; };
 		1F0CF2C521EA428000E40086 /* KString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* KString.swift */; };
 		1F0CF2C721EBA8C800E40086 /* Keyword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C621EBA8C800E40086 /* Keyword.swift */; };
@@ -178,7 +179,7 @@
 		1F8DF7892208CC13006351B0 /* BinarySearch in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF7882208CC13006351B0 /* BinarySearch */; };
 		1F8DF78B2208CC54006351B0 /* Recursion in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF78A2208CC54006351B0 /* Recursion */; };
 		1F8DF78D2208CCB0006351B0 /* ForLoop in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF78C2208CCB0006351B0 /* ForLoop */; };
-		1F8DF78F2208CCEE006351B0 /* FunctionDefinition in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF78E2208CCEE006351B0 /* FunctionDefinition */; };
+		1F8DF78F2208CCEE006351B0 /* Function in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF78E2208CCEE006351B0 /* Function */; };
 		1F8DF7922208D2E5006351B0 /* WhileLoop in Resources */ = {isa = PBXBuildFile; fileRef = 1F8DF7912208D2E5006351B0 /* WhileLoop */; };
 		1F8DF79422093690006351B0 /* String+Subscript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF79322093690006351B0 /* String+Subscript.swift */; };
 		1F8DF795220936C9006351B0 /* String+Subscript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF79322093690006351B0 /* String+Subscript.swift */; };
@@ -296,7 +297,7 @@
 		1F09370E21F5800B00E707BD /* String */ = {isa = PBXFileReference; lastKnownFileType = text; path = String; sourceTree = "<group>"; };
 		1F09371021F62BF700E707BD /* RepeatMapDemo */ = {isa = PBXFileReference; lastKnownFileType = text; path = RepeatMapDemo; sourceTree = "<group>"; };
 		1F09371621F66C4B00E707BD /* Subscript */ = {isa = PBXFileReference; lastKnownFileType = text; path = Subscript; sourceTree = "<group>"; };
-		1F09371821F672CD00E707BD /* DateTime */ = {isa = PBXFileReference; lastKnownFileType = text; path = DateTime; sourceTree = "<group>"; };
+		1F09371821F672CD00E707BD /* Benchmarking */ = {isa = PBXFileReference; lastKnownFileType = text; path = Benchmarking; sourceTree = "<group>"; };
 		1F09371A21F67FDD00E707BD /* SystemCheck */ = {isa = PBXFileReference; lastKnownFileType = text; path = SystemCheck; sourceTree = "<group>"; };
 		1F09371C21F684D500E707BD /* Scope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scope.swift; sourceTree = "<group>"; };
 		1F0A90DE21F7E94200432B17 /* ErrorHandling */ = {isa = PBXFileReference; lastKnownFileType = text; path = ErrorHandling; sourceTree = "<group>"; };
@@ -306,6 +307,7 @@
 		1F0A90E921FA0EF600432B17 /* TypeSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeSystem.swift; sourceTree = "<group>"; };
 		1F0A90EC21FA27E700432B17 /* LinearAlgebra.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearAlgebra.swift; sourceTree = "<group>"; };
 		1F0AC9DD222B29C300870367 /* OperationName+Attribute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OperationName+Attribute.swift"; sourceTree = "<group>"; };
+		1F0AC9E1222B5E4500870367 /* Variable */ = {isa = PBXFileReference; lastKnownFileType = text; path = Variable; sourceTree = "<group>"; };
 		1F0CF2C321EA420400E40086 /* KString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KString.swift; sourceTree = "<group>"; };
 		1F0CF2C621EBA8C800E40086 /* Keyword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keyword.swift; sourceTree = "<group>"; };
 		1F0CF2D421EEB69300E40086 /* Program.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Program.swift; sourceTree = "<group>"; };
@@ -350,7 +352,7 @@
 		1F8DF7882208CC13006351B0 /* BinarySearch */ = {isa = PBXFileReference; lastKnownFileType = text; path = BinarySearch; sourceTree = "<group>"; };
 		1F8DF78A2208CC54006351B0 /* Recursion */ = {isa = PBXFileReference; lastKnownFileType = text; path = Recursion; sourceTree = "<group>"; };
 		1F8DF78C2208CCB0006351B0 /* ForLoop */ = {isa = PBXFileReference; lastKnownFileType = text; path = ForLoop; sourceTree = "<group>"; };
-		1F8DF78E2208CCEE006351B0 /* FunctionDefinition */ = {isa = PBXFileReference; lastKnownFileType = text; path = FunctionDefinition; sourceTree = "<group>"; };
+		1F8DF78E2208CCEE006351B0 /* Function */ = {isa = PBXFileReference; lastKnownFileType = text; path = Function; sourceTree = "<group>"; };
 		1F8DF7912208D2E5006351B0 /* WhileLoop */ = {isa = PBXFileReference; lastKnownFileType = text; path = WhileLoop; sourceTree = "<group>"; };
 		1F8DF79322093690006351B0 /* String+Subscript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Subscript.swift"; sourceTree = "<group>"; };
 		1F8DF7982209381B006351B0 /* Boolean Logic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Boolean Logic.swift"; sourceTree = "<group>"; };
@@ -630,10 +632,11 @@
 			children = (
 				1F6D09FA220A439200807377 /* Algorithms */,
 				1FE1697A21F2EC070006712C /* Conditionals */,
-				1F09371821F672CD00E707BD /* DateTime */,
+				1F09371821F672CD00E707BD /* Benchmarking */,
 				1F0A90DE21F7E94200432B17 /* ErrorHandling */,
 				1F8DF78C2208CCB0006351B0 /* ForLoop */,
-				1F8DF78E2208CCEE006351B0 /* FunctionDefinition */,
+				1F8DF78E2208CCEE006351B0 /* Function */,
+				1F0AC9E1222B5E4500870367 /* Variable */,
 				1F8DF72B22050110006351B0 /* List */,
 				1F8DF76D22074B9C006351B0 /* Multiline */,
 				1F09370E21F5800B00E707BD /* String */,
@@ -918,7 +921,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1FE1697321F28F1E0006712C /* Tests in Resources */,
-				1F8DF78F2208CCEE006351B0 /* FunctionDefinition in Resources */,
+				1F8DF78F2208CCEE006351B0 /* Function in Resources */,
 				1F8DF78D2208CCB0006351B0 /* ForLoop in Resources */,
 				1FDC865122136AB600EAC346 /* FindBest in Resources */,
 				1F09370F21F5800B00E707BD /* String in Resources */,
@@ -929,6 +932,7 @@
 				1F8DF78B2208CC54006351B0 /* Recursion in Resources */,
 				1FDC863B22132F4300EAC346 /* tangent_plane_kelvin.png in Resources */,
 				1F8DF7922208D2E5006351B0 /* WhileLoop in Resources */,
+				1F0AC9E2222B5E4500870367 /* Variable in Resources */,
 				1FDC865222136AB600EAC346 /* DiceRoll in Resources */,
 				1FC67C9B2224D1B200A8E6BC /* Integration in Resources */,
 				1F09370721F56F9C00E707BD /* Differentiation in Resources */,
@@ -939,7 +943,7 @@
 				1FDC865022136AB600EAC346 /* Arcane in Resources */,
 				1F8DF7892208CC13006351B0 /* BinarySearch in Resources */,
 				1FC67CAD2228715B00A8E6BC /* Greeting in Resources */,
-				1F09371921F672CD00E707BD /* DateTime in Resources */,
+				1F09371921F672CD00E707BD /* Benchmarking in Resources */,
 				1F8DF7AD2209538A006351B0 /* FlatMap in Resources */,
 				1FDC863A22132F4300EAC346 /* tangent_plane_grapher.png in Resources */,
 				1FC67C80221E307A00A8E6BC /* TwoSampleTTest in Resources */,

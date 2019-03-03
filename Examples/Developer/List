@@ -1,10 +1,12 @@
 def l1 = {1, 2, 3, 4, 5}
 
-# Concatenation
+# Append
 def l2 = (l1 ++ {6, 7, 8, 9, 10})
+assert l2 == (1...10).map {$1}
 
 # Map
 def l3 = (l2 | $0 + $1)
+assert l3 == l2.map {$0 + $1}
 
 # Filter
 def l4 = (l1 |? $0 % 2 == 0)
@@ -21,5 +23,8 @@ l1 := (l1 rm 3)
 # Subscript by range
 l6 := l1[1,2]
 
+# Reverse
+assert reverse(l1) == {5, 4, 3, 2, 1}
 
-
+# Produces "gip a ma I"
+reverse("I am a pig" as list) ~ $0 & $1

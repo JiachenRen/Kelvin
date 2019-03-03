@@ -1,0 +1,12 @@
+# Defining variables
+def a = 3
+b := 4
+
+assert a + b == 7
+
+# Mutating a variable
+a++
+b += 1
+
+# a is now 4, b is now 5
+println "a is " & a & ", b is " & b

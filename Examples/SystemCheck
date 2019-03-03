@@ -29,10 +29,11 @@ file_paths | (run $0)
 
 def dev_files = {
     "Conditionals",
-    "DateTime",
+    "Benchmarking",
     "ErrorHandling",
     "ForLoop",
-    "FunctionDefinition",
+    "Function",
+    "Variable",
     "List",
     "Loops",
     "Multiline",

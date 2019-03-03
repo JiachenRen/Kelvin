@@ -121,8 +121,8 @@ public extension OperationName {
     public static let not = "not"
     
     // Definition & deletion
-    public static let def = "def"
-    public static let define = "define"
+    public static let define = "def"
+    public static let assign = "assign"
     public static let del = "del"
     
     // Mutating binary function

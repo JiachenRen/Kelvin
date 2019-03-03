@@ -13,11 +13,11 @@ public extension Developer {
     /// Variable/function definition and deletion;
     /// increment, decrement, assignment...
     static let assignmentOperations: [Operation] = [
-        .unary(.def, Equation.self) {
+        .unary(.define, Equation.self) {
             try $0.define()
             return KString("done")
         },
-        .unary(.def, Function.self) {
+        .unary(.define, Function.self) {
             var fun = $0
             var closure = try Assert.cast(fun.elements.last, to: Closure.self)
             fun.elements.removeLast()
@@ -25,8 +25,8 @@ public extension Developer {
             try fun.implement(using: closure)
             return KString("done")
         },
-        .binary(.define, [.any, .any]) {
-            return Function(.def, [Equation(lhs: $0, rhs: $1)])
+        .binary(.assign, [.any, .any]) {
+            return Function(.define, [Equation(lhs: $0, rhs: $1)])
         },
         .unary(.del, Variable.self) {v in
             Variable.delete(v.name)

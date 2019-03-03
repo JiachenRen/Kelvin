@@ -1,5 +1,5 @@
 # String concatenation
-println "you " & "are " & "a " & "pig!"
+println "you " & "are " & "a " & "genius!"
 
 println (random()...10 ~ $0 & $1)
 
