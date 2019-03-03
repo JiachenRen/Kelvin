@@ -9,7 +9,8 @@
 import Cocoa
 import Highlightr
 
-fileprivate let defaultTheme = "github"
+fileprivate let defaultDarkTheme = "agate"
+fileprivate let defaultLightTheme = "default"
 fileprivate let defaultLanguage = "ruby" // "ruby" and "crystal" also works fine
 
 class ConsoleViewController: NSViewController, NSTextViewDelegate {
@@ -53,7 +54,7 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
     }
     
     /// Theme for the JS syntax highlighting engine.
-    var theme: String = defaultTheme {
+    var theme: String = defaultLightTheme {
         didSet {
             editorTextStorage.highlightr.setTheme(to: theme)
             updateInterfaceByTheme()
@@ -72,7 +73,6 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
     var editorTextStorage: CodeAttributedString = {
         let storage = CodeAttributedString()
         storage.language = defaultLanguage
-        storage.highlightr.setTheme(to: defaultTheme)
         return storage
     }()
     
@@ -88,9 +88,23 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
         editorTextView.enabledTextCheckingTypes = 0
         editorTextView.layoutManager?.replaceTextStorage(editorTextStorage)
         editorTextView.setUpLineNumberView()
-        updateInterfaceByTheme()
+        
+        // Use the theme that matches the current system appearance
+        theme = view.isDarkMode() ? defaultDarkTheme : defaultLightTheme
         
         Program.io = self
+        
+        // Listen to the notif posted when switching between dark/light mode
+        DistributedNotificationCenter.default.addObserver(
+            self,
+            selector: #selector(themeChanged),
+            name: NSNotification.Name(rawValue: "AppleInterfaceThemeChangedNotification"),
+            object: nil
+        )
+    }
+    
+    @objc func themeChanged() {
+        theme = view.isDarkMode() ? defaultDarkTheme : defaultLightTheme
     }
 
     /// Derive text color from current theme and language
@@ -123,16 +137,24 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
         let inverted = NSColor(calibratedRed: r, green: g, blue: b, alpha: 1)
         editorTextView.insertionPointColor = inverted
         editorTextView.lineNumberView.foregroundColor = inverted.withAlphaComponent(0.5)
+        let grayScale = sqrt(pow(c.redComponent, 2) + pow(c.greenComponent, 2) + pow(c.blueComponent, 2))
+        let alpha: CGFloat = grayScale > 0.5 ? 0.1 : 0.2
+        let selectedTextAttributes = [
+            NSAttributedString.Key.backgroundColor: textColor?.withAlphaComponent(alpha) ?? inverted.withAlphaComponent(alpha)
+        ]
+        editorTextView.selectedTextAttributes = selectedTextAttributes
         
         // Console text view
         consoleTextView.backgroundColor = bgdColor
         consoleTextView.font = font
         consoleTextView.textColor = textColor
+        consoleTextView.selectedTextAttributes = selectedTextAttributes
         
         // Debugger text view
         debuggerTextView.backgroundColor = bgdColor
         debuggerTextView.font = font
         debuggerTextView.textColor = textColor
+        debuggerTextView.selectedTextAttributes = selectedTextAttributes
     }
     
     /**
@@ -180,12 +202,7 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
         programExecQueue.asyncAfter(deadline: .now() + 0.1, execute: execTask!)
     }
     
-    func textView(
-        _ textView: NSTextView,
-        completions words: [String],
-        forPartialWordRange charRange: NSRange,
-        indexOfSelectedItem index: UnsafeMutablePointer<Int>?
-    ) -> [String] {
+    func textView(_ textView: NSTextView, completions words: [String], forPartialWordRange charRange: NSRange, indexOfSelectedItem index: UnsafeMutablePointer<Int>?) -> [String] {
         guard textView === editorTextView else {
             return []
         }

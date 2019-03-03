@@ -82,6 +82,17 @@ let listAndPairOperations: [Operation] = [
         try Assert.index(list.count, idx)
         return list[idx]
     },
+    .binary(.get, List.self, Node.self) {(list, n) in
+        let values = list.elements.filter {
+            if let key = ($0 as? Pair)?.lhs {
+                return key === n
+            }
+            return false
+        }.map {
+            ($0 as! Pair).rhs
+        }
+        return values.count == 1 ? values[0] : List(values)
+    },
     .binary(.get, ListProtocol.self, List.self) {(list, idxList) in
         let indices = try Assert.specialize(list: idxList, as: Int.self)
         guard indices.count == 2 else {

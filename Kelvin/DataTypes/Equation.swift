@@ -127,9 +127,7 @@ public struct Equation: BinaryNode, NaN {
         }
         
         // Use the rhs of the equation as a template to create function definition.
-        var closure = Closure(rhs)
-        closure.capturesReturn = true
-        try fun.implement(using: closure)
+        try fun.implement(using: Closure(rhs, capturesReturn: true))
     }
 
     /**

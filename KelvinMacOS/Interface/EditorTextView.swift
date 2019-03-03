@@ -42,5 +42,4 @@ class EditorTextView: NSTextView {
         isSelecting = false
         
     }
-    
 }

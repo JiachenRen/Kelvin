@@ -1,0 +1,22 @@
+def dict = {
+    1,
+    2,
+    3,
+    a,
+    b,
+    "what": ("is": {"this", shit^2}),
+    d: e,
+    d: q,
+    c: {a, b},
+    m: {m, o: {r, p, g}}
+}
+
+dict[d]
+dict[c][0]
+dict["what"][1]
+√dict["what"][1][1]
+dict[shit]
+
+# Prints rpg
+println dict[m][o] ~ $0 & $1
+

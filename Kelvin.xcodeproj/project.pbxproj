@@ -61,6 +61,8 @@
 		1F0AC9DF222B2DAA00870367 /* OperationName+Attribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0AC9DD222B29C300870367 /* OperationName+Attribute.swift */; };
 		1F0AC9E0222B2E2500870367 /* OperationName+Attribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0AC9DD222B29C300870367 /* OperationName+Attribute.swift */; };
 		1F0AC9E2222B5E4500870367 /* Variable in Resources */ = {isa = PBXBuildFile; fileRef = 1F0AC9E1222B5E4500870367 /* Variable */; };
+		1F0AC9E4222B7AEA00870367 /* Dictionary in Resources */ = {isa = PBXBuildFile; fileRef = 1F0AC9E3222B7AEA00870367 /* Dictionary */; };
+		1F0AC9E6222B958500870367 /* NSView+DarkMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0AC9E5222B958500870367 /* NSView+DarkMode.swift */; };
 		1F0CF2C421EA420400E40086 /* KString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* KString.swift */; };
 		1F0CF2C521EA428000E40086 /* KString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* KString.swift */; };
 		1F0CF2C721EBA8C800E40086 /* Keyword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C621EBA8C800E40086 /* Keyword.swift */; };
@@ -308,6 +310,8 @@
 		1F0A90EC21FA27E700432B17 /* LinearAlgebra.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearAlgebra.swift; sourceTree = "<group>"; };
 		1F0AC9DD222B29C300870367 /* OperationName+Attribute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OperationName+Attribute.swift"; sourceTree = "<group>"; };
 		1F0AC9E1222B5E4500870367 /* Variable */ = {isa = PBXFileReference; lastKnownFileType = text; path = Variable; sourceTree = "<group>"; };
+		1F0AC9E3222B7AEA00870367 /* Dictionary */ = {isa = PBXFileReference; lastKnownFileType = text; path = Dictionary; sourceTree = "<group>"; };
+		1F0AC9E5222B958500870367 /* NSView+DarkMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSView+DarkMode.swift"; sourceTree = "<group>"; };
 		1F0CF2C321EA420400E40086 /* KString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KString.swift; sourceTree = "<group>"; };
 		1F0CF2C621EBA8C800E40086 /* Keyword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keyword.swift; sourceTree = "<group>"; };
 		1F0CF2D421EEB69300E40086 /* Program.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Program.swift; sourceTree = "<group>"; };
@@ -636,6 +640,7 @@
 				1F0A90DE21F7E94200432B17 /* ErrorHandling */,
 				1F8DF78C2208CCB0006351B0 /* ForLoop */,
 				1F8DF78E2208CCEE006351B0 /* Function */,
+				1F0AC9E3222B7AEA00870367 /* Dictionary */,
 				1F0AC9E1222B5E4500870367 /* Variable */,
 				1F8DF72B22050110006351B0 /* List */,
 				1F8DF76D22074B9C006351B0 /* Multiline */,
@@ -814,6 +819,7 @@
 				1FE487F2220E4132005361AC /* ConsoleViewController+IOProtocol.swift */,
 				1FC67C872224259700A8E6BC /* NSTextView+LineNumberRulerView.swift */,
 				1FFD8CAB218F50870004ECEB /* Main.storyboard */,
+				1F0AC9E5222B958500870367 /* NSView+DarkMode.swift */,
 			);
 			path = Interface;
 			sourceTree = "<group>";
@@ -942,6 +948,7 @@
 				1F8DF72C22050110006351B0 /* List in Resources */,
 				1FDC865022136AB600EAC346 /* Arcane in Resources */,
 				1F8DF7892208CC13006351B0 /* BinarySearch in Resources */,
+				1F0AC9E4222B7AEA00870367 /* Dictionary in Resources */,
 				1FC67CAD2228715B00A8E6BC /* Greeting in Resources */,
 				1F09371921F672CD00E707BD /* Benchmarking in Resources */,
 				1F8DF7AD2209538A006351B0 /* FlatMap in Resources */,
@@ -1102,6 +1109,7 @@
 				1F09370421F54E6200E707BD /* Calculus.swift in Sources */,
 				1F8DF79F220939CE006351B0 /* String.swift in Sources */,
 				1F6D09FC220B98AA00807377 /* ConsoleViewController.swift in Sources */,
+				1F0AC9E6222B958500870367 /* NSView+DarkMode.swift in Sources */,
 				1F0936F421F5184400E707BD /* Float80+Value.swift in Sources */,
 				1FFD8CA8218F50850004ECEB /* Kelvin.xcdatamodeld in Sources */,
 				1F0936CE21F4E36300E707BD /* Probability.swift in Sources */,

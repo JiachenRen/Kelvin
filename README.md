@@ -260,6 +260,8 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 - [x] Chained subscript access
   - Access by index
   - Access by range
+  - Access by `Key : Value`
+    - Works exactly like a `JSON` object, but a lot more flexible!
 - [x] Size
 
 ### Boolean logic
