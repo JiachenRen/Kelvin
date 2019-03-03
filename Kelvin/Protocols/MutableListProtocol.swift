@@ -36,8 +36,12 @@ extension MutableListProtocol {
      */
     public func simplify() throws -> Node {
         var copy = self
-        copy.elements = try elements.map {
-            try $0.simplify()
+        do {
+            copy.elements = try elements.map {
+                try $0.simplify()
+            }
+        } catch let e as KelvinError {
+            throw ExecutionError.onNode(self, err: e)
         }
         return copy
     }

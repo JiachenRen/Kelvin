@@ -88,7 +88,7 @@ public struct Program {
                 let log = Log(line: $0.line, input: $0.node, output: result)
                 Program.io?.log(log)
             } catch let e as KelvinError {
-                throw ExecutionError.on(line: $0.line, err: e)
+                throw ExecutionError.onLine($0.line, err: e)
             }
         }
 

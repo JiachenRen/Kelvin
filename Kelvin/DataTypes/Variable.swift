@@ -121,9 +121,13 @@ public struct Variable: LeafNode, NaN {
      */
     public func simplify() throws -> Node {
         if let def = definition {
-            // If the definition is not a constant, return the definition
-            return try isConstant && Mode.shared.rounding == .exact ?
-                self : def.simplify()
+            do {
+                // If the definition is not a constant, return the definition
+                return try isConstant && Mode.shared.rounding == .exact ?
+                    self : def.simplify()
+            } catch let e as KelvinError {
+                throw ExecutionError.onNode(self, err: e)
+            }
         }
         return self
     }

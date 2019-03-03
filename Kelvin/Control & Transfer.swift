@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum Transfer: KelvinError {
+enum Transfer: Error {
     case `return`(_ node: Node)
     case `throw`(_ node: Node)
     
@@ -33,7 +33,7 @@ enum Transfer: KelvinError {
     }
 }
 
-enum Control: KelvinError {
+enum Control: Error {
     case `continue`
     case `break`
     

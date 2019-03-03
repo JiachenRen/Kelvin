@@ -181,36 +181,39 @@ public struct Function: MutableListProtocol {
 
         // Make a copy of self.
         var copy = self
-
-        // Simplify each argument, if requested.
-        if !name[.preservesArguments] {
-            let preservesFirst = name[.preservesFirstArgument]
-            let args = try copy.elements.enumerated().map {(arg) -> Node in
-                let (i, e) = arg
-                if preservesFirst && i == 0 {
-                    return e
+        
+        do {
+            // Simplify each argument, if requested.
+            if !name[.preservesArguments] {
+                let preservesFirst = name[.preservesFirstArgument]
+                let args = try copy.elements.enumerated().map {(arg) -> Node in
+                    let (i, e) = arg
+                    if preservesFirst && i == 0 {
+                        return e
+                    }
+                    return try e.simplify()
                 }
-                return try e.simplify()
+                copy = Function(name, args)
             }
-            copy = Function(name, args)
-        }
 
-        // If the operation can be performed on the given arguments, perform the operation.
-        // Then, the result of the operation is simplified;
-        // otherwise returns a copy of the original function with each argument simplified.
-        if let s = try copy.invoke()?.simplify() {
-            return s
-        } else if name[.commutative] {
-            
-            // Try simplifying in the reserve order if the function is commutative
-            if copy.count > 2 {
-                let after = try Operation.simplifyCommutatively(copy.elements, by: name)
-                return after.complexity < copy.complexity ? after : copy
+            // If the operation can be performed on the given arguments, perform the operation.
+            // Then, the result of the operation is simplified;
+            // otherwise returns a copy of the original function with each argument simplified.
+            if let s = try copy.invoke()?.simplify() {
+                return s
+            } else if name[.commutative] {
+                // Try simplifying in the reserve order if the function is commutative
+                if copy.count > 2 {
+                    let after = try Operation.simplifyCommutatively(copy.elements, by: name)
+                    return after.complexity < copy.complexity ? after : copy
+                }
             }
-        }
 
-        // Cannot be further simplified
-        return copy
+            // Cannot be further simplified
+            return copy
+        } catch let e as KelvinError {
+            throw ExecutionError.onNode(self, err: e)
+        }
     }
     
     public func implement(using template: Node) throws {

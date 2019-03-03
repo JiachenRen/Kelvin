@@ -80,8 +80,8 @@ public class Gamma {
         
         if value < 0 {
             throw ExecutionError.domain(
-                KString("internal:logForGamma"),
-                value, lowerBound: 0,
+                value,
+                lowerBound: 0,
                 upperBound: Float80.infinity
             )
         }

@@ -67,7 +67,6 @@ let listAndPairOperations: [Operation] = [
             return pair.rhs
         default:
             throw ExecutionError.indexOutOfBounds(
-                nil,
                 maxIdx: 1,
                 idx: idx
             )
@@ -96,7 +95,7 @@ let listAndPairOperations: [Operation] = [
     .binary(.get, ListProtocol.self, List.self) {(list, idxList) in
         let indices = try Assert.specialize(list: idxList, as: Int.self)
         guard indices.count == 2 else {
-            throw ExecutionError.invalidSubscript(nil, list, idxList)
+            throw ExecutionError.invalidSubscript(list, idxList)
         }
         return try List(list.subsequence(from: indices[0], to: indices[1]))
     },

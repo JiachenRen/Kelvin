@@ -36,64 +36,83 @@ indirect public enum CompilerError: KelvinError {
 
 public enum ExecutionError: KelvinError {
     case general(errMsg: String)
-    case on(line: Int, err: KelvinError)
+    case onLine(_ line: Int, err: KelvinError)
+    case onNode(_ node: Node, err: KelvinError)
     case cancelled
-    case unexpected(_ node: Node?)
-    case invalidType(_ node: Node?, invalidTypeLiteral: String)
-    case unexpectedType(_ node: Node?, expected: DataType, found: DataType)
-    case indexOutOfBounds(_ node: Node?, maxIdx: Int, idx: Int)
+    case unexpected
+    case invalidType(invalidTypeLiteral: String)
+    case unexpectedType(expected: DataType, found: DataType)
+    case indexOutOfBounds(maxIdx: Int, idx: Int)
     case dimensionMismatch(_ a: Node, _ b: Node)
-    case domain(_ node: Node?, _ val: Value, lowerBound: Value, upperBound: Value)
-    case invalidRange(_ node: Node?, lowerBound: Value, upperBound: Value)
-    case invalidSubscript(_ node: Node?, _ target: Node, _ subscript: Node)
+    case domain(_ val: Value, lowerBound: Value, upperBound: Value)
+    case invalidRange(lowerBound: Value, upperBound: Value)
+    case invalidSubscript(_ target: Node, _ subscript: Node)
     case invalidCast(from: Node, to: DataType)
     case circularDefinition
     case nonSquareMatrix
     
-    private func err(on node: Node?, _ errMsg: String) -> String {
-        return "error when executing statement `\(node?.stringified ?? "")`: \(errMsg)"
+    private static func getRootCause(_ err: KelvinError) -> String {
+        guard let execErr = err as? ExecutionError else {
+            return err.localizedDescription
+        }
+        switch execErr {
+        case .onLine(_, err: let e), .onNode(_, err: let e):
+            if let execErr = e as? ExecutionError {
+                return getRootCause(execErr)
+            }
+            return e.localizedDescription
+        default:
+            return execErr.localizedDescription
+        }
+    }
+    
+    public func stackTrace() -> String {
+        switch self {
+        case .onNode(let n, err: let e):
+            let location = "\n\tat \(n.stringified)"
+            if let execErr = e as? ExecutionError {
+                let trace = execErr.stackTrace()
+                return trace + location
+            }
+            return e.localizedDescription + location
+        default:
+            return localizedDescription
+        }
     }
     
     public var localizedDescription: String {
         switch self {
         case .general(errMsg: let msg):
-            return "error: \(msg)"
-        case .on(line: let i, err: let e):
-            var msg = e.localizedDescription
-            if let execErr = e as? ExecutionError {
-                switch execErr {
-                case .general(errMsg: let errMsg):
-                    msg = errMsg
-                default:
-                    break
-                }
-            }
-            return "error on line \(i) - \(msg)"
+            return "\(msg)"
+        case .onLine(let i, err: let e):
+            return "error on line \(i) - \(e.localizedDescription)"
+        case .onNode(_, _):
+            return stackTrace()
         case .cancelled:
             return "program execution has been cancelled"
-        case .unexpected(let node):
-            return err(on: node, " an unexpected error has occurred")
-        case .invalidType(let node, invalidTypeLiteral: let literal):
-            return err(on: node, "`\(literal)` is not a valid type")
-        case .unexpectedType(let node, let expected, let found):
-            return "error: expected \(expected) in `\(node?.stringified ?? "")`, but found \(found) instead"
-        case .indexOutOfBounds(let node, maxIdx: let maxIdx, idx: let idx):
-            return err(on: node, "index out of bounds; max index is \(maxIdx), but an index of \(idx) is given")
+        case .unexpected:
+            return "an unexpected error has occurred"
+        case .invalidType(invalidTypeLiteral: let literal):
+            return "`\(literal)` is not a valid type"
+        case .unexpectedType(let expected, let found):
+            return "expected \(expected), but found \(found) instead"
+        case .indexOutOfBounds(maxIdx: let maxIdx, idx: let idx):
+            return "index out of bounds; max index is \(maxIdx), but an index of \(idx) is given"
         case .dimensionMismatch(let a, let b):
-            return "error: dimension mismatch in \(a.stringified) and \(b.stringified)"
-        case .domain(let node, let val, lowerBound: let lb, upperBound: let ub):
-            return err(on: node, "expecting an input between \(lb) and \(ub), but found \(val)")
-        case .invalidSubscript(let node, let target, let sub):
-            return err(on: node, "cannot subscript \(target.stringified) by \(sub.stringified)")
-        case .invalidRange(let node, lowerBound: let lb, upperBound: let ub):
-            return err(on: node, "cannot form range from \(lb) to \(ub)")
+            return "dimension mismatch in \(a.stringified) and \(b.stringified)"
+        case .domain(let val, lowerBound: let lb, upperBound: let ub):
+            return "expecting an input between \(lb) and \(ub), but found \(val)"
+        case .invalidSubscript(let target, let sub):
+            return "cannot subscript \(target.stringified) by \(sub.stringified)"
+        case .invalidRange(lowerBound: let lb, upperBound: let ub):
+            return "cannot form range from \(lb) to \(ub)"
         case .invalidCast(from: let node, to: let type):
             let nodeType = (try? DataType.resolve(node).description) ?? "unknown"
-            return "error: cannot convert node from `\(node.stringified)` aka. \(nodeType) to \(type)"
+            return "cannot cast `\(node.stringified)` of type \(nodeType) to \(type)"
         case .circularDefinition:
-            return "error: circular definition"
+            return "circular definition"
         case .nonSquareMatrix:
-            return "error: non-square matrix"
+            return "non-square matrix"
         }
     }
 }

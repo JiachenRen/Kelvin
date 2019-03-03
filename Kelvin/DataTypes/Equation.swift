@@ -49,9 +49,13 @@ public struct Equation: BinaryNode, NaN {
     public func simplify() throws -> Node {
         var eq = self
 
-        // Simplify left and right side.
-        eq.lhs = try lhs.simplify()
-        eq.rhs = try rhs.simplify()
+        do {
+            // Simplify left and right side.
+            eq.lhs = try lhs.simplify()
+            eq.rhs = try rhs.simplify()
+        } catch let e as KelvinError {
+            throw ExecutionError.onNode(self, err: e)
+        }
 
         // After simplification, lhs = rhs, equation is always true.
         if mode.rawValue.contains("=") && eq.lhs === eq.rhs {

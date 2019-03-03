@@ -79,7 +79,7 @@ extension ConsoleViewController: ConsoleDelegate {
             self.println(KString(input))
             return input
         }
-        throw ExecutionError.unexpected(nil)
+        throw ExecutionError.unexpected
     }
     
     func editableAfterIndex() -> Int {

@@ -42,6 +42,10 @@ public struct Pipeline: MutableListProtocol, NaN {
     }
     
     public func simplify() throws -> Node {
-        return try elements.map {try $0.simplify()}.last ?? KVoid()
+        do {
+            return try elements.map {try $0.simplify()}.last ?? KVoid()
+        } catch let e as KelvinError {
+            throw ExecutionError.onNode(self, err: e)
+        }
     }
 }
