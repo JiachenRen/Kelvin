@@ -19,7 +19,7 @@ Below is a screenshot of Kelvin IDE in the default theme (keep in mind that you 
 ![Finding Tangent with IDE and Kelvin](/Misc/Screenshots/finding_tangent.png "Finding Tangent")
 
 Another one of the **85** themes you can choose from that is my personal favorite, `tomorrow-night-blue`
-![Screenshot of IDE with Dark Theme](/Misc/Screenshots/kelvin_tomorrow_night_blue.png "IDE with dark theme")
+![Screenshot of IDE with Dark Theme](/Misc/Screenshots/kelvin_tomorrow_night_blue_theme.png "IDE with dark theme")
 
 Try it out, 'cause it's awesome ~~ why not??
 
