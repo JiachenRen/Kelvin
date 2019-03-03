@@ -11,7 +11,7 @@ import Highlightr
 
 fileprivate let defaultDarkTheme = "agate"
 fileprivate let defaultLightTheme = "default"
-fileprivate let defaultLanguage = "ruby" // "ruby" and "crystal" also works fine
+fileprivate let defaultLanguage = "kelvin" // "ruby" and "crystal" also works fine
 
 class ConsoleViewController: NSViewController, NSTextViewDelegate {
 
@@ -169,8 +169,9 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
         do {
             log("compiling...")
             let t = time
-            let program = try Compiler.compile(document: sourceCode, workItem: workItem)
+            var program = try Compiler.compile(document: sourceCode, workItem: workItem)
             log("compilation successful in \(time - t) seconds.")
+            program.config = Program.Configuration(scope: .useDefault, retentionPolicy: .restoreToDefault)
             try program.run(workItem: workItem)
         } catch let e as KelvinError {
             log(e.localizedDescription)

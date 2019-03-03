@@ -9,12 +9,12 @@ Kelvin is a powerful computer algebra system built with _Swift 4_. Aside from AP
 
 ## MacOS User Interface
 
-Finally, the UI is here! Well, it is rather simple, but isn't that a good thing? Using `Highlightr` (which uses [highlight.js](https://highlightjs.org "highlight.js homepage") at its core), the editor supports **185** languages and **89** themes. That's just something extra and useless imo but hey, it looks great!
+Finally, the UI is here! Using `Highlightr` (which uses [highlight.js](https://highlightjs.org "highlight.js homepage") at its core), the editor supports **186** languages and **89** themes. (That's just something extra and useless imo but hey, it looks great!) The `highlight.js` core is modified to support syntax highlighting for kelvin language, which is used by default.
 
 ### Integrated Development Environment
-Well, it is primitive as of now... but it gets the job done! It sort of works like the old [Swift Playground](https://developer.apple.com/swift-playgrounds/ "Apple's Introduction on Swift Playgrounds") - that is, as you edit your code, the editor automatically compiles and runs it for you! Only this time, it is faster (imo of course...). The window on the lower left is the `console`, all program outputs go in there. The window on the lower right is the `debugger`, all execution logs including compilation time, run time, errors, and step by step execution result go in there. 
+The IDE works like the old [Swift Playground](https://developer.apple.com/swift-playgrounds/ "Apple's Introduction on Swift Playgrounds") - that is, as you edit your code, the editor automatically compiles and runs it for you! Only this time, it is faster. The window on the lower left is the `console`, which serves as the program's `IO` interface. The window on the lower right is the `debugger`, all execution logs including compilation time, run time, errors & stack trace, and step by step execution result go in there. 
 
-Below is a screenshot of Kelvin IDE in default `github` theme, highlighted using `ruby`'s syntax (keep in mind that you can choose from a large poo of candidates). The screenshot demonstrates how to find the **tangent line/plane** of multivariate functions. (Notice how the whole script is compiled and evaluated in under **0.1 seconds**!) Even if the execution time lasts longer, there won't be any lagging since the scripts run on a separate thread and are cancelled/started automatically. 
+Below is a screenshot of Kelvin IDE in the default theme (keep in mind that you can choose from a large poo of candidates), highlighted using `kelvin`'s syntax . The screenshot demonstrates how to find the **tangent line/plane** of multivariate functions. (Notice how the whole script is compiled and evaluated in under **0.1 seconds**!) Even if the execution time lasts longer, there won't be any lagging since the scripts run on a separate thread and are cancelled/started automatically. 
 
 ![Finding Tangent with IDE and Kelvin](/Misc/Screenshots/finding_tangent.png "Finding Tangent")
 
@@ -22,6 +22,9 @@ Another one of the **85** themes you can choose from that is my personal favorit
 ![Screenshot of IDE with Dracula Theme](/Misc/Screenshots/ruby_dracula_theme.png "IDE with Dracula theme")
 
 Try it out, 'cause it's awesome ~~ why not??
+
+### Support for Dark Mode on Sierra
+The IDE now automatically chooses/changes its theme according to the system's theme! (You can still customize if wanted)
 
 ## Command Line
 ### Setup
