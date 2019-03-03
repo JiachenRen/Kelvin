@@ -1,5 +1,5 @@
 #  Examples
-This directory contains various examples that demonstrate how to the Kelvin language, from **basic programming capabilities** including _variable/function definition_, _loops_, _if statements_, _error handling_, etc. to powerful **built-in APIs** that carry advanced algebraic operations like _factorization_, _stat calculations_ (normCdf, etc.), _differentiation_, etc. 
+This directory contains various examples that demonstrate how to the Kelvin language, from **basic programming capabilities** including _variable/function definition_, _loops_, _if statements_, _error handling_, etc. to powerful **built-in APIs** that carry advanced algebraic operations like _factorization_, _stat calculations_ (normCdf, regression, etc.), _differentiation_, etc. 
 
 ## Table of Contents
 - Algebra
@@ -11,8 +11,10 @@ This directory contains various examples that demonstrate how to the Kelvin lang
 - Statistics
     - [One variable statistics](/Examples/Statistics/OneVar)
     - [Distribution](/Examples/Statistics/Distribution)
+    - [Regression](/Examples/Statistics/Regression)
 - Calculus
     - [Differentiation](/Examples/Calculus/Differentionation)
+    - [Integration](/Examples/Calculus/Integration)
 - Developer
     - Algorithms
         - [Binary search](/Examples/Developer/Algorithms/BinarySearch)
@@ -20,12 +22,14 @@ This directory contains various examples that demonstrate how to the Kelvin lang
         - [Recursion](/Examples/Developer/Algorithms/Recursion)
         - [Contains](/Examples/Developer/Algorithms/Contains)
     - [Conditional statements](/Examples/Developer/Conditionals)
-    - [Getting date & time](/Examples/Developer/DateTime)
+    - [Benchmarking](/Examples/Developer/Benchmarking)
     - [Error handling](/Examples/Developer/ErrorHandling)
     - [For loop](/Examples/Developer/ForLoop)
     - [While loop](/Examples/Developer/WhileLoop)
-    - [Variable/function definition](/Examples/Developer/FunctionDefinition)
-    - [List operations](/Examples/Developer/List)
+    - [Function](/Examples/Developer/Function)
+    - [Variable](/Examples/Developer/Variable)
+    - [List](/Examples/Developer/List)
+    - [Dictionary](/Examples/Developer/Dictionary)
     - [Working with string](/Examples/Developer/String)
     - [Subscript access](/Examples/Developer/Subscript)
     - [Trailing closure syntax](/Examples/Developer/TrailingClosure)
