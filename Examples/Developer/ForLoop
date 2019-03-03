@@ -39,7 +39,7 @@ assert l2 == {2, 4, 6, 2 * x, 2 * a, 2 * f(x), 2 * a + 2 * x}
 # Iterate through a string with for loop
 def str = "hello world"
 def chars = ""
-for (c: str as list) {
+for (c: str as @list) {
     chars &= c
     print c
 }

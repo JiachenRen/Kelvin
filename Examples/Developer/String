@@ -4,5 +4,5 @@ println "you " & "are " & "a " & "genius!"
 println (random()...10 ~ $0 & $1)
 
 # Iterating a stirng
-"123456" as list | $0
-assert (("123456" !! list | $0 ~ $0 & $1) == "123456")
+"123456" as @list | $0
+assert (("123456" !! @list | $0 ~ $0 & $1) == "123456")

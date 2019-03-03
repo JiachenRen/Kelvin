@@ -30,8 +30,8 @@
 		1F0936F121F513CF00E707BD /* MutableListProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936EF21F513AF00E707BD /* MutableListProtocol.swift */; };
 		1F0936F421F5184400E707BD /* Float80+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F321F5184400E707BD /* Float80+Value.swift */; };
 		1F0936F621F5186200E707BD /* Int+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F521F5186200E707BD /* Int+Value.swift */; };
-		1F0936F821F5189500E707BD /* Bool+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F721F5189500E707BD /* Bool+Value.swift */; };
-		1F0936FB21F518D000E707BD /* Bool+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F721F5189500E707BD /* Bool+Value.swift */; };
+		1F0936F821F5189500E707BD /* Bool+Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F721F5189500E707BD /* Bool+Node.swift */; };
+		1F0936FB21F518D000E707BD /* Bool+Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F721F5189500E707BD /* Bool+Node.swift */; };
 		1F0936FC21F518D000E707BD /* Float80+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F321F5184400E707BD /* Float80+Value.swift */; };
 		1F0936FD21F518D000E707BD /* Int+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F521F5186200E707BD /* Int+Value.swift */; };
 		1F09370121F51EC000E707BD /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F09370021F51EC000E707BD /* Vector.swift */; };
@@ -83,6 +83,9 @@
 		1F2E82D421975A94005C3353 /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82B521974368005C3353 /* Variable.swift */; };
 		1F2E82D521975A94005C3353 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AD2197331F005C3353 /* Function.swift */; };
 		1F2E82D621975A94005C3353 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AF2197338B005C3353 /* Node.swift */; };
+		1F322825222C76E0004417CB /* DataType+Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F322824222C76E0004417CB /* DataType+Node.swift */; };
+		1F322826222C7A2A004417CB /* DataType+Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F322824222C76E0004417CB /* DataType+Node.swift */; };
+		1F322827222C7A38004417CB /* DataType+Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F322824222C76E0004417CB /* DataType+Node.swift */; };
 		1F3974BC21E3970F006D6DC2 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974BB21E3970F006D6DC2 /* Error.swift */; };
 		1F3974BD21E39A7A006D6DC2 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974BB21E3970F006D6DC2 /* Error.swift */; };
 		1F3974BF21E3B741006D6DC2 /* LeafNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974BE21E3B741006D6DC2 /* LeafNode.swift */; };
@@ -133,7 +136,7 @@
 		1F8DF747220672BE006351B0 /* LinearAlgebra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90EC21FA27E700432B17 /* LinearAlgebra.swift */; };
 		1F8DF748220672BE006351B0 /* Relation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936DE21F4EB7A00E707BD /* Relation.swift */; };
 		1F8DF74B220672BE006351B0 /* Equation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974C421E633FD006D6DC2 /* Equation.swift */; };
-		1F8DF74C220672BE006351B0 /* Bool+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F721F5189500E707BD /* Bool+Value.swift */; };
+		1F8DF74C220672BE006351B0 /* Bool+Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F721F5189500E707BD /* Bool+Node.swift */; };
 		1F8DF74D220672BE006351B0 /* Float80+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F321F5184400E707BD /* Float80+Value.swift */; };
 		1F8DF74E220672BE006351B0 /* Int+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F521F5186200E707BD /* Int+Value.swift */; };
 		1F8DF74F220672BE006351B0 /* KString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C321EA420400E40086 /* KString.swift */; };
@@ -291,7 +294,7 @@
 		1F0936EF21F513AF00E707BD /* MutableListProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableListProtocol.swift; sourceTree = "<group>"; };
 		1F0936F321F5184400E707BD /* Float80+Value.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Float80+Value.swift"; sourceTree = "<group>"; };
 		1F0936F521F5186200E707BD /* Int+Value.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Value.swift"; sourceTree = "<group>"; };
-		1F0936F721F5189500E707BD /* Bool+Value.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bool+Value.swift"; sourceTree = "<group>"; };
+		1F0936F721F5189500E707BD /* Bool+Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bool+Node.swift"; sourceTree = "<group>"; };
 		1F09370021F51EC000E707BD /* Vector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vector.swift; sourceTree = "<group>"; };
 		1F09370321F54E6200E707BD /* Calculus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calculus.swift; sourceTree = "<group>"; };
 		1F09370621F56F9C00E707BD /* Differentiation */ = {isa = PBXFileReference; lastKnownFileType = text; path = Differentiation; sourceTree = "<group>"; };
@@ -323,6 +326,7 @@
 		1F2E82B521974368005C3353 /* Variable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Variable.swift; sourceTree = "<group>"; };
 		1F2E82BB219757FC005C3353 /* macOS Command Line Tool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "macOS Command Line Tool"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F2E82BD219757FC005C3353 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		1F322824222C76E0004417CB /* DataType+Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataType+Node.swift"; sourceTree = "<group>"; };
 		1F3974BB21E3970F006D6DC2 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		1F3974BE21E3B741006D6DC2 /* LeafNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeafNode.swift; sourceTree = "<group>"; };
 		1F3974C021E3B761006D6DC2 /* NaN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaN.swift; sourceTree = "<group>"; };
@@ -501,7 +505,8 @@
 		1F0936FF21F518E300E707BD /* ValueTypes */ = {
 			isa = PBXGroup;
 			children = (
-				1F0936F721F5189500E707BD /* Bool+Value.swift */,
+				1F0936F721F5189500E707BD /* Bool+Node.swift */,
+				1F322824222C76E0004417CB /* DataType+Node.swift */,
 				1F0936F321F5184400E707BD /* Float80+Value.swift */,
 				1F0936F521F5186200E707BD /* Int+Value.swift */,
 				1F0CF2C321EA420400E40086 /* KString.swift */,
@@ -1006,6 +1011,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F322827222C7A38004417CB /* DataType+Node.swift in Sources */,
 				1F0AC9DF222B2DAA00870367 /* OperationName+Attribute.swift in Sources */,
 				1FC67CA82227446900A8E6BC /* Assert.swift in Sources */,
 				1FC67CA42225B8A400A8E6BC /* GaussianElimination.swift in Sources */,
@@ -1040,7 +1046,7 @@
 				1F3D316E2202874C00462F10 /* Differentiation.swift in Sources */,
 				1F09370521F5618200E707BD /* Calculus.swift in Sources */,
 				1F09370221F51EDD00E707BD /* Vector.swift in Sources */,
-				1F0936FB21F518D000E707BD /* Bool+Value.swift in Sources */,
+				1F0936FB21F518D000E707BD /* Bool+Node.swift in Sources */,
 				1F0936FC21F518D000E707BD /* Float80+Value.swift in Sources */,
 				1F0936FD21F518D000E707BD /* Int+Value.swift in Sources */,
 				1F0936F121F513CF00E707BD /* MutableListProtocol.swift in Sources */,
@@ -1080,7 +1086,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F8DF79422093690006351B0 /* String+Subscript.swift in Sources */,
-				1F0936F821F5189500E707BD /* Bool+Value.swift in Sources */,
+				1F0936F821F5189500E707BD /* Bool+Node.swift in Sources */,
 				1F0A90E221F8C32B00432B17 /* String+Colors.swift in Sources */,
 				1F3974BF21E3B741006D6DC2 /* LeafNode.swift in Sources */,
 				1F8DF7812207EE9A006351B0 /* KVoid.swift in Sources */,
@@ -1131,6 +1137,7 @@
 				1F8DF78522089E30006351B0 /* Pipeline.swift in Sources */,
 				1F3D31622201FE0800462F10 /* Number.swift in Sources */,
 				1F0CF2C721EBA8C800E40086 /* Keyword.swift in Sources */,
+				1F322825222C76E0004417CB /* DataType+Node.swift in Sources */,
 				1F09371D21F684D500E707BD /* Scope.swift in Sources */,
 				1F94B7A6221C738000C47B1D /* EditorTextView.swift in Sources */,
 				1F8DF73022050B5B006351B0 /* IOProtocol.swift in Sources */,
@@ -1158,6 +1165,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F322826222C7A2A004417CB /* DataType+Node.swift in Sources */,
 				1F0AC9E0222B2E2500870367 /* OperationName+Attribute.swift in Sources */,
 				1FC67CA92227447F00A8E6BC /* Assert.swift in Sources */,
 				1FC67CA52225B8B100A8E6BC /* GaussianElimination.swift in Sources */,
@@ -1192,7 +1200,7 @@
 				1F8DF747220672BE006351B0 /* LinearAlgebra.swift in Sources */,
 				1F8DF748220672BE006351B0 /* Relation.swift in Sources */,
 				1F8DF74B220672BE006351B0 /* Equation.swift in Sources */,
-				1F8DF74C220672BE006351B0 /* Bool+Value.swift in Sources */,
+				1F8DF74C220672BE006351B0 /* Bool+Node.swift in Sources */,
 				1F8DF74D220672BE006351B0 /* Float80+Value.swift in Sources */,
 				1F8DF74E220672BE006351B0 /* Int+Value.swift in Sources */,
 				1F8DF74F220672BE006351B0 /* KString.swift in Sources */,

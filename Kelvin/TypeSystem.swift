@@ -21,10 +21,13 @@ public enum DataType: String, CustomStringConvertible {
     case function
     case bool
     case closure
+    case type
     
     public var description: String {
         return rawValue
     }
+    
+    static let symbol = "@"
     
     static func resolve<T>(_ type: T.Type) throws -> DataType {
         if type == KString.self {
@@ -51,6 +54,8 @@ public enum DataType: String, CustomStringConvertible {
             return .bool
         } else if type == Closure.self {
             return .closure
+        } else if type == DataType.self {
+            return .type
         }
         throw ExecutionError.general(errMsg: "\(String(describing: type)) is not a valid type")
     }
@@ -79,6 +84,8 @@ public enum DataType: String, CustomStringConvertible {
             return .function
         } else if node is Bool {
             return .bool
+        } else if node is DataType {
+            return .type
         }
         throw ExecutionError.general(errMsg: "unable to resolve type of \(node)")
     }
@@ -95,6 +102,7 @@ public enum ParameterType: Int, Equatable {
     case number
     case nan
     case `var`
+    case type
     case `func`
     case closure
     case bool
@@ -145,6 +153,8 @@ public enum ParameterType: Int, Equatable {
             return .any
         } else if type == Closure.self {
             return .closure
+        } else if type == DataType.self {
+            return .type
         }
         throw ExecutionError.general(errMsg: "\(String(describing: type)) is not a valid type")
     }

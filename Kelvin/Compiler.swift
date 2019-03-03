@@ -668,6 +668,14 @@ public class Compiler {
                 // Flow control & transfer (return, throw, continue, break)
                 return fun
             } else {
+                if expr.starts(with: DataType.symbol) {
+                    expr.removeFirst()
+                    guard let type = DataType(rawValue: expr) else {
+                        throw CompilerError.syntax(errMsg: "\(expr) is not a valid type")
+                    }
+                    return type
+                }
+                
                 // If none of the types above apply, then try to use it as a variable name.
                 guard let v = Variable(expr) else {
                     throw CompilerError.syntax(errMsg: "illegal variable name '\(expr)'")

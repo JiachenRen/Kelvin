@@ -40,7 +40,7 @@ println idMat(3)
 
 # Transpose matrix
 println trans(m1)
-println ¡([1, 2, 3] !! matrix) == [[1], [2], [3]]
+println ¡([1, 2, 3] !! @matrix) == [[1], [2], [3]]
 
 # Transformation
 # $0 -> element

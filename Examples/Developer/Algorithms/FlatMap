@@ -2,7 +2,7 @@ def flatMap(l) {
     tmp := {};
 
     for (element: l) {
-        if (element is list) {
+        if (element is @list) {
             tmp := tmp ++ flatMap(element);
             continue;
         }

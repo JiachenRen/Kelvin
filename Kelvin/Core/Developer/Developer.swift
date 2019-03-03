@@ -159,8 +159,7 @@ public class Developer {
         
         /// Type casting (coersion)
         /// - Todo: Implement all possible type coersions.
-        .binary(.as, Node.self, Variable.self) {(node, type) in
-            let dt = try Assert.dataType(type.name)
+        .binary(.as, Node.self, DataType.self) {(node, dt) in
             switch dt {
             case .list:
                 if let list = List(node) {
@@ -194,10 +193,9 @@ public class Developer {
                 throw ExecutionError.general(errMsg: "conversion to \(dt) is not yet supported")
             }
         },
-        .binary(.is, Node.self, Variable.self) {(n, v) in
-            let t1 = try Assert.dataType(v.name)
-            let t2 = try DataType.resolve(n)
-            return t2 == t1
+        .binary(.is, Node.self, DataType.self) {(n, type) in
+            let nodeType = try DataType.resolve(n)
+            return nodeType == type
         }
     ]
 }

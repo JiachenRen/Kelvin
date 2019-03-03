@@ -215,6 +215,8 @@ public class Operation: Equatable {
                     fallthrough
                 case .var where !(arg is Variable):
                     fallthrough
+                case .type where !(arg is DataType):
+                    fallthrough
                 case .bool where !(arg is Bool):
                     fallthrough
                 case .vec where !(arg is Vector):
