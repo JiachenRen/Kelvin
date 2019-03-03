@@ -86,6 +86,8 @@
 		1F322825222C76E0004417CB /* DataType+Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F322824222C76E0004417CB /* DataType+Node.swift */; };
 		1F322826222C7A2A004417CB /* DataType+Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F322824222C76E0004417CB /* DataType+Node.swift */; };
 		1F322827222C7A38004417CB /* DataType+Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F322824222C76E0004417CB /* DataType+Node.swift */; };
+		1F322829222C8AA9004417CB /* finding_tangent.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F322828222C8AA9004417CB /* finding_tangent.png */; };
+		1F32282B222C8AD5004417CB /* kelvin_tomorrow_night_blue_theme.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F32282A222C8AD5004417CB /* kelvin_tomorrow_night_blue_theme.png */; };
 		1F3974BC21E3970F006D6DC2 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974BB21E3970F006D6DC2 /* Error.swift */; };
 		1F3974BD21E39A7A006D6DC2 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974BB21E3970F006D6DC2 /* Error.swift */; };
 		1F3974BF21E3B741006D6DC2 /* LeafNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974BE21E3B741006D6DC2 /* LeafNode.swift */; };
@@ -249,7 +251,6 @@
 		1FE487F5220E416F005361AC /* ConsoleViewController+NSOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE487F4220E416F005361AC /* ConsoleViewController+NSOutlineView.swift */; };
 		1FE487FD220E9028005361AC /* ruby_github_theme.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FE487FB220E9027005361AC /* ruby_github_theme.png */; };
 		1FE487FE220E9028005361AC /* ruby_dracula_theme.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FE487FC220E9028005361AC /* ruby_dracula_theme.png */; };
-		1FE4880022126206005361AC /* finding_tangent.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FE487FF22126206005361AC /* finding_tangent.png */; };
 		1FFD8CA3218F50850004ECEB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD8CA2218F50850004ECEB /* AppDelegate.swift */; };
 		1FFD8CA8218F50850004ECEB /* Kelvin.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD8CA6218F50850004ECEB /* Kelvin.xcdatamodeld */; };
 		1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FFD8CA9218F50870004ECEB /* Assets.xcassets */; };
@@ -327,6 +328,8 @@
 		1F2E82BB219757FC005C3353 /* macOS Command Line Tool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "macOS Command Line Tool"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F2E82BD219757FC005C3353 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		1F322824222C76E0004417CB /* DataType+Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataType+Node.swift"; sourceTree = "<group>"; };
+		1F322828222C8AA9004417CB /* finding_tangent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = finding_tangent.png; sourceTree = "<group>"; };
+		1F32282A222C8AD5004417CB /* kelvin_tomorrow_night_blue_theme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kelvin_tomorrow_night_blue_theme.png; sourceTree = "<group>"; };
 		1F3974BB21E3970F006D6DC2 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		1F3974BE21E3B741006D6DC2 /* LeafNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeafNode.swift; sourceTree = "<group>"; };
 		1F3974C021E3B761006D6DC2 /* NaN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaN.swift; sourceTree = "<group>"; };
@@ -400,7 +403,6 @@
 		1FE487F4220E416F005361AC /* ConsoleViewController+NSOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConsoleViewController+NSOutlineView.swift"; sourceTree = "<group>"; };
 		1FE487FB220E9027005361AC /* ruby_github_theme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ruby_github_theme.png; sourceTree = "<group>"; };
 		1FE487FC220E9028005361AC /* ruby_dracula_theme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ruby_dracula_theme.png; sourceTree = "<group>"; };
-		1FE487FF22126206005361AC /* finding_tangent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = finding_tangent.png; sourceTree = "<group>"; };
 		1FFD8C9F218F50850004ECEB /* macOS Application.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "macOS Application.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FFD8CA2218F50850004ECEB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1FFD8CA7218F50850004ECEB /* Kelvin.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Kelvin.xcdatamodel; sourceTree = "<group>"; };
@@ -741,9 +743,10 @@
 		1FE487FA220E8DC8005361AC /* Screenshots */ = {
 			isa = PBXGroup;
 			children = (
+				1F32282A222C8AD5004417CB /* kelvin_tomorrow_night_blue_theme.png */,
+				1F322828222C8AA9004417CB /* finding_tangent.png */,
 				1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */,
 				1FDC863922132F4300EAC346 /* tangent_plane_kelvin.png */,
-				1FE487FF22126206005361AC /* finding_tangent.png */,
 				1FE487FC220E9028005361AC /* ruby_dracula_theme.png */,
 				1FE487FB220E9027005361AC /* ruby_github_theme.png */,
 			);
@@ -956,6 +959,7 @@
 				1F0AC9E4222B7AEA00870367 /* Dictionary in Resources */,
 				1FC67CAD2228715B00A8E6BC /* Greeting in Resources */,
 				1F09371921F672CD00E707BD /* Benchmarking in Resources */,
+				1F32282B222C8AD5004417CB /* kelvin_tomorrow_night_blue_theme.png in Resources */,
 				1F8DF7AD2209538A006351B0 /* FlatMap in Resources */,
 				1FDC863A22132F4300EAC346 /* tangent_plane_grapher.png in Resources */,
 				1FC67C80221E307A00A8E6BC /* TwoSampleTTest in Resources */,
@@ -970,7 +974,7 @@
 				1FFD8CAD218F50870004ECEB /* Main.storyboard in Resources */,
 				1F09370B21F57B0200E707BD /* Trigonometry in Resources */,
 				1FDC865A2215C1F900EAC346 /* StatProblem in Resources */,
-				1FE4880022126206005361AC /* finding_tangent.png in Resources */,
+				1F322829222C8AA9004417CB /* finding_tangent.png in Resources */,
 				1F3D31672202853000462F10 /* Factorization in Resources */,
 				1F8DF7AB22095321006351B0 /* Deconstruct in Resources */,
 			);

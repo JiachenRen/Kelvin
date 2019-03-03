@@ -6,6 +6,7 @@ assert f(a) == a^2
 f(a, b) := a^2 - b
 def l1 = {1, 2, 3}
 assert f(l1, 2) = {-1, 2, 7}
+l := ("hello world" as @list).map {$0 & $1}
 
 # Syntax for defining a multiline function
 def foo(a, b) {
