@@ -10,3 +10,22 @@ b += 1
 
 # a is now 4, b is now 5
 println "a is " & a & ", b is " & b
+
+# Inout variable (behaves like reference)
+def a = 3
+def f(x) {
+    x := x^2;
+    return x
+}
+
+# Prints 9
+println f(a)
+
+# Prints 3 - a has not changed
+assert a == 3
+
+# Prints 9
+println f(&a)
+
+# a is now 9 because the reference operator "&" passes a as an inout variable
+assert a == 9

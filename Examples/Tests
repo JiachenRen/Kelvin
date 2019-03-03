@@ -168,3 +168,9 @@ println "Test completed. No errors identified. System operational."
 
 # Test binomCdf
 assert sum(binomPdf(10, 0.1)) == 0.99999999999999999973
+
+# Test inout variables
+def f(x) = (return x++)
+def a = 3
+f(&a)
+assert a == 4

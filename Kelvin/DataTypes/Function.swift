@@ -269,22 +269,22 @@ public struct Function: MutableListProtocol {
         return { args in
             Scope.save()
             
-            var inoutVars = [Variable]()
+            var inoutArgs = [String: Variable]()
             try zip(parameters, args).forEach {(par, arg) in
                 var arg = arg
                 
                 // Find all inout variables, extract their definitions
                 if let fun = arg as? Function, fun.name == .inout {
-                    guard fun.count == 1, let iv = fun[0] as? Variable else {
+                    guard fun.count == 1, let inoutArg = fun[0] as? Variable else {
                         let msg = "expecting variable name after inout modifier, instead found \(fun[0].stringified)"
                         throw ExecutionError.general(errMsg: msg)
                     }
-                    inoutVars.append(iv)
-                    if Variable.definitions[iv.name] == nil {
-                        let msg = "variable \(iv.stringified) is undefined; inout modifier can only be used on variables with definitions"
+                    inoutArgs[inoutArg.name] = par
+                    if Variable.definitions[inoutArg.name] == nil {
+                        let msg = "variable \(inoutArg.stringified) is undefined; inout modifier can only be used on variables with definitions"
                         throw ExecutionError.general(errMsg: msg)
                     }
-                    arg = try iv.simplify()
+                    arg = try inoutArg.simplify()
                 }
                 Variable.define(dict[par.name]!, arg)
             }
@@ -298,8 +298,8 @@ public struct Function: MutableListProtocol {
                 })
             
             // Escaping definitions for inout variables
-            let escaping = inoutVars.reduce(into: [:]) {
-                $0[$1.name] = Variable.definitions[dict[$1.name]!]
+            let escaping = inoutArgs.reduce(into: [:]) {
+                $0[$1.key] = Variable.definitions[dict[$1.value.name]!]
             }
             
             Scope.restore()
