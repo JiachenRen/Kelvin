@@ -12,6 +12,7 @@ This directory contains various examples that demonstrate how to the Kelvin lang
     - [One variable statistics](/Examples/Statistics/OneVar)
     - [Distribution](/Examples/Statistics/Distribution)
     - [Regression](/Examples/Statistics/Regression)
+    - [Confidence intervals](/Examples/Statistics/ConfidenceInterval)
 - Calculus
     - [Differentiation](/Examples/Calculus/Differentionation)
     - [Integration](/Examples/Calculus/Integration)

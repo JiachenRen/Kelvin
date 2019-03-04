@@ -209,7 +209,13 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - tPdf/tCdf
   - Binomial Cdf/Pdf
   - Geometric Cdf/Pdf
-- [ ] Confidence intervals
+- [x] Confidence intervals
+    - [x] z interval
+    - [ ] t interval
+    - [ ] 2 sample z interval
+    - [ ] 2 sample t interval
+    - [ ] 1 prop z interval
+    - [ ] 2 prop z interval
 - [x] Regression
   - [x] Linear (least squares regression)
     - Residuals

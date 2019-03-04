@@ -88,6 +88,10 @@
 		1F322827222C7A38004417CB /* DataType+Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F322824222C76E0004417CB /* DataType+Node.swift */; };
 		1F322829222C8AA9004417CB /* finding_tangent.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F322828222C8AA9004417CB /* finding_tangent.png */; };
 		1F32282B222C8AD5004417CB /* kelvin_tomorrow_night_blue_theme.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F32282A222C8AD5004417CB /* kelvin_tomorrow_night_blue_theme.png */; };
+		1F32282D222CB704004417CB /* Confidence Intervals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F32282C222CB704004417CB /* Confidence Intervals.swift */; };
+		1F32282F222CC2DF004417CB /* ConfidenceInterval in Resources */ = {isa = PBXBuildFile; fileRef = 1F32282E222CC2DF004417CB /* ConfidenceInterval */; };
+		1F322830222CC4ED004417CB /* Confidence Intervals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F32282C222CB704004417CB /* Confidence Intervals.swift */; };
+		1F322831222CC4F8004417CB /* Confidence Intervals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F32282C222CB704004417CB /* Confidence Intervals.swift */; };
 		1F3974BC21E3970F006D6DC2 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974BB21E3970F006D6DC2 /* Error.swift */; };
 		1F3974BD21E39A7A006D6DC2 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974BB21E3970F006D6DC2 /* Error.swift */; };
 		1F3974BF21E3B741006D6DC2 /* LeafNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974BE21E3B741006D6DC2 /* LeafNode.swift */; };
@@ -330,6 +334,8 @@
 		1F322824222C76E0004417CB /* DataType+Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataType+Node.swift"; sourceTree = "<group>"; };
 		1F322828222C8AA9004417CB /* finding_tangent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = finding_tangent.png; sourceTree = "<group>"; };
 		1F32282A222C8AD5004417CB /* kelvin_tomorrow_night_blue_theme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kelvin_tomorrow_night_blue_theme.png; sourceTree = "<group>"; };
+		1F32282C222CB704004417CB /* Confidence Intervals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Confidence Intervals.swift"; sourceTree = "<group>"; };
+		1F32282E222CC2DF004417CB /* ConfidenceInterval */ = {isa = PBXFileReference; lastKnownFileType = text; path = ConfidenceInterval; sourceTree = "<group>"; };
 		1F3974BB21E3970F006D6DC2 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		1F3974BE21E3B741006D6DC2 /* LeafNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeafNode.swift; sourceTree = "<group>"; };
 		1F3974C021E3B761006D6DC2 /* NaN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaN.swift; sourceTree = "<group>"; };
@@ -578,11 +584,12 @@
 		1F570B5221FF6D8E0006E342 /* Statistics */ = {
 			isa = PBXGroup;
 			children = (
-				1F0936C221F3C13100E707BD /* OneVar.swift */,
+				1F32282C222CB704004417CB /* Confidence Intervals.swift */,
 				1F570B5321FF6DB90006E342 /* Distribution.swift */,
+				1F0936C221F3C13100E707BD /* OneVar.swift */,
+				1FC67C8922247E2A00A8E6BC /* Regression.swift */,
 				1F570B5521FF6F670006E342 /* Stat.swift */,
 				1FC67C852222EAEC00A8E6BC /* TwoVar.swift */,
-				1FC67C8922247E2A00A8E6BC /* Regression.swift */,
 			);
 			path = Statistics;
 			sourceTree = "<group>";
@@ -704,6 +711,7 @@
 				1F0A90E421F93DCE00432B17 /* OneVar */,
 				1FDC8643221331A300EAC346 /* Distribution */,
 				1FC67C9C2224D25F00A8E6BC /* Regression */,
+				1F32282E222CC2DF004417CB /* ConfidenceInterval */,
 			);
 			path = Statistics;
 			sourceTree = "<group>";
@@ -951,6 +959,7 @@
 				1FC67C9B2224D1B200A8E6BC /* Integration in Resources */,
 				1F09370721F56F9C00E707BD /* Differentiation in Resources */,
 				1F0A90E521F93DCE00432B17 /* OneVar in Resources */,
+				1F32282F222CC2DF004417CB /* ConfidenceInterval in Resources */,
 				1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */,
 				1FDC863722131CD200EAC346 /* Contains in Resources */,
 				1F8DF72C22050110006351B0 /* List in Resources */,
@@ -1015,6 +1024,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F322831222CC4F8004417CB /* Confidence Intervals.swift in Sources */,
 				1F322827222C7A38004417CB /* DataType+Node.swift in Sources */,
 				1F0AC9DF222B2DAA00870367 /* OperationName+Attribute.swift in Sources */,
 				1FC67CA82227446900A8E6BC /* Assert.swift in Sources */,
@@ -1107,6 +1117,7 @@
 				1FE487F5220E416F005361AC /* ConsoleViewController+NSOutlineView.swift in Sources */,
 				1F0A90EA21FA0EF600432B17 /* TypeSystem.swift in Sources */,
 				1F0936CB21F4E2A300E707BD /* Unary.swift in Sources */,
+				1F32282D222CB704004417CB /* Confidence Intervals.swift in Sources */,
 				1F0936EC21F5058B00E707BD /* ListProtocol.swift in Sources */,
 				1F3974C521E633FD006D6DC2 /* Equation.swift in Sources */,
 				1FFD8CD5218F52430004ECEB /* Compiler.swift in Sources */,
@@ -1169,6 +1180,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F322830222CC4ED004417CB /* Confidence Intervals.swift in Sources */,
 				1F322826222C7A2A004417CB /* DataType+Node.swift in Sources */,
 				1F0AC9E0222B2E2500870367 /* OperationName+Attribute.swift in Sources */,
 				1FC67CA92227447F00A8E6BC /* Assert.swift in Sources */,

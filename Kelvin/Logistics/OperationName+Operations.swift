@@ -56,6 +56,9 @@ public extension OperationName {
     public static let tCdf = "tCdf"
     public static let invT = "invT"
     
+    // Confidence intervals
+    public static let zInterval = "zInterval"
+    
     // One variable stats
     public static let mean = "mean"
     public static let max = "max"

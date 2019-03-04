@@ -21,7 +21,8 @@ def files = {
     "Linear Algebra/Matrix",
     "Statistics/OneVar",
     "Statistics/Distribution",
-    "Statistics/Regression"
+    "Statistics/Regression",
+    "Statistics/ConfidenceInterval"
 }
 
 def file_paths = (files | (examples_dir & $0))

@@ -1,0 +1,3 @@
+a := zInterval(0.5,2,3,0.95)
+b := zInterval(0.5,{1,2,3},0.95)
+assert round(reduce(a["CI"] - b["CI"]) {$0 + $1}, 5) == 0

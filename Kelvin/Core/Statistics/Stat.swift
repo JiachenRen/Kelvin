@@ -305,6 +305,36 @@ public class Stat {
                 Pair("R²", cod),
                 Pair("Resid", List(resid)),
             ])
+        },
+        
+        // Mark: Confidence interval
+        .quaternary(.zInterval, Value.self, Value.self, Int.self, Value.self) {
+            let result = try zInterval(
+                sigma: $0.float80,
+                statistic: $1.float80,
+                sampleSize: $2,
+                confidenceLevel: $3.float80
+            )
+            let stats: [Pair] = [
+                .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
+                .init("ME", result.me)
+            ]
+            return List(stats)
+        },
+        .ternary(.zInterval, Value.self, List.self, Value.self) {
+            let result = try zInterval(
+                sigma: $0.float80,
+                sample: $1.toNumerics(),
+                confidenceLevel: $2.float80
+            )
+            let stats: [Pair] = [
+                .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
+                .init("x̅", result.statistic),
+                .init("ME", result.me),
+                .init("Sx", result.sx),
+                .init("n", result.n)
+            ]
+            return List(stats)
         }
     ]
 }
