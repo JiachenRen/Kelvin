@@ -11,9 +11,9 @@ import Foundation
 /// Condidence intervals:
 /// - z interval: statistic +/- (critical value) x (standard deviation of statistic)
 /// - t interval: statistic +/- (critical value of t dist.) * Sx / √n
-/// - 2 sample z interval
+/// - 2 sample z interval:
 /// - 2 sample t interval
-/// - 1 prop z interval
+/// - 1 prop z interval: p̂ +/- z * √(p̂(1-p̂)/n)
 /// - 2 prop z interval
 public extension Stat {
     public typealias CI = (lowerBound: Float80, upperBound: Float80)
@@ -28,18 +28,18 @@ public extension Stat {
     ///     - statistic: Mean of the sample (x̅)
     ///     - cl: Confidence level (between 0 and 1)
     ///
-    /// - Returns: (Confidence Interval, Margin of Error)
+    /// - Returns: (Confidence Interval, Margin of Error, Critical Value z)
     public static func zInterval(
         sigma: Float80,
         statistic: Float80,
         sampleSize n: Int,
         confidenceLevel cl: Float80
-    ) throws -> (ci: CI, me: Float80) {
+    ) throws -> (ci: CI, me: Float80, z: Float80) {
         let z = try abs(Float80(invNorm((1 - Double(cl)) / 2))) // Compute the critical value
         let stdev_stat = sigma / sqrt(Float80(n)) // Compute statistic stdev
         let me = z * stdev_stat // Compute margin of error
         let ci = (statistic - me, statistic + me)
-        return (ci, me)
+        return (ci, me, z)
     }
     
     /// Calculates the z interval from sample data
@@ -56,17 +56,17 @@ public extension Stat {
         sigma: Float80,
         sample: [Float80],
         confidenceLevel cl: Float80
-    ) throws -> (ci: CI, me: Float80, sx: Float80, statistic: Float80, n: Int) {
+        ) throws -> (ci: CI, me: Float80, sx: Float80, statistic: Float80, n: Int, z: Float80) {
         let statistic = mean(sample)
         let n = sample.count
-        let (ci, me) = try zInterval(
+        let (ci, me, z) = try zInterval(
             sigma: sigma,
             statistic: statistic,
             sampleSize: n,
             confidenceLevel: cl
         )
         let sx = stdev(.sample, sample)
-        return (ci, me, sx, statistic, n)
+        return (ci, me, sx, statistic, n, z)
     }
     
     /// Calculates t interval from statistics of sample
@@ -100,16 +100,32 @@ public extension Stat {
     public static func tInterval(
         sample: [Float80],
         confidenceLevel cl: Float80
-    ) throws -> (ci: CI, statistic: Float80, me: Float80, df: Int, sx: Float80, n: Int, t: Float80) {
+        ) throws -> (ci: CI, statistic: Float80, me: Float80, se: Float80, df: Int, sx: Float80, n: Int, t: Float80) {
         let statistic = mean(sample)
         let sx = stdev(.sample, sample)
         let n = sample.count
-        let result = try tInterval(
+        let (ci, me, se, df, t) = try tInterval(
             statistic: statistic,
             sx: sx,
             sampleSize: n,
             confidenceLevel: cl
         )
-        return (result.ci, statistic, result.me, result.df, sx, n, result.t)
+        return (ci, statistic, me, se, df, sx, n, t)
     }
+    
+    /// Calculates one sample proportion z interval
+    /// CI = p̂ +/- z * √(p̂(1-p̂)/n)
+    public static func zIntervalOneProp(
+        successes x: Int,
+        sampleSize n: Int,
+        confidenceLevel cl: Float80
+    ) throws -> (ci: CI, statistic: Float80, me: Float80, se: Float80) {
+        let statistic = Float80(x) / Float80(n)
+        let z = try abs(Float80(invNorm(Double((1 - cl) / 2))))
+        let se = sqrt(statistic * (1 - statistic) / Float80(n))
+        let me = z * se
+        let ci = (statistic - me, statistic + me)
+        return (ci, statistic, me, se)
+    }
+    
 }

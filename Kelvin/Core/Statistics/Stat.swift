@@ -307,7 +307,8 @@ public class Stat {
             ])
         },
         
-        // Mark: Confidence interval
+        // Mark: Confidence intervals
+        
         .quaternary(.zInterval, Value.self, Value.self, Int.self, Value.self) {
             let result = try zInterval(
                 sigma: $0.float80,
@@ -317,7 +318,8 @@ public class Stat {
             )
             let stats: [Pair] = [
                 .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
-                .init("ME", result.me)
+                .init("ME", result.me),
+                .init("z", result.z)
             ]
             return List(stats)
         },
@@ -332,7 +334,8 @@ public class Stat {
                 .init("x̅", result.statistic),
                 .init("ME", result.me),
                 .init("Sx", result.sx),
-                .init("n", result.n)
+                .init("n", result.n),
+                .init("z", result.z)
             ]
             return List(stats)
         },
@@ -359,10 +362,25 @@ public class Stat {
                 .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
                 .init("x̅", result.statistic),
                 .init("ME", result.me),
+                .init("SE", result.se),
                 .init("t", result.t),
                 .init("df", result.df),
                 .init("Sx", result.sx),
                 .init("n", result.n)
+            ]
+            return List(stats)
+        },
+        .ternary(.zIntervalOneProp, Int.self, Int.self, Value.self) {
+            let result = try zIntervalOneProp(
+                successes: $0,
+                sampleSize: $1,
+                confidenceLevel: $2.float80
+            )
+            let stats: [Pair] = [
+                .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
+                .init("p̂", result.statistic),
+                .init("ME", result.me),
+                .init("SE", result.se)
             ]
             return List(stats)
         }
