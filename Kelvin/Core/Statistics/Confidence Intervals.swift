@@ -10,7 +10,7 @@ import Foundation
 
 /// Condidence intervals:
 /// - z interval: statistic +/- (critical value) x (standard deviation of statistic)
-/// - t interval
+/// - t interval: statistic +/- (critical value of t dist.) * Sx / √n
 /// - 2 sample z interval
 /// - 2 sample t interval
 /// - 1 prop z interval
@@ -25,7 +25,7 @@ public extension Stat {
     /// - Parameters:
     ///     - sigma: Population standard deviation
     ///     - n: Sample size
-    ///     - statistic: Mean of the statistic (x̅)
+    ///     - statistic: Mean of the sample (x̅)
     ///     - cl: Confidence level (between 0 and 1)
     ///
     /// - Returns: (Confidence Interval, Margin of Error)
@@ -51,7 +51,7 @@ public extension Stat {
     ///     - sample: A random sample from population
     ///     - cl: Confidence level (between 0 and 1)
     ///
-    /// - Returns: (Confidence Interval, Margin of Error, Sx)
+    /// - Returns: (Confidence Interval, Margin of Error, Sx, Sample Mean)
     public static func zInterval(
         sigma: Float80,
         sample: [Float80],
@@ -67,5 +67,49 @@ public extension Stat {
         )
         let sx = stdev(.sample, sample)
         return (ci, me, sx, statistic, n)
+    }
+    
+    /// Calculates t interval from statistics of sample
+    /// CI = statistic +/- (critical value of t dist. (t)) * Sx / √n,
+    /// where t = abs(invT((1 - Confidence Level) / 2, DF)
+    ///
+    /// - Parameters:
+    ///     - statistic: Sample mean (x̅)
+    ///     - sx: Sample standard deviation
+    ///     - n: The size of the sample
+    ///     - cl: Confidence level (between 0 and 1)
+    ///
+    /// - Returns: (Confidence Interval, Margin of Err., Std. Err., Degrees of Freedom, Critical Value t)
+    public static func tInterval(
+        statistic: Float80,
+        sx: Float80,
+        sampleSize n: Int,
+        confidenceLevel cl: Float80
+        ) throws -> (ci: CI, me: Float80, se: Float80, df: Int, t: Float80) {
+        let df = n - 1
+        let t = try abs(invT((1 - cl) / 2, df))
+        
+        // Calculate std. err
+        let se = sx / sqrt(Float80(n))
+        let me = se * t
+        let ci = (statistic - me, statistic + me)
+        return (ci, me, se, df, t)
+    }
+    
+    /// Calculates t interval from sample data
+    public static func tInterval(
+        sample: [Float80],
+        confidenceLevel cl: Float80
+    ) throws -> (ci: CI, statistic: Float80, me: Float80, df: Int, sx: Float80, n: Int, t: Float80) {
+        let statistic = mean(sample)
+        let sx = stdev(.sample, sample)
+        let n = sample.count
+        let result = try tInterval(
+            statistic: statistic,
+            sx: sx,
+            sampleSize: n,
+            confidenceLevel: cl
+        )
+        return (result.ci, statistic, result.me, result.df, sx, n, result.t)
     }
 }

@@ -211,7 +211,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - Geometric Cdf/Pdf
 - [x] Confidence intervals
     - [x] z interval
-    - [ ] t interval
+    - [x] t interval
     - [ ] 2 sample z interval
     - [ ] 2 sample t interval
     - [ ] 1 prop z interval

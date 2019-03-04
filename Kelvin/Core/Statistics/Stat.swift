@@ -335,6 +335,36 @@ public class Stat {
                 .init("n", result.n)
             ]
             return List(stats)
+        },
+        .quaternary(.tInterval, Value.self, Value.self, Int.self, Value.self) {
+            let result = try tInterval(
+                statistic: $0.float80,
+                sx: $1.float80,
+                sampleSize: $2,
+                confidenceLevel: $3.float80
+            )
+            let stats: [Pair] = [
+                .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
+                .init("ME", result.me),
+                .init("SE", result.se),
+                .init("t", result.t),
+                .init("df", result.df),
+            ]
+            return List(stats)
+        },
+        .binary(.tInterval, List.self, Value.self) {
+            let result = try tInterval(sample: $0.toNumerics(), confidenceLevel: $1.float80)
+            // (result.ci, statistic, result.me, result.df, sx, n)
+            let stats: [Pair] = [
+                .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
+                .init("x̅", result.statistic),
+                .init("ME", result.me),
+                .init("t", result.t),
+                .init("df", result.df),
+                .init("Sx", result.sx),
+                .init("n", result.n)
+            ]
+            return List(stats)
         }
     ]
 }

@@ -58,6 +58,7 @@ public extension OperationName {
     
     // Confidence intervals
     public static let zInterval = "zInterval"
+    public static let tInterval = "tInterval"
     
     // One variable stats
     public static let mean = "mean"
