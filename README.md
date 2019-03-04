@@ -31,11 +31,13 @@ The IDE now automatically chooses/changes its theme according to the system's th
 1. Download the binary file `kelvin` from releases (or you can build it yourself with XCode)
 2. If the file name is altered by your browser, remove the extension.
 3. Optionally, you can add `kelvin` as part of your command line tools by the following command:
+
 ```bash
 mv <path to kelvin> /usr/local/bin
 ```
 
 ### Usage
+
 ```bash
 Usage: kelvin -c
    or  kelvin -e <expr>
