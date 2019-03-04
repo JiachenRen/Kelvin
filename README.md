@@ -16,10 +16,10 @@ The IDE works like the old [Swift Playground](https://developer.apple.com/swift-
 
 Below is a screenshot of Kelvin IDE in the default theme (keep in mind that you can choose from a large poo of candidates), highlighted using `kelvin`'s syntax . The screenshot demonstrates how to find the **tangent line/plane** of multivariate functions. (Notice how the whole script is compiled and evaluated in under **0.1 seconds**!) Even if the execution time lasts longer, there won't be any lagging since the scripts run on a separate thread and are cancelled/started automatically. 
 
-![Finding Tangent with IDE and Kelvin](/Misc/Screenshots/finding_tangent.png "Finding Tangent")
+![Finding Tangent with IDE and Kelvin](https://raw.githubusercontent.com/JiachenRen/kelvin-cas/master/Misc/Screenshots/finding_tangent.png "Finding Tangent")
 
 Another one of the **85** themes you can choose from that is my personal favorite, `tomorrow-night-blue`
-![Screenshot of IDE with Dark Theme](/Misc/Screenshots/kelvin_tomorrow_night_blue_theme.png "IDE with dark theme")
+![Screenshot of IDE with Dark Theme](https://raw.githubusercontent.com/JiachenRen/kelvin-cas/master/Misc/Screenshots/kelvin_tomorrow_night_blue_theme.png "IDE with dark theme")
 
 Try it out, 'cause it's awesome ~~ why not??
 
@@ -54,6 +54,7 @@ Type kelvin without an option to enter interactive mode.
 
 ### Examples
 - Type `kelvin` and hit return to enter interactive mode (lines starting with `←` denotes input).
+
 ```bash
 # Enter interactive mode
 # Note: enter the statements line by line in the terminal. ommit the ← and → symbols
@@ -97,8 +98,10 @@ $ kelvin
 # Exit Kelvin
 ← exit()
 ```
+
 - If your terminal supports ANSI, use `kelvin -c` to activate ANSI coloring.
 - Compile and run a file containing kelvin scripts.
+
 ```bash
 # Change directory to tmp
 $ cd /tmp
@@ -130,12 +133,12 @@ $ kelvin -f -v /tmp/prg
 → program terminated in 0.0023789405822753906 seconds.
 Hello World
 ```
+
 ## The Kelvin Language
 The Kelvin programming language is developed by a high school senior. Yes, really. It is a combination of `Javascript`, `Swift`, `Python`, and `Bash`, with a bunch of wierd syntatic sugars that came from my pure imagination. It is a interpreted language (nowhere near as fast), but it is powerful in terms of what it can do when it comes to solving high school math problems.
 > As a side note, _Kelvin_ even has trailing closure syntax and anonymous arguments, a feature loved by Swift users!
 
 ### Examples
-
 Please refer to [Examples](Examples) for detailed documentation/examples over algebraic operations, calulus, stats, loops, conditional statements, error handling, closures, list operations, etc.
 
 ## Capabilities
