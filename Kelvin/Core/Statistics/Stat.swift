@@ -383,6 +383,61 @@ public class Stat {
                 .init("SE", result.se)
             ]
             return List(stats)
+        },
+        .init(.zIntervalTwoSamp, [.number, .number, .list, .list, .number]) {
+            let (sigma1, sigma2, l1, l2, cl) = try (
+                $0[0]≈!,
+                $0[1]≈!,
+                ($0[2] as! List).toNumerics(),
+                ($0[3] as! List).toNumerics(),
+                $0[4]≈!
+            )
+            let result = try zIntervalTwoSamp(
+                sigma1: sigma1,
+                sigma2: sigma2,
+                sample1: l1,
+                sample2: l2,
+                confidenceLevel: cl
+            )
+            let stats: [Pair] = [
+                .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
+                .init("x̅1 - x̅2", result.statDiff),
+                .init("ME", result.me),
+                .init("x̅1", result.stat1),
+                .init("x̅2", result.stat2),
+                .init("Sx1", result.sx1),
+                .init("Sx2", result.sx2),
+                .init("n1", result.n1),
+                .init("n2", result.n2),
+            ]
+            return List(stats)
+        },
+        .init(.zIntervalTwoSamp, [.number, .number, .number, .int, .number, .int, .number]) {
+            let (sigma1, sigma2, stat1, n1, stat2, n2, cl) = (
+                $0[0]≈!,
+                $0[1]≈!,
+                $0[2]≈!,
+                $0[3] as! Int,
+                $0[4]≈!,
+                $0[5] as! Int,
+                $0[6]≈!
+            )
+            let result = try zIntervalTwoSamp(
+                sigma1: sigma1,
+                sigma2: sigma2,
+                statistic1: stat1,
+                sampleSize1: n1,
+                statistic2: stat2,
+                sampleSize2: n2,
+                confidenceLevel: cl
+            )
+            let stats: [Pair] = [
+                .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
+                .init("x̅1 - x̅2", result.statDiff),
+                .init("ME", result.me),
+                .init("σDiff", result.sigmaDiff),
+            ]
+            return List(stats)
         }
     ]
 }

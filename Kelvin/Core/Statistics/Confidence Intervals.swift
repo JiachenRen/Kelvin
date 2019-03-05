@@ -18,6 +18,11 @@ import Foundation
 public extension Stat {
     public typealias CI = (lowerBound: Float80, upperBound: Float80)
     
+    /// Computes the z score (also known as critical value) from confidence level
+    public static func zScore(confidenceLevel cl: Float80) throws -> Float80 {
+        return try abs(Float80(invNorm((1 - Double(cl)) / 2)))
+    }
+    
     /// Calculates the z interval from statistics
     ///
     /// - Example: `zInterval(0.5,2,3,0.95)`
@@ -35,7 +40,7 @@ public extension Stat {
         sampleSize n: Int,
         confidenceLevel cl: Float80
     ) throws -> (ci: CI, me: Float80, z: Float80) {
-        let z = try abs(Float80(invNorm((1 - Double(cl)) / 2))) // Compute the critical value
+        let z = try zScore(confidenceLevel: cl)
         let stdev_stat = sigma / sqrt(Float80(n)) // Compute statistic stdev
         let me = z * stdev_stat // Compute margin of error
         let ci = (statistic - me, statistic + me)
@@ -85,7 +90,7 @@ public extension Stat {
         sx: Float80,
         sampleSize n: Int,
         confidenceLevel cl: Float80
-        ) throws -> (ci: CI, me: Float80, se: Float80, df: Int, t: Float80) {
+    ) throws -> (ci: CI, me: Float80, se: Float80, df: Int, t: Float80) {
         let df = n - 1
         let t = try abs(invT((1 - cl) / 2, df))
         
@@ -100,7 +105,7 @@ public extension Stat {
     public static func tInterval(
         sample: [Float80],
         confidenceLevel cl: Float80
-        ) throws -> (ci: CI, statistic: Float80, me: Float80, se: Float80, df: Int, sx: Float80, n: Int, t: Float80) {
+    ) throws -> (ci: CI, statistic: Float80, me: Float80, se: Float80, df: Int, sx: Float80, n: Int, t: Float80) {
         let statistic = mean(sample)
         let sx = stdev(.sample, sample)
         let n = sample.count
@@ -121,11 +126,75 @@ public extension Stat {
         confidenceLevel cl: Float80
     ) throws -> (ci: CI, statistic: Float80, me: Float80, se: Float80) {
         let statistic = Float80(x) / Float80(n)
-        let z = try abs(Float80(invNorm(Double((1 - cl) / 2))))
+        let z = try zScore(confidenceLevel: cl)
         let se = sqrt(statistic * (1 - statistic) / Float80(n))
         let me = z * se
         let ci = (statistic - me, statistic + me)
         return (ci, statistic, me, se)
+    }
+    
+    /// Calculates two sample z interval
+    /// Stdev of sampling dist. of x̅1 - x̅2 is √(σ1 ^ 2 / n1 + σ2 ^ 2 / n2);
+    /// The rest is the same as one samp. z interval
+    ///
+    /// - Parameters:
+    ///     - sigma1: Population standard deviation of x1
+    ///     - sigma2: Population standard deviation of x2
+    ///     - statistic1: Sample mean of x1
+    ///     - n1: Sample size of x1
+    ///     - statistic2: Sample mean of x2
+    ///     - n2: Sample size of x2
+    ///     - cl: Confidence level
+    ///
+    /// - Returns: (Confidence Interval, x̅1 - x̅2, Margin of Err., Stdev of Sampling Dist. of Diff.)
+    public static func zIntervalTwoSamp(
+        sigma1: Float80,
+        sigma2: Float80,
+        statistic1: Float80,
+        sampleSize1 n1: Int,
+        statistic2: Float80,
+        sampleSize2 n2: Int,
+        confidenceLevel cl: Float80
+    ) throws -> (ci: CI, statDiff: Float80, me: Float80, sigmaDiff: Float80) {
+        let sigmaDiff = sqrt(pow(sigma1, 2) / Float80(n1) + pow(sigma2, 2) / Float80(n2))
+        let statDiff = statistic1 - statistic2
+        let z = try zScore(confidenceLevel: cl)
+        let me = z * sigmaDiff
+        let ci = (statDiff - me, statDiff + me)
+        return (ci, statDiff, me, sigmaDiff)
+    }
+    
+    /// Calculates two sample z interval from sample data
+    ///
+    /// - Parameters:
+    ///     - sigma1: Stdev of pop. 1
+    ///     - sigma2: Stdev of pop. 2
+    ///     - sample1: A sample taken from pop. 1
+    ///     - sample2: A sample taken from pop. 2
+    ///     - cl: Confidence level
+    public static func zIntervalTwoSamp(
+        sigma1: Float80,
+        sigma2: Float80,
+        sample1: [Float80],
+        sample2: [Float80],
+        confidenceLevel cl: Float80
+    ) throws -> (ci: CI, statDiff: Float80, me: Float80, sigmaDiff: Float80, stat1: Float80, stat2: Float80, sx1: Float80, sx2: Float80, n1: Int, n2: Int) {
+        let stat1 = mean(sample1)
+        let stat2 = mean(sample2)
+        let n1 = sample1.count
+        let n2 = sample2.count
+        let sx1 = stdev(.sample, sample1)
+        let sx2 = stdev(.sample, sample2)
+        let (ci, statDiff, me, sigmaDiff) = try zIntervalTwoSamp(
+            sigma1: sigma1,
+            sigma2: sigma2,
+            statistic1: stat1,
+            sampleSize1: n1,
+            statistic2: stat2,
+            sampleSize2: n2,
+            confidenceLevel: cl
+        )
+        return (ci, statDiff, me, sigmaDiff, stat1, stat2, sx1, sx2, n1, n2)
     }
     
 }

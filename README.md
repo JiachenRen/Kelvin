@@ -217,9 +217,9 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 - [x] Confidence intervals
     - [x] z interval
     - [x] t interval
-    - [ ] 2 sample z interval
+    - [x] 2 sample z interval
     - [ ] 2 sample t interval
-    - [ ] 1 prop z interval
+    - [x] 1 prop z interval
     - [ ] 2 prop z interval
 - [x] Regression
   - [x] Linear (least squares regression)

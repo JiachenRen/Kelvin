@@ -13,3 +13,9 @@ assert round(d["ME"], 5) == 2.48414
 
 # One proportion z interval
 zIntervalOneProp(5,10,0.95) | println($0)
+
+# Two sample z interval from data
+zIntervalTwoSamp(5,7,{4,7,2},{8,6,4},0.95) | println($0)
+
+# Two sample z interval from stats
+zIntervalTwoSamp(5,7,214,20,195,30,0.95)
