@@ -114,18 +114,12 @@ $ kelvin
 - Compile and run a file containing kelvin scripts.
 
 ```bash
-# Change directory to tmp
-$ cd /tmp
 
-# Make a new file named "prg" containing a single line 'print "Hello World"'
-$ echo "print \"Hello World\"" > prg
+# Make a new file named "prg" containing a single line 'print "Hello World"' in /tmp directory
+$ cd /tmp; echo "print \"Hello World\"" > prg
 
-# Compile and run prg, which prints "Hello World"
-$ kelvin -f /tmp/prg
-Hello World
-
-# Alternatively, you can run the program with verbose on
-$ kelvin -f -v /tmp/prg
+# Compile and run the program with verbose on, highlighted with ANSI
+$ kelvin -f -vc prg
 
 # Program output under verbose mode
 → trying relative URL to current working directory...
