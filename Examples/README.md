@@ -38,6 +38,7 @@ This directory contains various examples that demonstrate how to the Kelvin lang
 ### Just to whet your appetite...
 
 - Binary search algorithm written in `Kelvin`:
+
 ```ruby
 # The conventional binary search algorithm written in kelvin language
 # - arr: a sorted array of values (kelvin only has value types, but the inout modifier '&' makes up for it.)
@@ -73,7 +74,9 @@ def l1 = {1, 2, 3, 5, 7, 8, 9, 10}
 println bin_search(l1, 8.5)
 assert bin_search(l1, 9) == 6
 ```
+
 - For loops, if statements, and while loops, etc. written in `Kelvin`:
+
 ```ruby
 # A function that demonstrates if statement, while loop, map, and
 # flow control keywords like return, continue, and break in kelvin.
