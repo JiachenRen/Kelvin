@@ -16,7 +16,8 @@ extension Stat {
     public static func covariance(
         _ type: DatasetType,
         _ datasetX: [Float80],
-        _ datasetY: [Float80]) throws -> Float80 {
+        _ datasetY: [Float80]
+    ) throws -> Float80 {
         
         if datasetX.count != datasetY.count {
             throw ExecutionError.dimensionMismatch(List(datasetX), List(datasetY))
@@ -45,7 +46,7 @@ extension Stat {
     public static func correlation(
         _ datasetX: [Float80],
         _ datasetY: [Float80]
-        ) throws -> Float80 {
+    ) throws -> Float80 {
         
         return try covariance(.sample, datasetX, datasetY) /
             stdev(.sample, datasetX) /
@@ -59,7 +60,7 @@ extension Stat {
     public static func determination(
         _ datasetY: [Float80],
         _ resid: [Float80]
-        ) throws -> Float80 {
+    ) throws -> Float80 {
         
         let meanY = mean(datasetY)
         
@@ -80,7 +81,8 @@ extension Stat {
     /// ∑xy
     public static func sumXY(
         _ datasetX: [Float80],
-        _ datasetY: [Float80]) throws -> Float80 {
+        _ datasetY: [Float80]
+    ) throws -> Float80 {
         
         if datasetX.count != datasetY.count {
             throw ExecutionError.dimensionMismatch(List(datasetX), List(datasetY))

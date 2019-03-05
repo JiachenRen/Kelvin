@@ -23,12 +23,12 @@ public struct Pair: BinaryNode, NaN {
     }
     
     /// First value of the pair
-    var lhs: Node
+    public var lhs: Node
     
     /// Second value of the pair
-    var rhs: Node
+    public var rhs: Node
     
-    init(_ v1: Node, _ v2: Node) {
+    public init(_ v1: Node, _ v2: Node) {
         self.lhs = v1
         self.rhs = v2
     }

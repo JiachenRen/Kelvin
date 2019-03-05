@@ -23,12 +23,12 @@ public struct Equation: BinaryNode, NaN {
     }
 
     /// The left hand side of the equation
-    var lhs: Node
+    public var lhs: Node
 
     /// The right hand side of the equation
-    var rhs: Node
+    public var rhs: Node
 
-    enum Mode: String {
+    public enum Mode: String {
         case greaterThan = ">"
         case greaterThanOrEquals = ">="
         case lessThan = "<"
@@ -40,7 +40,7 @@ public struct Equation: BinaryNode, NaN {
     var mode: Mode
 
     /// TODO: Implement inequality
-    init(lhs: Node, rhs: Node, mode: Mode = .equals) {
+    public init(lhs: Node, rhs: Node, mode: Mode = .equals) {
         self.mode = mode
         self.lhs = lhs
         self.rhs = rhs

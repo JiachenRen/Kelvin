@@ -10,20 +10,20 @@ import Foundation
 
 public struct Variable: LeafNode, NaN {
 
-    static var definitions: [String: Node] = {
+    public static var definitions: [String: Node] = {
         constants.reduce(into: [:]) {
             $0[$1.key] = $1.value
         }
     }()
 
-    static var constants: [String: Float80] = [
+    public static var constants: [String: Float80] = [
         "e": Float80(exactly: M_E)!,
         "pi": Float80.pi,
         "inf": Float80.infinity,
     ]
 
     /// The name of the variable
-    var name: String
+    public var name: String
 
     public static let validationRegex = Regex(pattern: "^[a-zA-Z_$]+[a-zA-Z_\\d]*$")
     
@@ -39,19 +39,19 @@ public struct Variable: LeafNode, NaN {
     }
 
     /// Extract the definition of the variable from the definitions.
-    var definition: Node? {
+    public var definition: Node? {
         return Variable.definitions[name]
     }
 
     /// Whether the variable represents a constant.
     /// e.g. pi, e
-    var isConstant: Bool {
+    public var isConstant: Bool {
         return Variable.constants[name] != nil
     }
     
     /// Anonymous arguments are replaced by their callers
     /// with supplied expressions.
-    var isAnonymous: Bool {
+    public var isAnonymous: Bool {
         return name.starts(with: "$") && Int(name[1..<name.count]) != nil
     }
 
@@ -64,7 +64,7 @@ public struct Variable: LeafNode, NaN {
         return 3
     }
 
-    init?(_ name: String) {
+    public init?(_ name: String) {
 
         // Check if the variable name is valid
         if !(name ~ Variable.validationRegex) {
@@ -89,7 +89,7 @@ public struct Variable: LeafNode, NaN {
         - name: The name of the variable
         - def: The definition of the variable, can be a number, expression, or equation.
      */
-    static func define(_ name: String, _ def: Node) {
+    public static func define(_ name: String, _ def: Node) {
         definitions.updateValue(def, forKey: name)
     }
 
@@ -98,7 +98,7 @@ public struct Variable: LeafNode, NaN {
      
      - Parameter name: The name of the variable to be deleted.
      */
-    static func delete(_ name: String) {
+    public static func delete(_ name: String) {
         definitions.removeValue(forKey: name)
     }
 

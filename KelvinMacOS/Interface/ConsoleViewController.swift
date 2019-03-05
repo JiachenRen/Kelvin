@@ -8,6 +8,7 @@
 
 import Cocoa
 import Highlightr
+import Kelvin
 
 fileprivate let defaultDarkTheme = "agate"
 fileprivate let defaultLightTheme = "default"
@@ -207,11 +208,14 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
         guard textView === editorTextView else {
             return []
         }
-        let partialWord = editorTextView.string[charRange.lowerBound..<charRange.upperBound]
+        let str = editorTextView.string
+        let startIdx = str.index(str.startIndex, offsetBy: charRange.lowerBound)
+        let endIdx = str.index(str.startIndex, offsetBy: charRange.upperBound)
+        let partialWord = editorTextView.string[startIdx..<endIdx]
         if partialWord == "" {
             return []
         }
-        var operations = [Operation]()
+        var operations = [Kelvin.Operation]()
         for (key, value) in Operation.registered {
             if key.starts(with: partialWord) {
                 operations.append(contentsOf: value)

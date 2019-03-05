@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol BinaryNode: MutableListProtocol {
+public protocol BinaryNode: MutableListProtocol {
     var rhs: Node { get set }
     var lhs: Node { get set }
 }

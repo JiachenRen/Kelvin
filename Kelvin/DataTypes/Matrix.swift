@@ -32,12 +32,12 @@ public struct Matrix: MutableListProtocol, NaN {
     public typealias Dimension = (rows: Int, cols: Int)
     public typealias Cell = (row: Int, col: Int, node: Node)
     
-    var rows: [Row]
-    var cols: [Vector] {
+    public var rows: [Row]
+    public var cols: [Vector] {
         return transposed.rows
     }
     
-    var transposed: Matrix {
+    public var transposed: Matrix {
         var trans = Matrix(rows: dim.cols, cols: dim.rows)
         for (i, r) in rows.enumerated() {
             for (j, e) in r.elements.enumerated() {
@@ -47,13 +47,13 @@ public struct Matrix: MutableListProtocol, NaN {
         return trans
     }
     
-    var dim: Dimension
+    public var dim: Dimension
     
-    var isSquareMatrix: Bool {
+    public var isSquareMatrix: Bool {
         return rows.count == rows.first!.count
     }
     
-    var cells: [Cell] {
+    public var cells: [Cell] {
         return rows.enumerated().map {(i, r) in
             r.elements.enumerated().map {(j, e) in
                 (i, j, e)
@@ -61,7 +61,7 @@ public struct Matrix: MutableListProtocol, NaN {
         }.flatMap {$0}
     }
     
-    subscript(_ idx: Int) -> Row {
+    public subscript(_ idx: Int) -> Row {
         get {
             return rows[idx]
         }
@@ -82,16 +82,16 @@ public struct Matrix: MutableListProtocol, NaN {
         }
     }
     
-    init(_ dim: Int) {
+    public init(_ dim: Int) {
         self.init(rows: dim, cols: dim)
     }
     
-    init(rows: Int, cols: Int) {
+    public init(rows: Int, cols: Int) {
         self.rows = [Row](repeating: Vector([Int](repeating: 0, count: cols)), count: rows)
         self.dim = (rows, cols)
     }
     
-    init(_ list: ListProtocol) throws {
+    public init(_ list: ListProtocol) throws {
         if list.count == 0 {
             throw ExecutionError.general(errMsg: "cannot create matrix from empty list")
         }
@@ -112,7 +112,7 @@ public struct Matrix: MutableListProtocol, NaN {
         try self.init(rows)
     }
     
-    init(_ rows: [Row]) throws {
+    public init(_ rows: [Row]) throws {
         self.rows = rows
         if rows.count < 1 || rows.first!.count < 1 {
             throw ExecutionError.general(errMsg: "cannot create empty matrix")
@@ -125,7 +125,7 @@ public struct Matrix: MutableListProtocol, NaN {
         self.dim = (rows: rows.count, cols: rows[0].count)
     }
     
-    init(_ mat: [[Node]]) throws {
+    public init(_ mat: [[Node]]) throws {
         try self.init(mat.map {Row($0)})
     }
     

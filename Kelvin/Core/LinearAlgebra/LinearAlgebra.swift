@@ -15,7 +15,7 @@ public class LinearAlgebra {
         vectorOperations
     ].flatMap {$0}
     
-    public static let matrixOperations: [Operation] = [
+    static let matrixOperations: [Operation] = [
         .binary(.add, Matrix.self, Matrix.self) {
             try $0.perform(+, with: $1)
         },
@@ -72,7 +72,7 @@ public class LinearAlgebra {
         }
     ]
     
-    public static let vectorOperations: [Operation] = [
+    static let vectorOperations: [Operation] = [
         .binary(.add, Vector.self, Vector.self) {
             try $0.perform(+, with: $1)
         },

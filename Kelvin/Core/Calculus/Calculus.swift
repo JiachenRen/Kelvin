@@ -11,7 +11,7 @@ import Foundation
 public class Calculus {
     
     /// Calculus operations
-    public static let operations: [Operation] = [
+    static let operations: [Operation] = [
         .binary(.derivative, [.any, .var]) {
             let v = $1 as! Variable
             Scope.withholdAccess(to: v)

@@ -154,7 +154,11 @@ public class Developer {
             return $0
         },
         .init(.getWorkingDirectory, []) {_ in
-            KString(Process().currentDirectoryPath)
+            #if os(OSX)
+                return KString(Process().currentDirectoryPath)
+            #else
+                throw ExecutionError.general(errMsg: "unable to resolve working directory - unsupported")
+            #endif
         },
         
         /// Type casting (coersion)

@@ -12,11 +12,11 @@ public struct Vector: MutableListProtocol, NaN {
     
     public var elements: [Node]
     
-    var magnitude: Node {
+    public var magnitude: Node {
         return √(++elements.map {$0 ^ 2})
     }
     
-    var unitVector: Vector {
+    public var unitVector: Vector {
         let mag = magnitude
         return Vector(elements.map {$0 / mag})
     }
@@ -39,7 +39,7 @@ public struct Vector: MutableListProtocol, NaN {
         return .node
     }
     
-    init(_ components: [Node]) {
+    public init(_ components: [Node]) {
         self.elements = components
     }
     

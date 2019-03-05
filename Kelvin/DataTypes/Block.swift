@@ -8,7 +8,8 @@
 
 import Foundation
 
-public struct Pipeline: MutableListProtocol, NaN {
+/// Compound statements
+public struct Block: MutableListProtocol, NaN {
     
     public var precedence: Keyword.Precedence {
         return .pipeline
@@ -30,12 +31,12 @@ public struct Pipeline: MutableListProtocol, NaN {
         return statements ?? ""
     }
     
-    init(_ statements: [Node]) {
+    public init(_ statements: [Node]) {
         self.elements = statements
     }
     
     public func equals(_ node: Node) -> Bool {
-        if let pipeline = node as? Pipeline {
+        if let pipeline = node as? Block {
             return equals(list: pipeline)
         }
         return false

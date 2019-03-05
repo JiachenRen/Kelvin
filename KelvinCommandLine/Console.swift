@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Kelvin
 
 public class Console: IOProtocol {
     private var output = ""
@@ -106,7 +107,7 @@ public class Console: IOProtocol {
                     Swift.print("\(tab)  ", terminator: "")
                 }
                 
-                var input = Swift.readLine()?.trimmed ?? ""
+                var input = Swift.readLine()?.trimmingCharacters(in: .whitespaces) ?? ""
                 
                 let curOpenBrackets = Compiler.countOpenBrackets(input)
                 openBrackets[.square]! += curOpenBrackets[.square]!

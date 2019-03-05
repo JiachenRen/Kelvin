@@ -22,16 +22,16 @@ public struct Keyword {
 
     /// The custom operator for a keyword. For example,
     /// the infix keyword .mod could have an operator of "%"
-    var `operator`: Operator?
+    public var `operator`: Operator?
 
     /// The associative property of the operator, either prefix, postfix, or infix
-    var associativity: Associativity
+    public var associativity: Associativity
 
     /// The precednece of the operator
-    var precedence: Precedence
+    public var precedence: Precedence
 
     /// The name of the operation that the keyword is associated with.
-    var name: String
+    public var name: String
 
     /// A dictionary that maps an encoding to a keyword.
     public static var encodings: [Encoding: Keyword] = {
@@ -49,16 +49,16 @@ public struct Keyword {
 
     /// A single character is used to encode the operation;
     /// By doing so, the compiler can treat the operation like +,-,*,/, and so on.
-    var encoding: Encoding
+    public var encoding: Encoding
 
     /// Keyword w/ higher compilation priority are compiled first.
     /// The longer the name of the operator, the higher the compilation priority.
-    var compilationPriority: Int {
+    public var compilationPriority: Int {
         return self.operator?.name.count ?? 0
     }
 
     /// Properly formatted w/ keyword.
-    var formatted: String {
+    public var formatted: String {
         if let o = self.operator {
             switch o.padding {
             case .bothSides:
@@ -86,7 +86,8 @@ public struct Keyword {
         for name: String,
         associativity: Associativity,
         precedence: Precedence? = nil,
-        operator: Operator? = nil) {
+        operator: Operator? = nil
+    ) {
         self.name = name
         self.associativity = associativity
         if let p = precedence {
@@ -110,7 +111,8 @@ public struct Keyword {
         for name: String,
         associativity: Associativity,
         precedence: Precedence? = nil,
-        operator: Operator? = nil) {
+        operator: Operator? = nil
+    ) {
 
         // Create the keyword
         let keyword = Keyword(

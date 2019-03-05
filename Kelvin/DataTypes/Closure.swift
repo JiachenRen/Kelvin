@@ -18,9 +18,9 @@ public struct Closure: UnaryNode, NaN {
         return "$(\(node.stringified))"
     }
     
-    var node: Node
+    public var node: Node
     
-    init(_ definition: Node, capturesReturn: Bool = false) {
+    public init(_ definition: Node, capturesReturn: Bool = false) {
         self.node = definition
         self.capturesReturn = capturesReturn
     }

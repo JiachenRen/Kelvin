@@ -29,7 +29,7 @@ public enum DataType: String, CustomStringConvertible {
     
     static let symbol = "@"
     
-    static func resolve<T>(_ type: T.Type) throws -> DataType {
+    public static func resolve<T>(_ type: T.Type) throws -> DataType {
         if type == KString.self {
             return .string
         } else if type == List.self || type == ListProtocol.self || type == MutableListProtocol.self {
@@ -61,7 +61,7 @@ public enum DataType: String, CustomStringConvertible {
     }
     
     /// - Todo: Resolve conflict b/w Number and Int
-    static func resolve(_ node: Node) throws -> DataType {
+    public static func resolve(_ node: Node) throws -> DataType {
         if node is KString {
             return .string
         } else if node is List {

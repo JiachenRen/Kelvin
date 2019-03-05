@@ -645,7 +645,7 @@ public class Compiler {
                 .map {
                     try resolve(String($0), &dict, binOps)
             }
-            return Pipeline(nodes)
+            return Block(nodes)
         } else if expr.contains(",") {
             
             // Resolve lists.

@@ -14,7 +14,7 @@ public protocol ListProtocol: Node {
 
 public extension ListProtocol {
     
-    var count: Int {
+    public var count: Int {
         return elements.count
     }
     

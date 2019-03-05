@@ -34,15 +34,15 @@ public struct List: MutableListProtocol, NaN {
         return .node
     }
 
-    init(_ elements: [Node]) {
+    public init(_ elements: [Node]) {
         self.elements = elements
     }
 
-    init(_ elements: Node...) {
+    public init(_ elements: Node...) {
         self.init(elements)
     }
     
-    init?(_ node: Node) {
+    public init?(_ node: Node) {
         if let list = node as? ListProtocol {
             self.elements = list.elements
         } else if let str = node as? KString {

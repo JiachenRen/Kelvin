@@ -82,7 +82,7 @@ public extension OperationName {
     ]
     
     /// Use subscript syntax to check if the operation contains the specified attribute.
-    subscript(attr: Attribute) -> Bool {
+    public subscript(attr: Attribute) -> Bool {
         return OperationName.attributes[self]?.contains(attr) ?? false
     }
 }

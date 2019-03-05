@@ -8,7 +8,7 @@
 
 import Foundation
 
-typealias Definition = ([Node]) throws -> Node?
+public typealias Definition = ([Node]) throws -> Node?
 
 /// Numerical unary operation
 typealias NUnary = (Float80) -> Float80

@@ -9,9 +9,6 @@
 import Foundation
 
 extension Float80: Value {
-    var isInteger: Bool {
-        return floor(self) == self
-    }
     
     public var float80: Float80 {
         return self

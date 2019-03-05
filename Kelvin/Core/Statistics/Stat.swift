@@ -16,7 +16,7 @@ public class Stat {
         case population
     }
     
-    public static let operations: [Operation] = [
+    static let operations: [Operation] = [
         
         // Mark: Distribution
         

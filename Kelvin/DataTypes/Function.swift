@@ -20,10 +20,10 @@ public struct Function: MutableListProtocol {
     }
 
     /// The name of the function
-    let name: String
+    public let name: String
 
     /// List of arguments that the function takes in.
-    let args: List
+    public let args: List
     
     /// Conform to MutableListProtocol by returning the list of arguments
     /// as elements; since the function itself is immutable, a new function
@@ -47,9 +47,9 @@ public struct Function: MutableListProtocol {
     }
     
     /// Whether the function is commutative.
-    let isCommutative: Bool
+    public let isCommutative: Bool
 
-    init(_ name: String, _ args: List) {
+    public init(_ name: String, _ args: List) {
         self.name = name
         self.isCommutative = name[.commutative]
         
@@ -58,7 +58,7 @@ public struct Function: MutableListProtocol {
         flatten()
     }
 
-    init(_ name: String, _ args: [Node]) {
+    public init(_ name: String, _ args: [Node]) {
         self.init(name, List(args))
     }
 
@@ -244,7 +244,7 @@ public struct Function: MutableListProtocol {
     
     /// Creates a definition from the template, by replacing
     /// the variables in template with arguments
-    static func createDefinition(from template: Node, using parameters: [Variable]) throws -> Definition {
+    public static func createDefinition(from template: Node, using parameters: [Variable]) throws -> Definition {
         
         // Generate a unique tag
         let tag = Keyword.Encoder.next()

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Kelvin
 
 extension ConsoleViewController: IOProtocol {
     

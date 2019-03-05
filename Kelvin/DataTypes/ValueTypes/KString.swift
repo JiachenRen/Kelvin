@@ -8,30 +8,30 @@
 
 import Foundation
 
-struct KString: LeafNode, NaN {
+public struct KString: LeafNode, NaN {
     
-    var stringified: String {
+    public var stringified: String {
         return "\"\(string)\""
     }
     
-    var ansiColored: String {
+    public var ansiColored: String {
         return "\"\(string)\"".green
     }
     
-    let string: String
+    public let string: String
     
-    init(_ string: String) {
+    public init(_ string: String) {
         self.string = string
     }
     
-    func equals(_ node: Node) -> Bool {
+    public func equals(_ node: Node) -> Bool {
         if let kString = node as? KString {
             return kString.string == string
         }
         return false
     }
     
-    func concat(_ ks: KString) -> KString {
+    public func concat(_ ks: KString) -> KString {
         return KString("\(string)\(ks.string)")
     }
 }

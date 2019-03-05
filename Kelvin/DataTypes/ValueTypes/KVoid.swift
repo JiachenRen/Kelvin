@@ -8,16 +8,16 @@
 
 import Foundation
 
-struct KVoid: LeafNode, NaN {
-    var stringified: String {
+public struct KVoid: LeafNode, NaN {
+    public var stringified: String {
         return "()"
     }
     
-    var ansiColored: String {
+    public var ansiColored: String {
         return "()".magenta.bold
     }
     
-    func equals(_ node: Node) -> Bool {
+    public func equals(_ node: Node) -> Bool {
         return node is KVoid
     }
     

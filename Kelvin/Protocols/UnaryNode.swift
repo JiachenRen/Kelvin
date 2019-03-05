@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol UnaryNode: Node {
+public protocol UnaryNode: Node {
     var node: Node { get set }
 }
 

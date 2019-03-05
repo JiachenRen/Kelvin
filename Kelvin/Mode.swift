@@ -9,10 +9,10 @@
 import Foundation
 
 public struct Mode {
-    static var shared: Mode = Mode()
+    public static var shared: Mode = Mode()
     
     // The rounding mode.
-    var rounding: Rounding = .approximate
+    public var rounding: Rounding = .approximate
     
     private var formatter: NumberFormatter = {
         let formatter = NumberFormatter()

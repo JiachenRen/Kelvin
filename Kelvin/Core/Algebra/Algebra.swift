@@ -11,7 +11,7 @@ import Foundation
 public class Algebra {
     
     /// Algebraic operations (factorization, expansion)
-    public static let operations: [Operation] = [
+    static let operations: [Operation] = [
         .unary(.factorize, [.any]) {
             try factorize($0)
         },

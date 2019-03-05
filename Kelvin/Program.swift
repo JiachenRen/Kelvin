@@ -10,9 +10,9 @@ import Foundation
 
 public struct Program {
 
-    var statements: [Statement]
+    public var statements: [Statement]
     
-    var config: Configuration
+    public var config: Configuration
     
     public static var io: IOProtocol?
 
@@ -21,26 +21,31 @@ public struct Program {
         return Date().timeIntervalSince1970
     }
 
-    init(_ statements: [Statement], config: Configuration = Configuration.default) {
+    public init(_ statements: [Statement], config: Configuration = Configuration.default) {
         self.statements = statements
         self.config = config
     }
     
     /// Compile and run the file w/ the given file name under /Examples directory
-    public static func compileAndRun(_ fileName: String, with config: Configuration? = nil) throws {
+    public static func compileAndRun(_ filePath: String, with config: Configuration? = nil) throws {
         var content = ""
         do {
             io?.log("trying relative URL to current working directory...")
-            let url = URL(fileURLWithPath: Process().currentDirectoryPath)
-                .appendingPathComponent(fileName)
-            content = try String(contentsOf: url)
-            io?.log("loading contents of \(fileName)")
+            #if os(OSX)
+                let url = URL(fileURLWithPath: Process().currentDirectoryPath)
+                    .appendingPathComponent(filePath)
+                content = try String(contentsOf: url)
+                io?.log("loading contents of \(filePath)")
+            #else
+                let errMsg = "unable to resolve current directory - unsupported"
+                throw ExecutionError.general(errMsg: errMsg)
+            #endif
         } catch let e {
             io?.log("\(e.localizedDescription)")
             io?.log("resolving absolute URL...")
             do {
-                content = try String(contentsOf: URL(fileURLWithPath: fileName))
-                io?.log("loading contents of \(fileName)")
+                content = try String(contentsOf: URL(fileURLWithPath: filePath))
+                io?.log("loading contents of \(filePath)")
             } catch let e {
                 throw ExecutionError.general(errMsg: e.localizedDescription)
             }
@@ -112,23 +117,34 @@ public struct Program {
     }
 
     public struct Log {
-        let line: Int?
-        let input: Node
-        let output: Node
+        public let line: Int?
+        public let input: Node
+        public let output: Node
+        
+        public init(line: Int? = nil, input: Node, output: Node) {
+            self.line = line
+            self.input = input
+            self.output = output
+        }
     }
     
     public struct Configuration {
-        var scope: Scope
-        var retentionPolicy: RetentionPolicy
+        public var scope: Scope
+        public var retentionPolicy: RetentionPolicy
         
-        static var `default` = Configuration(scope: .useCurrent, retentionPolicy: .restore)
+        public static var `default` = Configuration(scope: .useCurrent, retentionPolicy: .restore)
         
-        enum Scope {
+        public init(scope: Scope, retentionPolicy: RetentionPolicy) {
+            self.scope = scope
+            self.retentionPolicy = retentionPolicy
+        }
+        
+        public enum Scope {
             case useCurrent
             case useDefault
         }
         
-        enum RetentionPolicy {
+        public enum RetentionPolicy {
             case restore
             case restoreToDefault
             case preserveAll

@@ -78,7 +78,7 @@ extension Node {
      - Parameter args: Replacements for anonymous closure args
      - Returns: Node w/ closure args replaced w/ supplied args.
      */
-    func replacingAnonymousArgs(with args: [Node]) -> Node {
+    public func replacingAnonymousArgs(with args: [Node]) -> Node {
         return self.replacing(by: {n in
             let v = n as! Variable
             var name = v.name
@@ -99,7 +99,7 @@ extension Node {
     }
     
     /// Finalizes the node such that it is left as-is during simplification.
-    func finalize() -> Final {
+    public func finalize() -> Node {
         return Final(node: self)
     }
 }

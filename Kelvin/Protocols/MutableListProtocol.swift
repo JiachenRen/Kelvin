@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol MutableListProtocol: ListProtocol {
+public protocol MutableListProtocol: ListProtocol {
     var elements: [Node] { get set }
 }
 
@@ -46,7 +46,7 @@ extension MutableListProtocol {
         return copy
     }
     
-    subscript(_ idx: Int) -> Node {
+    public subscript(_ idx: Int) -> Node {
         get {
             return elements[idx]
         }
