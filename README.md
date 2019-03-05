@@ -7,34 +7,43 @@ Kelvin CAS
 
 Kelvin is a powerful computer algebra system built with _Swift 4_. Aside from APIs that support advanced **statistic**, **algebra**, **linear algebra**, **probability**, **list** and **calculus** operations, it incorporates many popular syntactic constructs from many different languages (lua, python, swift, java, javascript, bash). For a full list of what it can do, please refer to [Capabilities](#Capabilities).
 
-## MacOS User Interface
+## Using Kelvin as a Framework
 
-Finally, the UI is here! Using `Highlightr` (which uses [highlight.js](https://highlightjs.org "highlight.js homepage") at its core), the editor supports **186** languages and **89** themes. (That's just something extra and useless imo but hey, it looks great!) The `highlight.js` core is modified to support syntax highlighting for kelvin language, which is used by default.
+### Carthage
 
-### Integrated Development Environment
-The IDE works like the old [Swift Playground](https://developer.apple.com/swift-playgrounds/ "Apple's Introduction on Swift Playgrounds") - that is, as you edit your code, the editor automatically compiles and runs it for you! Only this time, it is faster. The window on the lower left is the `console`, which serves as the program's `IO` interface. The window on the lower right is the `debugger`, all execution logs including compilation time, run time, errors & stack trace, and step by step execution result go in there. 
+[Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks.
 
-Below is a screenshot of Kelvin IDE in the default theme (keep in mind that you can choose from a large poo of candidates), highlighted using `kelvin`'s syntax . The screenshot demonstrates how to find the **tangent line/plane** of multivariate functions. (Notice how the whole script is compiled and evaluated in under **0.1 seconds**!) Even if the execution time lasts longer, there won't be any lagging since the scripts run on a separate thread and are cancelled/started automatically. 
+You can install Carthage with [Homebrew](http://brew.sh/) using the following command:
 
-![Finding Tangent with IDE and Kelvin](/Misc/Screenshots/finding_tangent.png)
+```bash
+$ brew update
+$ brew install carthage
+```
 
-Another one of the **85** themes you can choose from that is my personal favorite, `tomorrow-night-blue`
-![Screenshot of IDE with Dark Theme](/Misc/Screenshots/kelvin_tomorrow_night_blue_theme.png)
+To integrate Highlightr into your Xcode project using Carthage, specify it in your `Cartfile`:
 
-Try it out, 'cause it's awesome ~~ why not??
+```ogdl
+github "JiachenRen/kelvin-cas"
+```
 
-### Support for Dark Mode on Sierra
-The IDE now automatically chooses/changes its theme according to the system's theme! (You can still customize if wanted)
+Run `carthage update` to build the framework and drag the built `Kelvin.framework` into your Xcode project.
+
+
+> **Note** - If `carthage update` fails with the `iOS Framework` framework, you can still build it manually from Xcode. 
+Otherwise if you are only using the macOS Framework, do ```carthage update --platform macOS``` instead.
 
 ## Command Line
+If you prefer, you can use `kelvin` as a command line tool.
 ### Setup
-1. Download the binary file `kelvin` from releases (or you can build it yourself with XCode)
+1. Download the binary file `kelvin` from releases.
 2. If the file name is altered by your browser, remove the extension.
 3. Optionally, you can add `kelvin` as part of your command line tools by the following command:
 
 ```bash
 mv <path to kelvin> /usr/local/bin
 ```
+
+Alternatively, you can build the scheme `macOS Command Line Tool` manually from Xcode.
 
 ### Usage
 
@@ -135,6 +144,25 @@ $ kelvin -f -v /tmp/prg
 → program terminated in 0.0023789405822753906 seconds.
 Hello World
 ```
+
+## MacOS User Interface
+
+Finally, the UI is here! Using `Highlightr` (which uses [highlight.js](https://highlightjs.org "highlight.js homepage") at its core), the editor supports **186** languages and **89** themes. (That's just something extra and useless imo but hey, it looks great!) The `highlight.js` core is modified to support syntax highlighting for kelvin language, which is used by default.
+
+### Integrated Development Environment
+The IDE works like the old [Swift Playground](https://developer.apple.com/swift-playgrounds/ "Apple's Introduction on Swift Playgrounds") - that is, as you edit your code, the editor automatically compiles and runs it for you! Only this time, it is faster. The window on the lower left is the `console`, which serves as the program's `IO` interface. The window on the lower right is the `debugger`, all execution logs including compilation time, run time, errors & stack trace, and step by step execution result go in there. 
+
+Below is a screenshot of Kelvin IDE in the default theme (keep in mind that you can choose from a large poo of candidates), highlighted using `kelvin`'s syntax . The screenshot demonstrates how to find the **tangent line/plane** of multivariate functions. (Notice how the whole script is compiled and evaluated in under **0.1 seconds**!) Even if the execution time lasts longer, there won't be any lagging since the scripts run on a separate thread and are cancelled/started automatically. 
+
+![Finding Tangent with IDE and Kelvin](/Misc/Screenshots/finding_tangent.png)
+
+Another one of the **85** themes you can choose from that is my personal favorite, `tomorrow-night-blue`
+![Screenshot of IDE with Dark Theme](/Misc/Screenshots/kelvin_tomorrow_night_blue_theme.png)
+
+Try it out, 'cause it's awesome ~~ why not??
+
+### Support for Dark Mode on Sierra
+The IDE now automatically chooses/changes its theme according to the system's theme! (You can still customize if wanted)
 
 ## The Kelvin Language
 The Kelvin programming language is developed by a high school senior. Yes, really. It is a combination of `Javascript`, `Swift`, `Python`, and `Bash`, with a bunch of wierd syntatic sugars that came from my pure imagination. It is a interpreted language (nowhere near as fast), but it is powerful in terms of what it can do when it comes to solving high school math problems.
