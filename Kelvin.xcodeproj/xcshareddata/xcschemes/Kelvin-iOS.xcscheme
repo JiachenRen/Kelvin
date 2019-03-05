@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1F48D9FC222E0E6600639F26"
-               BuildableName = "iOS_Framework.framework"
-               BlueprintName = "iOS Framework"
+               BuildableName = "Kelvin.framework"
+               BlueprintName = "Kelvin-iOS"
                ReferencedContainer = "container:Kelvin.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,8 +46,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1F48D9FC222E0E6600639F26"
-            BuildableName = "iOS_Framework.framework"
-            BlueprintName = "iOS Framework"
+            BuildableName = "Kelvin.framework"
+            BlueprintName = "Kelvin-iOS"
             ReferencedContainer = "container:Kelvin.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -64,8 +64,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1F48D9FC222E0E6600639F26"
-            BuildableName = "iOS_Framework.framework"
-            BlueprintName = "iOS Framework"
+            BuildableName = "Kelvin.framework"
+            BlueprintName = "Kelvin-iOS"
             ReferencedContainer = "container:Kelvin.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

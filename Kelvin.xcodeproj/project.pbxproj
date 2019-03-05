@@ -171,7 +171,6 @@
 		1F48DAA4222E31CD00639F26 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82BD219757FC005C3353 /* main.swift */; };
 		1F48DAA5222E31CD00639F26 /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF73622063067006351B0 /* Option.swift */; };
 		1F48DAA8222E31D900639F26 /* Kelvin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F48D9AA222E0D8100639F26 /* Kelvin.framework */; };
-		1F48DAAA222E325C00639F26 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F48DAA9222E325C00639F26 /* Accelerate.framework */; };
 		1F48DAAD222E3F7700639F26 /* Kelvin.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F48DAAB222E3DE900639F26 /* Kelvin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1F48DAAE222E3F9D00639F26 /* Kelvin.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F48DAAB222E3DE900639F26 /* Kelvin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1F570B5121FBF28C0006E342 /* Matrix in Resources */ = {isa = PBXBuildFile; fileRef = 1F570B5021FBF28C0006E342 /* Matrix */; };
@@ -296,7 +295,7 @@
 		1F2E82B121973FF7005C3353 /* Value.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Value.swift; sourceTree = "<group>"; };
 		1F2E82B32197416D005C3353 /* List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		1F2E82B521974368005C3353 /* Variable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Variable.swift; sourceTree = "<group>"; };
-		1F2E82BB219757FC005C3353 /* macOS Command Line Tool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "macOS Command Line Tool"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F2E82BB219757FC005C3353 /* kelvin */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = kelvin; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F2E82BD219757FC005C3353 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		1F322824222C76E0004417CB /* DataType+Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataType+Node.swift"; sourceTree = "<group>"; };
 		1F322828222C8AA9004417CB /* finding_tangent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = finding_tangent.png; sourceTree = "<group>"; };
@@ -381,7 +380,7 @@
 		1FE487F4220E416F005361AC /* ConsoleViewController+NSOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConsoleViewController+NSOutlineView.swift"; sourceTree = "<group>"; };
 		1FE487FB220E9027005361AC /* ruby_github_theme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ruby_github_theme.png; sourceTree = "<group>"; };
 		1FE487FC220E9028005361AC /* ruby_dracula_theme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ruby_dracula_theme.png; sourceTree = "<group>"; };
-		1FFD8C9F218F50850004ECEB /* macOS Application.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "macOS Application.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1FFD8C9F218F50850004ECEB /* Kelvin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kelvin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FFD8CA2218F50850004ECEB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1FFD8CA7218F50850004ECEB /* Kelvin.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Kelvin.xcdatamodel; sourceTree = "<group>"; };
 		1FFD8CA9218F50870004ECEB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -401,7 +400,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1F48DAAA222E325C00639F26 /* Accelerate.framework in Frameworks */,
 				1F48DAA8222E31D900639F26 /* Kelvin.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -772,9 +770,9 @@
 		1FFD8CA0218F50850004ECEB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1FFD8C9F218F50850004ECEB /* macOS Application.app */,
+				1FFD8C9F218F50850004ECEB /* Kelvin.app */,
 				1FFD8CB4218F50870004ECEB /* KelvinTests.xctest */,
-				1F2E82BB219757FC005C3353 /* macOS Command Line Tool */,
+				1F2E82BB219757FC005C3353 /* kelvin */,
 				1F48D9AA222E0D8100639F26 /* Kelvin.framework */,
 				1F48D9FD222E0E6600639F26 /* Kelvin.framework */,
 			);
@@ -857,9 +855,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		1F2E82BA219757FC005C3353 /* macOS Command Line Tool */ = {
+		1F2E82BA219757FC005C3353 /* kelvin */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1F2E82C1219757FC005C3353 /* Build configuration list for PBXNativeTarget "macOS Command Line Tool" */;
+			buildConfigurationList = 1F2E82C1219757FC005C3353 /* Build configuration list for PBXNativeTarget "kelvin" */;
 			buildPhases = (
 				1F2E82B7219757FC005C3353 /* Sources */,
 				1F2E82B8219757FC005C3353 /* Frameworks */,
@@ -870,14 +868,14 @@
 			dependencies = (
 				1F48DAA7222E31D300639F26 /* PBXTargetDependency */,
 			);
-			name = "macOS Command Line Tool";
+			name = kelvin;
 			productName = KelvinCommandLine;
-			productReference = 1F2E82BB219757FC005C3353 /* macOS Command Line Tool */;
+			productReference = 1F2E82BB219757FC005C3353 /* kelvin */;
 			productType = "com.apple.product-type.tool";
 		};
-		1F48D9A9222E0D8100639F26 /* macOS Framework */ = {
+		1F48D9A9222E0D8100639F26 /* Kelvin-macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1F48D9B3222E0D8100639F26 /* Build configuration list for PBXNativeTarget "macOS Framework" */;
+			buildConfigurationList = 1F48D9B3222E0D8100639F26 /* Build configuration list for PBXNativeTarget "Kelvin-macOS" */;
 			buildPhases = (
 				1F48D9A5222E0D8100639F26 /* Headers */,
 				1F48D9A6222E0D8100639F26 /* Sources */,
@@ -888,14 +886,14 @@
 			);
 			dependencies = (
 			);
-			name = "macOS Framework";
+			name = "Kelvin-macOS";
 			productName = "KelvinFramework-macOS";
 			productReference = 1F48D9AA222E0D8100639F26 /* Kelvin.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		1F48D9FC222E0E6600639F26 /* iOS Framework */ = {
+		1F48D9FC222E0E6600639F26 /* Kelvin-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1F48DA02222E0E6600639F26 /* Build configuration list for PBXNativeTarget "iOS Framework" */;
+			buildConfigurationList = 1F48DA02222E0E6600639F26 /* Build configuration list for PBXNativeTarget "Kelvin-iOS" */;
 			buildPhases = (
 				1F48D9F8222E0E6600639F26 /* Headers */,
 				1F48D9F9222E0E6600639F26 /* Sources */,
@@ -906,14 +904,14 @@
 			);
 			dependencies = (
 			);
-			name = "iOS Framework";
+			name = "Kelvin-iOS";
 			productName = "KelvinFramework-iOS";
 			productReference = 1F48D9FD222E0E6600639F26 /* Kelvin.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		1FFD8C9E218F50850004ECEB /* macOS Application */ = {
+		1FFD8C9E218F50850004ECEB /* Kelvin */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1FFD8CC8218F50870004ECEB /* Build configuration list for PBXNativeTarget "macOS Application" */;
+			buildConfigurationList = 1FFD8CC8218F50870004ECEB /* Build configuration list for PBXNativeTarget "Kelvin" */;
 			buildPhases = (
 				1FFD8C9B218F50850004ECEB /* Sources */,
 				1FFD8C9C218F50850004ECEB /* Frameworks */,
@@ -926,9 +924,9 @@
 			dependencies = (
 				1F48DA56222E140B00639F26 /* PBXTargetDependency */,
 			);
-			name = "macOS Application";
+			name = Kelvin;
 			productName = Kelvin;
-			productReference = 1FFD8C9F218F50850004ECEB /* macOS Application.app */;
+			productReference = 1FFD8C9F218F50850004ECEB /* Kelvin.app */;
 			productType = "com.apple.product-type.application";
 		};
 		1FFD8CB3218F50870004ECEB /* KelvinTests */ = {
@@ -989,11 +987,11 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1FFD8C9E218F50850004ECEB /* macOS Application */,
-				1F2E82BA219757FC005C3353 /* macOS Command Line Tool */,
+				1FFD8C9E218F50850004ECEB /* Kelvin */,
+				1F2E82BA219757FC005C3353 /* kelvin */,
 				1FFD8CB3218F50870004ECEB /* KelvinTests */,
-				1F48D9A9222E0D8100639F26 /* macOS Framework */,
-				1F48D9FC222E0E6600639F26 /* iOS Framework */,
+				1F48D9A9222E0D8100639F26 /* Kelvin-macOS */,
+				1F48D9FC222E0E6600639F26 /* Kelvin-iOS */,
 			);
 		};
 /* End PBXProject section */
@@ -1279,17 +1277,17 @@
 /* Begin PBXTargetDependency section */
 		1F48DA56222E140B00639F26 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 1F48D9A9222E0D8100639F26 /* macOS Framework */;
+			target = 1F48D9A9222E0D8100639F26 /* Kelvin-macOS */;
 			targetProxy = 1F48DA55222E140B00639F26 /* PBXContainerItemProxy */;
 		};
 		1F48DA9F222E1F8B00639F26 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 1F48D9A9222E0D8100639F26 /* macOS Framework */;
+			target = 1F48D9A9222E0D8100639F26 /* Kelvin-macOS */;
 			targetProxy = 1F48DA9E222E1F8B00639F26 /* PBXContainerItemProxy */;
 		};
 		1F48DAA7222E31D300639F26 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 1F48D9A9222E0D8100639F26 /* macOS Framework */;
+			target = 1F48D9A9222E0D8100639F26 /* Kelvin-macOS */;
 			targetProxy = 1F48DAA6222E31D300639F26 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1311,6 +1309,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				PRODUCT_MODULE_NAME = KelvinCommandLine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 			};
@@ -1321,6 +1320,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				PRODUCT_MODULE_NAME = KelvinCommandLine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 			};
@@ -1329,6 +1329,7 @@
 		1F48D9B4222E0D8100639F26 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1359,6 +1360,7 @@
 		1F48D9B5222E0D8100639F26 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1583,6 +1585,7 @@
 					"@executable_path/../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jiachenren.Kelvin;
+				PRODUCT_MODULE_NAME = KelvinMacOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 			};
@@ -1607,6 +1610,7 @@
 					"@executable_path/../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jiachenren.Kelvin;
+				PRODUCT_MODULE_NAME = KelvinMacOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 			};
@@ -1653,7 +1657,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1F2E82C1219757FC005C3353 /* Build configuration list for PBXNativeTarget "macOS Command Line Tool" */ = {
+		1F2E82C1219757FC005C3353 /* Build configuration list for PBXNativeTarget "kelvin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1F2E82BF219757FC005C3353 /* Debug */,
@@ -1662,7 +1666,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1F48D9B3222E0D8100639F26 /* Build configuration list for PBXNativeTarget "macOS Framework" */ = {
+		1F48D9B3222E0D8100639F26 /* Build configuration list for PBXNativeTarget "Kelvin-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1F48D9B4222E0D8100639F26 /* Debug */,
@@ -1671,7 +1675,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1F48DA02222E0E6600639F26 /* Build configuration list for PBXNativeTarget "iOS Framework" */ = {
+		1F48DA02222E0E6600639F26 /* Build configuration list for PBXNativeTarget "Kelvin-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1F48DA03222E0E6600639F26 /* Debug */,
@@ -1689,7 +1693,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1FFD8CC8218F50870004ECEB /* Build configuration list for PBXNativeTarget "macOS Application" */ = {
+		1FFD8CC8218F50870004ECEB /* Build configuration list for PBXNativeTarget "Kelvin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1FFD8CC9218F50870004ECEB /* Debug */,

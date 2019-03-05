@@ -29,7 +29,7 @@ github "JiachenRen/kelvin-cas"
 Run `carthage update` to build the framework and drag the built `Kelvin.framework` into your Xcode project.
 
 
-> **Note** - If `carthage update` fails with the `iOS Framework` framework, you can still build it manually from Xcode. 
+> **Note** - If `carthage update` fails with the `Kelvin-iOS` framework, you can still build it manually from Xcode. 
 Otherwise if you are only using the macOS Framework, do ```carthage update --platform macOS``` instead.
 
 ## Command Line

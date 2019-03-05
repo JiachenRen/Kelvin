@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1F2E82BA219757FC005C3353"
-               BuildableName = "macOS Command Line Tool"
-               BlueprintName = "macOS Command Line Tool"
+               BuildableName = "kelvin"
+               BlueprintName = "kelvin"
                ReferencedContainer = "container:Kelvin.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,8 +33,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1F2E82BA219757FC005C3353"
-            BuildableName = "macOS Command Line Tool"
-            BlueprintName = "macOS Command Line Tool"
+            BuildableName = "kelvin"
+            BlueprintName = "kelvin"
             ReferencedContainer = "container:Kelvin.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -56,8 +56,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1F2E82BA219757FC005C3353"
-            BuildableName = "macOS Command Line Tool"
-            BlueprintName = "macOS Command Line Tool"
+            BuildableName = "kelvin"
+            BlueprintName = "kelvin"
             ReferencedContainer = "container:Kelvin.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -75,8 +75,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1F2E82BA219757FC005C3353"
-            BuildableName = "macOS Command Line Tool"
-            BlueprintName = "macOS Command Line Tool"
+            BuildableName = "kelvin"
+            BlueprintName = "kelvin"
             ReferencedContainer = "container:Kelvin.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1F48D9A9222E0D8100639F26"
-               BuildableName = "macOS_Framework.framework"
-               BlueprintName = "macOS Framework"
+               BuildableName = "Kelvin.framework"
+               BlueprintName = "Kelvin-macOS"
                ReferencedContainer = "container:Kelvin.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,8 +46,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1F48D9A9222E0D8100639F26"
-            BuildableName = "macOS_Framework.framework"
-            BlueprintName = "macOS Framework"
+            BuildableName = "Kelvin.framework"
+            BlueprintName = "Kelvin-macOS"
             ReferencedContainer = "container:Kelvin.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -64,8 +64,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1F48D9A9222E0D8100639F26"
-            BuildableName = "macOS_Framework.framework"
-            BlueprintName = "macOS Framework"
+            BuildableName = "Kelvin.framework"
+            BlueprintName = "Kelvin-macOS"
             ReferencedContainer = "container:Kelvin.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

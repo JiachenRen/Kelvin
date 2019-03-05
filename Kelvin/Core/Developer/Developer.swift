@@ -9,7 +9,7 @@
 import Foundation
 
 public class Developer {
-    public static let operations: [Operation] = [
+    static let operations: [Operation] = [
         stringOperations,
         flowControlOperations,
         assignmentOperations,
