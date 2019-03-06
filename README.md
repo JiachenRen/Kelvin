@@ -42,9 +42,8 @@ If you prefer, you can use `kelvin` as a command line tool.
 $ cd /tmp; curl https://raw.githubusercontent.com/JiachenRen/kelvin-cas/master/install.sh > install.sh; bash install.sh
 ```
 
-3. You are done! Now try `kelvin -c`
+3. You are done! Now try `kelvin -c`.
 
-Alternatively, you can build the scheme `macOS Command Line Tool` manually from Xcode.
 
 ### Usage
 
