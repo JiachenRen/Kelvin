@@ -35,12 +35,11 @@ Otherwise if you are only using the macOS Framework, do ```carthage update --pla
 ## Command Line
 If you prefer, you can use `kelvin` as a command line tool.
 ### Setup
-Before proceeding, you must have `git` and `xcodebuild` installed.
-1. Download the shell script `install.sh`, which can be found [here](/install.sh).
+1. Before proceeding, you must have the latest `git` and `xcodebuild` installed.
 2. Run the following command in terminal.
 
 ```bash
-$ bash <path to install.sh>
+$ cd /tmp; curl https://raw.githubusercontent.com/JiachenRen/kelvin-cas/master/install.sh > install.sh; bash install.sh
 ```
 
 3. You are done! Now try `kelvin -c`

@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 cd /tmp
 rm -rf kelvin-cas
 git clone https://github.com/JiachenRen/kelvin-cas.git
