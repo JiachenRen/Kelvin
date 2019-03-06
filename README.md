@@ -35,13 +35,15 @@ Otherwise if you are only using the macOS Framework, do ```carthage update --pla
 ## Command Line
 If you prefer, you can use `kelvin` as a command line tool.
 ### Setup
-1. Download the binary file `kelvin` from releases.
-2. If the file name is altered by your browser, remove the extension.
-3. Optionally, you can add `kelvin` as part of your command line tools by the following command:
+Before proceeding, you must have `git` and `xcodebuild` installed.
+1. Download the shell script `install.sh`, which can be found [here](/install.sh).
+2. Run the following command in terminal.
 
 ```bash
-mv <path to kelvin> /usr/local/bin
+$ bash <path to install.sh>
 ```
+
+3. You are done! Now try `kelvin -c`
 
 Alternatively, you can build the scheme `macOS Command Line Tool` manually from Xcode.
 
