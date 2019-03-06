@@ -5,7 +5,7 @@ Kelvin CAS
 [![License: MIT](https://img.shields.io/apm/l/vim-mode.svg?colorB=blue&style=flat)](/LICENSE)
 ![Carthage - Compatible](https://img.shields.io/badge/carthage-✓-orange.svg?style=flat)
 
-Kelvin is a powerful computer algebra system built with _Swift 4_. Aside from APIs that support advanced **statistic**, **algebra**, **linear algebra**, **probability**, **list** and **calculus** operations, it incorporates many popular syntactic constructs from many different languages (lua, python, swift, java, javascript, bash). For a full list of what it can do, please refer to [Capabilities](#Capabilities).
+Kelvin is a powerful language for symbolic computation built with _Swift 4_. Aside from APIs for advanced **statistic**, **algebra**, **linear algebra**, **probability**, **list** and **calculus** operations, it incorporates many popular syntactic constructs from different languages (lua, python, swift, java, javascript, bash). For a full list of what it can do, please refer to [Capabilities](#Capabilities).
 
 ## Using Kelvin as a Framework
 
