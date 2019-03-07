@@ -252,10 +252,10 @@ public extension Stat {
     ///     - p: Area under the `tPdf` curve
     ///     - df: Degrees of freedom (a positive integer)
     /// - Precondition: p is between 0 and 1
-    public static func invT(_ p: Float80, _ df: Int) throws -> Float80 {
+    public static func invT<T: Value>(_ p: Float80, _ df: T) throws -> Float80 {
         try Assert.domain(p, 0, 1)
         try Assert.domain(df, 0, Float80.infinity)
-        let df = Float80(df)
+        let df = df.float80
         var x = ibetainv(2 * Swift.min(p, 1 - p), 0.5 * df, 0.5)
         x = sqrt(df * (1 - x) / x)
         return (p > 0.5) ? x : -x

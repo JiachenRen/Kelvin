@@ -241,7 +241,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
     - [x] z interval
     - [x] t interval
     - [x] 2 sample z interval
-    - [ ] 2 sample t interval
+    - [x] 2 sample t interval
     - [x] 1 prop z interval
     - [ ] 2 prop z interval
 - [x] Regression

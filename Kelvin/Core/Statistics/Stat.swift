@@ -312,7 +312,7 @@ public class Stat {
         .quaternary(.zInterval, Value.self, Value.self, Int.self, Value.self) {
             let result = try zInterval(
                 sigma: $0.float80,
-                statistic: $1.float80,
+                mean: $1.float80,
                 sampleSize: $2,
                 confidenceLevel: $3.float80
             )
@@ -331,17 +331,17 @@ public class Stat {
             )
             let stats: [Pair] = [
                 .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
-                .init("x̅", result.statistic),
+                .init("x̅", result.oneVar.mean),
                 .init("ME", result.me),
-                .init("Sx", result.sx),
-                .init("n", result.n),
+                .init("Sx", result.oneVar.sx),
+                .init("n", result.oneVar.n),
                 .init("z", result.z)
             ]
             return List(stats)
         },
         .quaternary(.tInterval, Value.self, Value.self, Int.self, Value.self) {
             let result = try tInterval(
-                statistic: $0.float80,
+                mean: $0.float80,
                 sx: $1.float80,
                 sampleSize: $2,
                 confidenceLevel: $3.float80
@@ -360,13 +360,13 @@ public class Stat {
             // (result.ci, statistic, result.me, result.df, sx, n)
             let stats: [Pair] = [
                 .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
-                .init("x̅", result.statistic),
+                .init("x̅", result.oneVar.mean),
                 .init("ME", result.me),
                 .init("SE", result.se),
                 .init("t", result.t),
                 .init("df", result.df),
-                .init("Sx", result.sx),
-                .init("n", result.n)
+                .init("Sx", result.oneVar.sx),
+                .init("n", result.oneVar.n)
             ]
             return List(stats)
         },
@@ -378,7 +378,7 @@ public class Stat {
             )
             let stats: [Pair] = [
                 .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
-                .init("p̂", result.statistic),
+                .init("p̂", result.pHat),
                 .init("ME", result.me),
                 .init("SE", result.se)
             ]
@@ -401,41 +401,90 @@ public class Stat {
             )
             let stats: [Pair] = [
                 .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
-                .init("x̅1 - x̅2", result.statDiff),
+                .init("x̅1 - x̅2", result.meanDiff),
                 .init("ME", result.me),
-                .init("x̅1", result.stat1),
-                .init("x̅2", result.stat2),
-                .init("Sx1", result.sx1),
-                .init("Sx2", result.sx2),
-                .init("n1", result.n1),
-                .init("n2", result.n2),
+                .init("x̅1", result.twoVar.mean1),
+                .init("x̅2", result.twoVar.mean2),
+                .init("Sx1", result.twoVar.sx1),
+                .init("Sx2", result.twoVar.sx2),
+                .init("n1", result.twoVar.n1),
+                .init("n2", result.twoVar.n2),
             ]
             return List(stats)
         },
         .init(.zIntervalTwoSamp, [.number, .number, .number, .int, .number, .int, .number]) {
-            let (sigma1, sigma2, stat1, n1, stat2, n2, cl) = (
-                $0[0]≈!,
-                $0[1]≈!,
-                $0[2]≈!,
+            let (sigma1, sigma2, stat1, n1, stat2, n2, c) = (
+                $0[0].evaluated!.float80,
+                $0[1].evaluated!.float80,
+                $0[2].evaluated!.float80,
                 $0[3] as! Int,
-                $0[4]≈!,
+                $0[4].evaluated!.float80,
                 $0[5] as! Int,
-                $0[6]≈!
+                $0[6].evaluated!.float80
             )
             let result = try zIntervalTwoSamp(
                 sigma1: sigma1,
                 sigma2: sigma2,
-                statistic1: stat1,
+                mean1: stat1,
                 sampleSize1: n1,
-                statistic2: stat2,
+                mean2: stat2,
                 sampleSize2: n2,
-                confidenceLevel: cl
+                confidenceLevel: c
             )
             let stats: [Pair] = [
                 .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
-                .init("x̅1 - x̅2", result.statDiff),
+                .init("x̅1 - x̅2", result.meanDiff),
                 .init("ME", result.me),
                 .init("σDiff", result.sigmaDiff),
+            ]
+            return List(stats)
+        },
+        .init(.tIntervalTwoSamp, [.number, .number, .int, .number, .number, .int, .number]) {
+            let (mean1, sx1, n1, mean2, sx2, n2, c) = (
+                $0[0].evaluated!.float80,
+                $0[1].evaluated!.float80,
+                $0[2] as! Int,
+                $0[3].evaluated!.float80,
+                $0[4].evaluated!.float80,
+                $0[5] as! Int,
+                $0[6].evaluated!.float80
+            )
+            let result = try tIntervalTwoSamp(
+                mean1: mean1,
+                sx1: sx1,
+                sampleSize1: n1,
+                mean2: mean2,
+                sx2: sx2,
+                sampleSize2: n2,
+                confidenceLevel: c
+            )
+            let stats: [Pair] = [
+                .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
+                .init("x̅1 - x̅2", result.meanDiff),
+                .init("SE", result.se),
+                .init("ME", result.me),
+                .init("df", result.df)
+            ]
+            return List(stats)
+        },
+        .ternary(.tIntervalTwoSamp, List.self, List.self, Value.self) {
+            let result = try tIntervalTwoSamp(
+                sample1: $0.toNumerics(),
+                sample2: $1.toNumerics(),
+                confidenceLevel: $2.float80
+            )
+            let stats: [Pair] = [
+                .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
+                .init("x̅1 - x̅2", result.meanDiff),
+                .init("SE", result.se),
+                .init("ME", result.me),
+                .init("df", result.df),
+                .init("x̅1", result.twoVar.mean1),
+                .init("x̅2", result.twoVar.mean2),
+                .init("Sx1", result.twoVar.sx1),
+                .init("Sx2", result.twoVar.sx2),
+                .init("n1", result.twoVar.n1),
+                .init("n2", result.twoVar.n2),
             ]
             return List(stats)
         }

@@ -61,6 +61,7 @@ public extension OperationName {
     public static let tInterval = "tInterval"
     public static let zIntervalOneProp = "zIntervalOneProp"
     public static let zIntervalTwoSamp = "zIntervalTwoSamp"
+    public static let tIntervalTwoSamp = "tIntervalTwoSamp"
     
     // One variable stats
     public static let mean = "mean"

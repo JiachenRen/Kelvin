@@ -7,7 +7,6 @@
 //
 
 import XCTest
-@testable import Kelvin
 
 class KelvinTests: XCTestCase {
 
