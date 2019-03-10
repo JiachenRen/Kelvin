@@ -122,9 +122,13 @@ public class Developer {
         .binary(.run, KString.self, KString.self) {(flag, filePath) in
             switch flag.string {
             case "-c":
-                try Program.compileAndRun(filePath.string, with: Program.Configuration(
-                    scope: .useCurrent,
-                    retentionPolicy: .restore))
+                try Program.compileAndRun(
+                    filePath.string,
+                    with: Program.Configuration(
+                        scope: .useCurrent,
+                        retentionPolicy: .restore
+                    )
+                )
             case "-v":
                 try Program.compileAndRun(filePath.string)
             default:

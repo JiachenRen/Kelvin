@@ -177,10 +177,6 @@ public class Compiler {
                 }
                 buff?.append(line)
                 
-                // Temporary fix
-                if line == "}" {
-                    buff?.append(";")
-                }
                 continue
             } else {
                 

@@ -5,9 +5,9 @@ def flatMap(l) {
         if (element is @list) {
             tmp := tmp ++ flatMap(element);
             continue;
-        }
+        };
         tmp := tmp ++ element;
-    }
+    };
 
     return tmp
 }

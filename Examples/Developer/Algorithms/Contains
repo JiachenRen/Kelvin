@@ -4,7 +4,7 @@ def contains(list, a) {
         if (e == a) {
             return true
         }
-    }
+    };
     return false
 }
 

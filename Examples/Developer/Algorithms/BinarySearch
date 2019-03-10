@@ -13,18 +13,18 @@ def bin_search(arr, search) {
         if (arr[middle] < search) {
             first := middle + 1;
             b := true;
-        }
+        };
 
         if (arr[middle] == search) {
             return middle;
-        }
+        };
 
         if (!b) {
             last := middle - 1;
-        }
+        };
 
         middle := int((first + last) / 2);
-    }
+    };
 
     return "not found";
 }

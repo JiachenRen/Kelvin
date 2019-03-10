@@ -57,12 +57,12 @@ def bin_search(arr, search) {
             b := true;
         } else {
             middle := int((first + last) / 2);
-        }
+        };
 
         if (arr[middle] == search) {
             return middle;
         } 
-    }
+    };
 
     return "not found";
 }
@@ -86,20 +86,20 @@ def whatTheHeckDoesThisDo(a, b) {
         a := a + 1;
         if (a > 50) {
             b++;
-        }
+        };
         if (b % 3 == 0) {
             println b & " is a multiple of 3";
             for (i: map(0...10) {$1}) {
                 print i
-            }
+            };
             print "\n";
             continue;
-        }
+        };
         println "b = " & b;
         if (b > 66) {
             break;
         }
-    }
+    };
 
     return {a, b}
 }

@@ -2,7 +2,7 @@ def f(a) {
     if (a > 10) {
         println a;
         return f(a / 10)
-    }
+    };
     return a
 }
 
