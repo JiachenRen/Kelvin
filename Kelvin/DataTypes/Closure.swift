@@ -15,7 +15,7 @@ public struct Closure: UnaryNode, NaN {
     var capturesReturn: Bool
 
     public var stringified: String {
-        return "$(\(node.stringified))"
+        return "\(Closure.symbol)(\(node.stringified))"
     }
     
     public var node: Node
@@ -34,7 +34,7 @@ public struct Closure: UnaryNode, NaN {
     }
 
     public var ansiColored: String {
-        return "#(".magenta.bold + node.ansiColored + ")".magenta.bold
+        return "\(Closure.symbol)(".magenta.bold + node.ansiColored + ")".magenta.bold
     }
 
     public var complexity: Int {
