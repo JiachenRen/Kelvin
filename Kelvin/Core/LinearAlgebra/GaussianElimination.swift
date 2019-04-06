@@ -18,7 +18,7 @@ public extension LinearAlgebra {
      - Parameter mat: A matrix of dimension N x (N + 1)
      - Returns: The solution vector for the matrix
      */
-    public static func gaussianElimination(_ mat: Matrix) throws -> Vector {
+    static func gaussianElimination(_ mat: Matrix) throws -> Vector {
         var mat = mat
         let N = mat.count
         

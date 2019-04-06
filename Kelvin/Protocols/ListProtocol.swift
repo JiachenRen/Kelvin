@@ -14,7 +14,7 @@ public protocol ListProtocol: Node {
 
 public extension ListProtocol {
     
-    public var count: Int {
+    var count: Int {
         return elements.count
     }
     
@@ -24,11 +24,11 @@ public extension ListProtocol {
         }
     }
     
-    public func isOutOfBounds(_ idx: Int) -> Bool {
+    func isOutOfBounds(_ idx: Int) -> Bool {
         return idx < 0 || idx >= count
     }
     
-    public func subsequence(from idx1: Int, to idx2: Int) throws -> [Node] {
+    func subsequence(from idx1: Int, to idx2: Int) throws -> [Node] {
         try Assert.index(count, idx1)
         try Assert.index(count, idx2)
         try Assert.range(idx1, idx2)
@@ -37,14 +37,14 @@ public extension ListProtocol {
     }
     
     /// Complexity of the list is the complexity of all its elements + 1.
-    public var complexity: Int {
+    var complexity: Int {
         return elements.reduce(0) {
             $0 + $1.complexity
             } + 1
     }
     
     /// Perform an action on each node in the tree.
-    public func forEach(_ body: (Node) -> ()) {
+    func forEach(_ body: (Node) -> ()) {
         body(self)
         for e in elements {
             e.forEach(body)
@@ -59,7 +59,7 @@ public extension ListProtocol {
      - depth: Search depth. Won't search for nodes beyond this designated depth.
      - Returns: Whether the current node contains the target node.
      */
-    public func contains(where predicament: PUnary, depth: Int) -> Bool {
+    func contains(where predicament: PUnary, depth: Int) -> Bool {
         if predicament(self) {
             return true
         } else if depth != 0 {
@@ -80,7 +80,7 @@ public extension ListProtocol {
      - Parameter predicament: The condition for splitting into the first list
      - Returns: A tuple with the first element being the sublist of elements satisfying the predicament.
      */
-    public func split(by predicament: PUnary) -> ([Node], [Node]) {
+    func split(by predicament: PUnary) -> ([Node], [Node]) {
         var o = self.elements
         
         var s = [Node]()
@@ -94,7 +94,7 @@ public extension ListProtocol {
     }
     
     /// Self explanatory
-    public func contains(where predicament: PUnary) -> Bool {
+    func contains(where predicament: PUnary) -> Bool {
         return elements.contains(where: predicament)
     }
     
@@ -104,7 +104,7 @@ public extension ListProtocol {
      - Parameter node: Another list to be compared to.
      - Returns: Whether self and node are equal.
      */
-    public func equals(list: ListProtocol) -> Bool {
+    func equals(list: ListProtocol) -> Bool {
         if list.count != count {
             return false
         }
@@ -117,7 +117,7 @@ public extension ListProtocol {
         return true
     }
     
-    public func map<T>(by unary: (Node) throws -> T) rethrows -> [T] {
+    func map<T>(by unary: (Node) throws -> T) rethrows -> [T] {
         return try elements.map(unary)
     }
 }

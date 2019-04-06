@@ -16,7 +16,7 @@ public extension Algebra {
     }
     
     /// Factorizes the parent node; e.g. a*b+a*c becomes a*(b+c)
-    public static func factorize(_ parent: Node) throws -> Node {
+    static func factorize(_ parent: Node) throws -> Node {
         return try parent.replacing(by: {
             try factorize(time, limitedBy: 1.0, ($0 as! Function).elements)
         }) {

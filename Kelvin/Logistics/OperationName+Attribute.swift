@@ -11,7 +11,7 @@ import Foundation
 public extension OperationName {
     
     /// Assigning attributes to operations change their behavior during compiltion and execution.
-    public enum Attribute: Hashable {
+    enum Attribute: Hashable {
         
         /// Debugging and flow control functions like "complexity" and "repeat"
         /// should not simplify args before their execution.
@@ -35,7 +35,7 @@ public extension OperationName {
     
     /// Use this dictionary to assign special attributes to operations.
     /// e.g. since + and * are commutative, the "commutative" flag should be assigned to them.
-    public static var attributes: [String: [Attribute]] = {
+    static var attributes: [String: [Attribute]] = {
         defaultAttributes
     }()
     
@@ -82,7 +82,7 @@ public extension OperationName {
     ]
     
     /// Use subscript syntax to check if the operation contains the specified attribute.
-    public subscript(attr: Attribute) -> Bool {
+    subscript(attr: Attribute) -> Bool {
         return OperationName.attributes[self]?.contains(attr) ?? false
     }
 }

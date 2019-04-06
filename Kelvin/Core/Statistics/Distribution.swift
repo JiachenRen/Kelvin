@@ -19,13 +19,13 @@ public extension Stat {
     /// - Parameters:
     ///     - k: The first trial that is successful
     ///     - pr: Probability of success
-    public static func geomPdf(prSuccess pr: Node, _ k: Int) throws -> Node {
+    static func geomPdf(prSuccess pr: Node, _ k: Int) throws -> Node {
         try Assert.domain(k, 0, Float80.infinity)
         return pr * ((1 - pr) ^ (k - 1))
     }
     
     /// - Returns: Cumulative geometric probability distribution from `lowerBound` to `upperBound`
-    public static func geomCdf(prSuccess pr: Node, lowerBound lb: Int, upperBound ub: Int) throws -> Node {
+    static func geomCdf(prSuccess pr: Node, lowerBound lb: Int, upperBound ub: Int) throws -> Node {
         try Assert.domain(lb, 0, Float80.infinity)
         try Assert.domain(ub, 0, Float80.infinity)
         try Assert.range(lb, ub)
@@ -37,7 +37,7 @@ public extension Stat {
     }
     
     /// Binomial cummulative distribution
-    public static func binomCdf(trials: Int, prSuccess pr: Node, lowerBound lb: Int, upperBound ub: Int) throws -> Node {
+    static func binomCdf(trials: Int, prSuccess pr: Node, lowerBound lb: Int, upperBound ub: Int) throws -> Node {
         try Assert.domain(trials, 0, Float80.infinity)
         try Assert.domain(lb, 0, trials)
         try Assert.domain(ub, 0, trials)
@@ -57,7 +57,7 @@ public extension Stat {
         - trials: Number of trials to be carried out
         - prSuccess: A Float80 b/w 0 and 1 that is the probability of success
      */
-    public static func binomPdf(trials: Int, prSuccess pr: Node) -> [Node] {
+    static func binomPdf(trials: Int, prSuccess pr: Node) -> [Node] {
         return (0...trials).map {
             binomPdf(trials: trials, prSuccess: pr, $0)
         }
@@ -71,12 +71,12 @@ public extension Stat {
         - x: Number of successes
      - Returns: The probability of getting the specified number of successes.
      */
-    public static func binomPdf(trials: Node, prSuccess pr: Node, _ x: Node) -> Node {
+    static func binomPdf(trials: Node, prSuccess pr: Node, _ x: Node) -> Node {
         return Function(.ncr, [trials, x]) * (pr ^ x) * ((1 - pr) ^ (trials - x))
     }
     
     /// A lightweight algorithm for calculating cummulative distribution frequency.
-    public static func normCdf(_ x: Double) -> Double {
+    static func normCdf(_ x: Double) -> Double {
         var L: Double, K: Double, w: Double
         
         // Constants
@@ -102,7 +102,7 @@ public extension Stat {
      - to: Upper bound
      - Returns: Cummulative distribution frequency from lowerbound to upperbound.
      */
-    public static func normCdf(from lb: Double, to ub: Double) -> Double {
+    static func normCdf(from lb: Double, to ub: Double) -> Double {
         return normCdf(ub) - normCdf(lb)
     }
     
@@ -117,7 +117,7 @@ public extension Stat {
      - σ: Standard deviation
      - Returns: Cummulative distribution frequency from lowerbound to upperbound.
      */
-    public static func normCdf(from lb: Double, to ub: Double, μ: Double, σ: Double) -> Double {
+    static func normCdf(from lb: Double, to ub: Double, μ: Double, σ: Double) -> Double {
         return normCdf((ub - μ) / σ) - normCdf((lb - μ) / σ)
     }
     
@@ -125,18 +125,18 @@ public extension Stat {
      Normal probability density function.
      Definition: 1 / √(2π) * e ^ (-1 / 2) ^ 2
      */
-    public static func normPdf(_ x: Node) -> Node {
+    static func normPdf(_ x: Node) -> Node {
         return 1 / √(2 * "pi"&) * ("e"& ^ ((-1 / 2) * (x ^ 2)))
     }
     
     /**
      normalPdf(x,μ,σ)=1 / σ * normalPdf((x−μ) / σ)
      */
-    public static func normPdf(_ x: Node, μ: Node, σ: Node) -> Node {
+    static func normPdf(_ x: Node, μ: Node, σ: Node) -> Node {
         return 1 / σ * normPdf((x - μ) / σ)
     }
     
-    public static func randNorm(μ: Float80, σ: Float80, n: Int) -> [Float80] {
+    static func randNorm(μ: Float80, σ: Float80, n: Int) -> [Float80] {
         let gaussianDist = GaussianDistribution(
             randomSource: GKRandomSource(),
             mean: Float(μ),
@@ -179,7 +179,7 @@ public extension Stat {
      
      https://stackedboxes.org/2017/05/01/acklams-normal-quantile-function/
      */
-    public static func invNorm(_ p: Double) throws -> Double {
+    static func invNorm(_ p: Double) throws -> Double {
         try Assert.domain(Float80(p), 0, 1)
         
         let a1 = -39.69683028665376
@@ -252,7 +252,7 @@ public extension Stat {
     ///     - p: Area under the `tPdf` curve
     ///     - df: Degrees of freedom (a positive integer)
     /// - Precondition: p is between 0 and 1
-    public static func invT<T: Value>(_ p: Float80, _ df: T) throws -> Float80 {
+    static func invT<T: Value>(_ p: Float80, _ df: T) throws -> Float80 {
         try Assert.domain(p, 0, 1)
         try Assert.domain(df, 0, Float80.infinity)
         let df = df.float80
@@ -455,7 +455,7 @@ public extension Stat {
     /// - Parameters:
     ///     - x: The value at which tCdf is evaluated
     ///     - df: Degrees of freedom
-    public static func tCdf(_ x: Float80, _ df: Int) throws -> Float80 {
+    static func tCdf(_ x: Float80, _ df: Int) throws -> Float80 {
         try Assert.domain(df, 1, Float80.infinity)
         let df = Float80(df)
         let A: Float80 = df / 2.0
@@ -493,7 +493,7 @@ public extension Stat {
     /// - Parameters:
     ///     - x: The value at which tCdf is evaluated
     ///     - df: Degrees of freedom
-    public static func tCdf(lowerBound lb: Float80, upperBound ub: Float80, _ df: Int) throws -> Float80 {
+    static func tCdf(lowerBound lb: Float80, upperBound ub: Float80, _ df: Int) throws -> Float80 {
         try Assert.range(lb, ub)
         return try tCdf(ub, df) - tCdf(lb, df)
     }
@@ -518,7 +518,7 @@ public extension Stat {
     ///     - t: The value where PDF is to be evaluated
     ///     - v: Degrees of freedom
     
-    public static func tPdf(_ t: Float80, _ v: Int) throws -> Node {
+    static func tPdf(_ t: Float80, _ v: Int) throws -> Node {
         let v: Float80 = Float80(v)
         return try Gamma.gamma((v + 1) / 2.0) /
             (√(v * Float80.pi) * Gamma.gamma(v / 2)) *

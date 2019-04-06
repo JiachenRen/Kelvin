@@ -109,7 +109,7 @@ class LineNumberRulerView: NSRulerView {
         
         let relativePoint = convert(NSZeroPoint, to: textView)
         let lineNumberAttributes: [NSAttributedString.Key: Any] = [
-            .font: font,
+            .font: font!,
             .foregroundColor: foregroundColor
         ]
         let attString = NSAttributedString(

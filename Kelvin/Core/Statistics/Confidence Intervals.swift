@@ -16,17 +16,17 @@ import Foundation
 /// - 1 prop z interval: p̂ +/- z * √(p̂(1-p̂)/n)
 /// - 2 prop z interval
 public extension Stat {
-    public typealias CI = (lowerBound: Float80, upperBound: Float80)
-    public typealias TwoVarStatResult = (mean1: Float80, mean2: Float80, sx1: Float80, sx2: Float80, n1: Int, n2: Int)
-    public typealias OneVarStatResult = (mean: Float80, sx: Float80, n: Int)
+    typealias CI = (lowerBound: Float80, upperBound: Float80)
+    typealias TwoVarStatResult = (mean1: Float80, mean2: Float80, sx1: Float80, sx2: Float80, n1: Int, n2: Int)
+    typealias OneVarStatResult = (mean: Float80, sx: Float80, n: Int)
     
     /// Computes the z score (also known as critical value) from confidence level
-    public static func zScore(confidenceLevel c: Float80) throws -> Float80 {
+    static func zScore(confidenceLevel c: Float80) throws -> Float80 {
         return try abs(Float80(invNorm((1 - Double(c)) / 2)))
     }
     
     /// Computes t score from C and DF
-    public static func tScore<T: Value>(
+    static func tScore<T: Value>(
         confidenceLevel c: Float80,
         degreesOfFreedom df: T
     ) throws -> Float80 {
@@ -44,7 +44,7 @@ public extension Stat {
     ///     - c: Confidence level (between 0 and 1)
     ///
     /// - Returns: (Confidence Interval, Margin of Error, Critical Value z)
-    public static func zInterval(
+    static func zInterval(
         sigma: Float80,
         mean: Float80,
         sampleSize n: Int,
@@ -67,7 +67,7 @@ public extension Stat {
     ///     - c: Confidence level (between 0 and 1)
     ///
     /// - Returns: (Confidence Interval, Margin of Error, Sx, Sample Mean)
-    public static func zInterval(
+    static func zInterval(
         sigma: Float80,
         sample: [Float80],
         confidenceLevel c: Float80
@@ -93,7 +93,7 @@ public extension Stat {
     ///     - c: Confidence level (between 0 and 1)
     ///
     /// - Returns: (Confidence Interval, Margin of Err., Std. Err., Degrees of Freedom, Critical Value t)
-    public static func tInterval(
+    static func tInterval(
         mean: Float80,
         sx: Float80,
         sampleSize n: Int,
@@ -110,7 +110,7 @@ public extension Stat {
     }
     
     /// Calculates t interval from sample data
-    public static func tInterval(
+    static func tInterval(
         sample: [Float80],
         confidenceLevel c: Float80
         ) throws -> (ci: CI, me: Float80, se: Float80, df: Int, oneVar: OneVarStatResult, t: Float80) {
@@ -126,7 +126,7 @@ public extension Stat {
     
     /// Calculates one sample proportion z interval
     /// CI = p̂ +/- z * √(p̂(1-p̂)/n)
-    public static func zIntervalOneProp(
+    static func zIntervalOneProp(
         successes x: Int,
         sampleSize n: Int,
         confidenceLevel c: Float80
@@ -153,7 +153,7 @@ public extension Stat {
     ///     - c: Confidence level
     ///
     /// - Returns: (Confidence Interval, x̅1 - x̅2, Margin of Err., Stdev of Sampling Dist. of Diff.)
-    public static func zIntervalTwoSamp(
+    static func zIntervalTwoSamp(
         sigma1: Float80,
         sigma2: Float80,
         mean1: Float80,
@@ -171,7 +171,7 @@ public extension Stat {
     }
     
     /// Calculates basic two variable statistics
-    public static func twoVar(sample1: [Float80], sample2: [Float80]) -> TwoVarStatResult {
+    static func twoVar(sample1: [Float80], sample2: [Float80]) -> TwoVarStatResult {
         let mean1 = mean(sample1)
         let mean2 = mean(sample2)
         let n1 = sample1.count
@@ -182,7 +182,7 @@ public extension Stat {
     }
     
     /// Calculates basic one variable statistics
-    public static func oneVar(sample: [Float80]) -> OneVarStatResult {
+    static func oneVar(sample: [Float80]) -> OneVarStatResult {
         let mean = Stat.mean(sample)
         let sx = stdev(.sample, sample)
         let n = sample.count
@@ -197,7 +197,7 @@ public extension Stat {
     ///     - sample1: A sample taken from pop. 1
     ///     - sample2: A sample taken from pop. 2
     ///     - c: Confidence level
-    public static func zIntervalTwoSamp(
+    static func zIntervalTwoSamp(
         sigma1: Float80,
         sigma2: Float80,
         sample1: [Float80],
@@ -218,7 +218,7 @@ public extension Stat {
     }
     
     /// Calculates two cample t interval from sample data
-    public static func tIntervalTwoSamp(
+    static func tIntervalTwoSamp(
         sample1: [Float80],
         sample2: [Float80],
         confidenceLevel c: Float80
@@ -245,7 +245,7 @@ public extension Stat {
     }
     
     /// Calculates two cample t interval from sample statistics
-    public static func tIntervalTwoSamp(
+    static func tIntervalTwoSamp(
         mean1: Float80,
         sx1: Float80,
         sampleSize1 n1: Int,
@@ -272,7 +272,7 @@ public extension Stat {
     ///     - n2: Size of sample 2
     ///
     /// - Returns: Degrees of freedom for the 2 samples
-    public static func degreesOfFreedom(
+    static func degreesOfFreedom(
         s1: Float80,
         n1: Int,
         s2: Float80,

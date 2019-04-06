@@ -24,7 +24,7 @@ public extension Calculus {
         - fun: A function of n variables.
         - variables: The independent variables of `fun`
      */
-    public static func tangent(
+    static func tangent(
         of fun: Function,
         variables: [Variable],
         at point: Vector) throws -> Equation {
@@ -62,7 +62,7 @@ public extension Calculus {
      - Returns: A function containing variables identical to the independent variables provided
      that computes the slope of the function in the specified direction
      */
-    public static func directionalDifferentiation(
+    static func directionalDifferentiation(
         of fun: Function,
         direction: Vector,
         independentVars vars: [Variable]) throws -> Node {
@@ -85,7 +85,7 @@ public extension Calculus {
      - independentVars: A list denoting the independent variables of the function.
      - Returns: The gradient vector of the function.
      */
-    public static func gradient(of fun: Function, independentVars vars: [Variable]) -> Vector {
+    static func gradient(of fun: Function, independentVars vars: [Variable]) -> Vector {
         return Vector(vars.map {derivative(of: fun, withRespectTo: $0) ?? Function(.derivative, [fun, $0])})
     }
     
@@ -105,7 +105,7 @@ public extension Calculus {
      - independentVar: The independent variable (y)
      - Returns: dy/dx - the result of the implicit differentiation
      */
-    public static func implicitDifferentiation(
+    static func implicitDifferentiation(
         _ eq: Equation,
         dependentVar dv: Variable,
         independentVar iv: Variable) throws -> Node? {
@@ -124,7 +124,7 @@ public extension Calculus {
      - nth: Nth derivative.
      - Returns: The nth derivative of n, if taken successfully.
      */
-    public static func derivative(of n: Node, withRespectTo v: Variable, _ nth: Int) throws -> Node? {
+    static func derivative(of n: Node, withRespectTo v: Variable, _ nth: Int) throws -> Node? {
         var n = n
         for i in 0..<nth {
             if let d = derivative(of: n, withRespectTo: v) {
@@ -144,7 +144,7 @@ public extension Calculus {
         - v: The variable for which the derivative is taken with respect to.
      - Returns: The derivative of n w/ respect to v.
      */
-    public static func derivative(of n: Node, withRespectTo v: Variable) -> Node? {
+    static func derivative(of n: Node, withRespectTo v: Variable) -> Node? {
         if let v1 = n as? Variable {
             
             // Irrelevant variables are treated as constants.
@@ -236,7 +236,7 @@ public extension Calculus {
     }
     
     
-    public static func derivative(of nodes: [Node], withRespectTo v: Variable) -> [Node] {
+    static func derivative(of nodes: [Node], withRespectTo v: Variable) -> [Node] {
         return nodes.map {
             Function(.derivative, [$0, v])
         }

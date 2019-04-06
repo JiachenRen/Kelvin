@@ -320,7 +320,7 @@ extension Operation: CustomStringConvertible {
 public extension Operation {
     
     /// Factory function for type safe quaternary operation
-    public static func quaternary<T1, T2, T3, T4>(
+    static func quaternary<T1, T2, T3, T4>(
         _ name: OperationName,
         _ type1: T1.Type,
         _ type2: T2.Type,
@@ -343,7 +343,7 @@ public extension Operation {
     }
     
     /// Factory function for quaternary operation
-    public static func quaternary(
+    static func quaternary(
         _ name: OperationName,
         _ signature: [ParameterType],
         quaternary: @escaping (Node, Node, Node, Node) throws -> Node?
@@ -354,7 +354,7 @@ public extension Operation {
     }
     
     /// Factory function for type safe ternary operation
-    public static func ternary<T1, T2, T3>(
+    static func ternary<T1, T2, T3>(
         _ name: OperationName,
         _ type1: T1.Type,
         _ type2: T2.Type,
@@ -374,7 +374,7 @@ public extension Operation {
     }
     
     /// Factory function for ternary operation
-    public static func ternary(
+    static func ternary(
         _ name: OperationName,
         _ signature: [ParameterType],
         ternary: @escaping (Node, Node, Node) throws -> Node?
@@ -385,7 +385,7 @@ public extension Operation {
     }
     
     /// Factory function for type safe binary operation
-    public static func binary<T1, T2>(
+    static func binary<T1, T2>(
         _ name: OperationName,
         _ type1: T1.Type,
         _ type2: T2.Type,
@@ -399,7 +399,7 @@ public extension Operation {
     }
     
     /// Factory function for binary operation
-    public static func binary(
+    static func binary(
         _ name: OperationName,
         _ signature: [ParameterType],
         binary: @escaping (Node, Node) throws -> Node?
@@ -410,7 +410,7 @@ public extension Operation {
     }
     
     /// Factory function for type safe unary operation
-    public static func unary<T>(
+    static func unary<T>(
         _ name: OperationName,
         _ type: T.Type,
         unary: @escaping (T) throws -> Node?
@@ -422,7 +422,7 @@ public extension Operation {
     }
     
     /// Factory function for unary operation
-    public static func unary(
+    static func unary(
         _ name: OperationName,
         _ signature: [ParameterType],
         unary: @escaping (Node) throws -> Node?

@@ -12,7 +12,7 @@ import GameKit
 // OneVar statistics
 public extension Stat {
     
-    public static func outliers(_ dataset: [Float80]) throws -> (lowerEnd: [Float80], upperEnd: [Float80]) {
+    static func outliers(_ dataset: [Float80]) throws -> (lowerEnd: [Float80], upperEnd: [Float80]) {
         let stats = try quartiles(dataset)
         let iqr = stats.q3 - stats.q1
         let ut = stats.q3 + 1.5 * iqr
@@ -29,7 +29,7 @@ public extension Stat {
         return (leOutliers, ueOutliers)
     }
     
-    public static func fiveNSummary(
+    static func fiveNSummary(
         _ dataset: [Float80],
         isSorted: Bool = false) throws -> [Float80] {
         
@@ -53,7 +53,7 @@ public extension Stat {
         return [min, m.q1, m.m, m.q3, max]
     }
     
-    public static func quartiles(
+    static func quartiles(
         _ dataset: [Float80],
         isSorted: Bool = false) throws -> (q1: Float80, m: Float80, q3: Float80) {
         
@@ -80,7 +80,7 @@ public extension Stat {
         return (q1, m, q3)
     }
     
-    public static func median(
+    static func median(
         _ dataset: [Float80],
         isSorted: Bool = false) -> (Float80, idx: Int?) {
         
@@ -106,7 +106,7 @@ public extension Stat {
     }
     
     /// Sum of difference squared.
-    public static func ssx(_ dataset: [Float80]) -> Float80 {
+    static func ssx(_ dataset: [Float80]) -> Float80 {
         
         // Calculate average.
         let sum: Float80 = dataset.reduce(0) {
@@ -119,7 +119,7 @@ public extension Stat {
             .reduce(0) {$0 + $1}
     }
     
-    public static func max(_ dataset: [Float80]) -> Float80 {
+    static func max(_ dataset: [Float80]) -> Float80 {
         var max: Float80 = -.infinity
         for n in dataset {
             if n > max {
@@ -129,7 +129,7 @@ public extension Stat {
         return max
     }
     
-    public static func min(_ dataset: [Float80]) -> Float80 {
+    static func min(_ dataset: [Float80]) -> Float80 {
         var min: Float80 = .infinity
         for n in dataset {
             if n < min {
@@ -139,7 +139,7 @@ public extension Stat {
         return min
     }
     
-    public static func sum(_ nodes: [Node]) -> Node {
+    static func sum(_ nodes: [Node]) -> Node {
         var nSum: Float80 = 0
         var nans = [Node]()
         
@@ -155,11 +155,11 @@ public extension Stat {
         return ++nans + nSum
     }
     
-    public static func sumSquared(_ dataset: [Float80]) -> Float80 {
+    static func sumSquared(_ dataset: [Float80]) -> Float80 {
         return dataset.map {pow($0, 2)}.reduce(0) {$0 + $1}
     }
     
-    public static func variance(_ type: DatasetType, _ dataset: [Float80]) -> Float80 {
+    static func variance(_ type: DatasetType, _ dataset: [Float80]) -> Float80 {
         let s = ssx(dataset)
         let c = Float80(dataset.count)
         switch type {
@@ -170,11 +170,11 @@ public extension Stat {
         }
     }
     
-    public static func stdev(_ type: DatasetType, _ dataset: [Float80]) -> Float80 {
+    static func stdev(_ type: DatasetType, _ dataset: [Float80]) -> Float80 {
         return sqrt(variance(type, dataset))
     }
     
-    public static func mean(_ dataset: [Float80]) -> Float80 {
+    static func mean(_ dataset: [Float80]) -> Float80 {
         return dataset.reduce(0) {$0 + $1} / Float80(dataset.count)
     }
 }

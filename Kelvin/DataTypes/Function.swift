@@ -11,7 +11,7 @@ import Foundation
 public struct Function: MutableListProtocol {
     
     public var evaluated: Value? {
-        return (try? invoke())??.evaluated
+        return (((try? invoke()) as Node??))??.evaluated
     }
 
     /// Complexity of the function is the complexity of the List of args + 1.

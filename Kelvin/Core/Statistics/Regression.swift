@@ -15,7 +15,7 @@ public extension Stat {
     /// - Formula:
     /// Slope(m) = r(sy/sx),
     /// Intercept(b) = ȳ - mx̅
-    public static func linearRegression(
+    static func linearRegression(
         _ datasetX: [Float80],
         _ datasetY: [Float80]
     ) throws -> (eqn: Equation, slope: Float80, yIntercept: Float80, r: Float80, cod: Float80, resid: [Float80]) {
@@ -63,7 +63,7 @@ public extension Stat {
     ///     - datasetY: Y coordinates of the points to be fitted.
     /// - Returns: A tuple with the first element being the regression eqn and
     ///            the second element being an array of coefficients.
-    public static func polynomialRegression(
+    static func polynomialRegression(
         degrees: Int,
         _ datasetX: [Float80],
         _ datasetY: [Float80]

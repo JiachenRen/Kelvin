@@ -271,7 +271,7 @@ public class Compiler {
         }
         
         // Remove white spaces b/w parenthesis and trailing closure
-        expr = expr.replacingOccurrences(of: "\\)\\s*\\{", with: "){", options: .regularExpression)
+        expr = expr.replacingOccurrences(of: #"\)\s*\{"#, with: "){", options: .regularExpression)
         
         // Convert f(a){...} to f(a,#(...))
         while let range = expr.range(of: "){") {
@@ -289,7 +289,7 @@ public class Compiler {
     private static func encodeStrings(_ expr: inout String, dict: inout NodeReference) {
 
         // Regex for matching string inside double quotes
-        let regex = try! NSRegularExpression(pattern: "([\"])(\\\\?.)*?\\1", options: NSRegularExpression.Options.caseInsensitive)
+        let regex = try! NSRegularExpression(pattern: #"(["])(\\?.)*?\1"#, options: NSRegularExpression.Options.caseInsensitive)
 
         var count = 0
         while true {
@@ -717,7 +717,7 @@ public class Compiler {
 
         var dict = OperatorReference()
         for keywords in prioritized {
-            var precedenceGrp = Dictionary<Character, String>()
+            var precedenceGrp = [Character: String]()
             keywords.forEach {
                 let id = "\(Flag.operator)\(dict.count)"
                 dict[id] = $0.encoding
@@ -956,7 +956,7 @@ public class Compiler {
         // f1() should be seen as a function whereas 3(x) = 3*x
         // 3a*4x = 3*a*4*x, +3(x+b) = 3*(x+b), (a+b)(a-b) = (a+b)*(a-b)
         let e = Keyword.glossary["*"]!.encoding
-        expr = expr.replacingOccurrences(of: "\\b(\\d+|\\))([a-zA-Z_$]+|\\()", with: "$1\(e)$2", options: .regularExpression)
+        expr = expr.replacingOccurrences(of: #"\b(\d+|\))([a-zA-Z_$]+|\()"#, with: "$1\(e)$2", options: .regularExpression)
     }
 
     /**
@@ -981,30 +981,24 @@ public class Compiler {
     }
 
     private static func binRange(_ segment: String, _ binIdx: String.Index) -> ClosedRange<String.Index> {
-        let left = String(segment[..<binIdx])
-        let right = String(segment[segment.index(after: binIdx)...])
-
-        var beginIdx = left.startIndex
-        var endIdx = right.endIndex
-
-        symbols.forEach { (symbol: Character) in
-            if let idx = left.lastIndex(of: symbol) {
-                if idx >= beginIdx {
-                    beginIdx = left.index(after: idx)
-                }
+        var beginIdx = binIdx
+        var endIdx = binIdx
+        
+        while let idx = segment.index(beginIdx, offsetBy: -1, limitedBy: segment.startIndex) {
+            if symbols.contains(segment[idx]) {
+                break
             }
-            if let idx = right.firstIndex(of: symbol) {
-                if idx <= endIdx {
-                    endIdx = idx
-                }
-            }
+            beginIdx = idx
         }
-
-        // Relocates indices in original expr.
-        let lb = segment.index(beginIdx, offsetBy: 0)
-        let ub = segment.index(endIdx, offsetBy: left.count)
-
-        return lb...ub
+        
+        while let idx = segment.index(endIdx, offsetBy: 1, limitedBy: segment.endIndex) {
+            if symbols.contains(segment[idx]) {
+                break
+            }
+            endIdx = idx
+        }
+        
+        return beginIdx...endIdx
     }
 
     /**
