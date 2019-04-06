@@ -13,9 +13,13 @@ public struct Scope {
     /// An array that keeps track of variable definitions and operations.
     private static var stack = [Scope]()
     
-    private var definitions: [String: Node]
-    private var operations: [String: [Operation]]
+    public var definitions: [String: Node]
+    public var operations: [String: [Operation]]
     private static var restricted = [String: Node]()
+    
+    public static var current: Scope {
+        return Scope(Variable.definitions, Operation.registered)
+    }
     
     init(_ definitions: [String: Node], _ operations: [String: [Operation]]) {
         self.definitions = definitions
@@ -27,8 +31,7 @@ public struct Scope {
      operations, and function definitions.
      */
     public static func save() {
-        let curScope = Scope(Variable.definitions, Operation.registered)
-        stack.append(curScope)
+        stack.append(current)
     }
     
     /**
@@ -39,14 +42,17 @@ public struct Scope {
         Operation.restoreDefault()
     }
     
+    public func apply() {
+        Operation.registered = operations
+        Variable.definitions = definitions
+    }
+    
     /**
      Pop the last saved scope from the stack and use it as a blueprint
      to restore function and variable definitions.
      */
     public static func restore() {
-        let scope = stack.removeLast()
-        Operation.registered = scope.operations
-        Variable.definitions = scope.definitions
+        stack.removeLast().apply()
     }
     
     /// Discard last saved scope

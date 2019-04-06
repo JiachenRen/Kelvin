@@ -46,9 +46,9 @@ public class Operation: Equatable {
     /// The larger the scope, the more universally applicable the function.
     let scope: Int
 
-    let def: Definition
-    let name: OperationName
-    let signature: [ParameterType]
+    public let def: Definition
+    public let name: OperationName
+    public let signature: [ParameterType]
 
     init(_ name: OperationName, _ signature: [ParameterType], definition: @escaping Definition) {
         self.name = name

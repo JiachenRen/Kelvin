@@ -43,7 +43,7 @@ public struct Regex {
 }
 
 
-extension String {
+public extension String {
     func matchRegex(pattern: Regex) -> Bool {
         let range: NSRange = NSMakeRange(0, count)
         if pattern.regex != nil {
@@ -71,7 +71,7 @@ extension String {
         return self.replaceRegex(pattern: Regex(pattern: pattern), template: template)
     }
     
-    var isAlphaNumeric: Bool {
+    var isAlphanumeric: Bool {
         return self ~ "^[a-zA-Z_]+[a-zA-Z_\\d]*$"
     }
     

@@ -96,7 +96,7 @@ public struct Function: MutableListProtocol {
             // Determine which form of the function to use;
             // there are three options: shorthand, operator, or default.
             let k = keyword.formatted
-            let n = colored ? (k.replacingOccurrences(of: " ", with: "").isAlphaNumeric ? k.bold : k) : k
+            let n = colored ? (k.replacingOccurrences(of: " ", with: "").isAlphanumeric ? k.bold : k) : k
             
             switch keyword.associativity {
             case .infix where count == 1:

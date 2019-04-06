@@ -77,6 +77,10 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
         return storage
     }()
     
+    /// The scope of the last successful compilation.
+    /// It is used for code completion.
+    var lastSuccessfulExecution: Scope?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -172,8 +176,10 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
             let t = time
             var program = try Compiler.compile(document: sourceCode, workItem: workItem)
             log("compilation successful in \(time - t) seconds.")
-            program.config = Program.Configuration(scope: .useDefault, retentionPolicy: .restoreToDefault)
+            program.config = Program.Configuration(scope: .useDefault, retentionPolicy: .preserveAll)
             try program.run(workItem: workItem)
+            lastSuccessfulExecution = Scope.current
+            Scope.restoreDefault()
         } catch let e as KelvinError {
             log(e.localizedDescription)
         } catch let e {
@@ -211,19 +217,38 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
         let str = editorTextView.string
         let startIdx = str.index(str.startIndex, offsetBy: charRange.lowerBound)
         let endIdx = str.index(str.startIndex, offsetBy: charRange.upperBound)
-        let partialWord = editorTextView.string[startIdx..<endIdx]
-        if partialWord == "" {
+        let partialWord = String(editorTextView.string[startIdx..<endIdx])
+        
+        // Ignore symbols like +, -, !=, etc.
+        if partialWord == "" || !partialWord.isAlphanumeric {
             return []
         }
-        var operations = [Kelvin.Operation]()
-        for (key, value) in Operation.registered {
-            if key.starts(with: partialWord) {
-                operations.append(contentsOf: value)
+        // Operations with name that begins with the partial word
+        var grp1 = [Kelvin.Operation]()
+        
+        // Operations with name that contains the partial word
+        var grp2 = [Kelvin.Operation]()
+        
+        let registeredOperations = lastSuccessfulExecution?.operations ?? Operation.registered
+        for (key, value) in registeredOperations {
+            let candidate = key.lowercased()
+            let part = partialWord.lowercased()
+            if candidate.starts(with: part) {
+                grp1.append(contentsOf: value)
+            } else if candidate.contains(part) {
+                grp2.append(contentsOf: value)
             }
         }
-        return operations.map {
-            $0.description
-        }
+        
+        let g1 = lastSuccessfulExecution?.definitions.keys
+            .filter {$0.lowercased().starts(with: partialWord.lowercased())}
+            .sorted {$0 < $1} ?? []
+        let g2 = grp1.sorted {$0.name < $1.name}
+            .map {$0.description} // Sort in alphabetic order
+        let g3 = grp2.sorted {$0.name < $1.name}
+            .map {$0.description}
+        
+        return [g1, g2, g3].flatMap {$0}
     }
     
     enum Buffer {
