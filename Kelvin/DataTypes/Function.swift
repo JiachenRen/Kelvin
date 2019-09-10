@@ -249,7 +249,7 @@ public struct Function: MutableListProtocol {
         // Generate a unique tag
         let tag = Keyword.Encoder.next()
         
-        var dict = parameters.reduce(into: [:]) {
+        let dict = parameters.reduce(into: [:]) {
             $0[$1.name] = "\(tag)\($1.name)"
         }
         

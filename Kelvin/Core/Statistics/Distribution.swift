@@ -283,7 +283,9 @@ public extension Stat {
             }
             al = (x * x - 3) / 6;
             h = 2 / (1 / (2 * a - 1)  + 1 / (2 * b - 1));
-            w = (x * sqrt(al + h) / h) - (1 / (2 * b - 1) - 1 / (2 * a - 1)) * (al + 5 / 6 - 2 / (3 * h));
+            let w1: Float80 = 1 / (2 * b - 1) - 1 / (2 * a - 1)
+            let w2: Float80 = al + 5.0 / 6.0 - 2.0 / (3.0 * h)
+            w = (x * sqrt(al + h) / h) - w1 * w2
             x = a / (a + b * exp(2 * w));
         } else {
             lna = log(a / (a + b));
@@ -501,12 +503,12 @@ public extension Stat {
     /// Internal log for gamma function used to compute tCdf.
     /// - SeeAlso: Gamma.logForGamma(_:)
     private static func logGamma(_ Z: Float80) -> Float80 {
-        let S = 1 + 76.18009173 / Z - 86.50532033 /
-            (Z + 1) + 24.01409822 /
-            (Z + 2) - 1.231739516 /
-            (Z + 3) + 0.00120858003 /
-            (Z + 4) - 0.00000536382 /
-            (Z + 5)
+        let S: Float80 = 1.0 + 76.18009173 / Z - 86.50532033 /
+            (Z + 1.0) + 24.01409822 /
+            (Z + 2.0) - 1.231739516 /
+            (Z + 3.0) + 0.00120858003 /
+            (Z + 4.0) - 0.00000536382 /
+            (Z + 5.0)
         return (Z - 0.5) * log(Z + 4.5) -
             (Z + 4.5) + log(S * 2.50662827465)
     }

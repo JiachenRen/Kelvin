@@ -113,7 +113,7 @@ fileprivate func parseExistingANSI(_ string: String) -> [ANSIGroup] {
     let matches = matchesForRegexInText("\\u001B\\[([^m]*)m(.+?)\\u001B\\[0m", text: string, global: true)
     
     for match in matches {
-        var parts = matchesForRegexInText("\\u001B\\[([^m]*)m(.+?)\\u001B\\[0m", text: match)
+        let parts = matchesForRegexInText("\\u001B\\[([^m]*)m(.+?)\\u001B\\[0m", text: match)
         let codes = parts[1].split {$0 == ";"}.map { String($0) }
         let string = parts[2]
         

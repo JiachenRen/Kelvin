@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Kelvin
 
 public class Console: IOProtocol {
     private var output = ""
