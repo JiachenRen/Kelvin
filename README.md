@@ -354,7 +354,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - Try
   - Assert
   - Throw
-- [Stack Trace]
+- [x] Stack Trace
     - Record full call stack history
     - Print stack trace
     - Enable/disable stack trace
