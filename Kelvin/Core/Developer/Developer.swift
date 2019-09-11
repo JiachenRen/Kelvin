@@ -14,7 +14,8 @@ public class Developer {
         flowControlOperations,
         assignmentOperations,
         booleanLogicOperations,
-        utilityOperations
+        utilityOperations,
+        debugOperations
     ].flatMap {$0}
     
     static let utilityOperations: [Operation] = [
@@ -141,7 +142,7 @@ public class Developer {
             return KString("done")
         },
         .unary(.compile, KString.self) {
-            try Compiler.compile($0.string)
+            Final(node: try Compiler.compile($0.string))
         },
         
         // IO

@@ -1,0 +1,8 @@
+# To read from input
+name := readLine()
+
+# To print to output
+println("Hello, " & name)
+
+# To get current working directory
+getWorkingDir()

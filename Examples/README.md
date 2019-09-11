@@ -9,31 +9,34 @@ This directory contains various examples that demonstrate how to the Kelvin lang
     - [Matrix](/Examples/Linear%20Algebra/Matrix)
     - [Vector](/Examples/Linear%20Algebra/Vector)
 - Statistics
-    - [One variable statistics](/Examples/Statistics/OneVar)
+    - [One variable statistics](/Examples/Statistics/One\ Var)
     - [Distribution](/Examples/Statistics/Distribution)
     - [Regression](/Examples/Statistics/Regression)
-    - [Confidence intervals](/Examples/Statistics/ConfidenceInterval)
+    - [Confidence intervals](/Examples/Statistics/Confidence\ Interval)
 - Calculus
     - [Differentiation](/Examples/Calculus/Differentionation)
     - [Integration](/Examples/Calculus/Integration)
 - Developer
     - Algorithms
-        - [Binary search](/Examples/Developer/Algorithms/BinarySearch)
+        - [Binary search](/Examples/Developer/Algorithms/Binary\ Search)
         - [Deconstruct](/Examples/Developer/Algorithms/Deconstruct)
         - [Recursion](/Examples/Developer/Algorithms/Recursion)
         - [Contains](/Examples/Developer/Algorithms/Contains)
-    - [Conditional statements](/Examples/Developer/Conditionals)
     - [Benchmarking](/Examples/Developer/Benchmarking)
-    - [Error handling](/Examples/Developer/ErrorHandling)
-    - [For loop](/Examples/Developer/ForLoop)
-    - [While loop](/Examples/Developer/WhileLoop)
-    - [Function](/Examples/Developer/Function)
-    - [Variable](/Examples/Developer/Variable)
-    - [List](/Examples/Developer/List)
+    - [Debugging](/Examples/Debugging/Stack\ Trace)
     - [Dictionary](/Examples/Developer/Dictionary)
-    - [Working with string](/Examples/Developer/String)
+    - [Error handling](/Examples/Developer/Error\ Handling)
+    - Flow Control
+        - [Conditional statements](/Examples/Developer/Conditionals)
+        - [For loop](/Examples/Developer/Flow\ Control/Loops/For\ Loop)
+        - [While loop](/Examples/Developer/Flow\ Control/Loops/While\ Loop)
+    - [Function](/Examples/Developer/Function)
+    - [IO](/Examples/Developer/IO/IO)
+    - [List](/Examples/Developer/List)
     - [Subscript access](/Examples/Developer/Subscript)
-    - [Trailing closure syntax](/Examples/Developer/TrailingClosure)
+    - [Trailing closure syntax](/Examples/Developer/Trailing\ Closure)
+    - [Variable](/Examples/Developer/Variable)
+    - [Working with string](/Examples/Developer/String)
     
 ### Just to whet your appetite...
 

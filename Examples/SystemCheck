@@ -6,11 +6,11 @@ def examples_dir = "/Users/jiachenren/iCloudDrive (Archive)/Documents/Developer/
 def start_time = time()
 def files = {
     "Misc/Arcane",
-    "Misc/DiceRoll",
-    "Misc/FindBest",
-    "Misc/RepeatMapDemo",
-    "Misc/StatProblem",
-    "Misc/TwoSampleTTest",
+    "Misc/Dice Roll",
+    "Misc/Find Best",
+    "Misc/Repeat Map Demo",
+    "Misc/Stat Problem",
+    "Misc/Two Sample T Test",
     "Tests",
     "Probability",
     "Algebra/Trigonometry",
@@ -19,40 +19,38 @@ def files = {
     "Calculus/Integration",
     "Linear Algebra/Vector",
     "Linear Algebra/Matrix",
-    "Statistics/OneVar",
+    "Statistics/One Var",
     "Statistics/Distribution",
     "Statistics/Regression",
-    "Statistics/ConfidenceInterval"
+    "Statistics/Confidence Interval"
 }
 
 def file_paths = (files | (examples_dir & $0))
 file_paths | (run $0)
 
 def dev_files = {
-    "Conditionals",
+    "Flow Control/Conditionals",
+    "Flow Control/Loops/While Loop",
+    "Flow Control/Loops/For Loop",
     "Benchmarking",
-    "ErrorHandling",
-    "ForLoop",
+    "Error Handling",
     "Function",
     "Variable",
     "List",
-    "Loops",
     "Multiline",
-    "Recursion",
     "String",
     "Subscript",
-    "TrailingClosure",
-    "WhileLoop"
+    "Trailing Closure",
 }
 
 for (dev_file: dev_files) {
-    full_path := examples_dir & "Developer/" dev_file
+    full_path := examples_dir & "Developer/" & dev_file;
     run full_path
 }
 
 def alg_files = {
-    "BinarySearch",
-    "FlatMap",
+    "Binary Search",
+    "Flat Map",
     "Deconstruct",
     "Contains",
     "Recursion"

@@ -1,0 +1,16 @@
+# Try statements
+msg1 := (try ({1, 2, 3} zip {1, 2}) : "an error has occurred.")
+msg2 := (try ({1, 2, 3} zip {1, 2}))
+
+println msg1
+println msg2
+
+# To throw an error
+def err() {
+    throw "shit happened"
+}
+try err() : "shit happened"
+
+# Assertions
+assert true
+try (assert false) : "assertion was false"

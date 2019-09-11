@@ -178,7 +178,7 @@ public struct Function: MutableListProtocol {
      - Returns: a node representing the simplified(computed) value of the function.
      */
     public func simplify() throws -> Node {
-
+        StackTrace.shared.add(.push, self, name)
         // Make a copy of self.
         var copy = self
         
@@ -200,16 +200,20 @@ public struct Function: MutableListProtocol {
             // Then, the result of the operation is simplified;
             // otherwise returns a copy of the original function with each argument simplified.
             if let s = try copy.invoke()?.simplify() {
+                StackTrace.shared.add(.pop, s, name)
                 return s
             } else if name[.commutative] {
                 // Try simplifying in the reserve order if the function is commutative
                 if copy.count > 2 {
                     let after = try Operation.simplifyCommutatively(copy.elements, by: name)
-                    return after.complexity < copy.complexity ? after : copy
+                    let s = after.complexity < copy.complexity ? after : copy
+                    StackTrace.shared.add(.pop, s, name)
+                    return s
                 }
             }
 
             // Cannot be further simplified
+            StackTrace.shared.add(.pop, copy, name)
             return copy
         } catch let e as KelvinError {
             throw ExecutionError.onNode(self, err: e)
@@ -219,7 +223,6 @@ public struct Function: MutableListProtocol {
     public func implement(using template: Node) throws {
         // Create function signature
         let signature = [ParameterType](repeating: .any, count: args.count)
-        
         // Make sure the old definition is removed from registry
         Operation.remove(name, signature)
         

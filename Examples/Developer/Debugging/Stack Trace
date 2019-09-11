@@ -1,0 +1,46 @@
+# This file demonstrates how you can use stack trace for debugging purposes.
+
+# First enable stack trace.
+setStackTraceEnabled(true)
+
+# Now, put the first block of code you want to capture here
+def f(x) {
+    return x == 0 ? x * f(x - 1)
+}
+f(10)
+println("This is recorded")
+
+# Now disable stack trace
+setStackTraceEnabled(false)
+
+# Beyond this point, you can write code whose stack calls won't be recorded
+println("This is not recorded")
+
+# You can enable stack trace again to capture a second block, third, and so on.
+setStackTraceEnabled(true)
+
+def g(a, b) {
+    return f(a) - f(b) ^ 2
+}
+g(3, 7)
+
+setStackTraceEnabled(false)
+
+# Now, to see the stack trace, simply call
+printStackTrace()
+
+# Since stack trace is cummulative, we can clear it.
+clearStackTrace()
+
+# You can also untrack selected calls
+# For the following section, all elementary arithmetic operations are untracked
+setStackTraceEnabled(true)
+setStackTraceUntracked({"+", "-", "*", "/", "^"})
+factor(a*3+a*b)
+setStackTraceEnabled(false)
+printStackTrace()
+clearStackTrace()
+
+# You should only be able to see
+# - PUSH(factor) factor(3 * a + a * b)
+# - POP(factor) (3 + b) * a

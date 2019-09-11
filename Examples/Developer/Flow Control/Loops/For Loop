@@ -40,10 +40,10 @@ assert l2 == {2, 4, 6, 2 * x, 2 * a, 2 * f(x), 2 * a + 2 * x}
 def str = "hello world"
 def chars = ""
 for (c: str as @list) {
-    chars &= c
+    chars &= c;
     print c
 }
-assert c == str
+assert chars == str
 
 # How to use stride(lowerBound, upperBound, step)
 # Prints "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, "

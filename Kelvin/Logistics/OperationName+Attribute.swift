@@ -78,7 +78,8 @@ public extension OperationName {
         .mutatingDiv: [.preservesArguments],
         .mutatingConcat: [.preservesArguments],
         .div: [.forwardCommutative],
-        .sub: [.forwardCommutative]
+        .sub: [.forwardCommutative],
+        .ternaryConditional: [.preservesArguments]
     ]
     
     /// Use subscript syntax to check if the operation contains the specified attribute.

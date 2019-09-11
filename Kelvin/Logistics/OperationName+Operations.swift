@@ -175,6 +175,12 @@ public extension OperationName {
     static let stride = "stride"
     static let getWorkingDirectory = "getWorkingDir"
     
+    // Debugging
+    static let setStackTraceEnabled = "setStackTraceEnabled"
+    static let printStackTrace = "printStackTrace"
+    static let clearStackTrace = "clearStackTrace"
+    static let setStackTraceUntracked = "setStackTraceUntracked"
+    
     // Linear algebra
     static let dotProduct = "dotP"
     static let crossProduct = "crossP"
