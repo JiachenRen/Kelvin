@@ -99,6 +99,17 @@ let listAndPairOperations: [Operation] = [
         }
         return try List(list.subsequence(from: indices[0], to: indices[1]))
     },
+    .ternary(.set, Variable.self, Int.self, Node.self) { (v, i, e) in
+        guard let val = Variable.definitions[v.name] else {
+            throw ExecutionError.undefined(v)
+        }
+        guard var list = val as? MutableListProtocol else {
+            throw ExecutionError.unexpectedType(expected: .list, found: try .resolve(val))
+        }
+        list[i] = e
+        Variable.define(v.name, list)
+        return KVoid()
+    },
     .unary(.size, ListProtocol.self) {
         return $0.count
     },

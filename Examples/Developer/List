@@ -30,3 +30,8 @@ assert reverse(l1) == {5, 3, 2, 1}
 
 # Produces "gip a ma I"
 reverse("I am a pig" as @list) ~ $0 & $1
+
+# Mutating a list at index
+my_list := {2, 3, 7, 9}
+set(my_list, 3, "pig")
+assert my_list == {2, 3, 7, "pig"}

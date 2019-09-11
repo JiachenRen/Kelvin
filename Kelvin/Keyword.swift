@@ -221,7 +221,9 @@ public struct Keyword {
         case equation           // =
         case `repeat`           // ...
         case or                 // ||
+        case nor                // !|
         case and                // &&
+        case nand               // !&
         case xor                // ^^
         case equality           // ==, !=
         case relational         // <, >, <=, >=
@@ -322,6 +324,8 @@ public struct Keyword {
         .init(for: .or, associativity: .infix, precedence: .or, operator: .init("||")),
         .init(for: .xor, associativity: .infix, precedence: .xor, operator: .init("^^")),
         .init(for: .not, associativity: .prefix, operator: .init("!", padding: .none)),
+        .init(for: .nand, associativity: .infix, precedence: .nand, operator: .init("!&")),
+        .init(for: .nor, associativity: .infix, precedence: .nor, operator: .init("!|")),
         
         // List
         .init(for: .get, associativity: .infix, precedence: .subscript, operator: .init("::", padding: .none)), // Preserve arguments?

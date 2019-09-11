@@ -20,7 +20,7 @@ public struct Function: MutableListProtocol {
     }
 
     /// The name of the function
-    public let name: String
+    public let name: OperationName
 
     /// List of arguments that the function takes in.
     public let args: List
@@ -178,6 +178,7 @@ public struct Function: MutableListProtocol {
      - Returns: a node representing the simplified(computed) value of the function.
      */
     public func simplify() throws -> Node {
+        // Push current function invocation onto the stack
         StackTrace.shared.add(.push, self, name)
         // Make a copy of self.
         var copy = self
@@ -200,6 +201,7 @@ public struct Function: MutableListProtocol {
             // Then, the result of the operation is simplified;
             // otherwise returns a copy of the original function with each argument simplified.
             if let s = try copy.invoke()?.simplify() {
+                // For each branch of return, pop the function from stack
                 StackTrace.shared.add(.pop, s, name)
                 return s
             } else if name[.commutative] {

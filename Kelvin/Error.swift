@@ -39,6 +39,7 @@ public enum ExecutionError: KelvinError {
     case onLine(_ line: Int, err: KelvinError)
     case onNode(_ node: Node, err: KelvinError)
     case cancelled
+    case undefined(_ v: Variable)
     case unexpected
     case invalidType(invalidTypeLiteral: String)
     case unexpectedType(expected: DataType, found: DataType)
@@ -113,6 +114,8 @@ public enum ExecutionError: KelvinError {
             return "circular definition"
         case .nonSquareMatrix:
             return "non-square matrix"
+        case .undefined(let v):
+            return "'\(v.name)' is undefined"
         }
     }
 }

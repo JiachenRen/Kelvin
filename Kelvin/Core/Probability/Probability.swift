@@ -11,13 +11,20 @@ import Foundation
 let probabilityOperations: [Operation] = [
 
     // Random number generation
-    .init(.random, []) { _ in
-        Float80.random(in: 0...1)
+    .noArg(.random) {
+        Float80.random(in: 0..<1)
     },
     .binary(.random, Value.self, Value.self) {(lb, ub) in
-        let i = min(lb.float80, ub.float80)
-        let j = max(lb.float80, ub.float80)
-        return Float80.random(in: i...j)
+        if (lb.float80 > ub.float80) {
+            throw ExecutionError.invalidRange(lowerBound: lb, upperBound: ub)
+        }
+        return Float80.random(in: lb.float80...ub.float80)
+    },
+    .binary(.randomInt, Int.self, Int.self) {(lb, ub) in
+        if (lb >= ub) {
+            throw ExecutionError.invalidRange(lowerBound: lb, upperBound: ub)
+        }
+        return Int.random(in: lb...ub)
     },
     .unary(.random, List.self) {
         $0.elements.randomElement()
@@ -26,6 +33,9 @@ let probabilityOperations: [Operation] = [
     // Combination and permutation
     .binary(.npr, Int.self, Int.self) {
         nPr($0.float80, $1.float80)
+    },
+    .binary(.npr, List.self, Int.self) {
+        List(permutations(of: $0.elements, $1).map {List($0)})
     },
     .binary(.ncr, Int.self, Int.self) {
         nCr($0.float80, $1.float80)
@@ -55,6 +65,41 @@ public func nPr(_ n: Float80, _ r: Float80) -> Float80 {
 /// A very concise definition of factorial.
 public func factorial(_ n: Float80) -> Float80 {
     return n < 0 ? .nan : n == 0 ? 1 : n * factorial(n - 1)
+}
+
+/// Find all permutations of objects in `[T]`.
+/// Ported from c, original algorithm here: https://www.geeksforgeeks.org/heaps-algorithm-for-generating-permutations/
+/// - Returns: A list of all possible permutations of `[T]`
+public func permutations<T>(of arr: [T], _ r: Int) -> [[T]] {
+    var perm: [[T]] = [[T]]()
+    
+    func heapPermutation(_ a: inout [T], _ size: Int, _ n: Int) {
+        // If size becomes 1 then prints the obtained permutation
+        if size == 1 {
+            perm.append(a)
+            return
+        }
+      
+        for i in 0..<size {
+            heapPermutation(&a, size - 1, n)
+      
+            // if size is odd, swap first and last
+            // element
+            if size % 2 == 1 {
+                a.swapAt(0, size - 1)
+            }
+      
+            // If size is even, swap ith and last
+            // element
+            else {
+                a.swapAt(i, size - 1)
+            }
+        }
+    }
+    
+    var a = arr
+    heapPermutation(&a, a.count, a.count)
+    return perm
 }
 
 /**

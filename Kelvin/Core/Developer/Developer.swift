@@ -78,46 +78,6 @@ public class Developer {
         .init(.copy, [.any, .int]) {
             Function(.repeat, $0)
         },
-        .init(.readLine, []) {_ in
-            guard let io = Program.io else {
-                throw ExecutionError.general(errMsg: "program in/out protocol not found")
-            }
-            return try KString(io.readLine())
-        },
-        
-        // Debug utilities
-        .unary(.complexity, [.any]) {
-            $0.complexity
-        },
-        .unary(.eval, [.any]) {
-            try $0.simplify()
-        },
-        .init(.exit, []) { _ in
-            exit(0)
-        },
-        .init(.date, []) { _ in
-            KString("\(Date())")
-        },
-        .init(.time, []) { _ in
-            Float80(Date().timeIntervalSince1970)
-        },
-        .unary(.delay, Value.self) {
-            Thread.sleep(forTimeInterval: Double($0.float80))
-            return KString("done")
-        },
-        .binary(.measure, Int.self, Node.self) {(i, n) in
-            let t = Date().timeIntervalSince1970
-            for _ in 0..<i {
-                let _ = try n.simplify()
-            }
-            let avg = Float80(Date().timeIntervalSince1970 - t) / Float80(i)
-            return Pair("avg(s)", avg)
-        },
-        .unary(.measure, [.any]) {
-            let t = Date().timeIntervalSince1970
-            let _ = try $0.simplify()
-            return Float80(Date().timeIntervalSince1970 - t)
-        },
         
         // Compilation & execution
         .binary(.run, KString.self, KString.self) {(flag, filePath) in
@@ -144,6 +104,9 @@ public class Developer {
         .unary(.compile, KString.self) {
             Final(node: try Compiler.compile($0.string))
         },
+        .unary(.eval, [.any]) {
+            try $0.simplify()
+        },
         
         // IO
         .unary(.print, [.any]) {
@@ -162,8 +125,14 @@ public class Developer {
             #if os(OSX)
                 return KString(Process().currentDirectoryPath)
             #else
-                throw ExecutionError.general(errMsg: "unable to resolve working directory - unsupported")
+                throw ExecutionError.general(errMsg: "unable to resolve working directory - unsupported platform")
             #endif
+        },
+        .init(.readLine, []) {_ in
+            guard let io = Program.io else {
+                throw ExecutionError.general(errMsg: "program in/out protocol not defined")
+            }
+            return try KString(io.readLine())
         },
         
         /// Type casting (coersion)

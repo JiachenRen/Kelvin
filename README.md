@@ -259,10 +259,11 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 
 ### Probability
 - [x] Permutation/combination
+  - ncr, npr for lists
 - [x] Randomization
-  - random(lb, ub), random()
+  - random(lb, ub), random(), randomInt(lb, ub)
   - Shuffle list
-  - Random element of list
+  - Random element from list
 
 ### Linear Algebra
 - [x] Vector
@@ -284,7 +285,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - [x] Transposition
   - [ ] LU decomposition
   - [ ] Inverse
-  - [x] Gaussian elimination (row reduction)
+  - [x] **Algebraic Gaussian elimination (row reduction)**
 
 ### List math/operations
 - [x] Zip, map, and reduce w/ anonymous closure arguments.
@@ -302,7 +303,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 
 ### Boolean logic
 - [x] Basic boolean operators
-  - And, or, xor, and not.
+  - And, or, not, xor, nand, and nor
 - [ ] Commutative simplification 
   - Only handles and & or for now
 
@@ -314,6 +315,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - Closures
   - Anonymous closure arguments (e.g. $0, $1, ...)
   - Inout variables (behaves like the reference operator "&", but not quite)
+  - List/clear all vars/funcs
 - [x] Runtime compilation
 - [x] Flow control
   - Execution
@@ -335,7 +337,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
     - Break
     - Continue
 - [x] I/O
-  - Program execution
+  - Execute file at path
   - Print, println
   - Log
   - Recursion
@@ -347,6 +349,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 - [x] Strings
   - Concatenation
   - Subscript access
+  - Deconstruction to list of chars
 - [x] Pairs
   - Compilation
   - Subscript access
@@ -366,4 +369,4 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - Lock/unlock variables
   - Save/restore
 - [x] Multi-line function/list/vector compilation
-- [x] Trailing closure syntax
+- [x] **Trailing closure syntax**

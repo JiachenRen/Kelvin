@@ -29,3 +29,9 @@ println f(&a)
 
 # a is now 9 because the reference operator "&" passes a as an inout variable
 assert a == 9
+
+# List all user defined variables
+listVars()
+
+# Clear all user defined variables
+clearVars()

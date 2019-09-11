@@ -1,7 +1,12 @@
 # nCr, nPr
 println (9 ncr 3)
 println (9 npr 3)
+
+# Generate a list of all possible unordered combinations of n elements from a list
 println ({1, 2, 3, x, a, b, 4, 5} ncr 4)
+
+# Generate a list of all possible permutations of n elements from a list
+assert size({a, b, c} ncr 3) == 6
 
 # Random number generation
 println "Calculating average of 100000 random numbers..."

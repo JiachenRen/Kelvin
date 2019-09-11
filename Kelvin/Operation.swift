@@ -16,7 +16,7 @@ typealias NUnary = (Float80) -> Float80
 /// Numerical binary operation
 typealias NBinary = (Float80, Float80) -> Float80
 
-public class Operation: Equatable {
+public class Operation: Equatable, Hashable {
 
     /// Registered operations are resolved dynamically during runtime
     /// and assigned to functions with matching signature as definitions.
@@ -41,6 +41,9 @@ public class Operation: Equatable {
     ].flatMap {
         $0
     }
+    
+    /// User defined functions
+    private(set) static var userDefined = Set<Operation>()
 
     /// A value that represents the scope of the signature
     /// The larger the scope, the more universally applicable the function.
@@ -59,6 +62,11 @@ public class Operation: Equatable {
         self.scope = signature.reduce(0) {
             $0 + $1.rawValue
         }
+    }
+    
+    /// Generates a hash from description, since each unique operation has a unique description.
+    public func hash(into hasher: inout Hasher) {
+        description.hash(into: &hasher)
     }
     
     /**
@@ -82,7 +90,10 @@ public class Operation: Equatable {
     }
 
     /// Register the operation.
-    public static func register(_ operation: Operation) {
+    public static func register(_ operation: Operation, isUserDefined: Bool = true) {
+        if isUserDefined {
+            userDefined.insert(operation)
+        }
         var arr = registered[operation.name] ?? [Operation]()
         arr.append(operation)
         
@@ -102,15 +113,9 @@ public class Operation: Equatable {
     private static func process(_ operations: [Operation]) -> [OperationName: [Operation]] {
         var operations = operations
 
-        let conjugates = operations.map {
-                    conjugate(for: $0)
-                }
-                .filter {
-                    $0 != nil
-                }
-                .map {
-                    $0!
-                }
+        let conjugates = operations
+            .map {conjugate(for: $0)}
+            .compactMap {$0}
 
         operations.append(contentsOf: conjugates)
         var dict = [OperationName: [Operation]]()
@@ -134,9 +139,10 @@ public class Operation: Equatable {
         return dict
     }
 
-    /// Clear existing registered operations, then
-    /// register default operations
+    /// Clear existing registered operations, clear user defined operations,
+    /// then register default operations.
     public static func restoreDefault() {
+        userDefined = []
         registered = process(defaults)
     }
 
@@ -429,6 +435,16 @@ public extension Operation {
     ) -> Operation {
         return Operation(name, signature) {
             try unary($0[0])
+        }
+    }
+    
+    /// Factory function for no-arg operation
+    static func noArg(
+        _ name: OperationName,
+        def: @escaping () throws -> Node?
+    ) -> Operation {
+        return Operation(name, []) { _ in
+            try def()
         }
     }
 }

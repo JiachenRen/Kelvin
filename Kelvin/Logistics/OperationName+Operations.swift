@@ -91,6 +91,7 @@ public extension OperationName {
     static let list = "list"
     static let pair = "pair"
     static let get = "get"
+    static let set = "set"
     static let map = "map"
     static let reduce = "reduce"
     static let filter = "filter"
@@ -115,8 +116,24 @@ public extension OperationName {
     static let factorize = "factor" // Also used for factorizing an integer
     static let expand = "expand"
     
+    // Linear algebra
+    static let dotProduct = "dotP"
+    static let crossProduct = "crossP"
+    static let unitVector = "unitVec"
+    static let magnitude = "mag"
+    static let angleBetween = "angle"
+    static let matrixMultiplication = "mult"
+    static let determinant = "det"
+    static let createMatrix = "mat"
+    static let identityMatrix = "idMat"
+    static let transpose = "trans"
+    static let gaussianElimination = "gausElim"
+    static let transform = "transform"
+    static let cofactor = "cofactor"
+    
     // Probability
     static let random = "random"
+    static let randomInt = "randomInt"
     static let npr = "npr"
     static let ncr = "ncr"
     static let factorial = "factorial"
@@ -126,6 +143,8 @@ public extension OperationName {
     static let or = "or"
     static let xor = "xor"
     static let not = "not"
+    static let nor = "nor"
+    static let nand = "nand"
     
     // Definition & deletion
     static let define = "def"
@@ -141,16 +160,25 @@ public extension OperationName {
     static let mutatingDiv = "/="
     static let mutatingConcat = "&="
     
-    // Developer
+    // - MARK: Developer
+    
+    // Flow control
     static let `if` = "if"
     static let ternaryConditional = "ternary"
     static let `else` = "else"
     static let pipe = "pipe"
-    static let evaluateAt = "at"
+    
+    // Loop
     static let `repeat` = "repeat"
     static let copy = "copy"
-    static let concat = "concat"
-    static let split = "split"
+    static let `for` = "for"
+    static let `while` = "while"
+    static let `return` = "return"
+    static let `continue` = "continue"
+    static let `break` = "break"
+    static let stride = "stride"
+    
+    // System utilities
     static let complexity = "complexity"
     static let eval = "eval"
     static let exit = "exit"
@@ -158,43 +186,31 @@ public extension OperationName {
     static let time = "time"
     static let delay = "delay"
     static let run = "run"
-    static let `try` = "try"
-    static let `assert` = "assert"
-    static let measure = "measure"
     static let compile = "compile"
+    static let measure = "measure"
+    static let listVariables = "listVars"
+    static let clearVariables = "clearVars"
+    static let listFunctions = "listFuncs"
+    static let clearFunctions = "clearFuncss"
+    
+    // IO
+    static let evaluateAt = "at"
+    static let concat = "concat"
+    static let split = "split"
     static let print = "print"
     static let println = "println"
-    static let `return` = "return"
-    static let `continue` = "continue"
-    static let `break` = "break"
-    static let `throw` = "throw"
-    static let `for` = "for"
-    static let `while` = "while"
     static let `inout` = "inout"
     static let readLine = "readLine"
-    static let stride = "stride"
     static let getWorkingDirectory = "getWorkingDir"
     
-    // Debugging
+    // Debugging & erro handling
     static let setStackTraceEnabled = "setStackTraceEnabled"
     static let printStackTrace = "printStackTrace"
     static let clearStackTrace = "clearStackTrace"
     static let setStackTraceUntracked = "setStackTraceUntracked"
-    
-    // Linear algebra
-    static let dotProduct = "dotP"
-    static let crossProduct = "crossP"
-    static let unitVector = "unitVec"
-    static let magnitude = "mag"
-    static let angleBetween = "angle"
-    static let matrixMultiplication = "mult"
-    static let determinant = "det"
-    static let createMatrix = "mat"
-    static let identityMatrix = "idMat"
-    static let transpose = "trans"
-    static let gaussianElimination = "gausElim"
-    static let transform = "transform"
-    static let cofactor = "cofactor"
+    static let `try` = "try"
+    static let `throw` = "throw"
+    static let `assert` = "assert"
     
     // Equality
     static let equals = "=="
