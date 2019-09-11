@@ -284,7 +284,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - [x] Transposition
   - [ ] LU decomposition
   - [ ] Inverse
-  - [x] Gaussian elimination
+  - [x] Gaussian elimination (row reduction)
 
 ### List math/operations
 - [x] Zip, map, and reduce w/ anonymous closure arguments.
@@ -354,6 +354,11 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - Try
   - Assert
   - Throw
+- [Stack Trace]
+    - Record full call stack history
+    - Print stack trace
+    - Enable/disable stack trace
+    - Untrack specific functions, both native & user defined
 - [x] System
   - Precise date & time (down to nano seconds)
   - Performance measurement
