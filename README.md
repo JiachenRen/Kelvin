@@ -1,7 +1,7 @@
 Kelvin CAS
 =============
 [![Build Status](https://travis-ci.com/JiachenRen/kelvin-cas.svg?branch=master)](https://travis-ci.com/JiachenRen/kelvin-cas)
-![Swift 4.2](https://img.shields.io/badge/swift-4.2-orange.svg)
+![Swift 5.1](https://img.shields.io/badge/swift-5.1-orange)
 [![License: MIT](https://img.shields.io/apm/l/vim-mode.svg?colorB=blue&style=flat)](/LICENSE)
 ![Carthage - Compatible](https://img.shields.io/badge/carthage-✓-orange.svg?style=flat)
 
