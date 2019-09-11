@@ -27,7 +27,7 @@ This directory contains various examples that demonstrate how to the Kelvin lang
     - [Dictionary](/Examples/Developer/Dictionary)
     - [Error handling](/Examples/Developer/Error%20Handling)
     - Flow Control
-        - [Conditional statements](/Examples/Developer/Float%20Control/Conditionals)
+        - [Conditional statements](/Examples/Developer/Flow%20Control/Conditionals)
         - [For loop](/Examples/Developer/Flow%20Control/Loops/For%20Loop)
         - [While loop](/Examples/Developer/Flow%20Control/Loops/While%20Loop)
     - [Function](/Examples/Developer/Function)
