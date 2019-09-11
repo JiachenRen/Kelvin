@@ -423,8 +423,11 @@ public class Compiler {
         }
         
         // Restore pair() to (:)
-        parent = parent.replacing(by: {
+        parent = try parent.replacing(by: {
             let elements = args($0).elements
+            if elements.count != 2 {
+                throw CompilerError.syntax(errMsg: "expected expr. on both sides of 'x'")
+            }
             return Pair(elements[0], elements[1])
         }) {
             name($0) == .pair
@@ -442,8 +445,12 @@ public class Compiler {
         }
 
         // Restore equations
-        parent = parent.replacing(by: {
-            Equation(lhs: args($0)[0], rhs: args($0)[1])
+        parent = try parent.replacing(by: {
+            let elements = args($0).elements
+            if elements.count != 2 {
+                throw CompilerError.syntax(errMsg: "expected expr. on both sides of '='")
+            }
+            return Equation(lhs: args($0)[0], rhs: args($0)[1])
         }) {
             name($0) == .equates
         }
