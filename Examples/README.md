@@ -14,7 +14,7 @@ This directory contains various examples that demonstrate how to the Kelvin lang
     - [Regression](/Examples/Statistics/Regression)
     - [Confidence intervals](/Examples/Statistics/Confidence%20Interval)
 - Calculus
-    - [Differentiation](/Examples/Calculus/Differentionation)
+    - [Differentiation](/Examples/Calculus/Differentiation)
     - [Integration](/Examples/Calculus/Integration)
 - Developer
     - Algorithms
@@ -23,11 +23,11 @@ This directory contains various examples that demonstrate how to the Kelvin lang
         - [Recursion](/Examples/Developer/Algorithms/Recursion)
         - [Contains](/Examples/Developer/Algorithms/Contains)
     - [Benchmarking](/Examples/Developer/Benchmarking)
-    - [Debugging](/Examples/Debugging/Stack%20Trace)
+    - [Debugging](/Examples/Developer/Debugging/Stack%20Trace)
     - [Dictionary](/Examples/Developer/Dictionary)
     - [Error handling](/Examples/Developer/Error%20Handling)
     - Flow Control
-        - [Conditional statements](/Examples/Developer/Conditionals)
+        - [Conditional statements](/Examples/Developer/Float%20Control/Conditionals)
         - [For loop](/Examples/Developer/Flow%20Control/Loops/For%20Loop)
         - [While loop](/Examples/Developer/Flow%20Control/Loops/While%20Loop)
     - [Function](/Examples/Developer/Function)
