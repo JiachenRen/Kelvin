@@ -337,6 +337,7 @@
 		1FE1697B21F2EC070006712C /* Conditionals in Resources */ = {isa = PBXBuildFile; fileRef = 1FE1697A21F2EC070006712C /* Conditionals */; };
 		1FE487FD220E9028005361AC /* ruby_github_theme.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FE487FB220E9027005361AC /* ruby_github_theme.png */; };
 		1FE487FE220E9028005361AC /* ruby_dracula_theme.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FE487FC220E9028005361AC /* ruby_dracula_theme.png */; };
+		1FF845C02329B22500FA8F93 /* Callbacks in Resources */ = {isa = PBXBuildFile; fileRef = 1FF845BF2329B22500FA8F93 /* Callbacks */; };
 		1FF8B07423274E2800F49770 /* IO in Resources */ = {isa = PBXBuildFile; fileRef = 1FF8B07323274E2800F49770 /* IO */; };
 		1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FFD8CA9218F50870004ECEB /* Assets.xcassets */; };
 		1FFD8CAD218F50870004ECEB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1FFD8CAB218F50870004ECEB /* Main.storyboard */; };
@@ -508,6 +509,7 @@
 		1FE487F4220E416F005361AC /* ConsoleViewController+NSOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConsoleViewController+NSOutlineView.swift"; sourceTree = "<group>"; };
 		1FE487FB220E9027005361AC /* ruby_github_theme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ruby_github_theme.png; sourceTree = "<group>"; };
 		1FE487FC220E9028005361AC /* ruby_dracula_theme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ruby_dracula_theme.png; sourceTree = "<group>"; };
+		1FF845BF2329B22500FA8F93 /* Callbacks */ = {isa = PBXFileReference; lastKnownFileType = text; path = Callbacks; sourceTree = "<group>"; };
 		1FF8B07323274E2800F49770 /* IO */ = {isa = PBXFileReference; lastKnownFileType = text; path = IO; sourceTree = "<group>"; };
 		1FFD8C9F218F50850004ECEB /* Kelvin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kelvin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FFD8CA2218F50850004ECEB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -773,6 +775,7 @@
 				1FF8B07223274DFC00F49770 /* IO */,
 				1F6D09FA220A439200807377 /* Algorithms */,
 				1F09371821F672CD00E707BD /* Benchmarking */,
+				1FF845BF2329B22500FA8F93 /* Callbacks */,
 				1F0A90DE21F7E94200432B17 /* Error Handling */,
 				1F8DF78E2208CCEE006351B0 /* Function */,
 				1F0AC9E3222B7AEA00870367 /* Dictionary */,
@@ -1221,6 +1224,7 @@
 				1F645FC021FAA1260096AD1C /* Vector in Resources */,
 				1F09371721F66C4B00E707BD /* Subscript in Resources */,
 				1F0936BE21F3A54800E707BD /* Probability in Resources */,
+				1FF845C02329B22500FA8F93 /* Callbacks in Resources */,
 				1FFD8CAD218F50870004ECEB /* Main.storyboard in Resources */,
 				1F09370B21F57B0200E707BD /* Trigonometry in Resources */,
 				1FDC865A2215C1F900EAC346 /* Stat Problem in Resources */,

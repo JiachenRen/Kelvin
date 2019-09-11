@@ -31,6 +31,7 @@ This directory contains various examples that demonstrate how to the Kelvin lang
         - [For loop](/Examples/Developer/Flow%20Control/Loops/For%20Loop)
         - [While loop](/Examples/Developer/Flow%20Control/Loops/While%20Loop)
     - [Function](/Examples/Developer/Function)
+    - [Callback](/Examples/Developer/Callbacks)
     - [IO](/Examples/Developer/IO/IO)
     - [List](/Examples/Developer/List)
     - [Subscript access](/Examples/Developer/Subscript)

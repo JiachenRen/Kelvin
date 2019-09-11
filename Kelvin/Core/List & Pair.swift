@@ -74,6 +74,17 @@ let listAndPairOperations: [Operation] = [
     },
 
     // List operations
+    .unary(.flatten, ListProtocol.self) {(list: ListProtocol) in
+        var flattened: [Node] = []
+        list.elements.forEach { e in
+            if let l = e as? ListProtocol {
+                flattened.append(contentsOf: l.elements)
+                return
+            }
+            flattened.append(e)
+        }
+        return List(flattened)
+    },
     .init(.list, [.universal]) {
         List($0)
     },
@@ -175,12 +186,12 @@ let listAndPairOperations: [Operation] = [
     .binary(.contains, ListProtocol.self, Node.self) {(list, e) in
         list.contains {e === $0}
     },
-    .unary(.shuffle, List.self) {
+    .unary(.shuffle, ListProtocol.self) {
         var elements = $0.elements
         elements.shuffle()
         return List(elements)
     },
-    .unary(.reverse, List.self) {
+    .unary(.reverse, ListProtocol.self) {
         List($0.elements.reversed())
     }
 ]

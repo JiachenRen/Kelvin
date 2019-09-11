@@ -309,6 +309,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 
 ### Programs/functions
 - [x] Variables & Functions
+  - **Higher order function** (function as parameter, callbacks, however you call it)
   - Definition & deletion
   - Overloading of functions
   - Automatic scope management

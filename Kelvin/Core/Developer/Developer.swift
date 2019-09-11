@@ -107,6 +107,9 @@ public class Developer {
         .unary(.eval, [.any]) {
             try $0.simplify()
         },
+        .binary(.invoke, Variable.self, ListProtocol.self) { (v, list) in
+            Function(v.name, list.elements)
+        },
         
         // IO
         .unary(.print, [.any]) {

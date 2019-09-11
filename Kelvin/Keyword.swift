@@ -236,6 +236,7 @@ public struct Keyword {
         case prefix             // √, !(not)
         case postfix            // ++, --, !(factorial), °, %
         case `subscript`        // ::
+        case invocation         // =>
         case binding            // binding between closures
         case node               // leaf nodes should never require parenthesis
 
@@ -352,6 +353,7 @@ public struct Keyword {
         .init(for: .compile, associativity: .prefix),
         .init(for: .delay, associativity: .prefix),
         .init(for: .run, associativity: .prefix, precedence: .prefixCommand),
+        .init(for: .invoke, associativity: .infix, precedence: .invocation, operator: .init("=>", padding: .none)),
         
         // Transfer, flow control, and error handling
         .init(for: .return, associativity: .prefix, precedence: .prefixCommand),

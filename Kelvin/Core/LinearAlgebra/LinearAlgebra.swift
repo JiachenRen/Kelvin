@@ -58,6 +58,9 @@ public class LinearAlgebra {
         .binary(.createMatrix, Int.self, Int.self) {
             Matrix(rows: $0, cols: $1)
         },
+        .ternary(.createMatrix, ListProtocol.self, Int.self, Int.self) {
+            try Matrix($0, rows: $1, cols: $2)
+        },
         .unary(.createMatrix, Int.self) {
             Matrix($0)
         },

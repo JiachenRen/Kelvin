@@ -103,6 +103,7 @@ public extension OperationName {
     static let remove = "rm"
     static let contains = "contains"
     static let reverse = "reverse"
+    static let flatten = "flatten"
     
     // Calculus
     static let derivative = "derivative"
@@ -167,6 +168,7 @@ public extension OperationName {
     static let ternaryConditional = "ternary"
     static let `else` = "else"
     static let pipe = "pipe"
+    static let invoke = "invoke"
     
     // Loop
     static let `repeat` = "repeat"
@@ -191,7 +193,7 @@ public extension OperationName {
     static let listVariables = "listVars"
     static let clearVariables = "clearVars"
     static let listFunctions = "listFuncs"
-    static let clearFunctions = "clearFuncss"
+    static let clearFunctions = "clearFuncs"
     
     // IO
     static let evaluateAt = "at"

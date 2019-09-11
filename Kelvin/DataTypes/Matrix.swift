@@ -91,6 +91,18 @@ public struct Matrix: MutableListProtocol, NaN {
         self.dim = (rows, cols)
     }
     
+    public init(_ list: ListProtocol, rows: Int, cols: Int) throws {
+        if list.count != rows * cols {
+            let msg = "cannot create a \(rows) x \(cols) matrix from a list of \(list.count) elements"
+            throw ExecutionError.general(errMsg: msg)
+        }
+        let elements = list.elements
+        self.dim = (rows, cols)
+        self.rows = stride(from: 0, to: elements.count, by: rows).map {
+            Row(Array(elements[$0..<min($0 + rows, elements.count)]))
+        }
+    }
+    
     public init(_ list: ListProtocol) throws {
         if list.count == 0 {
             throw ExecutionError.general(errMsg: "cannot create matrix from empty list")

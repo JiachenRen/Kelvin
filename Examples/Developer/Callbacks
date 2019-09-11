@@ -1,0 +1,16 @@
+# invoke is represented by =>, where lhs is the name of the function to invoke and rhs is list of arguments
+def f(x, y, a, b) {
+    # This is equivalent to 'invoke(x, {invoke(y, {a, b + a}), b^2, c})'
+    return x => (y => (a, b + a), b^2, c)
+}
+
+def f(a, b, c) {
+    return a - b * c
+}
+
+def g(a, b) {
+    return a ^ b
+}
+
+# Prints -16 * c + 2187
+println(f(f, g, 3, 4))
