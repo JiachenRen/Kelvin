@@ -233,7 +233,7 @@ public struct Keyword {
         case exponent           // ^
         case coersion           // as
         case derivative         // '
-        case prefix             // √, !(not)
+        case prefix             // √, !(not), * prefix as function reference
         case postfix            // ++, --, !(factorial), °, %
         case `subscript`        // ::
         case invocation         // =>
@@ -354,6 +354,7 @@ public struct Keyword {
         .init(for: .delay, associativity: .prefix),
         .init(for: .run, associativity: .prefix, precedence: .prefixCommand),
         .init(for: .invoke, associativity: .infix, precedence: .invocation, operator: .init("=>", padding: .none)),
+        .init(for: .functionRef, associativity: .prefix, precedence: .prefixCommand, operator: .init("*", padding: .none)),
         
         // Transfer, flow control, and error handling
         .init(for: .return, associativity: .prefix, precedence: .prefixCommand),

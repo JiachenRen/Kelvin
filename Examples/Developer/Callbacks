@@ -14,3 +14,38 @@ def g(a, b) {
 
 # Prints -16 * c + 2187
 println(f(f, g, 3, 4))
+
+# There is another way to pass in functions as parameters.
+# Define f, that takes in g as parameter
+def f(g, x) {
+    return g(x)
+}
+
+# Define a, a primitive function
+def a(x) {
+    return x^2
+}
+
+# Define b, a primitive function
+def b(x) {
+    return x^3
+}
+
+# Define c, a function that looks up and invokes the arbitrary definitions a, b
+def c(x) {
+    return {a,b}[0] => {b => {x}}
+}
+
+# Invoke c
+assert c(3) == 729
+
+assert f(*{a,b}[0],x) == x ^ 2
+def test() {
+    map({a, b, c}) {
+        try f(*$0, x) : undef
+    }
+}
+result := test()
+
+assert (result contains undef) == false
+assert result == {x^2, x^3, x^6}

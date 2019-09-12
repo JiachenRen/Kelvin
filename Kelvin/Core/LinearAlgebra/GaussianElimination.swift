@@ -31,7 +31,7 @@ public extension LinearAlgebra {
         }
         
         /* Reduction into r.e.f. */
-        let singular_flag = try forwardElim(&mat);
+        let singular_flag = try forwardElim(&mat)
         
         /* If matrix is singular */
         if (singular_flag != -1) {
@@ -65,7 +65,7 @@ public extension LinearAlgebra {
              * it denotes that matrix is singular, and
              * will lead to a division-by-zero later. */
             if (mat[k][k]≈ ?? .nan) == 0 {
-                return k; // Matrix is singular
+                return k // Matrix is singular
             }
             
             for i in k+1..<N {
@@ -80,7 +80,7 @@ public extension LinearAlgebra {
                 }
                 
                 /* filling lower triangular matrix with zeros*/
-                mat[i][k] = 0;
+                mat[i][k] = 0
             }
         }
         
@@ -99,7 +99,7 @@ public extension LinearAlgebra {
         for i in (0..<N).reversed()
         {
             /* start with the RHS of the equation */
-            x[i] = mat[i][N];
+            x[i] = mat[i][N]
             
             /* Initialize j to i+1 since matrix is upper
              triangular*/
@@ -112,7 +112,7 @@ public extension LinearAlgebra {
             
             /* divide the RHS by the coefficient of the
              unknown being calculated */
-            x[i] = x[i] / mat[i][i];
+            x[i] = x[i] / mat[i][i]
         }
         
         return x

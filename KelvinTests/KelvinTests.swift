@@ -43,6 +43,7 @@ class KelvinTests: XCTestCase {
         }
     }
     
+    /// Scheme for test should be RELEASE with DEBUG off.
     func testPerformance() {
         self.measure {
             do {

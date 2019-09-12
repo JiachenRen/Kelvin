@@ -269,12 +269,13 @@ public struct Function: MutableListProtocol {
             return rpl
         }, where: {n in
             if let v = n as? Variable {
-                return parameters.contains {v === $0}
+                return dict[v.name] != nil
             }
             return false
         })
         
         return { args in
+            // Push variable scope
             Scope.save()
             
             var inoutArgs = [String: Variable]()
@@ -297,7 +298,27 @@ public struct Function: MutableListProtocol {
                 Variable.define(dict[par.name]!, arg)
             }
             
-            let result = try template.simplify()
+            // Inject higher order functions into definition
+            var injected: Node = template
+            for (i, arg) in args.enumerated() where arg is Function {
+                let fun = arg as! Function
+                if fun.name != .functionRef {
+                    continue
+                }
+                injected = try injected.replacing(by: {
+                    let org = $0 as! Function
+                    guard let new = fun.elements.first as? Variable else {
+                        let msg = "'\(fun.stringified)' is not a valid function reference"
+                        throw ExecutionError.general(errMsg: msg)
+                    }
+                    return Function(new.name, org.args)
+                }) {
+                    ($0 as? Function)?.name == parameters[i].name
+                }
+            }
+            
+            // Link arguments and parameters
+            let result = try injected.simplify()
                 .replacing(by: { (n) -> Node in
                     let v = n as! Variable
                     return Variable.definitions[v.name]!
@@ -310,11 +331,12 @@ public struct Function: MutableListProtocol {
                 $0[$1.key] = Variable.definitions[dict[$1.value.name]!]
             }
             
+            // Pop variable scope
             Scope.restore()
             
             // Escape inout variable definitions
-            for (v, def) in escaping {
-                Variable.definitions[v] = def
+            Variable.definitions.merge(escaping) {
+                (org, esc) in esc
             }
             
             return result

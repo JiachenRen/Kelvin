@@ -169,6 +169,7 @@ public extension OperationName {
     static let `else` = "else"
     static let pipe = "pipe"
     static let invoke = "invoke"
+    static let functionRef = "func"
     
     // Loop
     static let `repeat` = "repeat"

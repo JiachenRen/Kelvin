@@ -98,8 +98,8 @@ public struct Matrix: MutableListProtocol, NaN {
         }
         let elements = list.elements
         self.dim = (rows, cols)
-        self.rows = stride(from: 0, to: elements.count, by: rows).map {
-            Row(Array(elements[$0..<min($0 + rows, elements.count)]))
+        self.rows = stride(from: 0, to: elements.count, by: cols).map {
+            Row(Array(elements[$0..<min($0 + cols, elements.count)]))
         }
     }
     
