@@ -10,16 +10,16 @@ import Foundation
 
 public class Console: IOProtocol {
     private var output = ""
-    public var colored: Bool
+    private let tab = "  "
+    
+    /// If verbose is false, all log messages are not printed.
     public var verbose: Bool
     
-    private let tab = "      "
-    
-    init(colored: Bool = false, verbose: Bool = false) {
-        self.colored = colored
+    init(verbose: Bool = false) {
         self.verbose = verbose
     }
     
+    /// Clears the output buffer of the console
     public func clear() {
         output = ""
     }
@@ -37,40 +37,57 @@ public class Console: IOProtocol {
         }
         if let line = l.line {
             let msg = "\(tab)# \(line)"
-            Swift.print(colored ? msg.white : msg)
+            Swift.print(msg.white)
         }
         let output = "\(format(l.output))"
         let input = "\(format(l.input))"
         Swift.print("\(tab)→ \(input)\n\(tab)= \(output)\n")
     }
     
+    /// Formats and prints `e` as an error (red).
     public func error(_ e: String) {
-        Swift.print("→ \(colored ? e.red : e)", terminator: "\n\n")
+        Swift.print("→ \(e.red)", terminator: "\n\n")
     }
     
+    /// Formats and prints `w` as a warning (yellow).
     public func warning(_ w: String) {
-        Swift.print("→ \(colored ? w.yellow : w)", terminator: "\n\n")
+        Swift.print("→ \(w.yellow)", terminator: "\n\n")
     }
     
+    /// Read a line from terminal.
     public func readLine() -> String {
-        return Swift.readLine() ?? ""
+        return readln() ?? ""
     }
     
+    /// Reads from terminal, making use of libedit.tbd
+    /// In this fashion, terminal history,
+    /// - Parameter prompt: The prompt to be displayed
+    func readln(prompt: String? = nil, addToHistory: Bool = true) -> String? {
+        guard let cString = readline(prompt) else { return nil }
+        defer { free(cString) }
+        if addToHistory { add_history(cString) }
+        return(String(cString: cString))
+    }
+    
+    /// Converts node to its String representation.
     private func format(_ n: Node) -> String {
         if let ks = n as? KString {
             return ks.string
         }
-        return colored ? n.ansiColored : n.stringified
+        return n.ansiColored
     }
     
+    /// Append node `n` to output buffer
     public func print(_ n: Node) {
         output += format(n)
     }
     
+    /// Append node `n` and a linebreak to output buffer
     public func println(_ n: Node) {
         output += format(n) + "\n"
     }
     
+    /// Flush output buffer, which prints all pending messages to terminal.
     public func flush() {
         if output == "" {
             return
@@ -78,11 +95,32 @@ public class Console: IOProtocol {
         Swift.print(output)
     }
     
-    /// Main program execution interactive loop
-    public func interactiveLoop() throws {
-        
-        Swift.print("Kelvin Algebra System. Copyright (c) 2019, Jiachen Ren.")
-        
+    /// Evaluates the expression represented by `expr`
+    func eval(_ expr: String) {
+        do {
+            let output = try Compiler.compile(expr).simplify()
+            Swift.print(output.stringified)
+        } catch let e as KelvinError {
+            error(e.localizedDescription)
+        } catch let e {
+            error("internal error: \(e.localizedDescription)")
+        }
+    }
+    
+    /// Compiles and executes Kelvin source file at path
+    func compileAndRun(_ filePath: String) throws {
+        do {
+            try Program.compileAndRun(filePath)
+            flush()
+        } catch let e as KelvinError {
+            error(e.localizedDescription)
+            exit(EXIT_FAILURE)
+        }
+    }
+    
+    /// Kelvin REPL(Read-Evaluate-Print-Loop)
+    public func repl() throws {
+        Swift.print("Kelvin Algebra System REPL. Copyright (c) 2019, Jiachen Ren.")
         var openBrackets = [Compiler.Bracket: Int]()
         var buff: String? = nil
         
@@ -97,16 +135,14 @@ public class Console: IOProtocol {
         
         resetCounters()
         
+        // REPL loop
         while true {
             do {
                 let open = openBrackets.reduce(0) {$0 + $1.value}
-                if open == 0 {
-                    Swift.print("\(tab)← ", terminator: "")
-                } else {
-                    Swift.print("\(tab)  ", terminator: "")
-                }
-                
-                var input = Swift.readLine()?.trimmingCharacters(in: .whitespaces) ?? ""
+                let padding = repeatElement("\(tab)", count: open + 1)
+                    .reduce("  ") {$0 + $1}
+                let prompt = open == 0 ? "\(tab)← " : padding
+                var input = readln(prompt: prompt)?.trimmingCharacters(in: .whitespaces) ?? ""
                 
                 let curOpenBrackets = Compiler.countOpenBrackets(input)
                 openBrackets[.square]! += curOpenBrackets[.square]!
@@ -149,15 +185,34 @@ public class Console: IOProtocol {
     }
     
     public static func printUsage() {
-        Swift.print("Usage: kelvin -c")
-        Swift.print("   or  kelvin -e <expr>")
-        Swift.print("   or  kelvin -f [options] <filepath>\n")
-        Swift.print("Type kelvin without an option to enter interactive mode.\n")
+        Swift.print("Usage: kelvin -i (enter interactive mode)")
+        Swift.print("   or  kelvin -e <expr> (evaluate the expression that follows)")
+        Swift.print("   or  kelvin -f [options] <filepath> (execute file at path)\n")
         Swift.print(" where options include:", terminator: "\n\n")
-        Swift.print("    -c format outputs with ANSI")
-        Swift.print("    -e <expr> evaluate the expression that follows")
-        Swift.print("    -f <filepath> execute the content of the file")
         Swift.print("    -v verbose")
-        Swift.print("    -vc verbose output with ANSI\n")
+    }
+    
+    /// An enum representation of available program arguments.
+    public enum Argument: String {
+        case expression = "e"
+        case file = "f"
+        case verbose = "v"
+        case interactive = "i"
+        
+        /// Parses raw argument string to option
+        public static func parse(_ raw: String) throws -> Argument {
+            var raw = raw
+            raw.removeFirst()
+            
+            guard let option = Argument(rawValue: raw) else {
+                Swift.print("Unrecognized option: \(raw)")
+                Console.printUsage()
+                exit(EXIT_FAILURE)
+            }
+            
+            return option
+        }
     }
 }
+
+

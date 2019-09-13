@@ -19,7 +19,6 @@
 		1F0A90E521F93DCE00432B17 /* One Var in Resources */ = {isa = PBXBuildFile; fileRef = 1F0A90E421F93DCE00432B17 /* One Var */; };
 		1F0AC9E2222B5E4500870367 /* Variable in Resources */ = {isa = PBXBuildFile; fileRef = 1F0AC9E1222B5E4500870367 /* Variable */; };
 		1F0AC9E4222B7AEA00870367 /* Dictionary in Resources */ = {isa = PBXBuildFile; fileRef = 1F0AC9E3222B7AEA00870367 /* Dictionary */; };
-		1F256A1222593F7300F8D7F9 /* Kelvin.h in Sources */ = {isa = PBXBuildFile; fileRef = 1F48DAAB222E3DE900639F26 /* Kelvin.h */; };
 		1F322829222C8AA9004417CB /* finding_tangent.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F322828222C8AA9004417CB /* finding_tangent.png */; };
 		1F32282B222C8AD5004417CB /* kelvin_tomorrow_night_blue_theme.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F32282A222C8AD5004417CB /* kelvin_tomorrow_night_blue_theme.png */; };
 		1F32282F222CC2DF004417CB /* Confidence Interval in Resources */ = {isa = PBXBuildFile; fileRef = 1F32282E222CC2DF004417CB /* Confidence Interval */; };
@@ -185,7 +184,6 @@
 		1FA8EF7B2328264F00D66971 /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA8EF79232825B800D66971 /* Debug.swift */; };
 		1FA8EF7C232857CC00D66971 /* Console.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF73322050CD3006351B0 /* Console.swift */; };
 		1FA8EF7D232857CC00D66971 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82BD219757FC005C3353 /* main.swift */; };
-		1FA8EF7E232857CC00D66971 /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF73622063067006351B0 /* Option.swift */; };
 		1FA8EF822328660200D66971 /* Confidence Intervals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F32282C222CB704004417CB /* Confidence Intervals.swift */; };
 		1FA8EF832328660200D66971 /* Distribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F570B5321FF6DB90006E342 /* Distribution.swift */; };
 		1FA8EF842328660200D66971 /* OneVar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936C221F3C13100E707BD /* OneVar.swift */; };
@@ -320,6 +318,8 @@
 		1FA8F0062329453300D66971 /* Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2D421EEB69300E40086 /* Program.swift */; };
 		1FA8F0072329453300D66971 /* StackTrace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA8EF73232815A200D66971 /* StackTrace.swift */; };
 		1FA8F0082329453300D66971 /* Keyword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CF2C621EBA8C800E40086 /* Keyword.swift */; };
+		1FB0F175232AC07800281559 /* libedit.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FB0F174232AC07800281559 /* libedit.tbd */; };
+		1FB0F177232AC2C400281559 /* KelvinCLI-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = 1FB0F176232AC24B00281559 /* KelvinCLI-Bridging-Header.h */; };
 		1FC67C80221E307A00A8E6BC /* Two Sample T Test in Resources */ = {isa = PBXBuildFile; fileRef = 1FC67C7F221E307A00A8E6BC /* Two Sample T Test */; };
 		1FC67C9B2224D1B200A8E6BC /* Integration in Resources */ = {isa = PBXBuildFile; fileRef = 1FC67C9A2224D1B200A8E6BC /* Integration */; };
 		1FC67C9D2224D25F00A8E6BC /* Regression in Resources */ = {isa = PBXBuildFile; fileRef = 1FC67C9C2224D25F00A8E6BC /* Regression */; };
@@ -451,7 +451,6 @@
 		1F8DF72B22050110006351B0 /* List */ = {isa = PBXFileReference; lastKnownFileType = text; path = List; sourceTree = "<group>"; };
 		1F8DF72F22050B5B006351B0 /* IOProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOProtocol.swift; sourceTree = "<group>"; };
 		1F8DF73322050CD3006351B0 /* Console.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Console.swift; sourceTree = "<group>"; };
-		1F8DF73622063067006351B0 /* Option.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
 		1F8DF76D22074B9C006351B0 /* Multiline */ = {isa = PBXFileReference; lastKnownFileType = text; path = Multiline; sourceTree = "<group>"; };
 		1F8DF76F22075A32006351B0 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		1F8DF77022075A32006351B0 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
@@ -479,6 +478,8 @@
 		1FA8EF73232815A200D66971 /* StackTrace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackTrace.swift; sourceTree = "<group>"; };
 		1FA8EF77232823F100D66971 /* Stack Trace */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Stack Trace"; sourceTree = "<group>"; };
 		1FA8EF79232825B800D66971 /* Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
+		1FB0F174232AC07800281559 /* libedit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libedit.tbd; path = usr/lib/libedit.tbd; sourceTree = SDKROOT; };
+		1FB0F176232AC24B00281559 /* KelvinCLI-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KelvinCLI-Bridging-Header.h"; sourceTree = "<group>"; };
 		1FC67C7F221E307A00A8E6BC /* Two Sample T Test */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Two Sample T Test"; sourceTree = "<group>"; };
 		1FC67C81221F362A00A8E6BC /* Integration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Integration.swift; sourceTree = "<group>"; };
 		1FC67C852222EAEC00A8E6BC /* TwoVar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoVar.swift; sourceTree = "<group>"; };
@@ -545,6 +546,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FB0F175232AC07800281559 /* libedit.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -672,9 +674,9 @@
 		1F2E82BC219757FC005C3353 /* KelvinCommandLine */ = {
 			isa = PBXGroup;
 			children = (
+				1FB0F176232AC24B00281559 /* KelvinCLI-Bridging-Header.h */,
 				1F8DF73322050CD3006351B0 /* Console.swift */,
 				1F2E82BD219757FC005C3353 /* main.swift */,
-				1F8DF73622063067006351B0 /* Option.swift */,
 			);
 			path = KelvinCommandLine;
 			sourceTree = "<group>";
@@ -750,6 +752,7 @@
 		1F6D0A02220D18CE00807377 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1FB0F174232AC07800281559 /* libedit.tbd */,
 				1F48DAA9222E325C00639F26 /* Accelerate.framework */,
 				1F6D0A03220D18CE00807377 /* Highlightr.framework */,
 			);
@@ -1415,6 +1418,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FB0F177232AC2C400281559 /* KelvinCLI-Bridging-Header.h in Sources */,
 				1FA8EF822328660200D66971 /* Confidence Intervals.swift in Sources */,
 				1FA8EF832328660200D66971 /* Distribution.swift in Sources */,
 				1FA8EF842328660200D66971 /* OneVar.swift in Sources */,
@@ -1484,8 +1488,6 @@
 				1FA8EFC42328660200D66971 /* Keyword.swift in Sources */,
 				1FA8EF7C232857CC00D66971 /* Console.swift in Sources */,
 				1FA8EF7D232857CC00D66971 /* main.swift in Sources */,
-				1FA8EF7E232857CC00D66971 /* Option.swift in Sources */,
-				1F256A1222593F7300F8D7F9 /* Kelvin.h in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1733,6 +1735,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "KelvinCommandLine/KelvinCLI-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -1744,6 +1747,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "KelvinCommandLine/KelvinCLI-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
