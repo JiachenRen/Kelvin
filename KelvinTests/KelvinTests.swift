@@ -11,7 +11,6 @@ import XCTest
 class KelvinTests: XCTestCase {
 
     override func setUp() {
-        Program.io = Console(colored: false, verbose: true)
         restoreDefault()
     }
 

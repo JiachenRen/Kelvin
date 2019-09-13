@@ -45,7 +45,7 @@ public struct Closure: UnaryNode, NaN {
         do {
             let result = try node.simplify()
             return result
-        } catch let e as Transfer {
+        } catch let e as FlowControl {
             switch e {
             case .return(let n) where capturesReturn:
                 return n

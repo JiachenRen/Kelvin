@@ -8,8 +8,10 @@
 
 import Foundation
 
-public extension Developer {
-    static let flowControlOperations: [Operation] = [
+public extension FlowControl {
+    
+    // Bridge flow control operations
+    static let operations: [Operation] = [
         
         // Pileline, conditional statements
         .binary(.ternaryConditional, Node.self, Pair.self) {(n, pair) in
@@ -44,13 +46,13 @@ public extension Developer {
         
         // Transfer
         .unary(.return, [.any]) {
-            throw Transfer.return($0)
+            throw FlowControl.return($0)
         },
         .init(.break, []) {_ in
-            throw Control.break
+            throw FlowControl.break
         },
         .init(.continue, []) {_ in
-            throw Control.continue
+            throw FlowControl.continue
         },
         
         // Error handling
@@ -87,12 +89,14 @@ public extension Developer {
                 Variable.define(v.name, e)
                 do {
                     let _ = try closure.simplify()
-                } catch let c as Control {
+                } catch let c as FlowControl {
                     switch c {
                     case .continue:
                         continue
                     case .break:
                         break loop
+                    default:
+                        throw c
                     }
                 }
                 Variable.definitions[v.name] = def
@@ -107,12 +111,14 @@ public extension Developer {
                 
                 do {
                     let _ = try closure.simplify()
-                } catch let c as Control {
+                } catch let c as FlowControl {
                     switch c {
                     case .continue:
                         continue
                     case .break:
                         break loop
+                    default:
+                        throw c
                     }
                 }
             }

@@ -11,7 +11,6 @@ import Foundation
 public class Developer {
     static let operations: [Operation] = [
         stringOperations,
-        flowControlOperations,
         assignmentOperations,
         booleanLogicOperations,
         utilityOperations,
@@ -101,6 +100,17 @@ public class Developer {
             try Program.compileAndRun($0.string)
             return KString("done")
         },
+        .unary(.import, KString.self) {
+            try Program.compileAndRun(
+                $0.string,
+                with: .init(
+                    scope: .useCurrent,
+                    retentionPolicy: .preserveAll
+                )
+            )
+            Program.io?.log("imported \($0.string)")
+            return KString("done")
+        },
         .unary(.compile, KString.self) {
             Final(node: try Compiler.compile($0.string))
         },
@@ -124,18 +134,25 @@ public class Developer {
             Program.io?.log($0.string)
             return $0
         },
-        .init(.getWorkingDirectory, []) {_ in
+        .noArg(.getWorkingDirectory) {
             #if os(OSX)
-                return KString(Process().currentDirectoryPath)
+            return KString(FileSystem.shared.workingDirectoryPath)
             #else
-                throw ExecutionError.general(errMsg: "unable to resolve working directory - unsupported platform")
+            throw ExecutionError.general(errMsg: "unable to resolve working directory - unsupported platform")
             #endif
         },
-        .init(.readLine, []) {_ in
+        .unary(.setWorkingDirectory, KString.self) {
+            try FileSystem.shared.setWorkingDirectory($0.string)
+            return KVoid()
+        },
+        .noArg(.readLine) {
             guard let io = Program.io else {
                 throw ExecutionError.general(errMsg: "program in/out protocol not defined")
             }
             return try KString(io.readLine())
+        },
+        .unary(.readFile, KString.self) {
+            return try KString(FileSystem.shared.readFile(at: $0.string))
         },
         
         /// Type casting (coersion)

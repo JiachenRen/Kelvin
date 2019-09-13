@@ -667,8 +667,8 @@ public class Compiler {
             // then an integer, next a double, and finally a boolean.
             if let node = dict[expr] ?? Int(expr) ?? Float80(expr) ?? Bool(expr) {
                 return node
-            } else if let fun = Transfer.parse(expr) ?? Control.parse(expr) {
-                // Flow control & transfer (return, throw, continue, break)
+            } else if let fun = FlowControl.parse(expr) {
+                // Flow control statements (return, throw, continue, break)
                 return fun
             } else {
                 if expr.starts(with: DataType.symbol) {

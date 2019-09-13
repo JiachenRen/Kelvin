@@ -6,3 +6,9 @@ println("Hello, " & name)
 
 # To get current working directory
 getWorkingDir()
+
+# Set current working directory
+setWorkingDir("/tmp")
+
+# Read file at path (if no '/' at the beginning, relative path to working dir. is used)
+# readFile("/Users/jiachenren/iCloudDrive (Archive)/Documents/Developer/Kelvin/Examples/Developer/Benchmarking")

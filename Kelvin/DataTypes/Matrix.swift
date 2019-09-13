@@ -300,6 +300,64 @@ public struct Matrix: MutableListProtocol, NaN {
         return coMat
     }
     
+    /// Calculates adjoint of the matrix.
+    /// Ported from C, source: https://www.geeksforgeeks.org/adjoint-inverse-matrix/
+    /// - Returns: The adjoint of this matrix, which is an N x N matrix
+    public func adjoint() throws -> Matrix {
+        try Assert.squareMatrix(self)
+        
+        var adj = Matrix(dim.rows)
+        
+        let n = count
+        if (n == 1) {
+            adj = Matrix(1)
+            adj[0][0] = 1
+            return adj
+        }
+        
+        var sign = 1
+        
+        for i in 0..<n {
+            for j in 0..<n {
+                // Get cofactor of A[i][j]
+                let temp = try cofactor(row: i, col: j)
+    
+                // Sign of adj[j][i] positive if sum of row
+                // and column indexes is even.
+                sign = ((i + j) % 2 == 0 ) ? 1: -1
+    
+                // Interchanging rows and columns to get the
+                // transpose of the cofactor matrix
+                adj[j][i] = sign * (try temp.determinant())
+            }
+        }
+        
+        return adj
+    }
+    
+    /// Calculates inverse of the matrix
+    /// - Returns: The inverse of the matrix
+    public func inverse() throws -> Matrix {
+        // Find determinant
+        let det = try determinant()
+        if (det.evaluated?.float80 == 0) {
+            throw ExecutionError.general(errMsg: "Singular matrix, can't find its inverse")
+        }
+      
+        // Find adjoint
+        let adj = try adjoint()
+      
+        // Find Inverse using formula "inverse(A) = adj(A)/det(A)"
+        var inv = Matrix(count)
+        for i in 0..<count {
+            for j in 0..<count {
+                inv[i][j] = try (adj[i][j] / det).simplify()
+            }
+        }
+      
+        return inv
+    }
+    
     /**
      Creates an identity matrix of the specified dimension
      The identity matrix, I2 for example, is

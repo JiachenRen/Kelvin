@@ -48,94 +48,37 @@ $ cd /tmp; curl https://raw.githubusercontent.com/JiachenRen/kelvin-cas/master/i
 ### Usage
 
 ```bash
-Usage: kelvin -c
-   or  kelvin -e <expr>
-   or  kelvin -f [options] <filepath>
+Usage: kelvin -i (enter interactive mode)
+  or  kelvin -e <expr> (evaluate the expression that follows)
+  or  kelvin -f [options] <filepath> (execute file at path)
 
-Type kelvin without an option to enter interactive mode.
+where options include:
 
- where options include:
-
-    -c format outputs with ANSI
-    -e <expr> evaluate the expression that follows
-    -f <filepath> execute the content of the file
-    -v verbose
-    -vc verbose output with ANSI
+   -v verbose
 ```
 
-### Examples
-- Type `kelvin` and hit return to enter interactive mode (lines starting with `←` denotes input).
-
-```bash
-# Enter interactive mode
-# Note: enter the statements line by line in the terminal. ommit the ← and → symbols
-# to reproduce the result
-$ kelvin
-
-# Define a function fib(x) that finds the nth element of the fibonacci series
-# In kelvin, this can be abbreviated into a single line: 
-# def fib(n, $((if(n <= 1, $(return n)); return fib(n - 1) + fib(n - 2))))
-# You don't want to do that! (Nobody would understand...)
-← def fib(n) {
-    if (n <= 1) {
-        return n
-    };
-    return fib(n-1) + fib(n-2)
-  }
-→ done
-
-# Test to see what the 10th element of the series is
-← println fib(10)
-→ 55
-
-# Define a function listFib(n) that generates a fibonacci series of up to n elements
-# Again, look at this one liner that means the same thing (seriously though, don't do this)
-# def listFib(n, $(return 0...n | $(fib($1 + 1))))
-← def listFib(n) {
-    return map(0...n) {fib($1+1)}
-  }
-→ done
-
-# Print the first 10 elements of the series, and sum them up
-← println listFib(10)
-→ {1, 1, 2, 3, 5, 8, 13, 21, 34, 55}
-
-← s := sum(listFib(10))
-→ done
-
-← println s
-→ 143
-
-# Exit Kelvin
-← exit()
-```
-
-- If your terminal supports ANSI, use `kelvin -c` to activate ANSI coloring.
-- Compile and run a file containing kelvin scripts.
+## Hello World in Kelvin
 
 ```bash
 
 # Make a new file named "prg" containing a single line 'print "Hello World"' in /tmp directory
-$ cd /tmp; echo "print \"Hello World\"" > prg
+$ cd /tmp && echo "print \"Hello World\"" > prg
 
-# Compile and run the program with verbose on, highlighted with ANSI
-$ kelvin -f -vc prg
+# Compile and run the program with verbose on
+$ kelvin -f -v prg
 
 # Program output under verbose mode
-→ trying relative URL to current working directory...
-→ loading contents of prg
+→ loading file at prg...
 → compiling...
-→ compilation successful in 0.03710794448852539 seconds.
-→ starting...
-→ timestamp: 1549690611.090765
-→ begin program execution log:
+→ compilation successful in 5 milliseconds.
+→ start time: Sep 13, 2019 at 10:26:51 AM
+→ begin execution log:
+  # 1
+  → print "Hello World"
+  = Hello World
 
-    # 1
-    → println "Hello World"
-    = "Hello World"
-
-→ end program execution log.
-→ program terminated in 0.0023789405822753906 seconds.
+→ end execution log.
+→ program terminated in 3 milliseconds.
 Hello World
 ```
 
@@ -159,7 +102,73 @@ Try it out, 'cause it's awesome ~~ why not??
 The IDE now automatically chooses/changes its theme according to the system's theme! (You can still customize if wanted)
 
 ## The Kelvin Language
-The Kelvin programming language is developed by a high school senior. Yes, really. It is a combination of `Javascript`, `Swift`, `Python`, and `Bash`, with a bunch of wierd syntatic sugars that came from my pure imagination. It is a interpreted language (nowhere near as fast), but it is powerful in terms of what it can do when it comes to solving high school math problems.
+Kelvin was originally designed to be a CAS. Nevertheless, over the course of its development it gradually evolved into its own functional programming language, with all the nuances of a modern programming language such as **recursion**, **loops**, **if statements**, **higher order functions**, **anonymous closure arguments** , and so much more. Read the subsections below to get a taste of Kelvin.
+
+### Performance
+Kelvin is a interpreted language (nowhere near as fast), but it is powerful when it comes to solving math problems. For instance, one of the things that makes Kelvin unique is its **optimization engine**. For instance, suppose you have a function defined as
+```ruby
+def f(x, y) = x ^ 2 / x + y - x + y
+```
+For most languages, for instance `Python`, `Swift`, `C`, `Java`, etc., when the function `f` is fed with arguments `x` and `y`, the actual expression `x ^ 2 / x + y - x + y` is evaluated. Kelvin, however, handles things much more efficiently. First, the function definition is algebraically simplified to be `2y`. When you call function with undefined variables `a, b`, `a` is actually dropped for it no longer exists in the function definition. The function then apply its simplified definition `f(y) = 2y` on `a`, which results in `2a`.
+
+### Syntax
+The syntax of Kelvin is inspired by a variety of languages including `Javascript`, `Swift`, `Python`, and `Bash`. 
+Just to whet your appetite, the documentation for defining functions and variables are included here.
+
+#### Function Definition
+```ruby
+# Inline function definition:
+def f(x) = 3x ^ 2 * log(g(x)) + a
+
+# Which is equivalent to.
+f(x) := 3x ^ 2 * log(g(x)) + a
+
+# For more complicated functions, use multiline definition.
+def f(a, b, c) {
+    str := "";
+    for (i: map(0...a) {$1}) {
+        if (i % 2 == 0 nor (true xor c)) {
+            str &= i
+        } else if (c) {
+            break
+        } else {
+            continue
+        }
+    };
+    return str
+}
+
+# Higher order functions.
+def f(g, a, b) {
+    return g => {a, b}
+}
+
+def g(x, y) = x + y
+
+# 'f' is a higher order function that can take in 'g' as argument.
+# Call to f(g, 3, 4) returns 7.
+f(g, 3, 4)
+
+def f1(x) {x(3, 4)}
+# Pass in x as a function reference
+f1(*g) # returns 7
+```
+
+#### Variable Definition
+```
+# Define a = 3
+a := 3
+
+# Equivalent to a := 3
+def a = 3
+
+# Equivalent to a := 3
+define(a, 3)
+
+# Define a as b, b as c, c as a, which will cause circular definition
+a := b; b := c; c := d;
+```
+
 > As a side note, _Kelvin_ even has trailing closure syntax and anonymous arguments, a feature loved by Swift users!
 
 ### Examples
@@ -261,7 +270,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 - [x] Permutation/combination
   - ncr, npr for lists
 - [x] Randomization
-  - random(lb, ub), random(), randomInt(lb, ub)
+  - `random(lb, ub)`, `random()`, `randomInt(lb, ub)`
   - Shuffle list
   - Random element from list
 
@@ -283,14 +292,16 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - [x] Multiplication
   - [x] Addition/Subtraction
   - [x] Transposition
-  - [ ] LU decomposition
-  - [ ] Inverse
+  - [x] Inverse
+  - [x] Adjoint
   - [x] **Algebraic Gaussian elimination (row reduction)**
+  - [ ] LU decomposition
 
 ### List math/operations
 - [x] Zip, map, and reduce w/ anonymous closure arguments.
 - [x] Sort and filter
 - [x] Append and remove
+- [x] Set at index
 - [ ] Insert
 - [x] Reverse
 - [x] Contains
@@ -309,44 +320,45 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 
 ### Programs/functions
 - [x] Variables & Functions
-  - **Higher order function** (function as parameter, callbacks, however you call it)
+  - **Higher order function** (function as parameter)
+    - `invoke(<name of function>, <list of parameters>)`, operator `=>`
+    - function reference prefix operator `*`
   - Definition & deletion
   - Overloading of functions
   - Automatic scope management
-  - Closures
-  - Anonymous closure arguments (e.g. $0, $1, ...)
-  - Inout variables (behaves like the reference operator "&", but not quite)
+  - **Closures**
+  - Anonymous closure arguments {`$0`, ... , `$1`}
+  - **Inout variables** (behaves like the reference operator `&`, but not quite)
   - List/clear all vars/funcs
-- [x] Runtime compilation
+- [x] Runtime environment 
+  - `run <file at path>`
+  - `import <file at path>`
+  - `compile <kelvin script>`
+  - `eval <kelvin script>`
 - [x] Flow control
-  - Execution
-    - Line break (;)
-    - Pipeline (->)
+  - Line break `;`
+    - Pipeline `->`
   - Loops
-    - Copy
-    - Repeat
-    - for (a: list) {...}
-    - while (a) {...}
+    - `copy`
+    - `repeat`
+    - `for (a: <list>) {...}`
+    - `while (a) {...}`
   - Conditional statements
-    - Ternary operator '?'
-    - If (predicate) {...}
-    - Else {...}
-    - Else if (predicate) {...}
-  - Transfer
-    - Return
-  - Control
-    - Break
-    - Continue
+    - Ternary operator `?`
+    - `if (<bool>) {...}`
+    - `else {...}`
+    - `else if (<bool>) {...}`
+  - Breaking out of function or loop
+    - `return`
+    - `break`
+    - `continue`
 - [x] I/O
-  - Execute file at path
+  - Read file
+  - [ ] Write to file
   - Print, println
   - Log
-  - Recursion
-  - Return
-  - Throw
-  - Get current directory path
-  - Read line
-  - [ ] Read file
+  - Get/set working directory
+  - Read line from UI
 - [x] Strings
   - Concatenation
   - Subscript access
@@ -355,9 +367,9 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - Compilation
   - Subscript access
 - [x] Error handling
-  - Try
-  - Assert
-  - Throw
+  - `try` blocks, ternary `try` statement
+  - `assert <bool>`
+  - `throw <any>`
 - [x] Stack Trace
     - Record full call stack history
     - Print stack trace

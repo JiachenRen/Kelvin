@@ -15,6 +15,13 @@ public struct Program {
     public var config: Configuration
     
     public static var io: IOProtocol?
+    
+    private let dateFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.timeStyle = .medium
+        df.dateStyle = .medium
+        return df
+    }()
 
     /// Get the absolute time
     var currentTime: TimeInterval {
@@ -29,31 +36,13 @@ public struct Program {
     /// Compile and run the file w/ the given file name under /Examples directory
     public static func compileAndRun(_ filePath: String, with config: Configuration? = nil) throws {
         var content = ""
-        do {
-            io?.log("trying relative URL to current working directory...")
-            #if os(OSX)
-                let url = URL(fileURLWithPath: Process().currentDirectoryPath)
-                    .appendingPathComponent(filePath)
-                content = try String(contentsOf: url)
-                io?.log("loading contents of \(filePath)")
-            #else
-                let errMsg = "unable to resolve current directory - unsupported"
-                throw ExecutionError.general(errMsg: errMsg)
-            #endif
-        } catch let e {
-            io?.log("\(e.localizedDescription)")
-            io?.log("resolving absolute URL...")
-            do {
-                content = try String(contentsOf: URL(fileURLWithPath: filePath))
-                io?.log("loading contents of \(filePath)")
-            } catch let e {
-                throw ExecutionError.general(errMsg: e.localizedDescription)
-            }
-        }
+        io?.log("loading file at \(filePath)...")
+        content = try FileSystem.shared.readFile(at: filePath)
         let t = Date().timeIntervalSince1970
         io?.log("compiling...")
         var program = try Compiler.compile(document: content)
-        io?.log("compilation successful in \(Date().timeIntervalSince1970 - t) seconds.")
+        let millis = Int((Date().timeIntervalSince1970 - t) * 1000)
+        io?.log("compilation successful in \(millis) milliseconds.")
         if let c = config {
             program.config = c
         }
@@ -76,9 +65,8 @@ public struct Program {
             break
         }
 
-        Program.io?.log("starting...")
-        Program.io?.log("timestamp: \(startTime)")
-        Program.io?.log("begin program execution log:")
+        Program.io?.log("start time: \(dateFormatter.string(from: Date()))")
+        Program.io?.log("begin execution log:")
     
         try statements.forEach {
             if let item = workItem, item.isCancelled {
@@ -97,8 +85,8 @@ public struct Program {
             }
         }
 
-        Program.io?.log("end program execution log.")
-        Program.io?.log("program terminated in \(currentTime - startTime) seconds.")
+        Program.io?.log("end execution log.")
+        Program.io?.log("program terminated in \(Int((currentTime - startTime) * 1000)) milliseconds.")
 
         // Clear all temporary variables, functions, and keyword definitions.
         switch config.retentionPolicy {

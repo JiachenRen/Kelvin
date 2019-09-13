@@ -72,6 +72,12 @@ public class LinearAlgebra {
         },
         .unary(.gaussianElimination, Matrix.self) {
             try gaussianElimination($0)
+        },
+        .unary(.adjoint, Matrix.self) {
+            try $0.adjoint()
+        },
+        .unary(.inverse, Matrix.self) {
+            try $0.inverse()
         }
     ]
     

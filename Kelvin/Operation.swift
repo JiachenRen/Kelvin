@@ -30,6 +30,7 @@ public class Operation: Equatable, Hashable {
         Algebra.operations,
         Calculus.operations,
         Developer.operations,
+        FlowControl.operations,
         LinearAlgebra.operations,
         Stat.operations,
         binaryOperations,

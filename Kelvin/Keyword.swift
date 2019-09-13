@@ -353,6 +353,7 @@ public struct Keyword {
         .init(for: .compile, associativity: .prefix),
         .init(for: .delay, associativity: .prefix),
         .init(for: .run, associativity: .prefix, precedence: .prefixCommand),
+        .init(for: .import, associativity: .prefix, precedence: .prefixCommand),
         .init(for: .invoke, associativity: .infix, precedence: .invocation, operator: .init("=>", padding: .none)),
         .init(for: .functionRef, associativity: .prefix, precedence: .prefixCommand, operator: .init("*", padding: .none)),
         

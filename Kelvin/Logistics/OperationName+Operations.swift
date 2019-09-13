@@ -131,6 +131,8 @@ public extension OperationName {
     static let gaussianElimination = "gausElim"
     static let transform = "transform"
     static let cofactor = "cofactor"
+    static let adjoint = "adjoint"
+    static let inverse = "inv"
     
     // Probability
     static let random = "random"
@@ -189,6 +191,7 @@ public extension OperationName {
     static let time = "time"
     static let delay = "delay"
     static let run = "run"
+    static let `import` = "import"
     static let compile = "compile"
     static let measure = "measure"
     static let listVariables = "listVars"
@@ -204,7 +207,9 @@ public extension OperationName {
     static let println = "println"
     static let `inout` = "inout"
     static let readLine = "readLine"
+    static let readFile = "readFile"
     static let getWorkingDirectory = "getWorkingDir"
+    static let setWorkingDirectory = "setWorkingDir"
     
     // Debugging & erro handling
     static let setStackTraceEnabled = "setStackTraceEnabled"

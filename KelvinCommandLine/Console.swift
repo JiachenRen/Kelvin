@@ -28,7 +28,7 @@ public class Console: IOProtocol {
         if !verbose {
             return
         }
-        Swift.print("→ \(l)")
+        Swift.print("→ \(l)".white)
     }
     
     public func log(_ l: Program.Log) {
@@ -46,12 +46,12 @@ public class Console: IOProtocol {
     
     /// Formats and prints `e` as an error (red).
     public func error(_ e: String) {
-        Swift.print("→ \(e.red)", terminator: "\n\n")
+        Swift.print("→ \(e)".red, terminator: "\n\n")
     }
     
     /// Formats and prints `w` as a warning (yellow).
     public func warning(_ w: String) {
-        Swift.print("→ \(w.yellow)", terminator: "\n\n")
+        Swift.print("→ \(w.yellow)".yellow, terminator: "\n\n")
     }
     
     /// Read a line from terminal.
