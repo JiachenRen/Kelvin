@@ -57,7 +57,7 @@ where options include:
    -v verbose
 ```
 
-## Hello World in Kelvin
+### Hello World in Kelvin
 
 ```bash
 
@@ -155,7 +155,7 @@ f1(*g) # returns 7
 ```
 
 #### Variable Definition
-```
+```ruby
 # Define a = 3
 a := 3
 

@@ -1,0 +1,65 @@
+# Run all Kelvin scripts and tests and do a pansystemic performance analysis.
+
+# Replace with your absolute directory to Examples
+def examples_dir = "/Users/jiachenren/iCloudDrive (Archive)/Documents/Developer/Kelvin/Examples/"
+
+def start_time = time()
+def files = {
+    "Misc/Arcane.kel",
+    "Misc/DiceRoll.kel",
+    "Misc/FindBest.kel",
+    "Misc/RepeatMapDemo.kel",
+    "Misc/StatProblem.kel",
+    "Misc/TwoSampleTTest.kel",
+    "Tests.kel",
+    "Probability.kel",
+    "Algebra/Trigonometry.kel",
+    "Algebra/Factorization.kel",
+    "Calculus/Differentiation.kel",
+    "Calculus/Integration.kel",
+    "LinearAlgebra/Vector.kel",
+    "LinearAlgebra/Matrix.kel",
+    "Statistics/OneVar.kel.kel",
+    "Statistics/Distribution.kel",
+    "Statistics/Regression.kel",
+    "Statistics/ConfidenceInterval.kel"
+}
+
+def file_paths = (files | (examples_dir & $0))
+file_paths | (run $0)
+
+def dev_files = {
+    "FlowControl/Conditionals.kel",
+    "FlowControl/Loops/WhileLoop.kel",
+    "FlowControl/Loops/ForLoop.kel",
+    "Benchmarking.kel",
+    "ErrorHandling.kel",
+    "Debugging/StackTrace.kel",
+    "HigherOrderFunction.kel",
+    "Function.kel",
+    "Variable.kel",
+    "List.kel",
+    "Multiline.kel",
+    "String.kel",
+    "Subscript.kel",
+    "TrailingClosure.kel",
+}
+
+for (dev_file: dev_files) {
+    full_path := examples_dir & "Developer/" & dev_file;
+    run full_path
+}
+
+def alg_files = {
+    "BinarySearch.kel",
+    "FlatMap.kel",
+    "Deconstruct.kel",
+    "Contains.kel",
+    "Recursion.kel"
+}
+
+map(alg_files) {
+    run examples_dir & "Developer/Algorithms/" & $0
+}
+
+println "System check completed in " & (time() - start_time) & " seconds."
