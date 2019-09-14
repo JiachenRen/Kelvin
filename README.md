@@ -103,8 +103,8 @@ Below is a screenshot of Kelvin IDE in the default theme (keep in mind that you 
 
 ![Finding Tangent with IDE and Kelvin](/Misc/Screenshots/kelvin_dark_theme.png)
 
-Another one of the **85** themes you can choose from that is my personal favorite, `tomorrow-night-blue`
-![Screenshot of IDE with Dark Theme](/Misc/Screenshots/kelvin_light_theme.png)
+Another one of the **85** themes you can choose from.
+![Screenshot of IDE with Light Theme](/Misc/Screenshots/kelvin_light_theme.png)
 
 Try it out, 'cause it's awesome ~~ why not??
 
