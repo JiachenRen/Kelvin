@@ -56,6 +56,7 @@
 		1F3E30D0232C37AA002971F9 /* Tests.kel in Resources */ = {isa = PBXBuildFile; fileRef = 1F3E30A7232C37AA002971F9 /* Tests.kel */; };
 		1F3E30D1232C37AA002971F9 /* Probability.kel in Resources */ = {isa = PBXBuildFile; fileRef = 1F3E30A8232C37AA002971F9 /* Probability.kel */; };
 		1F3E30D2232C37AA002971F9 /* SystemCheck.kel in Resources */ = {isa = PBXBuildFile; fileRef = 1F3E30A9232C37AA002971F9 /* SystemCheck.kel */; };
+		1F43991A232D520300AC5D38 /* tangent_plane_kelvin.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F439919232D520300AC5D38 /* tangent_plane_kelvin.png */; };
 		1F48DA05222E0EB800639F26 /* Confidence Intervals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F32282C222CB704004417CB /* Confidence Intervals.swift */; };
 		1F48DA06222E0EB800639F26 /* Distribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F570B5321FF6DB90006E342 /* Distribution.swift */; };
 		1F48DA07222E0EB800639F26 /* OneVar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936C221F3C13100E707BD /* OneVar.swift */; };
@@ -467,6 +468,7 @@
 		1F3E30A7232C37AA002971F9 /* Tests.kel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Tests.kel; sourceTree = "<group>"; };
 		1F3E30A8232C37AA002971F9 /* Probability.kel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Probability.kel; sourceTree = "<group>"; };
 		1F3E30A9232C37AA002971F9 /* SystemCheck.kel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SystemCheck.kel; sourceTree = "<group>"; };
+		1F439919232D520300AC5D38 /* tangent_plane_kelvin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tangent_plane_kelvin.png; sourceTree = "<group>"; };
 		1F48D9AA222E0D8100639F26 /* Kelvin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Kelvin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F48D9FD222E0E6600639F26 /* Kelvin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Kelvin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F48DAA9222E325C00639F26 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -925,6 +927,7 @@
 		1FE487FA220E8DC8005361AC /* Screenshots */ = {
 			isa = PBXGroup;
 			children = (
+				1F439919232D520300AC5D38 /* tangent_plane_kelvin.png */,
 				1F32282A222C8AD5004417CB /* kelvin_tomorrow_night_blue_theme.png */,
 				1F322828222C8AA9004417CB /* finding_tangent.png */,
 				1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */,
@@ -1239,6 +1242,7 @@
 				1F3E30C7232C37AA002971F9 /* FlatMap.kel in Resources */,
 				1F3E30B3232C37AA002971F9 /* Arcane.kel in Resources */,
 				1F3E30CD232C37AA002971F9 /* String.kel in Resources */,
+				1F43991A232D520300AC5D38 /* tangent_plane_kelvin.png in Resources */,
 				1F3E30AF232C37AA002971F9 /* Distribution.kel in Resources */,
 				1F3E30BC232C37AA002971F9 /* WhileLoop.kel in Resources */,
 				1F3E30D2232C37AA002971F9 /* SystemCheck.kel in Resources */,

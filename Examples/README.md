@@ -81,12 +81,13 @@ assert bin_search(l1, 9) == 6
 
 ## Using Kelvin with macOS built-in Grapher
 
-You can copy and paste the output from kelvin directly into the built-in `Grapher` to graph it. The following screenshots demonstrate using kelvin to compute a tangent plane, then using `Grapher` to visualize:
+You can copy and paste the output from kelvin directly into the built-in `Grapher` to graph it. The following screenshots demonstrate using kelvin to compute a tangent plane in terminal. You can then use `Grapher` to graph it.
     
 ![Kelvin](/Misc/Screenshots/tangent_plane_kelvin.png)
-![Grapher](/Misc/Screenshots/tangent_plane_grapher.png)
 
 ## Show me the code!
+This is a comprehensive demonstration of how you can use Kelvin to suit your mathematical needs!
+
 <!-- AUTOMATIC DOC -->
 ### [Algebra/Factorization](/Examples/Algebra/Factorization.kel)
 ```ruby
