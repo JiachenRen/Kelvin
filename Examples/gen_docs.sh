@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/zsh
 
 #  gen_docs.sh
 #  Kelvin
@@ -18,28 +18,29 @@ README_DIR=README.md
 
 gen () {
   # Generate documentations from Kelvin source code
-  if [ ! $1 == ./README.md ] && [[ -f $1 ]]; then
-    echo "### $1" >> $TMP
+  if [[ ! "$1" == "README.md" ]] && [[ -f $1 ]]; then
+    title=$(echo $1 | sed -e 's/\.\///' -e 's/\.kel//')
+    echo "### [$title](/$title)" >> $TMP
     echo "\`\`\`$LANG" >> $TMP
     cat $1 >> $TMP
     echo "\`\`\`" >> $TMP
   fi
 }
 
-export -f gen
+# export -f gen
 
 # Create a temporary file to hold manually written README.md content
 touch $TMP
-IFS='' # Preserve padding white space
+IFS=$'\n'
 while read -r line; do
   echo "$line" >> $TMP
-  if [ "$line" == "<!-- AUTOMATIC DOC -->" ]; then
+  if [[ "$line" == "<!-- AUTOMATIC DOC -->" ]]; then
     break
   fi
 done < $README_DIR
 
 # Get a list of all kelvin source files, excluding *.md
-for f in ./**/*.kel
+for f in **/*.kel
 do
     echo "Generating docs for $f"
     gen $f

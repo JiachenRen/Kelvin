@@ -339,7 +339,6 @@
 		1FB0F175232AC07800281559 /* libedit.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FB0F174232AC07800281559 /* libedit.tbd */; };
 		1FB0F177232AC2C400281559 /* KelvinCLI-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = 1FB0F176232AC24B00281559 /* KelvinCLI-Bridging-Header.h */; };
 		1FDC863A22132F4300EAC346 /* tangent_plane_grapher.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */; };
-		1FDC863B22132F4300EAC346 /* tangent_plane_kelvin.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863922132F4300EAC346 /* tangent_plane_kelvin.png */; };
 		1FE487FD220E9028005361AC /* ruby_github_theme.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FE487FB220E9027005361AC /* ruby_github_theme.png */; };
 		1FE487FE220E9028005361AC /* ruby_dracula_theme.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FE487FC220E9028005361AC /* ruby_dracula_theme.png */; };
 		1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FFD8CA9218F50870004ECEB /* Assets.xcassets */; };
@@ -508,7 +507,6 @@
 		1FC67CA6222741FA00A8E6BC /* Assert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assert.swift; sourceTree = "<group>"; };
 		1FC67CAA22278C5500A8E6BC /* ConsoleTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleTextView.swift; sourceTree = "<group>"; };
 		1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tangent_plane_grapher.png; sourceTree = "<group>"; };
-		1FDC863922132F4300EAC346 /* tangent_plane_kelvin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tangent_plane_kelvin.png; sourceTree = "<group>"; };
 		1FDC86582214BFAF00EAC346 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		1FDEA4BA225914C800D88542 /* Kelvin CLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Kelvin CLI"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FE1697521F2D44A0006712C /* Pair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pair.swift; sourceTree = "<group>"; };
@@ -930,7 +928,6 @@
 				1F32282A222C8AD5004417CB /* kelvin_tomorrow_night_blue_theme.png */,
 				1F322828222C8AA9004417CB /* finding_tangent.png */,
 				1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */,
-				1FDC863922132F4300EAC346 /* tangent_plane_kelvin.png */,
 				1FE487FC220E9028005361AC /* ruby_dracula_theme.png */,
 				1FE487FB220E9027005361AC /* ruby_github_theme.png */,
 			);
@@ -1215,7 +1212,6 @@
 				1F3E30BE232C37AA002971F9 /* Benchmarking.kel in Resources */,
 				1F3E30CE232C37AA002971F9 /* Vector.kel in Resources */,
 				1F3E30AD232C37AA002971F9 /* ConfidenceInterval.kel in Resources */,
-				1FDC863B22132F4300EAC346 /* tangent_plane_kelvin.png in Resources */,
 				1F3E30C5232C37AA002971F9 /* Deconstruct.kel in Resources */,
 				1F3E30C8232C37AA002971F9 /* Contains.kel in Resources */,
 				1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */,
