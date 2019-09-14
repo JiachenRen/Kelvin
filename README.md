@@ -5,7 +5,7 @@ Kelvin CAS
 [![License: MIT](https://img.shields.io/apm/l/vim-mode.svg?colorB=blue&style=flat)](/LICENSE)
 ![Carthage - Compatible](https://img.shields.io/badge/carthage-✓-orange.svg?style=flat)
 
-Kelvin is a powerful language for symbolic computation built with _Swift 4_. Aside from APIs for advanced **statistic**, **algebra**, **linear algebra**, **probability**, **list** and **calculus** operations, it incorporates many popular syntactic constructs from different languages (lua, python, swift, java, javascript, bash). For a full list of what it can do, please refer to [Capabilities](#Capabilities).
+Kelvin is a powerful language for symbolic computation built with _Swift 5_. Aside from APIs for advanced **statistic**, **algebra**, **linear algebra**, **probability**, **list** and **calculus** operations, it incorporates many popular syntactic constructs and features from many different languages. For a full list of what it can do, please refer to [Capabilities](#Capabilities). For documentation and examples, please refer to [Examples](/Examples)
 
 ## Using Kelvin as a Framework
 
@@ -39,7 +39,7 @@ If you prefer, you can use `kelvin` as a command line tool.
 2. Run the following command in terminal.
 
 ```bash
-$ cd /tmp; curl https://raw.githubusercontent.com/JiachenRen/kelvin-cas/master/install.sh > install.sh; bash install.sh
+$ cd /tmp && curl https://raw.githubusercontent.com/JiachenRen/kelvin-cas/master/install.sh > install.sh && bash install.sh
 ```
 
 3. You are done! Now try `kelvin -c`.
@@ -81,6 +81,16 @@ $ kelvin -f -v prg
 → program terminated in 3 milliseconds.
 Hello World
 ```
+
+### Beautiful ANSI syntax highlighting in terminal
+
+Kelvin command line interface comes with beautiful syntax highlighting. 
+
+#### Dark UI
+![Dark Mode](/Misc/Screenshots/kelvin_terminal_dark.gif)
+
+#### Light UI
+![Dark Mode](/Misc/Screenshots/kelvin_terminal_light.gif)
 
 ## MacOS User Interface
 

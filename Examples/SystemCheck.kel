@@ -19,7 +19,7 @@ def files = {
     "Calculus/Integration.kel",
     "LinearAlgebra/Vector.kel",
     "LinearAlgebra/Matrix.kel",
-    "Statistics/OneVar.kel.kel",
+    "Statistics/OneVar.kel",
     "Statistics/Distribution.kel",
     "Statistics/Regression.kel",
     "Statistics/ConfidenceInterval.kel"
