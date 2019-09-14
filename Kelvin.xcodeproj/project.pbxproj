@@ -59,6 +59,8 @@
 		1F43991A232D520300AC5D38 /* tangent_plane_kelvin.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F439919232D520300AC5D38 /* tangent_plane_kelvin.png */; };
 		1F43991D232D681800AC5D38 /* kelvin_terminal_dark.gif in Resources */ = {isa = PBXBuildFile; fileRef = 1F43991B232D681800AC5D38 /* kelvin_terminal_dark.gif */; };
 		1F43991E232D681800AC5D38 /* kelvin_terminal_light.gif in Resources */ = {isa = PBXBuildFile; fileRef = 1F43991C232D681800AC5D38 /* kelvin_terminal_light.gif */; };
+		1F439921232D6DCE00AC5D38 /* kelvin_dark_theme.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F43991F232D6DCE00AC5D38 /* kelvin_dark_theme.png */; };
+		1F439922232D6DCE00AC5D38 /* kelvin_light_theme.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F439920232D6DCE00AC5D38 /* kelvin_light_theme.png */; };
 		1F48DA05222E0EB800639F26 /* Confidence Intervals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F32282C222CB704004417CB /* Confidence Intervals.swift */; };
 		1F48DA06222E0EB800639F26 /* Distribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F570B5321FF6DB90006E342 /* Distribution.swift */; };
 		1F48DA07222E0EB800639F26 /* OneVar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936C221F3C13100E707BD /* OneVar.swift */; };
@@ -473,6 +475,8 @@
 		1F439919232D520300AC5D38 /* tangent_plane_kelvin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tangent_plane_kelvin.png; sourceTree = "<group>"; };
 		1F43991B232D681800AC5D38 /* kelvin_terminal_dark.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = kelvin_terminal_dark.gif; sourceTree = "<group>"; };
 		1F43991C232D681800AC5D38 /* kelvin_terminal_light.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = kelvin_terminal_light.gif; sourceTree = "<group>"; };
+		1F43991F232D6DCE00AC5D38 /* kelvin_dark_theme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kelvin_dark_theme.png; sourceTree = "<group>"; };
+		1F439920232D6DCE00AC5D38 /* kelvin_light_theme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kelvin_light_theme.png; sourceTree = "<group>"; };
 		1F48D9AA222E0D8100639F26 /* Kelvin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Kelvin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F48D9FD222E0E6600639F26 /* Kelvin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Kelvin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F48DAA9222E325C00639F26 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -931,6 +935,8 @@
 		1FE487FA220E8DC8005361AC /* Screenshots */ = {
 			isa = PBXGroup;
 			children = (
+				1F43991F232D6DCE00AC5D38 /* kelvin_dark_theme.png */,
+				1F439920232D6DCE00AC5D38 /* kelvin_light_theme.png */,
 				1F43991B232D681800AC5D38 /* kelvin_terminal_dark.gif */,
 				1F43991C232D681800AC5D38 /* kelvin_terminal_light.gif */,
 				1F439919232D520300AC5D38 /* tangent_plane_kelvin.png */,
@@ -1231,6 +1237,7 @@
 				1F32282B222C8AD5004417CB /* kelvin_tomorrow_night_blue_theme.png in Resources */,
 				1F3E30C0232C37AA002971F9 /* Dictionary.kel in Resources */,
 				1F3E30C1232C37AA002971F9 /* Multiline.kel in Resources */,
+				1F439921232D6DCE00AC5D38 /* kelvin_dark_theme.png in Resources */,
 				1F3E30CF232C37AA002971F9 /* Matrix.kel in Resources */,
 				1F43991D232D681800AC5D38 /* kelvin_terminal_dark.gif in Resources */,
 				1F3E30BF232C37AA002971F9 /* HigherOrderFunction.kel in Resources */,
@@ -1241,6 +1248,7 @@
 				1FDC863A22132F4300EAC346 /* tangent_plane_grapher.png in Resources */,
 				1F3E30CA232C37AA002971F9 /* Subscript.kel in Resources */,
 				1F3E30D1232C37AA002971F9 /* Probability.kel in Resources */,
+				1F439922232D6DCE00AC5D38 /* kelvin_light_theme.png in Resources */,
 				1F3E30C9232C37AA002971F9 /* Recursion.kel in Resources */,
 				1F3E30AB232C37AA002971F9 /* Trigonometry.kel in Resources */,
 				1F3E30AE232C37AA002971F9 /* Regression.kel in Resources */,

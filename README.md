@@ -101,10 +101,10 @@ The IDE works like the old [Swift Playground](https://developer.apple.com/swift-
 
 Below is a screenshot of Kelvin IDE in the default theme (keep in mind that you can choose from a large poo of candidates), highlighted using `kelvin`'s syntax . The screenshot demonstrates how to find the **tangent line/plane** of multivariate functions. (Notice how the whole script is compiled and evaluated in under **0.1 seconds**!) Even if the execution time lasts longer, there won't be any lagging since the scripts run on a separate thread and are cancelled/started automatically. 
 
-![Finding Tangent with IDE and Kelvin](/Misc/Screenshots/finding_tangent.png)
+![Finding Tangent with IDE and Kelvin](/Misc/Screenshots/kelvin_dark_theme.png)
 
 Another one of the **85** themes you can choose from that is my personal favorite, `tomorrow-night-blue`
-![Screenshot of IDE with Dark Theme](/Misc/Screenshots/kelvin_tomorrow_night_blue_theme.png)
+![Screenshot of IDE with Dark Theme](/Misc/Screenshots/kelvin_light_theme.png)
 
 Try it out, 'cause it's awesome ~~ why not??
 
