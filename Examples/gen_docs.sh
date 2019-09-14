@@ -20,7 +20,7 @@ gen () {
   # Generate documentations from Kelvin source code
   if [[ ! "$1" == "README.md" ]] && [[ -f $1 ]]; then
     title=$(echo $1 | sed -e 's/\.\///' -e 's/\.kel//')
-    echo "### [$title](/$1)" >> $TMP
+    echo "### [$title](/Examples/$1)" >> $TMP
     echo "\`\`\`$LANG" >> $TMP
     cat $1 >> $TMP
     echo "\`\`\`" >> $TMP
