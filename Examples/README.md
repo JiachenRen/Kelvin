@@ -88,7 +88,7 @@ You can copy and paste the output from kelvin directly into the built-in `Graphe
 
 ## Show me the code!
 <!-- AUTOMATIC DOC -->
-### [Algebra/Factorization](/Algebra/Factorization)
+### [Algebra/Factorization](/Algebra/Factorization.kel)
 ```ruby
 # Behold, factorization!
 
@@ -101,12 +101,12 @@ factor(z * d * a + z * b * 2 + y * d * a + y * b * 2 + x * d * a + x * b * 2)
 factor(r * b * a + d * b * a - d * c * a * 2 - r * c * a * 2)
 factor(x * f * c + x * f * b + x * d * c + x * d * b + f * c * a + f * b * a + d * c * a + d * b * a)
 ```
-### [Algebra/Trigonometry](/Algebra/Trigonometry)
+### [Algebra/Trigonometry](/Algebra/Trigonometry.kel)
 ```ruby
 # Prints 1!!!!
 println tan(x) * sec(x) * csc(x) * cos(x) ^ 2
 ```
-### [Calculus/Differentiation](/Calculus/Differentiation)
+### [Calculus/Differentiation](/Calculus/Differentiation.kel)
 ```ruby
 # Define f as a function of x, y, z
 def f(x, y, z) = x(x, y, z) + y(x, y, z) + z(x, y, z)
@@ -184,11 +184,11 @@ for (point: points) {
     println tangent(g(x,y), {x,y}, point)
 }
 ```
-### [Calculus/Integration](/Calculus/Integration)
+### [Calculus/Integration](/Calculus/Integration.kel)
 ```ruby
 assert nIntegrate(1 / x ^ 2, x, 1, inf) == 1
 ```
-### [Developer/Algorithms/BinarySearch](/Developer/Algorithms/BinarySearch)
+### [Developer/Algorithms/BinarySearch](/Developer/Algorithms/BinarySearch.kel)
 ```ruby
 # Conventional binary search algorithm implemented in kelvin!
 def bin_search(arr, search) {
@@ -225,7 +225,7 @@ def l1 = {1, 2, 3, 5, 7, 8, 9, 10}
 assert println(bin_search(l1, 8.5)) == "not found"
 assert bin_search(l1, 9) == 6
 ```
-### [Developer/Algorithms/Contains](/Developer/Algorithms/Contains)
+### [Developer/Algorithms/Contains](/Developer/Algorithms/Contains.kel)
 ```ruby
 # A function that checks if list contains a
 def contains(list, a) {
@@ -243,7 +243,7 @@ println contains({1, 2, 3}, 2)
 # Prints false
 println contains({1, 2, 3}, x)
 ```
-### [Developer/Algorithms/Deconstruct](/Developer/Algorithms/Deconstruct)
+### [Developer/Algorithms/Deconstruct](/Developer/Algorithms/Deconstruct.kel)
 ```ruby
 def deconstruct(n) {
     if (n is @function) {
@@ -261,7 +261,7 @@ def deconstruct(n) {
 
 println deconstruct(a*b+c^d*f)
 ```
-### [Developer/Algorithms/FlatMap](/Developer/Algorithms/FlatMap)
+### [Developer/Algorithms/FlatMap](/Developer/Algorithms/FlatMap.kel)
 ```ruby
 def flatMap(l) {
     tmp := {};
@@ -283,7 +283,7 @@ println "original: " & original
 println "flat mapped: " & flat
 assert flat == {1, 1, 1, 2, 3, 2, 3, 4, 4, 5}
 ```
-### [Developer/Algorithms/Recursion](/Developer/Algorithms/Recursion)
+### [Developer/Algorithms/Recursion](/Developer/Algorithms/Recursion.kel)
 ```ruby
 def f(a) {
     if (a > 10) {
@@ -296,7 +296,7 @@ def f(a) {
 println f(1000005)
 println f(15)
 ```
-### [Developer/Benchmarking](/Developer/Benchmarking)
+### [Developer/Benchmarking](/Developer/Benchmarking.kel)
 ```ruby
 # Calculate the time to compute 10000 random numbers
 a := time();
@@ -315,7 +315,7 @@ measure {factor(expr)}
 # Measure the time average of factorizing 'expr' 10 times
 measure(10) {factor(expr)}
 ```
-### [Developer/Debugging/StackTrace](/Developer/Debugging/StackTrace)
+### [Developer/Debugging/StackTrace](/Developer/Debugging/StackTrace.kel)
 ```ruby
 # This file demonstrates how you can use stack trace for debugging purposes.
 
@@ -364,7 +364,7 @@ clearStackTrace()
 # - PUSH(factor) factor(3 * a + a * b)
 # - POP(factor) (3 + b) * a
 ```
-### [Developer/Dictionary](/Developer/Dictionary)
+### [Developer/Dictionary](/Developer/Dictionary.kel)
 ```ruby
 def dict = {
     1,
@@ -389,7 +389,7 @@ dict[shit]
 println dict[m][o] ~ $0 & $1
 
 ```
-### [Developer/ErrorHandling](/Developer/ErrorHandling)
+### [Developer/ErrorHandling](/Developer/ErrorHandling.kel)
 ```ruby
 # Try statements
 msg1 := (try ({1, 2, 3} zip {1, 2}) : "an error has occurred.")
@@ -408,7 +408,7 @@ try err() : "shit happened"
 assert true
 try (assert false) : "assertion was false"
 ```
-### [Developer/FlowControl/Conditionals](/Developer/FlowControl/Conditionals)
+### [Developer/FlowControl/Conditionals](/Developer/FlowControl/Conditionals.kel)
 ```ruby
 # A simple if statement (same syntax as in most languages)
 # Important - semicolons are mandatary in closures
@@ -435,7 +435,7 @@ if ((a+=2) == 2) {
 a := (a < 10 ? 0 : 10)
 assert a == 0
 ```
-### [Developer/FlowControl/Loops/ForLoop](/Developer/FlowControl/Loops/ForLoop)
+### [Developer/FlowControl/Loops/ForLoop](/Developer/FlowControl/Loops/ForLoop.kel)
 ```ruby
 # Declare a list, l1
 def l1 = {1, 2, 3, x, a, f(x), x + a}
@@ -501,7 +501,7 @@ for (i: stride(0, 10, 0.1)) {
     print i & ", "
 }
 ```
-### [Developer/FlowControl/Loops/WhileLoop](/Developer/FlowControl/Loops/WhileLoop)
+### [Developer/FlowControl/Loops/WhileLoop](/Developer/FlowControl/Loops/WhileLoop.kel)
 ```ruby
 def a = 0;
 while (a < 10) {
@@ -509,7 +509,7 @@ while (a < 10) {
 }
 assert a == 10
 ```
-### [Developer/Function](/Developer/Function)
+### [Developer/Function](/Developer/Function.kel)
 ```ruby
 # Syntax for defining inline function
 def f(x) = x^3 / a
@@ -555,7 +555,7 @@ listFuncs()
 # Clear all user defined functions
 clearFuncs()
 ```
-### [Developer/HigherOrderFunction](/Developer/HigherOrderFunction)
+### [Developer/HigherOrderFunction](/Developer/HigherOrderFunction.kel)
 ```ruby
 # invoke is represented by =>, where lhs is the name of the function to invoke and rhs is list of arguments
 def f(x, y, a, b) {
@@ -609,7 +609,7 @@ result := test()
 assert (result contains undef) == false
 assert result == {x^2, x^3, x^6}
 ```
-### [Developer/IO/IO](/Developer/IO/IO)
+### [Developer/IO/IO](/Developer/IO/IO.kel)
 ```ruby
 # To read from input
 name := readLine()
@@ -626,7 +626,7 @@ setWorkingDir("/tmp")
 # Read file at path (if no '/' at the beginning, relative path to working dir. is used)
 # readFile("/Users/jiachenren/iCloudDrive (Archive)/Documents/Developer/Kelvin/Examples/Developer/Benchmarking")
 ```
-### [Developer/List](/Developer/List)
+### [Developer/List](/Developer/List.kel)
 ```ruby
 def l1 = {1, 2, 3, 4, 5}
 
@@ -666,7 +666,7 @@ my_list := {2, 3, 7, 9}
 set(my_list, 3, "pig")
 assert my_list == {2, 3, 7, "pig"}
 ```
-### [Developer/Multiline](/Developer/Multiline)
+### [Developer/Multiline](/Developer/Multiline.kel)
 ```ruby
 def f(a,b,c) = (
     a := 3;
@@ -705,7 +705,7 @@ def fibonacci(x) = (
 
 println fibonacci(11)
 ```
-### [Developer/String](/Developer/String)
+### [Developer/String](/Developer/String.kel)
 ```ruby
 # String concatenation
 println "you " & "are " & "a " & "genius!"
@@ -716,7 +716,7 @@ println (random()...10 ~ $0 & $1)
 "123456" as @list | $0
 assert (("123456" !! @list | $0 ~ $0 & $1) == "123456")
 ```
-### [Developer/Subscript](/Developer/Subscript)
+### [Developer/Subscript](/Developer/Subscript.kel)
 ```ruby
 println a[b[c][d + f]][g] + m
 println a[b][c] + d
@@ -724,7 +724,7 @@ println d + [a, b, c]
 println [a, b, c] + [d, q, f([a, s, t])] + {u, f([v, w, t])[m][x + z[y]]}
 
 ```
-### [Developer/TrailingClosure](/Developer/TrailingClosure)
+### [Developer/TrailingClosure](/Developer/TrailingClosure.kel)
 ```ruby
 # Fucking trailing closure syntax!
 
@@ -742,7 +742,7 @@ println filter(l1) {$0 > 0.5}
 # This is equivalent to "l1 >? $0 > 0.5"
 println sort(l1) {$0 > $1}
 ```
-### [Developer/Variable](/Developer/Variable)
+### [Developer/Variable](/Developer/Variable.kel)
 ```ruby
 # Defining variables
 def a = 3
@@ -782,7 +782,7 @@ listVars()
 # Clear all user defined variables
 clearVars()
 ```
-### [LinearAlgebra/Matrix](/LinearAlgebra/Matrix)
+### [LinearAlgebra/Matrix](/LinearAlgebra/Matrix.kel)
 ```ruby
 # a 2 x 2 matrix
 def m2x2 = [[1, 3], [1, 2]]
@@ -857,7 +857,7 @@ assert cofactor([
     [14,  -3,  -8,  19,  21]
 ]
 ```
-### [LinearAlgebra/Vector](/LinearAlgebra/Vector)
+### [LinearAlgebra/Vector](/LinearAlgebra/Vector.kel)
 ```ruby
 # Find the unit vector
 println unitVec([a, b, c])
@@ -876,7 +876,7 @@ v1 := [1, 3, 5]
 v2 := [4, 7, 9]
 println angle(v1, v2)
 ```
-### [Misc/Arcane](/Misc/Arcane)
+### [Misc/Arcane](/Misc/Arcane.kel)
 ```ruby
 # Create a list {f(3,4), f(3,4), f(3,4), f(3,4), f(3,4)}, then store the list in variable "c"
 c:=repeat(f(3,4),5)
@@ -970,7 +970,7 @@ println f(a,b)
 println (l1 | $0 + k ~ f($0, $1))
 println ((x ^ 3)'x << x = 3)
 ```
-### [Misc/DiceRoll](/Misc/DiceRoll)
+### [Misc/DiceRoll](/Misc/DiceRoll.kel)
 ```ruby
 def dice1() = round random(1,6)
 def dice2() = int random(1, 7)
@@ -997,7 +997,7 @@ println mean(rolls2)
 print "Expected value of dice 3 rolls: "
 println mean(rolls3)
 ```
-### [Misc/FindBest](/Misc/FindBest)
+### [Misc/FindBest](/Misc/FindBest.kel)
 ```ruby
 iq_scale := 180
 look_scale := 100
@@ -1035,13 +1035,13 @@ println find_best_in(l1)
 print "Best in group 2: "
 println find_best_in(l2)
 ```
-### [Misc/Greeting](/Misc/Greeting)
+### [Misc/Greeting](/Misc/Greeting.kel)
 ```ruby
 println "Please enter your name:"
 def name = readLine()
 println "Hello, " & name
 ```
-### [Misc/RepeatMapDemo](/Misc/RepeatMapDemo)
+### [Misc/RepeatMapDemo](/Misc/RepeatMapDemo.kel)
 ```ruby
 # Generate a list containing numbers from 1 to 100, store it into l1
 i := 0
@@ -1056,7 +1056,7 @@ x := (l1 ~ f($0, $1))
 println "l1 = " & l1
 println "x  = " & x
 ```
-### [Misc/StatProblem](/Misc/StatProblem)
+### [Misc/StatProblem](/Misc/StatProblem.kel)
 ```ruby
 def airList = {
     7.6, 3.8, 2.1, 3.7, 4.7, 4.9, 5.2, 3.4, 4.1, 2.7, 3.1, 3.8, 3.0, 6.2, 2.0, 1.1, 4.4, 1.4, 4.3,5.5, 4.1, 5.0, 4.8, 3.2, 6.8, 3.1, 2.5, 6.6, 2.2, 2.5, 4.4
@@ -1084,7 +1084,7 @@ println diff
 #         - Normal:
 #        - Independent:
 ```
-### [Misc/TwoSampleTTest](/Misc/TwoSampleTTest)
+### [Misc/TwoSampleTTest](/Misc/TwoSampleTTest.kel)
 ```ruby
 input := (split("1 24 25 2 30 31 3 22 23 4 24 24 5 26 27 6 23 25 7 26 28 8 20 20 9 27 27 10 28 30", " ") | $0 as @number)
 
@@ -1101,7 +1101,7 @@ def t = 1 / (0.8165 / √(10))
 def p = tCdf(t,inf,9)
 println "p-value: " & p
 ```
-### [Probability](/Probability)
+### [Probability](/Probability.kel)
 ```ruby
 # nCr, nPr
 println (9 ncr 3)
@@ -1120,7 +1120,7 @@ println mean(random()...100000)
 # A function that approaches 1 as x approaches infinity.
 def f(x) = min(random()...x) + max(random()...x)
 ```
-### [Statistics/ConfidenceInterval](/Statistics/ConfidenceInterval)
+### [Statistics/ConfidenceInterval](/Statistics/ConfidenceInterval.kel)
 ```ruby
 # z interval
 a := zInterval(0.5,2,3,0.95)
@@ -1152,7 +1152,7 @@ assert round(result["CI"][0], 3) == 0.355
 assert round(result["CI"][1], 3) == 1.845
 result | println($0)
 ```
-### [Statistics/Distribution](/Statistics/Distribution)
+### [Statistics/Distribution](/Statistics/Distribution.kel)
 ```ruby
 # Normal cumulative distribution frequency
 println normCdf(-inf, 7, 45, 21)
@@ -1167,7 +1167,7 @@ println oneVar(l1)
 assert geomCdf(0.5, 2, 4) == 0.4375
 assert tCdf(-inf, inf, 20) == 1
 ```
-### [Statistics/OneVar](/Statistics/OneVar)
+### [Statistics/OneVar](/Statistics/OneVar.kel)
 ```ruby
 # Five number summary
 println (sum5n({1, 3, 7, 9, 11, 12, 17}) | $0::1)
@@ -1186,7 +1186,7 @@ println outliers(l1)
 
 # Mark -- Distribution
 ```
-### [Statistics/Regression](/Statistics/Regression)
+### [Statistics/Regression](/Statistics/Regression.kel)
 ```ruby
 def l1 = {1,2,3,7,9,10}
 def l2 = {2,5,7,6,9,10}
@@ -1198,7 +1198,7 @@ def regEq(a) = (definition << x = a)
 regEq(3)
 assert round(regEq(3) - (3.00909 + 0.654545 * 3), 3) == 0
 ```
-### [SystemCheck](/SystemCheck)
+### [SystemCheck](/SystemCheck.kel)
 ```ruby
 # Run all Kelvin scripts and tests and do a pansystemic performance analysis.
 
@@ -1266,7 +1266,7 @@ map(alg_files) {
 
 println "System check completed in " & (time() - start_time) & " seconds."
 ```
-### [Tests](/Tests)
+### [Tests](/Tests.kel)
 ```ruby
 # Comprehensive test
 # true = PASS
