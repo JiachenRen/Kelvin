@@ -98,7 +98,7 @@ public class Console: IOProtocol {
     /// Evaluates the expression represented by `expr`
     func eval(_ expr: String) {
         do {
-            let output = try Compiler.compile(expr).simplify()
+            let output = try Compiler.shared.compile(expr).simplify()
             Swift.print(output.stringified)
         } catch let e as KelvinError {
             error(e.localizedDescription)
@@ -144,7 +144,7 @@ public class Console: IOProtocol {
                 let prompt = open == 0 ? "\(tab)← " : padding
                 var input = readln(prompt: prompt)?.trimmingCharacters(in: .whitespaces) ?? ""
                 
-                let curOpenBrackets = Compiler.countOpenBrackets(input)
+                let curOpenBrackets = Compiler.shared.countOpenBrackets(input)
                 openBrackets[.square]! += curOpenBrackets[.square]!
                 openBrackets[.round]! += curOpenBrackets[.round]!
                 openBrackets[.curly]! += curOpenBrackets[.curly]!
@@ -168,12 +168,12 @@ public class Console: IOProtocol {
                     }
                     continue
                 } else {
-                    let _ = try Compiler.compile(input)
+                    let _ = try Compiler.shared.compile(input)
                 }
                 
                 // Compile and execute the input statement
                 clear()
-                let parent = try Compiler.compile(input)
+                let parent = try Compiler.shared.compile(input)
                 let result = try parent.simplify()
                 flush()
                 log(Program.Log(line: nil, input: parent, output: result))

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F321B762335542400460CC2 /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA8EF79232825B800D66971 /* Debug.swift */; };
+		1F321B772335542400460CC2 /* FlowControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3E306C232B39CC002971F9 /* FlowControl.swift */; };
+		1F321B782335542400460CC2 /* FileSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3E3065232B2077002971F9 /* FileSystem.swift */; };
+		1F321B792335542400460CC2 /* StackTrace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA8EF73232815A200D66971 /* StackTrace.swift */; };
 		1F322829222C8AA9004417CB /* finding_tangent.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F322828222C8AA9004417CB /* finding_tangent.png */; };
 		1F32282B222C8AD5004417CB /* kelvin_tomorrow_night_blue_theme.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F32282A222C8AD5004417CB /* kelvin_tomorrow_night_blue_theme.png */; };
 		1F3E3067232B2338002971F9 /* FileSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3E3065232B2077002971F9 /* FileSystem.swift */; };
@@ -508,6 +512,7 @@
 		1FA8EF79232825B800D66971 /* Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		1FB0F174232AC07800281559 /* libedit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libedit.tbd; path = usr/lib/libedit.tbd; sourceTree = SDKROOT; };
 		1FB0F176232AC24B00281559 /* KelvinCLI-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KelvinCLI-Bridging-Header.h"; sourceTree = "<group>"; };
+		1FB3E369233552D100C21025 /* SwiftSoup.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftSoup.framework; path = Carthage/Build/Mac/SwiftSoup.framework; sourceTree = "<group>"; };
 		1FC67C81221F362A00A8E6BC /* Integration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Integration.swift; sourceTree = "<group>"; };
 		1FC67C852222EAEC00A8E6BC /* TwoVar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoVar.swift; sourceTree = "<group>"; };
 		1FC67C872224259700A8E6BC /* NSTextView+LineNumberRulerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextView+LineNumberRulerView.swift"; sourceTree = "<group>"; };
@@ -884,6 +889,7 @@
 		1F6D0A02220D18CE00807377 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1FB3E369233552D100C21025 /* SwiftSoup.framework */,
 				1FB0F174232AC07800281559 /* libedit.tbd */,
 				1F48DAA9222E325C00639F26 /* Accelerate.framework */,
 				1F6D0A03220D18CE00807377 /* Highlightr.framework */,
@@ -1380,6 +1386,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F321B762335542400460CC2 /* Debug.swift in Sources */,
+				1F321B772335542400460CC2 /* FlowControl.swift in Sources */,
+				1F321B782335542400460CC2 /* FileSystem.swift in Sources */,
+				1F321B792335542400460CC2 /* StackTrace.swift in Sources */,
 				1F48DA05222E0EB800639F26 /* Confidence Intervals.swift in Sources */,
 				1F48DA06222E0EB800639F26 /* Distribution.swift in Sources */,
 				1F48DA07222E0EB800639F26 /* OneVar.swift in Sources */,
@@ -1652,6 +1662,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "$(SRCROOT)/Kelvin/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1683,6 +1697,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "$(SRCROOT)/Kelvin/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";

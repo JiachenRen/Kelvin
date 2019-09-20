@@ -21,7 +21,11 @@ public class FileSystem {
     
     /// Initializes a new FileSystem instance.
     init() {
-       workingDirectoryPath = Process().currentDirectoryPath
+        #if os(OSX)
+        workingDirectoryPath = Process().currentDirectoryPath
+        #else
+        workingDirectoryPath = ""
+        #endif
     }
     
     /// Create an absolute URL from relative/absolute path and checks if it exists.
