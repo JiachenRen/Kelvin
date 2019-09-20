@@ -18,38 +18,37 @@ extension ConsoleViewController: IOProtocol {
         return n.stringified
     }
     
-    private func append(to buffer: Buffer, _ content: String) {
-        buffers[buffer] = (buffers[buffer] ?? "") + content
+    private func append(_ content: String) {
+        consoleOutputBuffer += content
     }
     
     func print(_ n: Node) {
-        append(to: .console, format(n))
+        append(format(n))
     }
     
     func println(_ n: Node) {
-        append(to: .console, format(n) + "\n")
+        append(format(n) + "\n")
     }
     
     func log(_ l: String) {
-        append(to: .debugger, l + "\n")
+        Swift.print(l)
     }
     
     func log(_ l: Program.Log) {
-        append(to: .debugger, "\t← \(format(l.input))\n")
-        append(to: .debugger, "\t→ \(format(l.output))\n")
+        executionLogs.append(l)
     }
     
     func error(_ e: String) {
-        append(to: .debugger, e)
+        consoleOutputBuffer += e
     }
     
     func clear() {
-        buffers[.debugger] = ""
-        buffers[.console] = ""
+        executionLogs = []
+        consoleOutputBuffer = ""
     }
     
     func warning(_ w: String) {
-        append(to: .debugger, "warning: \(w)\n")
+        consoleOutputBuffer += w
     }
     
     func flush() {}
@@ -84,6 +83,6 @@ extension ConsoleViewController: ConsoleDelegate {
     }
     
     func editableAfterIndex() -> Int {
-        return (buffers[.console]?.count ?? 0) - 1
+        return consoleOutputBuffer.count - 1
     }
 }

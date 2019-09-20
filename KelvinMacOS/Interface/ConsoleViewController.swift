@@ -22,12 +22,17 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
     @IBOutlet var debuggerTextView: NSTextView!
     @IBOutlet weak var outlineView: NSOutlineView!
     
-    /// Asynchronous task that updates the content of console and debugger
-    /// as the program is being executed.
-    var asyncUpdateTask: DispatchWorkItem?
+    /// Asynchronous task that updates the content of console as the program is being executed.
+    var consoleUpdateTask: DispatchWorkItem?
+    
+    /// Asynchronous task for updating debugger as program is executed.
+    var debuggerUpdateTask: DispatchWorkItem?
+    
+    /// Queue for background processing tasks
+    let processingQueue = DispatchQueue(label: "com.jiachenren.Kelvin.processing")
     
     /// Asynchronous queue for executing Kelvin scripts.
-    let programExecQueue = DispatchQueue(label: "com.jiachenren.Kelvin")
+    let programExecQueue = DispatchQueue(label: "com.jiachenren.Kelvin.programExecution")
     
     /// Work item for executing Kelvin scripts
     var execTask: DispatchWorkItem?
@@ -36,21 +41,44 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
         return Date().timeIntervalSince1970
     }
     
-    /// Stores the output of the program, either in console buffer or debugger buffer.
-    var buffers = [Buffer: String]() {
+    
+    var executionLogs = [Program.Log]() {
         didSet {
-            asyncUpdateTask?.cancel()
-            asyncUpdateTask = DispatchWorkItem {
+            debuggerUpdateTask?.cancel()
+            debuggerUpdateTask = DispatchWorkItem { [unowned self] in
+                var str = ""
+                var cur = 1
+                for log in self.executionLogs {
+                    if let line = log.line {
+                        for _ in 0..<line - cur {
+                            str += "\n"
+                        }
+                        cur = line
+                    }
+                    str += "\(log.output.stringified)"
+                }
+                DispatchQueue.main.async {
+                    self.debuggerTextView.string = str
+                    self.debuggerTextView.textColor = self.textColor
+                }
+            }
+            processingQueue.async(execute: debuggerUpdateTask!)
+        }
+    }
+    
+    /// Stores the output of the program, either in console buffer or debugger buffer.
+    var consoleOutputBuffer: String = "" {
+        didSet {
+            consoleUpdateTask?.cancel()
+            consoleUpdateTask = DispatchWorkItem {
                 let textColor = self.textColor
-                self.debuggerTextView.string = self.buffers[.debugger] ?? ""
-                self.debuggerTextView.textColor = textColor
-                self.consoleTextView.string = self.buffers[.console] ?? ""
+                self.consoleTextView.string = self.consoleOutputBuffer
                 self.consoleTextView.textColor = textColor
             }
             
             // Delay 0.1 seconds to retain the ability to cancel asynchronous update
             // tasks that are too frequent.
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: asyncUpdateTask!)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: consoleUpdateTask!)
         }
     }
     
@@ -58,6 +86,7 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
     var theme: String = defaultLightTheme {
         didSet {
             editorTextStorage.highlightr.setTheme(to: theme)
+            debuggerTextStorage.highlightr.setTheme(to: theme)
             updateInterfaceByTheme()
         }
     }
@@ -66,12 +95,19 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
     var language: String = defaultLanguage {
         didSet {
             editorTextStorage.language = language
+            debuggerTextStorage.language = language
             updateInterfaceByTheme()
         }
     }
     
     /// Live text storage for editor text view that highlights on the fly.
     var editorTextStorage: CodeAttributedString = {
+        let storage = CodeAttributedString()
+        storage.language = defaultLanguage
+        return storage
+    }()
+    
+    var debuggerTextStorage: CodeAttributedString = {
         let storage = CodeAttributedString()
         storage.language = defaultLanguage
         return storage
@@ -93,6 +129,13 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
         editorTextView.enabledTextCheckingTypes = 0
         editorTextView.layoutManager?.replaceTextStorage(editorTextStorage)
         editorTextView.setUpLineNumberView()
+        
+        // Make debugger text view horizontally scrollable
+        debuggerTextView.maxSize = NSMakeSize(.greatestFiniteMagnitude, .greatestFiniteMagnitude)
+        debuggerTextView.isHorizontallyResizable = true
+        debuggerTextView.textContainer?.widthTracksTextView = false
+        debuggerTextView.textContainer?.containerSize = NSMakeSize(.greatestFiniteMagnitude, .greatestFiniteMagnitude)
+        debuggerTextView.layoutManager?.replaceTextStorage(debuggerTextStorage)
         
         // Use the theme that matches the current system appearance
         theme = view.isDarkMode() ? defaultDarkTheme : defaultLightTheme
@@ -157,8 +200,6 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
         
         // Debugger text view
         debuggerTextView.backgroundColor = bgdColor
-        debuggerTextView.font = font
-        debuggerTextView.textColor = textColor
         debuggerTextView.selectedTextAttributes = selectedTextAttributes
     }
     
@@ -249,10 +290,5 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
             .map {$0.description}
         
         return [g1, g2, g3].flatMap {$0}
-    }
-    
-    enum Buffer {
-        case console
-        case debugger
     }
 }
