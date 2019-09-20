@@ -40,7 +40,7 @@ public struct Program {
         content = try FileSystem.shared.readFile(at: filePath)
         let t = Date().timeIntervalSince1970
         io?.log("compiling...")
-        var program = try Compiler.compile(document: content)
+        var program = try Compiler.shared.compile(document: content)
         let millis = Int((Date().timeIntervalSince1970 - t) * 1000)
         io?.log("compilation successful in \(millis) milliseconds.")
         if let c = config {

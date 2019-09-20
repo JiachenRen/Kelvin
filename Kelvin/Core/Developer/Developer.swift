@@ -112,7 +112,7 @@ public class Developer {
             return KString("done")
         },
         .unary(.compile, KString.self) {
-            Final(node: try Compiler.compile($0.string))
+            Final(node: try Compiler.shared.compile($0.string))
         },
         .unary(.eval, [.any]) {
             try $0.simplify()

@@ -13,6 +13,11 @@ import Foundation
  */
 public class Compiler {
     
+    /// Shared singleton instance of Compiler
+    public static var shared: Compiler {
+        return Compiler()
+    }
+    
     public enum Bracket: String {
         case curly = "{}"
         case square = "[]"
@@ -24,7 +29,7 @@ public class Compiler {
     }
 
     /// Symbols from binary operators, shorthands, and syntactic sugars.
-    private static var symbols: String {
+    private var symbols: String {
         let operators = Keyword.encodings
                 .keys.reduce("") {
             "\($0)\($1)"
@@ -53,7 +58,7 @@ public class Compiler {
 
     /// Used to restore escape characters to their original form
     /// e.g \t becomes a tab.
-    private static let escapeCharDict: [String: String] = [
+    private let escapeCharDict: [String: String] = [
         "\\n": "\n",
         "\\r": "\r",
         "\\t": "\t",
@@ -61,7 +66,7 @@ public class Compiler {
         "\\\\": "\\"
     ]
     
-    private static var compiledExpressions = [String: Node]()
+    private var compiledExpressions = [String: Node]()
 
     /**
      Compiles a single line expression.
@@ -69,7 +74,7 @@ public class Compiler {
      - Parameter expr: String representation of an expression
      - Returns: Parent node of the compiled expression.
      */
-    public static func compile(_ expr: String) throws -> Node {
+    public func compile(_ expr: String) throws -> Node {
         var expr = expr
         
         let preserved = expr
@@ -122,7 +127,7 @@ public class Compiler {
      - Parameter document: A string containing multiple lines of code
      - Returns: A program.
      */
-    public static func compile(document: String, workItem: DispatchWorkItem? = nil) throws -> Program {
+    public func compile(document: String, workItem: DispatchWorkItem? = nil) throws -> Program {
         let lines = document.split(separator: "\n", omittingEmptySubsequences: false)
                 .map {
                     String($0)
@@ -182,7 +187,7 @@ public class Compiler {
                 
                 // Brackets mismatch, deliberately bail out
                 do {
-                    let _ = try Compiler.compile(line)
+                    let _ = try compile(line)
                 } catch let e as CompilerError {
                     throw CompilerError.on(line: i + 1, e)
                 }
@@ -212,7 +217,7 @@ public class Compiler {
      Counts the number of open brackets (round, curly, and square) in the line.
      - Returns: A dictionary containing the number of open brackets for each type.
      */
-    public static func countOpenBrackets(_ line: String) -> [Bracket: Int] {
+    public func countOpenBrackets(_ line: String) -> [Bracket: Int] {
         var counts = [Int](repeating: 0, count: 3)
         for c in line {
             switch c {
@@ -241,7 +246,7 @@ public class Compiler {
         return openBrackets
     }
     
-    private static func applyTrailingClosureSyntax(_ expr: inout String) {
+    private func applyTrailingClosureSyntax(_ expr: inout String) {
         
         // Convert f {} to f(#())
         let regex = try! NSRegularExpression(pattern: "\\w+\\s*\\{", options: [])
@@ -286,7 +291,7 @@ public class Compiler {
     /// Replaces strings in the expression w/ node references and store the
     /// actual string values into the node reference dictionary.
     /// They are converted back at the final step of compilation.
-    private static func encodeStrings(_ expr: inout String, dict: inout NodeReference) {
+    private func encodeStrings(_ expr: inout String, dict: inout NodeReference) {
 
         // Regex for matching string inside double quotes
         let regex = try! NSRegularExpression(pattern: #"(["])(\\?.)*?\1"#, options: NSRegularExpression.Options.caseInsensitive)
@@ -341,7 +346,7 @@ public class Compiler {
      - Parameters:
         - keyword: The keyword to be encoded
      */
-    private static func encodeKeyword(_ keyword: Keyword, for expr: String) -> String {
+    private func encodeKeyword(_ keyword: Keyword, for expr: String) -> String {
         var expr = expr
         var c = keyword.encoding
         var n = keyword.name
@@ -392,7 +397,7 @@ public class Compiler {
      - Parameter parent: The parent node to have DTs restored.
      - Returns: The parent node with DTs restored.
      */
-    private static func decode(_ parent: Node) throws -> Node {
+    private func decode(_ parent: Node) throws -> Node {
         var parent = parent
 
         func name(_ node: Node) -> String? {
@@ -505,7 +510,7 @@ public class Compiler {
         - lb: The index of the left bracket/parenthesis
      - Returns: The start index of the subscript operand or the name of the function.
      */
-    private static func indexOfPrefix(before lb: String.Index, in expr: String) -> String.Index? {
+    private func indexOfPrefix(before lb: String.Index, in expr: String) -> String.Index? {
         var prefixIdx = lb
         while let b = expr.index(prefixIdx, offsetBy: -1, limitedBy: expr.startIndex) {
             if symbols.contains(expr[b]) {
@@ -528,7 +533,7 @@ public class Compiler {
         - binOps: A dictionary that maps a binary operator reference to an operator encoding.
      - Returns: The parent node that represents the expression.
      */
-    private static func resolve(_ expr: String, _ dict: inout NodeReference, _ binOps: OperatorReference) throws -> Node {
+    private func resolve(_ expr: String, _ dict: inout NodeReference, _ binOps: OperatorReference) throws -> Node {
         var expr = expr
         
         // Store the resolved node in the reference dictionary, then update the expression
@@ -688,7 +693,7 @@ public class Compiler {
         }
     }
 
-    private static func binaryToFunction(_ expr: inout String) throws -> OperatorReference {
+    private func binaryToFunction(_ expr: inout String) throws -> OperatorReference {
         let keywords = Keyword.encodings.values
         let sorted = keywords.sorted {
             $0.precedence > $1.precedence
@@ -743,7 +748,7 @@ public class Compiler {
      - Parameter operators: A group of operators with same precedence.
      - Returns: The first index of any of the operators, if there is one.
      */
-    private static func firstIndex(
+    private func firstIndex(
         from startIdx: String.Index,
         of encodings: [Keyword.Encoding: String],
         in expr: String
@@ -756,7 +761,7 @@ public class Compiler {
         return nil
     }
 
-    private static func parenthesize(
+    private func parenthesize(
         _ expr: inout String,
         _ keywords: [Keyword],
         _ precedenceGrp: [Keyword.Encoding: String]
@@ -892,7 +897,7 @@ public class Compiler {
         }
     }
     
-    private static func resolveAssociativity(
+    private func resolveAssociativity(
         _ keyword: Keyword,
         _ left: String?,
         _ right: String?
@@ -941,7 +946,7 @@ public class Compiler {
         return (try fun(keyword), nil)
     }
 
-    private static func replace(_ expr: inout String, of target: String, with replacement: String) {
+    private func replace(_ expr: inout String, of target: String, with replacement: String) {
         expr = expr.replacingOccurrences(of: target, with: replacement)
     }
 
@@ -951,7 +956,7 @@ public class Compiler {
      
      - Parameter expr: The expression to have coefficients and negative sign formatted
      */
-    private static func format(_ expr: inout String) {
+    private func format(_ expr: inout String) {
 
         // Remove white spaces for ease of processing
         expr = expr.replacingOccurrences(of: "\\s+", with: "", options: .regularExpression)
@@ -973,7 +978,7 @@ public class Compiler {
      - Parameter str: A string containing multiple (or none) occurences of substr
      - Returns: The indices at which substr occurs in str.
      */
-    private static func findIndices(of substr: String, in str: String) -> [String.Index] {
+    private func findIndices(of substr: String, in str: String) -> [String.Index] {
         var indices = [String.Index]()
         if let r = str.range(of: substr) {
             indices.append(r.lowerBound)
@@ -987,7 +992,7 @@ public class Compiler {
         return indices
     }
 
-    private static func binRange(_ segment: String, _ binIdx: String.Index) -> ClosedRange<String.Index> {
+    private func binRange(_ segment: String, _ binIdx: String.Index) -> ClosedRange<String.Index> {
         var beginIdx = binIdx
         var endIdx = binIdx
         
@@ -1011,7 +1016,7 @@ public class Compiler {
     /**
      Validates the expression for parenthesis/brackets match, illegal symbols, etc.
      */
-    private static func validate(_ expr: String) throws {
+    private func validate(_ expr: String) throws {
         func matches(_ expr: String, _ chars: [String]) -> Bool {
             var n: Int? = nil
             for char in chars {
@@ -1047,7 +1052,7 @@ public class Compiler {
         - rp2: Replacement for "close"
      - Returns: Expression with "open" replaced with "open1" and "close" replaced with "close1"
      */
-    private static func replace(_ exp: String, _ open: Character, _ close: Character, _ rp1: String, _ rp2: String) -> String {
+    private func replace(_ exp: String, _ open: Character, _ close: Character, _ rp1: String, _ rp2: String) -> String {
         let r = self.innermost(exp, open, close)
         let idx1 = exp.index(after: r.lowerBound)
         let idx2 = exp.index(after: r.upperBound)
@@ -1062,7 +1067,7 @@ public class Compiler {
     /**
      - Returns: The indices of the innermost opening and the closing parenthesis/brackets
      */
-    private static func innermost(_ exp: String, _ open: Character, _ close: Character) -> ClosedRange<String.Index> {
+    private func innermost(_ exp: String, _ open: Character, _ close: Character) -> ClosedRange<String.Index> {
         let closeIdx = exp.firstIndex(of: close)!
         let openIdx = exp[..<closeIdx].lastIndex(of: open)!
         return openIdx...closeIdx
@@ -1077,7 +1082,7 @@ public class Compiler {
         - close: the char that completes the parenthesis/bracket together with the char at start idx.
      - Returns: the index at which the parenthesis/bracket terminates
      */
-    private static func find(_ expr: String, start: String.Index, close: Character) -> String.Index? {
+    private func find(_ expr: String, start: String.Index, close: Character) -> String.Index? {
         let open = expr[start]
         var stacks = 0
         for (idx, c) in expr[start...].enumerated() {
@@ -1097,7 +1102,7 @@ public class Compiler {
     /**
      - Returns: the index at which the parenthesis/bracket opens
      */
-    private static func find(_ expr: String, end: String.Index, open: Character) -> String.Index? {
+    private func find(_ expr: String, end: String.Index, open: Character) -> String.Index? {
         let close = expr[end]
         var stacks = 0
         for (idx, c) in expr[...end].enumerated().reversed() {
@@ -1118,7 +1123,7 @@ public class Compiler {
      - Parameter c: char c for num of occurrence.
      - Returns: The number of times that **c** shows up in **s**.
      */
-    private static func count(_ s: String, char: Character) -> Int {
+    private func count(_ s: String, char: Character) -> Int {
         var count = 0
         for c in s {
             if c == char {

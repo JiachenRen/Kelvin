@@ -25,7 +25,7 @@ class KelvinTests: XCTestCase {
         .appendingPathComponent("Examples")
     
     private var testUrl: String {
-        return examplesUrl.path + "/SystemCheck"
+        return examplesUrl.path + "/SystemCheck.kel"
     }
     
     private func restoreDefault() {
@@ -36,7 +36,7 @@ class KelvinTests: XCTestCase {
     
     func testSystemCheck() throws {
         do {
-            let _ = try Compiler.compile("run \"\(testUrl)\"").simplify()
+            let _ = try Compiler.shared.compile("run \"\(testUrl)\"").simplify()
         } catch let e as KelvinError {
             XCTFail(e.localizedDescription)
         }
@@ -46,7 +46,7 @@ class KelvinTests: XCTestCase {
     func testPerformance() {
         self.measure {
             do {
-                let _ = try Compiler.compile("run \"\(testUrl)\"").simplify()
+                let _ = try Compiler.shared.compile("run \"\(testUrl)\"").simplify()
             } catch let e as KelvinError {
                 XCTFail(e.localizedDescription)
             } catch let e {

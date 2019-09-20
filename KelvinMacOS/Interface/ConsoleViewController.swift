@@ -174,7 +174,7 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
         do {
             log("compiling...")
             let t = time
-            var program = try Compiler.compile(document: sourceCode, workItem: workItem)
+            var program = try Compiler.shared.compile(document: sourceCode, workItem: workItem)
             log("compilation successful in \(time - t) seconds.")
             program.config = Program.Configuration(scope: .useDefault, retentionPolicy: .preserveAll)
             try program.run(workItem: workItem)
