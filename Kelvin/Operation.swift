@@ -151,8 +151,8 @@ public class Operation: Equatable, Hashable {
      Remove a parametric operation from registration.
      
      - Parameters:
-     - name: The name of the operation to be removed.
-     - signature: The signature of the operation to be removed.
+        - name: The name of the operation to be removed.
+        - signature: The signature of the operation to be removed.
      */
     static func remove(_ name: OperationName, _ signature: [ParameterType]) {
         let parOp = Operation(name, signature) { _ in

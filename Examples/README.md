@@ -89,6 +89,78 @@ You can copy and paste the output from kelvin directly into the built-in `Graphe
 This is a comprehensive demonstration of how you can use Kelvin to suit your mathematical needs!
 
 <!-- AUTOMATIC DOC -->
+### [Algebra/BooleanLogic](/Examples/Algebra/BooleanLogic.kel)
+```ruby
+# Test boolean logic simplification
+
+# Test for base cases
+# a and a is a
+assert (a && a) == a
+assert (a && b && a) == (a && b)
+# a or a is a
+assert (a || a) == a
+assert (a || b || a) == (a || b)
+# not not a is a
+assert !(!a) == a
+assert (a && !(!a)) == a
+# a or false is a
+assert (a || false || b) == (a || b)
+assert (a || b || false) == (false || b || a)
+assert (a || b || false) == (a || b)
+# a or true is true
+assert (a || true) == true
+# a and ... and false is false
+assert (a && b && false) == false
+assert (false && a && b) == false
+assert (b && false && a) == false
+# a and true is a
+assert (a && b && true) == (a && b)
+# a and not a is false
+assert (a && b && !(!(!a))) == false
+# a or not a is true
+assert (a || b || !a) == true
+# a and (b or a) is a
+assert (a && (b || a)) == a
+assert ((a || b) && b) == b
+assert (a && (b || (b && a))) != a
+# a or (a and b) is a
+assert (f() && g() || f()) == f()
+
+# Test for complex cases (where expanding & factoring are needed)
+assert ((!a || b) && (a || b)) == b
+assert (!a && (a || b)) == (!a && b)
+assert ((a && b) || (a && c)) == (a && (b || c))
+assert ((a || b) && (a || c || d)) == (a || b && (c || d))
+
+def f1(a, b, c, d) {
+    return ((a || b) && (a || c || d))
+}
+
+def f2(a, b, c, d) {
+    return a || b && (c || d)
+}
+
+def randBool() {
+    return int(random() * 2) == 0
+}
+
+def randBool(i) {
+    return randBool()...i
+}
+
+def test(f, g, i) {
+    tmp := randBool(4);
+    return ((f => tmp) == (g => tmp))...i
+}
+
+assert test(f1, f2, 10) == (true...10)
+assert (a or (b and (c or a))) == (a || b && c)
+assert (a or (b and (c or !a))) == (a || b)
+
+# The ultimate test, from CS 2051 HW
+assert !(!(!x && !(!y || x)) || !y) == (!x && y)
+assert (not (not (not x and not (not y or x)) or not y)) == (not x and y)
+```
 ### [Algebra/Factorization](/Examples/Algebra/Factorization.kel)
 ```ruby
 # Behold, factorization!
@@ -1218,11 +1290,12 @@ def files = {
     "Probability.kel",
     "Algebra/Trigonometry.kel",
     "Algebra/Factorization.kel",
+    "Algebra/BooleanLogic.kel",
     "Calculus/Differentiation.kel",
     "Calculus/Integration.kel",
     "LinearAlgebra/Vector.kel",
     "LinearAlgebra/Matrix.kel",
-    "Statistics/OneVar.kel.kel",
+    "Statistics/OneVar.kel",
     "Statistics/Distribution.kel",
     "Statistics/Regression.kel",
     "Statistics/ConfidenceInterval.kel"

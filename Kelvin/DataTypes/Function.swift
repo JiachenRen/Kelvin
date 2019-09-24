@@ -105,7 +105,8 @@ public struct Function: MutableListProtocol {
                 let c = keyword.operator?.name ?? (colored ? ansiFormattedName : name)
                 return "\(c)\(r[0])"
             case .infix where args.count == 2 || isCommutative:
-                if let s = r.enumerated().reduce(nil, { (a, c) -> String in
+                if let s = r.enumerated().reduce(nil, {
+                    (a, c) -> String in
                     let (i, b) = c
                     let p = usesParenthesis(forNodeAtIndex: i)
                     let b1 = p ? parenthesize(b, colored) : "\(b)"

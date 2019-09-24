@@ -46,6 +46,7 @@ extension MutableListProtocol {
         return copy
     }
     
+    /// Gets the element at the specified index
     public subscript(_ idx: Int) -> Node {
         get {
             return elements[idx]

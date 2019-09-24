@@ -325,8 +325,9 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 ### Boolean logic
 - [x] Basic boolean operators
   - And, or, not, xor, nand, and nor
-- [ ] Commutative simplification 
-  - Only handles and & or for now
+- [x] Complex boolean logic simplification
+  - Decarte's Law and distributive properties of `and` and `or`
+  - e.g. `!(!(!x && !(!y || x)) || !y)` simplifies to  `(!x && y)`
 
 ### Programs/functions
 - [x] Variables & Functions

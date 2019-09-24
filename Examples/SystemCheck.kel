@@ -15,6 +15,7 @@ def files = {
     "Probability.kel",
     "Algebra/Trigonometry.kel",
     "Algebra/Factorization.kel",
+    "Algebra/BooleanLogic.kel",
     "Calculus/Differentiation.kel",
     "Calculus/Integration.kel",
     "LinearAlgebra/Vector.kel",

@@ -61,9 +61,8 @@ public struct Scope {
         return stack.removeLast()
     }
     
-    /**
-     Temporarily withhold any attempts to access the variable.
-     */
+
+    /// Temporarily withhold any attempts to access the variable.
     public static func withholdAccess(to vars: Variable...) {
         vars.forEach {v in
             let n = v.name
@@ -78,6 +77,7 @@ public struct Scope {
         vars.forEach {withholdAccess(to: $0)}
     }
     
+    /// Release restrictions to all hidden variables
     public static func releaseRestrictions() {
         for (key, value) in restricted {
             Variable.define(key, value)

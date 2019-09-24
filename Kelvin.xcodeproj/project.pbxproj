@@ -208,6 +208,7 @@
 		1F48DAAD222E3F7700639F26 /* Kelvin.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F48DAAB222E3DE900639F26 /* Kelvin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1F48DAAE222E3F9D00639F26 /* Kelvin.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F48DAAB222E3DE900639F26 /* Kelvin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1F6D0A04220D18CE00807377 /* Highlightr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F6D0A03220D18CE00807377 /* Highlightr.framework */; };
+		1F8C8C88233960C0007FCD4F /* BooleanLogic.kel in Resources */ = {isa = PBXBuildFile; fileRef = 1F8C8C87233960C0007FCD4F /* BooleanLogic.kel */; };
 		1FA4D915222F47C500296037 /* install.sh in Resources */ = {isa = PBXBuildFile; fileRef = 1FA4D914222F47C500296037 /* install.sh */; };
 		1FA8EF7523281BC000D66971 /* StackTrace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA8EF73232815A200D66971 /* StackTrace.swift */; };
 		1FA8EF7B2328264F00D66971 /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA8EF79232825B800D66971 /* Debug.swift */; };
@@ -492,6 +493,7 @@
 		1F570B5921FF737D0006E342 /* OperationName+Operations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OperationName+Operations.swift"; sourceTree = "<group>"; };
 		1F6D09FB220B98AA00807377 /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
 		1F6D0A03220D18CE00807377 /* Highlightr.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Highlightr.framework; path = Carthage/Build/Mac/Highlightr.framework; sourceTree = "<group>"; };
+		1F8C8C87233960C0007FCD4F /* BooleanLogic.kel */ = {isa = PBXFileReference; lastKnownFileType = text; path = BooleanLogic.kel; sourceTree = "<group>"; };
 		1F8DF72F22050B5B006351B0 /* IOProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOProtocol.swift; sourceTree = "<group>"; };
 		1F8DF73322050CD3006351B0 /* Console.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Console.swift; sourceTree = "<group>"; };
 		1F8DF76F22075A32006351B0 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
@@ -734,6 +736,7 @@
 			children = (
 				1F3E3077232C37A9002971F9 /* Factorization.kel */,
 				1F3E3078232C37A9002971F9 /* Trigonometry.kel */,
+				1F8C8C87233960C0007FCD4F /* BooleanLogic.kel */,
 			);
 			path = Algebra;
 			sourceTree = "<group>";
@@ -1226,6 +1229,7 @@
 				1F3E30B5232C37AA002971F9 /* Greeting.kel in Resources */,
 				1F3E30C4232C37AA002971F9 /* Function.kel in Resources */,
 				1F3E30D0232C37AA002971F9 /* Tests.kel in Resources */,
+				1F8C8C88233960C0007FCD4F /* BooleanLogic.kel in Resources */,
 				1F3E30B1232C37AA002971F9 /* Differentiation.kel in Resources */,
 				1F3E30C2232C37AA002971F9 /* StackTrace.kel in Resources */,
 				1F3E30BD232C37AA002971F9 /* ForLoop.kel in Resources */,
@@ -1653,7 +1657,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1688,7 +1692,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;

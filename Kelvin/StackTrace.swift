@@ -11,6 +11,8 @@ import Foundation
 public class StackTrace {
     public private(set) var operations: [Operation]
     public var isEnabled: Bool = false
+    public var debugOn: Bool = false
+    private var indentLevel = 0
     
     /// List of function to be untracked accessible to the user
     public var untracked: [String] = []
@@ -74,7 +76,22 @@ public class StackTrace {
         ) {
             return
         }
-        operations.append(Operation(instr, node, target))
+        let op = Operation(instr, node, target)
+        operations.append(op)
+        if debugOn {
+            if instr == .pop {
+                indentLevel -= 1
+            }
+            print(pad(for: indentLevel) + op.description)
+            if instr == .push {
+                indentLevel += 1
+            }
+        }
+    }
+    
+    private func pad(for indent: Int, using whitespace: String = "  ") -> String {
+        return repeatElement(whitespace, count: indent)
+            .reduce("") {$0 + $1}
     }
     
     /// Generate a stack trace string from operations.
@@ -86,8 +103,7 @@ public class StackTrace {
             if op.instr == .pop {
                 indent -= 1
             }
-            let s = repeatElement(padding, count: indent)
-                .reduce("") {$0 + $1} + op.description + "\n"
+            let s = pad(for: indent, using: padding) + op.description + "\n"
             if op.instr == .push {
                 indent += 1
             }
@@ -98,6 +114,7 @@ public class StackTrace {
     /// Clears the stack trace history until this point.
     public func clear() {
         operations = []
+        indentLevel = 0
     }
     
 }

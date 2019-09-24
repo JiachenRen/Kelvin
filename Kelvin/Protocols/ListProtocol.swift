@@ -117,7 +117,9 @@ public extension ListProtocol {
         return true
     }
     
+    /// Maps the elements of this list into `[T]`
     func map<T>(by unary: (Node) throws -> T) rethrows -> [T] {
         return try elements.map(unary)
     }
+    
 }
