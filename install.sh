@@ -10,4 +10,4 @@ mv DerivedData/Build/Products/Release/Kelvin\ CLI /usr/local/bin/kelvin
 echo "Cleaning up..."
 rm -rf /tmp/kelvin-cas
 echo "Success. Kelvin is installed in /usr/bin/local"
-echo "Example usage: kelvin -c"
+echo "Example usage: kelvin -i"
