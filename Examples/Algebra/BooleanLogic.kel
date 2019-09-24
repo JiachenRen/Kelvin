@@ -57,7 +57,7 @@ def randBool(i) {
 
 def test(f, g, i) {
     tmp := randBool(4);
-    return ((f => tmp) == (g => tmp))...i
+    return ((f <<< tmp) == (g <<< tmp))...i
 }
 
 assert test(f1, f2, 10) == (true...10)

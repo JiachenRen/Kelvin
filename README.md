@@ -150,7 +150,7 @@ def f(a, b, c) {
 
 # Higher order functions.
 def f(g, a, b) {
-    return g => {a, b}
+    return g <<< {a, b}
 }
 
 def g(x, y) = x + y
@@ -332,7 +332,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 ### Programs/functions
 - [x] Variables & Functions
   - **Higher order function** (function as parameter)
-    - `invoke(<name of function>, <list of parameters>)`, operator `=>`
+    - `invoke(<name of function>, <list of parameters>)`, operator `<<<`
     - function reference prefix operator `*`
   - Definition & deletion
   - Overloading of functions

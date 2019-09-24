@@ -150,7 +150,7 @@ def randBool(i) {
 
 def test(f, g, i) {
     tmp := randBool(4);
-    return ((f => tmp) == (g => tmp))...i
+    return ((f <<< tmp) == (g <<< tmp))...i
 }
 
 assert test(f1, f2, 10) == (true...10)
@@ -630,10 +630,10 @@ clearFuncs()
 ```
 ### [Developer/HigherOrderFunction](/Examples/Developer/HigherOrderFunction.kel)
 ```ruby
-# invoke is represented by =>, where lhs is the name of the function to invoke and rhs is list of arguments
+# invoke is represented by <<<, where lhs is the name of the function to invoke and rhs is list of arguments
 def f(x, y, a, b) {
     # This is equivalent to 'invoke(x, {invoke(y, {a, b + a}), b^2, c})'
-    return x => (y => (a, b + a), b^2, c)
+    return x <<< (y <<< (a, b + a), b^2, c)
 }
 
 def f(a, b, c) {
@@ -665,7 +665,7 @@ def b(x) {
 
 # Define c, a function that looks up and invokes the arbitrary definitions a, b
 def c(x) {
-    return {a,b}[0] => {b => {x}}
+    return {a,b}[0] <<< {b <<< {x}}
 }
 
 # Invoke c
