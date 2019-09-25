@@ -42,6 +42,7 @@ def dev_files = {
     "List.kel",
     "Multiline.kel",
     "String.kel",
+    "RunShell.kel",
     "Subscript.kel",
     "TrailingClosure.kel",
 }

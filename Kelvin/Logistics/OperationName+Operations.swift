@@ -202,8 +202,6 @@ public extension OperationName {
     
     // IO
     static let evaluateAt = "at"
-    static let concat = "concat"
-    static let split = "split"
     static let print = "print"
     static let println = "println"
     static let `inout` = "inout"
@@ -241,4 +239,11 @@ public extension OperationName {
     static let leastCommonMultiple = "lcm"
     static let degrees = "degrees"
     static let percent = "pct"
+    
+    // String
+    static let concat = "concat"
+    static let split = "split"
+    static let replace = "replace"
+    static let regexReplace = "regReplace"
+    static let regexMatches = "regMatches"
 }

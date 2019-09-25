@@ -219,7 +219,9 @@ public class Compiler {
      */
     public func countOpenBrackets(_ line: String) -> [Bracket: Int] {
         var counts = [Int](repeating: 0, count: 3)
-        for c in line {
+        // Remove quotation marks so quoted parenthesis won't be counted
+        let stripped = line.replacingOccurrences(of: #"(["])(\\?.)*?\1"#, with: "", options: .regularExpression)
+        for c in stripped {
             switch c {
             case "{":
                 counts[0] += 1

@@ -36,5 +36,29 @@ public extension Developer {
             try Assert.index(s.string.count, n)
             return KString("\(s.string[n])")
         },
+        
+        // Replace
+        .ternary(.replace, KString.self, KString.self, KString.self) {
+            KString($0.string.replacingOccurrences(of: $1.string, with: $2.string))
+        },
+        
+        // Contains
+        .binary(.contains, KString.self, KString.self) {
+            $0.string.contains($1.string)
+        },
+        
+        // Regex
+        .ternary(.regexReplace, KString.self, KString.self, KString.self) {
+            KString($0.string.replacingOccurrences(of: $1.string, with: $2.string, options: .regularExpression))
+        },
+        .binary(.regexMatches, KString.self, KString.self) {
+            let reg = try NSRegularExpression(pattern: $1.string)
+            let str = $0.string
+            let range = NSRange(str.startIndex..., in: str)
+            let matches = reg.matches(in: str, range: range).map {
+                KString(String(str[Range($0.range, in: str)!]))
+            }
+            return List(matches)
+        }
     ]
 }

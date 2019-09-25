@@ -778,6 +778,14 @@ def fibonacci(x) = (
 
 println fibonacci(11)
 ```
+### [Developer/RunShell](/Examples/Developer/RunShell.kel)
+```ruby
+def shellAdd(a, b, $(script := a & "+" & b; return replace(shell "echo '" & script & "' | bc", "\n", "") !! @number))
+
+# Using shell to add 2 numbers!!!
+println shellAdd(10000, 23423.25)
+assert shellAdd(10000, 23423.25) == (10000 + 23423.25)
+```
 ### [Developer/String](/Examples/Developer/String.kel)
 ```ruby
 # String concatenation
@@ -788,6 +796,22 @@ println (random()...10 ~ $0 & $1)
 # Iterating a stirng
 "123456" as @list | $0
 assert (("123456" !! @list | $0 ~ $0 & $1) == "123456")
+
+# Replace substring in string
+assert replace("I am a pig", "pig", "genius") == "I am a genius"
+
+# Access through subscript
+assert "21345"[3] == "4"
+
+# Contains
+assert "BadPerson" contains "dP"
+
+# Regex replace
+assert regReplace("aaa3aa43aa5aa6aa7aa8","[\d]+","($0)") == "aaa(3)aa(43)aa(5)aa(6)aa(7)aa(8)"
+assert regReplace("a\/\3", "\\\\", "\.") == "a./.3"
+
+# Regex matches
+assert regMatches("1,2,3","\d") == {"1", "2", "3"}
 ```
 ### [Developer/Subscript](/Examples/Developer/Subscript.kel)
 ```ruby
@@ -1317,6 +1341,7 @@ def dev_files = {
     "List.kel",
     "Multiline.kel",
     "String.kel",
+    "RunShell.kel",
     "Subscript.kel",
     "TrailingClosure.kel",
 }

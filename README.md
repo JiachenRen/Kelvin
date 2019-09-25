@@ -373,7 +373,11 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 - [x] Strings
   - Concatenation
   - Subscript access
-  - Deconstruction to list of chars
+  - Cast to list of `@char`
+  - Replace
+  - Contains
+  - **Support for regex**
+    - Matches & replace
 - [x] Pairs
   - Compilation
   - Subscript access
@@ -389,6 +393,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 - [x] System
   - Precise date & time (down to nano seconds)
   - Performance measurement
+  - Full interoperability with **shell script**
 - [x] Scope management
   - Lock/unlock variables
   - Save/restore

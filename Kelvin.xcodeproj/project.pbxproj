@@ -208,6 +208,7 @@
 		1F48DAAD222E3F7700639F26 /* Kelvin.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F48DAAB222E3DE900639F26 /* Kelvin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1F48DAAE222E3F9D00639F26 /* Kelvin.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F48DAAB222E3DE900639F26 /* Kelvin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1F6D0A04220D18CE00807377 /* Highlightr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F6D0A03220D18CE00807377 /* Highlightr.framework */; };
+		1F8244D6233AF32800F32C21 /* RunShell.kel in Resources */ = {isa = PBXBuildFile; fileRef = 1F8244D5233AF32800F32C21 /* RunShell.kel */; };
 		1F8C8C88233960C0007FCD4F /* BooleanLogic.kel in Resources */ = {isa = PBXBuildFile; fileRef = 1F8C8C87233960C0007FCD4F /* BooleanLogic.kel */; };
 		1FA4D915222F47C500296037 /* install.sh in Resources */ = {isa = PBXBuildFile; fileRef = 1FA4D914222F47C500296037 /* install.sh */; };
 		1FA8EF7523281BC000D66971 /* StackTrace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA8EF73232815A200D66971 /* StackTrace.swift */; };
@@ -493,6 +494,7 @@
 		1F570B5921FF737D0006E342 /* OperationName+Operations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OperationName+Operations.swift"; sourceTree = "<group>"; };
 		1F6D09FB220B98AA00807377 /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
 		1F6D0A03220D18CE00807377 /* Highlightr.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Highlightr.framework; path = Carthage/Build/Mac/Highlightr.framework; sourceTree = "<group>"; };
+		1F8244D5233AF32800F32C21 /* RunShell.kel */ = {isa = PBXFileReference; lastKnownFileType = text; path = RunShell.kel; sourceTree = "<group>"; };
 		1F8C8C87233960C0007FCD4F /* BooleanLogic.kel */ = {isa = PBXFileReference; lastKnownFileType = text; path = BooleanLogic.kel; sourceTree = "<group>"; };
 		1F8DF72F22050B5B006351B0 /* IOProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOProtocol.swift; sourceTree = "<group>"; };
 		1F8DF73322050CD3006351B0 /* Console.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Console.swift; sourceTree = "<group>"; };
@@ -793,6 +795,7 @@
 				1F3E30A1232C37A9002971F9 /* List.kel */,
 				1F3E30A2232C37A9002971F9 /* TrailingClosure.kel */,
 				1F3E30A3232C37A9002971F9 /* String.kel */,
+				1F8244D5233AF32800F32C21 /* RunShell.kel */,
 			);
 			path = Developer;
 			sourceTree = "<group>";
@@ -1243,6 +1246,7 @@
 				1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */,
 				1FA4D915222F47C500296037 /* install.sh in Resources */,
 				1F3E30C6232C37AA002971F9 /* BinarySearch.kel in Resources */,
+				1F8244D6233AF32800F32C21 /* RunShell.kel in Resources */,
 				1F3E30B7232C37AA002971F9 /* StatProblem.kel in Resources */,
 				1F32282B222C8AD5004417CB /* kelvin_tomorrow_night_blue_theme.png in Resources */,
 				1F3E30C0232C37AA002971F9 /* Dictionary.kel in Resources */,
