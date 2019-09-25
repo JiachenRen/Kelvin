@@ -121,6 +121,31 @@ public class Developer {
             Function(v.name, list.elements)
         },
         
+        // Execute shell command
+        .unary(.runShell, KString.self) { command in
+            func shell(_ command: String) -> String {
+                let task = Process()
+                task.launchPath = "/bin/bash"
+                task.arguments = ["-c", command]
+
+                let stdPipe = Pipe()
+                let errPipe = Pipe()
+                task.standardOutput = stdPipe
+                task.standardError = errPipe
+                task.launch()
+
+                let stdData = stdPipe.fileHandleForReading.readDataToEndOfFile()
+                let output: String = String(data: stdData, encoding: .utf8)!
+                
+                let errData = errPipe.fileHandleForReading.readDataToEndOfFile()
+                let errMsg = String(data: errData, encoding: .utf8)!
+                Program.io?.error(errMsg)
+
+                return output
+            }
+            return KString(shell(command.string))
+        },
+        
         // IO
         .unary(.print, [.any]) {
             Program.io?.print($0)

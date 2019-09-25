@@ -198,6 +198,7 @@ public extension OperationName {
     static let clearVariables = "clearVars"
     static let listFunctions = "listFuncs"
     static let clearFunctions = "clearFuncs"
+    static let runShell = "shell"
     
     // IO
     static let evaluateAt = "at"
