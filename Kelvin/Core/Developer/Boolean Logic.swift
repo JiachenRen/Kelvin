@@ -200,9 +200,23 @@ public extension Developer {
                 var leftArgs = fun1.args.elements
                 var rightArgs = fun2.args.elements
                 let commonTerms = intersection(&leftArgs, &rightArgs)
-                if commonTerms.count > 0 {
-                    let disjoint = pack(.or, leftArgs) &&& pack(.or, rightArgs)
-                    return disjoint ||| pack(.or, commonTerms)
+                guard commonTerms.count > 0 else {
+                    return nil
+                }
+                var disjoint: Node?
+                if leftArgs.count == 0 && rightArgs.count == 0 {
+                    disjoint = nil
+                } else if leftArgs.count == 0 {
+                    disjoint = pack(.or, rightArgs)
+                } else if rightArgs.count == 0 {
+                    disjoint = pack(.or, leftArgs)
+                } else {
+                    disjoint = pack(.or, leftArgs) &&& pack(.or, rightArgs)
+                }
+                if let d = disjoint {
+                    return d ||| pack(.or, commonTerms)
+                } else {
+                    return pack(.or, commonTerms)
                 }
             }
             return nil
@@ -214,10 +228,23 @@ public extension Developer {
                 var leftArgs = fun1.args.elements
                 var rightArgs = fun2.args.elements
                 let commonTerms = intersection(&leftArgs, &rightArgs)
-                if commonTerms.count > 0 {
-                    let conjunct = pack(.and, leftArgs) ||| pack(.and, rightArgs)
-                    let result = conjunct &&& pack(.and, commonTerms)
-                    return result
+                guard commonTerms.count > 0 else {
+                    return nil
+                }
+                var conjunct: Node?
+                if leftArgs.count == 0 && rightArgs.count == 0 {
+                    conjunct = nil
+                } else if leftArgs.count == 0 {
+                    conjunct = pack(.and, rightArgs)
+                } else if rightArgs.count == 0 {
+                    conjunct = pack(.and, leftArgs)
+                } else {
+                    conjunct = pack(.and, leftArgs) ||| pack(.and, rightArgs)
+                }
+                if let c = conjunct {
+                    return c &&& pack(.and, commonTerms)
+                } else {
+                    return pack(.and, commonTerms)
                 }
             }
             return nil

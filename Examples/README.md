@@ -38,6 +38,7 @@ This directory contains various examples that demonstrate how to the Kelvin lang
     - [Trailing closure syntax](/Examples/Developer/TrailingClosure.kel)
     - [Variable](/Examples/Developer/Variable.kel)
     - [Working with string](/Examples/Developer/String.kel)
+    - [Run shell script](/Examples/D)
     
 ### Just to whet your appetite...
 
