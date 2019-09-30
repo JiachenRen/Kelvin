@@ -364,9 +364,12 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
     - `return`
     - `break`
     - `continue`
-- [x] I/O
+- [x] I/O & File System
   - Read file
-  - [ ] Write to file
+  - Write/append to file
+  - Automatic rel/abs path mapping
+  - List paths
+  - Remove/create file/folder
   - Print, println
   - Log
   - Get/set working directory
