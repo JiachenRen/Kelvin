@@ -599,7 +599,7 @@
 				1F0936C921F4E26700E707BD /* Arithmetic */,
 				1F3D316F2202875700462F10 /* Calculus */,
 				1F8DF7972209376B006351B0 /* Developer */,
-				1F3E3069232B3954002971F9 /* Flow Control */,
+				1F3E3069232B3954002971F9 /* FlowControl */,
 				1FC67CA12225B7C000A8E6BC /* LinearAlgebra */,
 				1F985D4D221C3F6B00EFC404 /* Probability */,
 				1F3D31612201FE0800462F10 /* Number.swift */,
@@ -724,13 +724,13 @@
 			path = Calculus;
 			sourceTree = "<group>";
 		};
-		1F3E3069232B3954002971F9 /* Flow Control */ = {
+		1F3E3069232B3954002971F9 /* FlowControl */ = {
 			isa = PBXGroup;
 			children = (
 				1F8DF79C22093909006351B0 /* FlowControl+operations.swift */,
 				1F3E306C232B39CC002971F9 /* FlowControl.swift */,
 			);
-			path = "Flow Control";
+			path = FlowControl;
 			sourceTree = "<group>";
 		};
 		1F3E3076232C37A9002971F9 /* Algebra */ = {

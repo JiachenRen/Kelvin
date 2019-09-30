@@ -1,14 +1,47 @@
 # To read from input
-name := readLine()
+# name := readLine()
 
 # To print to output
 println("Hello, " & name)
 
 # To get current working directory
-getWorkingDir()
+println getWorkingDir()
 
 # Set current working directory
 setWorkingDir("/tmp")
 
 # Read file at path (if no '/' at the beginning, relative path to working dir. is used)
 # readFile("/Users/jiachenren/iCloudDrive (Archive)/Documents/Developer/Kelvin/Examples/Developer/Benchmarking")
+
+# Creating a directory named "folder" relative to "/tmp"
+# If a file/folder named folder already exists, an error is thrown.
+createDir("folder")
+
+# Change to the dir just created
+setWorkingDir("folder")
+
+# Create a new file named "file.txt"
+# Overwrites previous content
+createFile("file.txt")
+
+# Write to the file
+writeToFile("file.txt", "println \"Hello World!\"\n")
+
+# Append to existing file (an error is thrown if file does not exist.)
+# Use either relative(relative to working dir) or absolute path.
+appendToFile("file.txt", "println (a + b - a)")
+
+# Checks if the path given is a directory
+assert isDir("file.txt") == false
+
+# List paths under "/tmp/folder"
+assert listPaths() == {"file.txt"}
+
+# Let's run the file we just created!
+run "file.txt"
+
+# Delete everything! Be careful!
+assert getWorkingDir() == "/tmp/folder"
+removePath("/tmp/folder")
+
+

@@ -51,6 +51,7 @@ public enum ExecutionError: KelvinError {
     case invalidCast(from: Node, to: DataType)
     case circularDefinition
     case nonSquareMatrix
+    case unsupportedPlatform(_ supported: String)
     
     private static func getRootCause(_ err: KelvinError) -> String {
         guard let execErr = err as? ExecutionError else {
@@ -116,6 +117,8 @@ public enum ExecutionError: KelvinError {
             return "non-square matrix"
         case .undefined(let v):
             return "'\(v.name)' is undefined"
+        case .unsupportedPlatform(let supported):
+            return "this feature is supported on \(supported) only"
         }
     }
 }

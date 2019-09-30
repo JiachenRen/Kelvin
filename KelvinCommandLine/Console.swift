@@ -15,6 +15,9 @@ public class Console: IOProtocol {
     /// If verbose is false, all log messages are not printed.
     public var verbose: Bool
     
+    /// If output should be buffered. If this is set to false, any outputs are printed immediately.
+    private var buffered = true
+    
     /// Keep track of all the outputs from the console.
     /// The first element is the path to current working directory.
     private var out: [Node] = [] {
@@ -48,9 +51,16 @@ public class Console: IOProtocol {
         if let line = l.line {
             printLineNumber(line)
         }
-        let output = "\(format(l.output))"
-        let input = "\(format(l.input))"
-        Swift.print("\(tab)→ \(input)\n\(tab)= \(output)\n")
+        printInput(l.input)
+        printOutput(l.output)
+    }
+    
+    private func printInput(_ input: Node) {
+        Swift.print("\(tab)→ \(format(input))")
+    }
+    
+    private func printOutput(_ output: Node) {
+        Swift.print("\(tab)= \(format(output))\n")
     }
     
     private func printLineNumber(_ line: Int) {
@@ -92,12 +102,22 @@ public class Console: IOProtocol {
     
     /// Append node `n` to output buffer
     public func print(_ n: Node) {
-        output += format(n)
+        let s = format(n)
+        if buffered {
+            output += s
+        } else {
+            Swift.print(s, terminator: "")
+        }
     }
     
     /// Append node `n` and a linebreak to output buffer
     public func println(_ n: Node) {
-        output += format(n) + "\n"
+        let s = format(n) + "\n"
+        if buffered {
+            output += s
+        } else {
+            Swift.print(s, terminator: "")
+        }
     }
     
     /// Flush output buffer, which prints all pending messages to terminal.
@@ -135,12 +155,15 @@ public class Console: IOProtocol {
     
     /// Kelvin REPL(Read-Evaluate-Print-Loop)
     public func repl() throws {
-        Swift.print("Access history with out[line number]. Kelvin Algebra System REPL. Copyright (c) 2019, Jiachen Ren.")
+        Swift.print("Access history with out[line number]. Kelvin Algebra System REPL. Copyright (c) 2019, Jiachen Ren.\n")
         var openBrackets = [Compiler.Bracket: Int]()
         var buff: String? = nil
         
         // Add working directory path as first env var.
         out.append(KString(Process().currentDirectoryPath))
+        
+        // Print any outputs to console immediately
+        buffered = false
         
         func resetCounters() {
             openBrackets = [
@@ -193,12 +216,12 @@ public class Console: IOProtocol {
                 }
                 
                 // Compile and execute the input statement
-                clear()
-                let parent = try Compiler.shared.compile(input)
-                let result = try parent.simplify()
+                let expr = try Compiler.shared.compile(input)
+                printInput(expr)
+                let result = try expr.simplify()
+                printOutput(result)
                 out.append(result)
-                flush()
-                log(Program.Log(line: nil, input: parent, output: result))
+                
             } catch let e as KelvinError {
                 resetCounters()
                 error(e.localizedDescription)

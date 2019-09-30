@@ -179,6 +179,38 @@ public class Developer {
         .unary(.readFile, KString.self) {
             return try KString(FileSystem.shared.readFile(at: $0.string))
         },
+        .binary(.appendToFile, KString.self, KString.self) {
+            try FileSystem.shared.write($1.string, to: $0.string, append: true)
+            return KVoid()
+        },
+        .binary(.writeToFile, KString.self, KString.self) {
+            try FileSystem.shared.write($1.string, to: $0.string, append: false)
+            return KVoid()
+        },
+        .unary(.pathExists, KString.self) {
+            return FileSystem.shared.exists($0.string)
+        },
+        .unary(.isDirectory, KString.self) {
+            return FileSystem.shared.assert($0.string, asDirectory: true)
+        },
+        .unary(.removePath, KString.self) {
+            try FileSystem.shared.remove(at: $0.string)
+            return KVoid()
+        },
+        .unary(.createFile, KString.self) {
+            try FileSystem.shared.createFile(at: $0.string)
+            return KVoid()
+        },
+        .unary(.createDirectory, KString.self) {
+            try FileSystem.shared.createDirectory(at: $0.string)
+            return KVoid()
+        },
+        .noArg(.listPaths) {
+            return try List(FileSystem.shared.list().map {KString($0)})
+        },
+        .unary(.listPaths, KString.self) {
+            return try List(FileSystem.shared.list($0.string).map {KString($0)})
+        },
         
         /// Type casting (coersion)
         /// - Todo: Implement all possible type coersions.
