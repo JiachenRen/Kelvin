@@ -12,7 +12,9 @@ public typealias OperationName = String
 
 public extension OperationName {
     
-    // Binary arithmetic operations
+    // MARK: - Arithmetic
+    
+    // Binary operations
     static let add = "+"
     static let sub = "-"
     static let mult = "*"
@@ -20,7 +22,7 @@ public extension OperationName {
     static let exp = "^"
     static let mod = "mod"
     
-    // Unary arithmetic operations
+    // Unary operations
     static let log = "log"
     static let log2 = "log2"
     static let ln = "ln"
@@ -42,6 +44,8 @@ public extension OperationName {
     static let negate = "negate"
     static let sqrt = "sqrt"
     static let sign = "sign"
+    
+    // MARK: - Stats
     
     // Distribution
     static let normCdf = "normCdf"
@@ -77,7 +81,7 @@ public extension OperationName {
     static let outliers = "outliers"
     static let oneVar = "oneVar"
     
-    // Two variable statistics
+    // Two variable
     static let correlation = "correlation"
     static let covariance = "covariance"
     static let twoVar = "twoVar"
@@ -87,7 +91,8 @@ public extension OperationName {
     static let linReg = "linReg"
     static let polyReg = "polyReg"
     
-    // List & Pair
+    // MARK: - List & Pair
+    
     static let list = "list"
     static let pair = "pair"
     static let get = "get"
@@ -105,7 +110,8 @@ public extension OperationName {
     static let reverse = "reverse"
     static let flatten = "flatten"
     
-    // Calculus
+    // MARK: - Calculus
+    
     static let derivative = "derivative"
     static let tangent = "tangent"
     static let implicitDifferentiation = "impDif"
@@ -113,7 +119,8 @@ public extension OperationName {
     static let gradient = "grad"
     static let numericalIntegration = "nIntegrate"
     
-    // Algebra
+    // MARK: - Algebra
+    
     static let factorize = "factor" // Also used for factorizing an integer
     static let expand = "expand"
     
@@ -134,14 +141,16 @@ public extension OperationName {
     static let adjoint = "adjoint"
     static let inverse = "inv"
     
-    // Probability
+    // MARK: - Probability
+    
     static let random = "random"
     static let randomInt = "randomInt"
     static let npr = "npr"
     static let ncr = "ncr"
     static let factorial = "factorial"
     
-    // Boolean logic
+    // MARK: - Boolean logic
+    
     static let and = "and"
     static let or = "or"
     static let xor = "xor"
@@ -149,12 +158,11 @@ public extension OperationName {
     static let nor = "nor"
     static let nand = "nand"
     
-    // Definition & deletion
+    // MARK: - Declaration
+    
     static let define = "def"
     static let assign = "assign"
     static let del = "del"
-    
-    // Mutating binary function
     static let increment = "++"
     static let decrement = "--"
     static let mutatingAdd = "+="
@@ -163,9 +171,8 @@ public extension OperationName {
     static let mutatingDiv = "/="
     static let mutatingConcat = "&="
     
-    // - MARK: Developer
+    // MARK: - Flow control
     
-    // Flow control
     static let `if` = "if"
     static let ternaryConditional = "ternary"
     static let `else` = "else"
@@ -183,7 +190,8 @@ public extension OperationName {
     static let `break` = "break"
     static let stride = "stride"
     
-    // System utilities
+    // MARK: - System utilities
+    
     static let complexity = "complexity"
     static let eval = "eval"
     static let exit = "exit"
@@ -200,7 +208,8 @@ public extension OperationName {
     static let clearFunctions = "clearFuncs"
     static let runShell = "shell"
     
-    // IO
+    // MARK: - IO
+    
     static let evaluateAt = "at"
     static let print = "print"
     static let println = "println"
@@ -210,7 +219,8 @@ public extension OperationName {
     static let getWorkingDirectory = "getWorkingDir"
     static let setWorkingDirectory = "setWorkingDir"
     
-    // Debugging & erro handling
+    // MARK: - Debug & Error
+    
     static let setStackTraceEnabled = "setStackTraceEnabled"
     static let printStackTrace = "printStackTrace"
     static let clearStackTrace = "clearStackTrace"
@@ -219,11 +229,10 @@ public extension OperationName {
     static let `throw` = "throw"
     static let `assert` = "assert"
     
-    // Equality
+    // MARK: - Relational
+    
     static let equals = "=="
     static let notEquals = "!="
-    
-    // Relational
     static let equates = "="
     static let greaterThan = ">"
     static let lessThan = "<"
@@ -240,7 +249,8 @@ public extension OperationName {
     static let degrees = "degrees"
     static let percent = "pct"
     
-    // String
+    // MARK: - Strings
+    
     static let concat = "concat"
     static let split = "split"
     static let replace = "replace"

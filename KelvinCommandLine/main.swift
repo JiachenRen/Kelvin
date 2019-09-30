@@ -32,8 +32,16 @@ case .file where args.count == 3:
     console.verbose = false
     try console.compileAndRun(args[2])
 case .file where args.count == 4:
-    // Execute file at path (verbose = true)
     let config = try Console.Argument.parse(args[2])
+    switch config {
+    case .debug:
+        // Turn on stack trace for debug mode
+        StackTrace.shared.isEnabled = true
+        StackTrace.shared.debugOn = true
+    default:
+        break
+    }
+    // Execute file at path (verbose = true)
     console.verbose = config == .verbose
     try console.compileAndRun(args[3])
 default:

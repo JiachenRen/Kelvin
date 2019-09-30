@@ -55,6 +55,7 @@ Usage: kelvin -i (enter interactive mode)
 where options include:
 
    -v verbose
+   -d debug
 ```
 
 ### Hello World in Kelvin

@@ -15,9 +15,19 @@ public class Console: IOProtocol {
     /// If verbose is false, all log messages are not printed.
     public var verbose: Bool
     
+    /// Keep track of all the outputs from the console.
+    /// The first element is the path to current working directory.
+    private var out: [Node] = [] {
+        didSet {
+            Variable.define("out", List(out))
+        }
+    }
+    
     init(verbose: Bool = false) {
         self.verbose = verbose
     }
+    
+    // MARK: - IO Protocol
     
     /// Clears the output buffer of the console
     public func clear() {
@@ -36,12 +46,15 @@ public class Console: IOProtocol {
             return
         }
         if let line = l.line {
-            let msg = "\(tab)# \(line)"
-            Swift.print(msg.white)
+            printLineNumber(line)
         }
         let output = "\(format(l.output))"
         let input = "\(format(l.input))"
         Swift.print("\(tab)→ \(input)\n\(tab)= \(output)\n")
+    }
+    
+    private func printLineNumber(_ line: Int) {
+        Swift.print("\(tab)# \(line)".white)
     }
     
     /// Formats and prints `e` as an error (red).
@@ -95,6 +108,8 @@ public class Console: IOProtocol {
         Swift.print(output)
     }
     
+    // MARK: - REPL
+    
     /// Evaluates the expression represented by `expr`
     func eval(_ expr: String) {
         do {
@@ -120,9 +135,12 @@ public class Console: IOProtocol {
     
     /// Kelvin REPL(Read-Evaluate-Print-Loop)
     public func repl() throws {
-        Swift.print("Kelvin Algebra System REPL. Copyright (c) 2019, Jiachen Ren.")
+        Swift.print("Access history with out[line number]. Kelvin Algebra System REPL. Copyright (c) 2019, Jiachen Ren.")
         var openBrackets = [Compiler.Bracket: Int]()
         var buff: String? = nil
+        
+        // Add working directory path as first env var.
+        out.append(KString(Process().currentDirectoryPath))
         
         func resetCounters() {
             openBrackets = [
@@ -141,6 +159,9 @@ public class Console: IOProtocol {
                 let open = openBrackets.reduce(0) {$0 + $1.value}
                 let padding = repeatElement("\(tab)", count: open + 1)
                     .reduce("  ") {$0 + $1}
+                if open == 0 {
+                    printLineNumber(out.count)
+                }
                 let prompt = open == 0 ? "\(tab)← " : padding
                 var input = readln(prompt: prompt)?.trimmingCharacters(in: .whitespaces) ?? ""
                 
@@ -175,6 +196,7 @@ public class Console: IOProtocol {
                 clear()
                 let parent = try Compiler.shared.compile(input)
                 let result = try parent.simplify()
+                out.append(result)
                 flush()
                 log(Program.Log(line: nil, input: parent, output: result))
             } catch let e as KelvinError {
@@ -190,6 +212,7 @@ public class Console: IOProtocol {
         Swift.print("   or  kelvin -f [options] <filepath> (execute file at path)\n")
         Swift.print(" where options include:", terminator: "\n\n")
         Swift.print("    -v verbose")
+        Swift.print("    -d debug")
     }
     
     /// An enum representation of available program arguments.
@@ -198,6 +221,7 @@ public class Console: IOProtocol {
         case file = "f"
         case verbose = "v"
         case interactive = "i"
+        case debug = "d"
         
         /// Parses raw argument string to option
         public static func parse(_ raw: String) throws -> Argument {
