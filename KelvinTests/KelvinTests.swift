@@ -31,7 +31,7 @@ class KelvinTests: XCTestCase {
     private func restoreDefault() {
         Variable.restoreDefault()
         Operation.restoreDefault()
-        Keyword.restoreDefault()
+        Syntax.restoreDefault()
     }
     
     func testSystemCheck() throws {

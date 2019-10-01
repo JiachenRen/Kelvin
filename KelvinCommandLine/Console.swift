@@ -145,7 +145,7 @@ public class Console: IOProtocol {
     /// Compiles and executes Kelvin source file at path
     func compileAndRun(_ filePath: String) throws {
         do {
-            try Program.compileAndRun(filePath)
+            try Program.compileAndRun(fileAt: filePath)
             flush()
         } catch let e as KelvinError {
             error(e.localizedDescription)
