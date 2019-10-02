@@ -36,20 +36,6 @@ def f() = ({1, 2, 3, x} | $0 ^ 2 -> define(f(x), sum($0)); f(12) -> $0...5 | $0 
 println(f())
 del a
 
-# Here comes the feature that makes Kelvin different - algebraic computations!
-# Try the following expressions:
-println 1+(a-1-(b-3))+4
-println a || b && true and false || true || d || false
-println x*x^x/x
-println a+b+d+c+v-b-(d-c+a)-a-v
-println a^x*-a^3
-println 3a*4a
-println 3a+4a
-println (3a)^2
-println a^2+b+2a^2-b+c-3a^2
-println 33+43-23*(5+47)^2/2+cos(12)^log(4)%0.1
-println 3!!°/4/pi
-
 # Store a string "Hello World" into variable 'greeting'
 def greeting = "Hello World"
 println greeting

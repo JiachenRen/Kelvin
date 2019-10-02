@@ -683,9 +683,10 @@
 		1F0CF2CF21EEA6D600E40086 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
+				1F3E309A232C37A9002971F9 /* Algorithms */,
 				1F3E3076232C37A9002971F9 /* Algebra */,
 				1F3E307E232C37A9002971F9 /* Calculus */,
-				1F3E3089232C37A9002971F9 /* Developer */,
+				1F3E3089232C37A9002971F9 /* Core */,
 				1F3E30A4232C37AA002971F9 /* LinearAlgebra */,
 				1F3E3081232C37A9002971F9 /* Misc */,
 				1F3E30A8232C37AA002971F9 /* Probability.kel */,
@@ -773,7 +774,7 @@
 			path = Misc;
 			sourceTree = "<group>";
 		};
-		1F3E3089232C37A9002971F9 /* Developer */ = {
+		1F3E3089232C37A9002971F9 /* Core */ = {
 			isa = PBXGroup;
 			children = (
 				1F3E308A232C37A9002971F9 /* ErrorHandling.kel */,
@@ -786,14 +787,13 @@
 				1F3E3095232C37A9002971F9 /* Debugging */,
 				1F3E3097232C37A9002971F9 /* IO */,
 				1F3E3099232C37A9002971F9 /* Function.kel */,
-				1F3E309A232C37A9002971F9 /* Algorithms */,
 				1F3E30A0232C37A9002971F9 /* Subscript.kel */,
 				1F3E30A1232C37A9002971F9 /* List.kel */,
 				1F3E30A2232C37A9002971F9 /* TrailingClosure.kel */,
 				1F3E30A3232C37A9002971F9 /* String.kel */,
 				1F8244D5233AF32800F32C21 /* RunShell.kel */,
 			);
-			path = Developer;
+			path = Core;
 			sourceTree = "<group>";
 		};
 		1F3E308C232C37A9002971F9 /* FlowControl */ = {

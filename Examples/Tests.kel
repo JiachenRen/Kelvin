@@ -27,6 +27,16 @@ assert (a * 3) ^ 2 == a ^ 2 * 9
 assert c + (b + a ^ 2 * 2 + a ^ 2 - b) - a ^ 2 * 3 == c
 assert round(cos(12) ^ log(4) % 0.1 + (43 + 33 - 23 * (5 + 47) ^ 2 / 2), 10) == -31019.9971647929
 assert ((3!)!)° / 4 / pi == 1
+assert 1 + 4 + a - 1 - (b - 3) == a + 7 - b
+assert (a || b && true and false || true || d || false) == true
+assert x * x ^ x / x == x ^ x
+assert a + b + c + d + v - b - (a + d - c) - a - v == 2c - a
+assert a ^ x * -a ^ 3 == -(a ^ (x + 3))
+assert 3a * 4a == 12a ^ 2
+assert 3a + 4a == 7a
+assert (3a) ^ 2 == 9a ^ 2
+assert 2 * a ^ 2 + a ^ 2 + b - b + c - 3 * a ^ 2 == c
+assert (3!)!° / 4 / pi == 1
 
 x:=factor(f * a * 2 + d * a + c * a + b * a)
 assert x == (f * 2 + d + c + b) * a

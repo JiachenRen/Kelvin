@@ -7,6 +7,11 @@ This directory contains various examples that demonstrate how to the Kelvin lang
     - [Factorize](/Examples/Algebra/Factor.kel)
     - [Expand](/Examples/Algebra/Expand.kel)
     - [Boolean logic simplification](/Examples/Algebra/BooleanLogic.kel)
+- Algorithms
+    - [Binary search](/Examples/Algorithms/BinarySearch.kel)
+    - [Deconstruct](/Examples/Algorithms/Deconstruct.kel)
+    - [Recursion](/Examples/Algorithms/Recursion.kel)
+    - [Contains](/Examples/Algorithms/Contains.kel)
 - Linear Algebra
     - [Matrix](/Examples/LinearAlgebra/Matrix.kel)
     - [Vector](/Examples/LinearAlgebra/Vector.kel)
@@ -18,29 +23,24 @@ This directory contains various examples that demonstrate how to the Kelvin lang
 - Calculus
     - [Differentiation](/Examples/Calculus/Differentiation.kel)
     - [Integration](/Examples/Calculus/Integration.kel)
-- Developer
-    - Algorithms
-        - [Binary search](/Examples/Developer/Algorithms/BinarySearch.kel)
-        - [Deconstruct](/Examples/Developer/Algorithms/Deconstruct.kel)
-        - [Recursion](/Examples/Developer/Algorithms/Recursion.kel)
-        - [Contains](/Examples/Developer/Algorithms/Contains.kel)
-    - [Benchmarking](/Examples/Developer/Benchmarking.kel)
-    - [Debugging](/Examples/Developer/Debugging/StackTrace.kel)
-    - [Dictionary](/Examples/Developer/Dictionary.kel)
-    - [Error handling](/Examples/Developer/ErrorHandling.kel)
+- Core
+    - [Benchmarking](/Examples/Core/Benchmarking.kel)
+    - [Debugging](/Examples/Core/Debugging/StackTrace.kel)
+    - [Dictionary](/Examples/Core/Dictionary.kel)
+    - [Error handling](/Examples/Core/ErrorHandling.kel)
     - Flow Control
-        - [Conditional statements](/Examples/Developer/FlowControl/Conditionals.kel)
-        - [For loop](/Examples/Developer/FlowControl/Loops/ForLoop.kel)
-        - [While loop](/Examples/Developer/FlowControl/Loops/WhileLoop.kel)
-    - [Function](/Examples/Developer/Function.kel)
-    - [Higher order function](/Examples/Developer/HigherOrderFunction.kel)
-    - [IO](/Examples/Developer/IO/IO.kel)
-    - [List](/Examples/Developer/List.kel)
-    - [Subscript access](/Examples/Developer/Subscript.kel)
-    - [Trailing closure syntax](/Examples/Developer/TrailingClosure.kel)
-    - [Variable](/Examples/Developer/Variable.kel)
-    - [Working with string](/Examples/Developer/String.kel)
-    - [Run shell script](/Examples/Developer/RunShell.kel)
+        - [Conditional statements](/Examples/Core/FlowControl/Conditionals.kel)
+        - [For loop](/Examples/Core/FlowControl/Loops/ForLoop.kel)
+        - [While loop](/Examples/Core/FlowControl/Loops/WhileLoop.kel)
+    - [Function](/Examples/Core/Function.kel)
+    - [Higher order function](/Examples/Core/HigherOrderFunction.kel)
+    - [IO](/Examples/Core/IO/IO.kel)
+    - [List](/Examples/Core/List.kel)
+    - [Subscript access](/Examples/Core/Subscript.kel)
+    - [Trailing closure syntax](/Examples/Core/TrailingClosure.kel)
+    - [Variable](/Examples/Core/Variable.kel)
+    - [Working with string](/Examples/Core/String.kel)
+    - [Run shell script](/Examples/Core/RunShell.kel)
     
 ### Just to whet your appetite...
 
@@ -168,10 +168,10 @@ assert (not (not (not x and not (not y or x)) or not y)) == (not x and y)
 ```ruby
 assert expand((a + b)(a - b)) == a ^ 2 - b ^ 2
 assert expand((a - b) ^ 3) == a ^ 3 + 3 * a * b ^ 2 - 3 * a ^ 2 * b - b ^ 3
-assert expand(3 ^ (b - 3)) == 3 ^ -3 * 3 ^ b
+# assert expand(3 ^ (b - 3)) == 3 ^ -3 * 3 ^ b
 assert expand((a + b) ^ (4 - a * 5))
 assert expand((a + b) ^ (4 + a)) == (a + b) ^ a * 4 * a * b ^ 3 + (a + b) ^ a * 4 * a ^ 3 * b + (a + b) ^ a * 6 * a ^ 2 * b ^ 2 + (a + b) ^ a * a ^ 4 + (a + b) ^ a * b ^ 4
-assert expand((a + b) ^ (-5 * a + 4)) == (a + b) ^ (-5 * a) * 4 * a * b ^ 3 + (a + b) ^ (-5 * a) * 4 * a ^ 3 * b + (a + b) ^ (-5 * a) * 6 * a ^ 2 * b ^ 2 + (a + b) ^ (-5 * a) * a ^ 4 + (a + b) ^ (-5 * a) * b ^ 4
+assert expand((a + b) ^ (-5 * a + 4)) =i= (a + b) ^ (-5 * a) * 4 * a * b ^ 3 + (a + b) ^ (-5 * a) * 4 * a ^ 3 * b + (a + b) ^ (-5 * a) * 6 * a ^ 2 * b ^ 2 + (a + b) ^ (-5 * a) * a ^ 4 + (a + b) ^ (-5 * a) * b ^ 4
 ```
 ### [Algebra/Factor](/Examples/Algebra/Factor.kel)
 ```ruby
@@ -190,6 +190,114 @@ factor(x * f * c + x * f * b + x * d * c + x * d * b + f * c * a + f * b * a + d
 ```ruby
 # Prints 1!!!!
 println tan(x) * sec(x) * csc(x) * cos(x) ^ 2
+```
+### [Algorithms/BinarySearch](/Examples/Algorithms/BinarySearch.kel)
+```ruby
+# Conventional binary search algorithm implemented in kelvin!
+def bin_search(arr, search) {
+    c := 0;
+    first := 0;
+    n := size(arr);
+    last := n - 1;
+    middle := int((first + last) / 2);
+
+    # This is a while loop
+    while (first <= last) {
+        b := false;
+
+        if (arr[middle] < search) {
+            first := middle + 1;
+            b := true;
+        };
+
+        if (arr[middle] == search) {
+            return middle;
+        };
+
+        if (!b) {
+            last := middle - 1;
+        };
+
+        middle := int((first + last) / 2);
+    };
+
+    return "not found";
+}
+
+def l1 = {1, 2, 3, 5, 7, 8, 9, 10}
+assert println(bin_search(l1, 8.5)) == "not found"
+assert bin_search(l1, 9) == 6
+```
+### [Algorithms/Contains](/Examples/Algorithms/Contains.kel)
+```ruby
+# A function that checks if list contains a
+def contains(list, a) {
+    for (e: list) {
+        if (e == a) {
+            return true
+        }
+    };
+    return false
+}
+
+# Prints true
+println contains({1, 2, 3}, 2)
+
+# Prints false
+println contains({1, 2, 3}, x)
+```
+### [Algorithms/Deconstruct](/Examples/Algorithms/Deconstruct.kel)
+```ruby
+def deconstruct(n) {
+    if (n is @function) {
+        return deconstruct(n as @list)
+    };
+
+    if (n is @list) {
+        return map(n) {
+            deconstruct($0)
+        }
+    };
+
+    return n
+}
+
+println deconstruct(a*b+c^d*f)
+```
+### [Algorithms/FlatMap](/Examples/Algorithms/FlatMap.kel)
+```ruby
+def flatMap(l) {
+    tmp := {};
+
+    for (element: l) {
+        if (element is @list) {
+            tmp := tmp ++ flatMap(element);
+            continue;
+        };
+        tmp := tmp ++ element;
+    };
+
+    return tmp
+}
+
+original := {1, {1, {1, 2, 3}, 2}, {3, 4}, 4, 5}
+flat := flatMap(original)
+println "original: " & original
+println "flat mapped: " & flat
+assert flat == {1, 1, 1, 2, 3, 2, 3, 4, 4, 5}
+```
+### [Algorithms/Recursion](/Examples/Algorithms/Recursion.kel)
+```ruby
+def f(a) {
+    if (a > 10) {
+        println a;
+        return f(a / 10)
+    };
+    return a
+}
+
+println f(1000005)
+println f(15)
 ```
 ### [Calculus/Differentiation](/Examples/Calculus/Differentiation.kel)
 ```ruby
@@ -273,115 +381,7 @@ for (point: points) {
 ```ruby
 assert nIntegrate(1 / x ^ 2, x, 1, inf) == 1
 ```
-### [Developer/Algorithms/BinarySearch](/Examples/Developer/Algorithms/BinarySearch.kel)
-```ruby
-# Conventional binary search algorithm implemented in kelvin!
-def bin_search(arr, search) {
-    c := 0;
-    first := 0;
-    n := size(arr);
-    last := n - 1;
-    middle := int((first + last) / 2);
-
-    # This is a while loop
-    while (first <= last) {
-        b := false;
-
-        if (arr[middle] < search) {
-            first := middle + 1;
-            b := true;
-        };
-
-        if (arr[middle] == search) {
-            return middle;
-        };
-
-        if (!b) {
-            last := middle - 1;
-        };
-
-        middle := int((first + last) / 2);
-    };
-
-    return "not found";
-}
-
-def l1 = {1, 2, 3, 5, 7, 8, 9, 10}
-assert println(bin_search(l1, 8.5)) == "not found"
-assert bin_search(l1, 9) == 6
-```
-### [Developer/Algorithms/Contains](/Examples/Developer/Algorithms/Contains.kel)
-```ruby
-# A function that checks if list contains a
-def contains(list, a) {
-    for (e: list) {
-        if (e == a) {
-            return true
-        }
-    };
-    return false
-}
-
-# Prints true
-println contains({1, 2, 3}, 2)
-
-# Prints false
-println contains({1, 2, 3}, x)
-```
-### [Developer/Algorithms/Deconstruct](/Examples/Developer/Algorithms/Deconstruct.kel)
-```ruby
-def deconstruct(n) {
-    if (n is @function) {
-        return deconstruct(n as @list)
-    };
-
-    if (n is @list) {
-        return map(n) {
-            deconstruct($0)
-        }
-    };
-
-    return n
-}
-
-println deconstruct(a*b+c^d*f)
-```
-### [Developer/Algorithms/FlatMap](/Examples/Developer/Algorithms/FlatMap.kel)
-```ruby
-def flatMap(l) {
-    tmp := {};
-
-    for (element: l) {
-        if (element is @list) {
-            tmp := tmp ++ flatMap(element);
-            continue;
-        };
-        tmp := tmp ++ element;
-    };
-
-    return tmp
-}
-
-original := {1, {1, {1, 2, 3}, 2}, {3, 4}, 4, 5}
-flat := flatMap(original)
-println "original: " & original
-println "flat mapped: " & flat
-assert flat == {1, 1, 1, 2, 3, 2, 3, 4, 4, 5}
-```
-### [Developer/Algorithms/Recursion](/Examples/Developer/Algorithms/Recursion.kel)
-```ruby
-def f(a) {
-    if (a > 10) {
-        println a;
-        return f(a / 10)
-    };
-    return a
-}
-
-println f(1000005)
-println f(15)
-```
-### [Developer/Benchmarking](/Examples/Developer/Benchmarking.kel)
+### [Core/Benchmarking](/Examples/Core/Benchmarking.kel)
 ```ruby
 # Calculate the time to compute 10000 random numbers
 a := time();
@@ -400,7 +400,7 @@ measure {factor(expr)}
 # Measure the time average of factorizing 'expr' 10 times
 measure(10) {factor(expr)}
 ```
-### [Developer/Debugging/StackTrace](/Examples/Developer/Debugging/StackTrace.kel)
+### [Core/Debugging/StackTrace](/Examples/Core/Debugging/StackTrace.kel)
 ```ruby
 # This file demonstrates how you can use stack trace for debugging purposes.
 
@@ -449,7 +449,7 @@ clearStackTrace()
 # - PUSH(factor) factor(3 * a + a * b)
 # - POP(factor) (3 + b) * a
 ```
-### [Developer/Dictionary](/Examples/Developer/Dictionary.kel)
+### [Core/Dictionary](/Examples/Core/Dictionary.kel)
 ```ruby
 def dict = {
     1,
@@ -474,7 +474,7 @@ dict[shit]
 println dict[m][o] ~ $0 & $1
 
 ```
-### [Developer/ErrorHandling](/Examples/Developer/ErrorHandling.kel)
+### [Core/ErrorHandling](/Examples/Core/ErrorHandling.kel)
 ```ruby
 # Try statements
 msg1 := (try ({1, 2, 3} zip {1, 2}) : "an error has occurred.")
@@ -493,7 +493,7 @@ try err() : "shit happened"
 assert true
 try (assert false) : "assertion was false"
 ```
-### [Developer/FlowControl/Conditionals](/Examples/Developer/FlowControl/Conditionals.kel)
+### [Core/FlowControl/Conditionals](/Examples/Core/FlowControl/Conditionals.kel)
 ```ruby
 # A simple if statement (same syntax as in most languages)
 # Important - semicolons are mandatary in closures
@@ -520,7 +520,7 @@ if ((a+=2) == 2) {
 a := (a < 10 ? 0 : 10)
 assert a == 0
 ```
-### [Developer/FlowControl/Loops/ForLoop](/Examples/Developer/FlowControl/Loops/ForLoop.kel)
+### [Core/FlowControl/Loops/ForLoop](/Examples/Core/FlowControl/Loops/ForLoop.kel)
 ```ruby
 # Declare a list, l1
 def l1 = {1, 2, 3, x, a, f(x), x + a}
@@ -586,7 +586,7 @@ for (i: stride(0, 10, 0.1)) {
     print i & ", "
 }
 ```
-### [Developer/FlowControl/Loops/WhileLoop](/Examples/Developer/FlowControl/Loops/WhileLoop.kel)
+### [Core/FlowControl/Loops/WhileLoop](/Examples/Core/FlowControl/Loops/WhileLoop.kel)
 ```ruby
 def a = 0;
 while (a < 10) {
@@ -594,7 +594,7 @@ while (a < 10) {
 }
 assert a == 10
 ```
-### [Developer/Function](/Examples/Developer/Function.kel)
+### [Core/Function](/Examples/Core/Function.kel)
 ```ruby
 # Syntax for defining inline function
 def f(x) = x^3 / a
@@ -640,7 +640,7 @@ listFuncs()
 # Clear all user defined functions
 clearFuncs()
 ```
-### [Developer/HigherOrderFunction](/Examples/Developer/HigherOrderFunction.kel)
+### [Core/HigherOrderFunction](/Examples/Core/HigherOrderFunction.kel)
 ```ruby
 # invoke is represented by <<<, where lhs is the name of the function to invoke and rhs is list of arguments
 def f(x, y, a, b) {
@@ -694,7 +694,7 @@ result := test()
 assert (result contains undef) == false
 assert result == {x^2, x^3, x^6}
 ```
-### [Developer/IO/IO](/Examples/Developer/IO/IO.kel)
+### [Core/IO/IO](/Examples/Core/IO/IO.kel)
 ```ruby
 # To read from input
 # name := readLine()
@@ -744,7 +744,7 @@ removePath("/tmp/folder")
 
 
 ```
-### [Developer/List](/Examples/Developer/List.kel)
+### [Core/List](/Examples/Core/List.kel)
 ```ruby
 def l1 = {1, 2, 3, 4, 5}
 
@@ -784,7 +784,7 @@ my_list := {2, 3, 7, 9}
 set(my_list, 3, "pig")
 assert my_list == {2, 3, 7, "pig"}
 ```
-### [Developer/Multiline](/Examples/Developer/Multiline.kel)
+### [Core/Multiline](/Examples/Core/Multiline.kel)
 ```ruby
 def f(a,b,c) = (
     a := 3;
@@ -823,7 +823,7 @@ def fibonacci(x) = (
 
 println fibonacci(11)
 ```
-### [Developer/RunShell](/Examples/Developer/RunShell.kel)
+### [Core/RunShell](/Examples/Core/RunShell.kel)
 ```ruby
 def shellAdd(a, b, $(script := a & "+" & b; return replace(shell "echo '" & script & "' | bc", "\n", "") !! @number))
 
@@ -831,7 +831,7 @@ def shellAdd(a, b, $(script := a & "+" & b; return replace(shell "echo '" & scri
 println shellAdd(10000, 23423.25)
 assert shellAdd(10000, 23423.25) == (10000 + 23423.25)
 ```
-### [Developer/String](/Examples/Developer/String.kel)
+### [Core/String](/Examples/Core/String.kel)
 ```ruby
 # String concatenation
 println "you " & "are " & "a " & "genius!"
@@ -858,7 +858,7 @@ assert regReplace("a\/\3", "\\\\", "\.") == "a./.3"
 # Regex matches
 assert regMatches("1,2,3","\d") == {"1", "2", "3"}
 ```
-### [Developer/Subscript](/Examples/Developer/Subscript.kel)
+### [Core/Subscript](/Examples/Core/Subscript.kel)
 ```ruby
 println a[b[c][d + f]][g] + m
 println a[b][c] + d
@@ -866,7 +866,7 @@ println d + [a, b, c]
 println [a, b, c] + [d, q, f([a, s, t])] + {u, f([v, w, t])[m][x + z[y]]}
 
 ```
-### [Developer/TrailingClosure](/Examples/Developer/TrailingClosure.kel)
+### [Core/TrailingClosure](/Examples/Core/TrailingClosure.kel)
 ```ruby
 # Fucking trailing closure syntax!
 
@@ -884,7 +884,7 @@ println filter(l1) {$0 > 0.5}
 # This is equivalent to "l1 >? $0 > 0.5"
 println sort(l1) {$0 > $1}
 ```
-### [Developer/Variable](/Examples/Developer/Variable.kel)
+### [Core/Variable](/Examples/Core/Variable.kel)
 ```ruby
 # Defining variables
 def a = 3
@@ -1057,20 +1057,6 @@ println m
 def f() = ({1, 2, 3, x} | $0 ^ 2 -> define(f(x), sum($0)); f(12) -> $0...5 | $0 % 7 -> (sum($0)!)° -> define(a, $0 % 12345 / 3 * e); cos(log(a) ^ 2) * √((5!)!) * 360°)
 println(f())
 del a
-
-# Here comes the feature that makes Kelvin different - algebraic computations!
-# Try the following expressions:
-println 1+(a-1-(b-3))+4
-println a || b && true and false || true || d || false
-println x*x^x/x
-println a+b+d+c+v-b-(d-c+a)-a-v
-println a^x*-a^3
-println 3a*4a
-println 3a+4a
-println (3a)^2
-println a^2+b+2a^2-b+c-3a^2
-println 33+43-23*(5+47)^2/2+cos(12)^log(4)%0.1
-println 3!!°/4/pi
 
 # Store a string "Hello World" into variable 'greeting'
 def greeting = "Hello World"
@@ -1358,7 +1344,7 @@ def files = {
     "Tests.kel",
     "Probability.kel",
     "Algebra/Trigonometry.kel",
-    "Algebra/Facotr.kel",
+    "Algebra/Factor.kel",
     "Algebra/Expand.kel",
     "Algebra/BooleanLogic.kel",
     "Calculus/Differentiation.kel",
@@ -1374,7 +1360,7 @@ def files = {
 def file_paths = (files | (examples_dir & $0))
 file_paths | (run $0)
 
-def dev_files = {
+def core_files = {
     "FlowControl/Conditionals.kel",
     "FlowControl/Loops/WhileLoop.kel",
     "FlowControl/Loops/ForLoop.kel",
@@ -1392,8 +1378,8 @@ def dev_files = {
     "TrailingClosure.kel",
 }
 
-for (dev_file: dev_files) {
-    full_path := examples_dir & "Developer/" & dev_file;
+for (file: core_files) {
+    full_path := examples_dir & "Core/" & file;
     run full_path
 }
 
@@ -1406,7 +1392,7 @@ def alg_files = {
 }
 
 map(alg_files) {
-    run examples_dir & "Developer/Algorithms/" & $0
+    run examples_dir & "Algorithms/" & $0
 }
 
 println "System check completed in " & (time() - start_time) & " seconds."
@@ -1442,6 +1428,16 @@ assert (a * 3) ^ 2 == a ^ 2 * 9
 assert c + (b + a ^ 2 * 2 + a ^ 2 - b) - a ^ 2 * 3 == c
 assert round(cos(12) ^ log(4) % 0.1 + (43 + 33 - 23 * (5 + 47) ^ 2 / 2), 10) == -31019.9971647929
 assert ((3!)!)° / 4 / pi == 1
+assert 1 + 4 + a - 1 - (b - 3) == a + 7 - b
+assert (a || b && true and false || true || d || false) == true
+assert x * x ^ x / x == x ^ x
+assert a + b + c + d + v - b - (a + d - c) - a - v == 2c - a
+assert a ^ x * -a ^ 3 == -(a ^ (x + 3))
+assert 3a * 4a == 12a ^ 2
+assert 3a + 4a == 7a
+assert (3a) ^ 2 == 9a ^ 2
+assert 2 * a ^ 2 + a ^ 2 + b - b + c - 3 * a ^ 2 == c
+assert (3!)!° / 4 / pi == 1
 
 x:=factor(f * a * 2 + d * a + c * a + b * a)
 assert x == (f * 2 + d + c + b) * a

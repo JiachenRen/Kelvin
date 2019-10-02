@@ -58,7 +58,9 @@ public extension Algebra {
                 }
             } else if let c = rhs as? Int {
                 // a ^ 3 = a * a * a
-                return recursivelyExpand(**[Node](repeating: lhs, count: c))
+                // a ^ -3 = 1 / (a * a * a)
+                let expanded = recursivelyExpand(**[Node](repeating: lhs, count: abs(c)))
+                return c > 0 ? expanded : 1 / expanded
             }
         default:
             break
