@@ -4,7 +4,9 @@ This directory contains various examples that demonstrate how to the Kelvin lang
 ## Table of Contents
 - Algebra
     - [Trigonometry](/Examples/Algebra/Trigonometry.kel)
-    - [Factorization](/Examples/Algebra/Factorization.kel)
+    - [Factorize](/Examples/Algebra/Factor.kel)
+    - [Expand](/Examples/Algebra/Expand.kel)
+    - [Boolean logic simplification](/Examples/Algebra/BooleanLogic.kel)
 - Linear Algebra
     - [Matrix](/Examples/LinearAlgebra/Matrix.kel)
     - [Vector](/Examples/LinearAlgebra/Vector.kel)
@@ -31,7 +33,7 @@ This directory contains various examples that demonstrate how to the Kelvin lang
         - [For loop](/Examples/Developer/FlowControl/Loops/ForLoop.kel)
         - [While loop](/Examples/Developer/FlowControl/Loops/WhileLoop.kel)
     - [Function](/Examples/Developer/Function.kel)
-    - [Callback](/Examples/Developer/HigherOrderFunction.kel)
+    - [Higher order function](/Examples/Developer/HigherOrderFunction.kel)
     - [IO](/Examples/Developer/IO/IO.kel)
     - [List](/Examples/Developer/List.kel)
     - [Subscript access](/Examples/Developer/Subscript.kel)
@@ -162,7 +164,16 @@ assert (a or (b and (c or !a))) == (a || b)
 assert !(!(!x && !(!y || x)) || !y) == (!x && y)
 assert (not (not (not x and not (not y or x)) or not y)) == (not x and y)
 ```
-### [Algebra/Factorization](/Examples/Algebra/Factorization.kel)
+### [Algebra/Expand](/Examples/Algebra/Expand.kel)
+```ruby
+assert expand((a + b)(a - b)) == a ^ 2 - b ^ 2
+assert expand((a - b) ^ 3) == a ^ 3 + 3 * a * b ^ 2 - 3 * a ^ 2 * b - b ^ 3
+assert expand(3 ^ (b - 3)) == 3 ^ -3 * 3 ^ b
+assert expand((a + b) ^ (4 - a * 5))
+assert expand((a + b) ^ (4 + a)) == (a + b) ^ a * 4 * a * b ^ 3 + (a + b) ^ a * 4 * a ^ 3 * b + (a + b) ^ a * 6 * a ^ 2 * b ^ 2 + (a + b) ^ a * a ^ 4 + (a + b) ^ a * b ^ 4
+assert expand((a + b) ^ (-5 * a + 4)) == (a + b) ^ (-5 * a) * 4 * a * b ^ 3 + (a + b) ^ (-5 * a) * 4 * a ^ 3 * b + (a + b) ^ (-5 * a) * 6 * a ^ 2 * b ^ 2 + (a + b) ^ (-5 * a) * a ^ 4 + (a + b) ^ (-5 * a) * b ^ 4
+```
+### [Algebra/Factor](/Examples/Algebra/Factor.kel)
 ```ruby
 # Behold, factorization!
 
@@ -1347,7 +1358,8 @@ def files = {
     "Tests.kel",
     "Probability.kel",
     "Algebra/Trigonometry.kel",
-    "Algebra/Factorization.kel",
+    "Algebra/Facotr.kel",
+    "Algebra/Expand.kel",
     "Algebra/BooleanLogic.kel",
     "Calculus/Differentiation.kel",
     "Calculus/Integration.kel",
@@ -1532,40 +1544,6 @@ assert l6 == {2}
 
 # Test string concatenation
 assert "asdf" & "sdfsdf"[1] == "asdfd"
-
-# Test Multiline function definition
-def bin_search(arr, search) {
-    c := 0;
-    first := 0;
-    n := size(arr);
-    last := n - 1;
-    middle := int((first + last) / 2);
-
-    while (first <= last) {
-        b := false;
-
-        if (arr[middle] < search) {
-            first := middle + 1;
-            b := true;
-        };
-
-        if (arr[middle] == search) {
-            return middle;
-        };
-
-        if (!b) {
-            last := middle - 1;
-        };
-
-        middle := int((first + last) / 2);
-    };
-
-    return "not found";
-}
-
-def l1 = {1, 2, 3, 5, 7, 8, 9, 10}
-assert bin_search(l1, 8.5) == "not found"
-assert bin_search(l1, 9) == 6
 
 println "Test completed. No errors identified. System operational."
 

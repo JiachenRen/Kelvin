@@ -16,7 +16,7 @@
 		1F3E3068232B2391002971F9 /* FileSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3E3065232B2077002971F9 /* FileSystem.swift */; };
 		1F3E306E232B3BF9002971F9 /* FlowControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3E306C232B39CC002971F9 /* FlowControl.swift */; };
 		1F3E306F232B3C04002971F9 /* FlowControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3E306C232B39CC002971F9 /* FlowControl.swift */; };
-		1F3E30AA232C37AA002971F9 /* Factorization.kel in Resources */ = {isa = PBXBuildFile; fileRef = 1F3E3077232C37A9002971F9 /* Factorization.kel */; };
+		1F3E30AA232C37AA002971F9 /* Factor.kel in Resources */ = {isa = PBXBuildFile; fileRef = 1F3E3077232C37A9002971F9 /* Factor.kel */; };
 		1F3E30AB232C37AA002971F9 /* Trigonometry.kel in Resources */ = {isa = PBXBuildFile; fileRef = 1F3E3078232C37A9002971F9 /* Trigonometry.kel */; };
 		1F3E30AC232C37AA002971F9 /* OneVar.kel in Resources */ = {isa = PBXBuildFile; fileRef = 1F3E307A232C37A9002971F9 /* OneVar.kel */; };
 		1F3E30AD232C37AA002971F9 /* ConfidenceInterval.kel in Resources */ = {isa = PBXBuildFile; fileRef = 1F3E307B232C37A9002971F9 /* ConfidenceInterval.kel */; };
@@ -370,6 +370,7 @@
 		1FB2D0DB23440A3D008709AE /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67CA6222741FA00A8E6BC /* Assert.swift */; };
 		1FB2D0DC23440A3D008709AE /* KType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB2D0502343C851008709AE /* KType.swift */; };
 		1FB2D0DD23440A3D008709AE /* ParameterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB2D0522343C882008709AE /* ParameterType.swift */; };
+		1FB2D0DF2344464C008709AE /* Expand.kel in Resources */ = {isa = PBXBuildFile; fileRef = 1FB2D0DE2344464C008709AE /* Expand.kel */; };
 		1FB70A292342AEF400C12343 /* List+Supplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB70A252342ABCF00C12343 /* List+Supplier.swift */; };
 		1FB70A2A2342AEF400C12343 /* Supplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB70A272342AE4800C12343 /* Supplier.swift */; };
 		1FB70A2F2342B65800C12343 /* Vector+Supplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB70A2B2342B11D00C12343 /* Vector+Supplier.swift */; };
@@ -458,7 +459,7 @@
 		1F3E3065232B2077002971F9 /* FileSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystem.swift; sourceTree = "<group>"; };
 		1F3E306C232B39CC002971F9 /* FlowControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowControl.swift; sourceTree = "<group>"; };
 		1F3E3075232C2FD7002971F9 /* gen_docs.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = gen_docs.sh; sourceTree = "<group>"; };
-		1F3E3077232C37A9002971F9 /* Factorization.kel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Factorization.kel; sourceTree = "<group>"; };
+		1F3E3077232C37A9002971F9 /* Factor.kel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Factor.kel; sourceTree = "<group>"; };
 		1F3E3078232C37A9002971F9 /* Trigonometry.kel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Trigonometry.kel; sourceTree = "<group>"; };
 		1F3E307A232C37A9002971F9 /* OneVar.kel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = OneVar.kel; sourceTree = "<group>"; };
 		1F3E307B232C37A9002971F9 /* ConfidenceInterval.kel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ConfidenceInterval.kel; sourceTree = "<group>"; };
@@ -547,6 +548,7 @@
 		1FB2D0BD2343F2E3008709AE /* Keyword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keyword.swift; sourceTree = "<group>"; };
 		1FB2D0BF2343F310008709AE /* Tokenizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tokenizer.swift; sourceTree = "<group>"; };
 		1FB2D0C12343F491008709AE /* Operator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operator.swift; sourceTree = "<group>"; };
+		1FB2D0DE2344464C008709AE /* Expand.kel */ = {isa = PBXFileReference; lastKnownFileType = text; path = Expand.kel; sourceTree = "<group>"; };
 		1FB3E369233552D100C21025 /* SwiftSoup.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftSoup.framework; path = Carthage/Build/Mac/SwiftSoup.framework; sourceTree = "<group>"; };
 		1FB70A252342ABCF00C12343 /* List+Supplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "List+Supplier.swift"; sourceTree = "<group>"; };
 		1FB70A272342AE4800C12343 /* Supplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supplier.swift; sourceTree = "<group>"; };
@@ -729,7 +731,8 @@
 		1F3E3076232C37A9002971F9 /* Algebra */ = {
 			isa = PBXGroup;
 			children = (
-				1F3E3077232C37A9002971F9 /* Factorization.kel */,
+				1F3E3077232C37A9002971F9 /* Factor.kel */,
+				1FB2D0DE2344464C008709AE /* Expand.kel */,
 				1F3E3078232C37A9002971F9 /* Trigonometry.kel */,
 				1F8C8C87233960C0007FCD4F /* BooleanLogic.kel */,
 			);
@@ -1349,7 +1352,7 @@
 				1F3E30CF232C37AA002971F9 /* Matrix.kel in Resources */,
 				1F43991D232D681800AC5D38 /* kelvin_terminal_dark.gif in Resources */,
 				1F3E30BF232C37AA002971F9 /* HigherOrderFunction.kel in Resources */,
-				1F3E30AA232C37AA002971F9 /* Factorization.kel in Resources */,
+				1F3E30AA232C37AA002971F9 /* Factor.kel in Resources */,
 				1F3E30CC232C37AA002971F9 /* TrailingClosure.kel in Resources */,
 				1F3E30B2232C37AA002971F9 /* TwoSampleTTest.kel in Resources */,
 				1F3E30B4232C37AA002971F9 /* RepeatMapDemo.kel in Resources */,
@@ -1361,6 +1364,7 @@
 				1F3E30AB232C37AA002971F9 /* Trigonometry.kel in Resources */,
 				1F3E30AE232C37AA002971F9 /* Regression.kel in Resources */,
 				1F3E30BB232C37AA002971F9 /* Conditionals.kel in Resources */,
+				1FB2D0DF2344464C008709AE /* Expand.kel in Resources */,
 				1FFD8CAD218F50870004ECEB /* Main.storyboard in Resources */,
 				1F3E30B0232C37AA002971F9 /* Integration.kel in Resources */,
 				1F3E30C7232C37AA002971F9 /* FlatMap.kel in Resources */,

@@ -10,41 +10,58 @@ import Foundation
 
 public extension Algebra {
     
-    /**
-     Try this:
-     expand((x+1)(a+x)(b+x))
-     
-     - Todo: Handle exponents "x^(a+b) -> x^a*x^b"
-     */
+    /// Expands the given expression.
+    /// Try these:
+    /// `expand((x+1)(a+x)(b+x))`
+    /// `expand((a+b)^3)`
+    /// `expand((a+b)^(3+a))`
     static func expand(_ node: Node) -> Node {
         return node.replacing(by: {(n) -> Node in
                 recursivelyExpand(n)
-            }) {
-                if let fun = $0 as? Function {
-                    if fun.name == .mult && fun.contains(where: {($0 as? Function)?.name == .add}, depth: 1) {
-                        return true
-                    }
-                }
-                return false
-        }
+            }) {_ in true }
     }
     
-    /**
-     Recursively expand the expression.
-     */
+    /// Recursively expands the node.
+    /// - Parameter node: The node to be expanded.
     private static func recursivelyExpand(_ node: Node) -> Node {
-        guard var nodes = (node as? Function)?.elements else {
+        // First ensure that we are working with a function
+        guard let fun = node as? Function else {
             return node
         }
         
-        for i in 0..<nodes.count {
-            let n = nodes.remove(at: i)
-            if let f = n as? Function, f.name == .add {
-                return ++(f.elements.map {
-                    recursivelyExpand($0 * **nodes)
-                })
+        // Extract the function's arguments
+        var args = fun.elements
+        
+        switch fun.name {
+        case .mult:
+            for i in 0..<args.count {
+                let n = args.remove(at: i)
+                if let f = n as? Function, f.name == .add {
+                    return ++(f.elements.map {
+                        recursivelyExpand($0 * **args)
+                    })
+                }
+                args.insert(n, at: i)
             }
-            nodes.insert(n, at: i)
+        case .exp:
+            let lhs = fun[0], rhs = fun[1]
+            if let rhsFun = rhs as? Function {
+                switch rhsFun.name {
+                case .add:
+                    // a ^ (b + c) = a ^ b * a ^ c
+                    let expanded = **rhsFun.elements.map {
+                        recursivelyExpand(lhs ^ $0)
+                    }
+                    return recursivelyExpand(expanded)
+                default:
+                    break
+                }
+            } else if let c = rhs as? Int {
+                // a ^ 3 = a * a * a
+                return recursivelyExpand(**[Node](repeating: lhs, count: c))
+            }
+        default:
+            break
         }
         
         return node

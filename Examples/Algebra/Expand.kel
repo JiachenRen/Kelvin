@@ -1,0 +1,6 @@
+assert expand((a + b)(a - b)) == a ^ 2 - b ^ 2
+assert expand((a - b) ^ 3) == a ^ 3 + 3 * a * b ^ 2 - 3 * a ^ 2 * b - b ^ 3
+assert expand(3 ^ (b - 3)) == 3 ^ -3 * 3 ^ b
+assert expand((a + b) ^ (4 - a * 5))
+assert expand((a + b) ^ (4 + a)) == (a + b) ^ a * 4 * a * b ^ 3 + (a + b) ^ a * 4 * a ^ 3 * b + (a + b) ^ a * 6 * a ^ 2 * b ^ 2 + (a + b) ^ a * a ^ 4 + (a + b) ^ a * b ^ 4
+assert expand((a + b) ^ (-5 * a + 4)) == (a + b) ^ (-5 * a) * 4 * a * b ^ 3 + (a + b) ^ (-5 * a) * 4 * a ^ 3 * b + (a + b) ^ (-5 * a) * 6 * a ^ 2 * b ^ 2 + (a + b) ^ (-5 * a) * a ^ 4 + (a + b) ^ (-5 * a) * b ^ 4
