@@ -28,6 +28,13 @@ public struct Vector: MutableListProtocol, NaN {
         return "[\(e)]"
     }
     
+    /// Minimalistic representation of the vector.
+    public var minimal: String {
+        return elements.reduce(nil) {
+            $0 == nil ? $1.stringified : "\($0!) \($1.stringified)"
+        } ?? ""
+    }
+    
     public var ansiColored: String {
         let e = elements.reduce(nil) {
             $0 == nil ? $1.ansiColored : "\($0!), \($1.ansiColored)"
@@ -44,11 +51,14 @@ public struct Vector: MutableListProtocol, NaN {
     }
     
     init?(_ node: Node) {
-        if let list = node as? ListProtocol {
-            self.elements = list.elements
-        } else {
+        guard let list = node as? ListProtocol else {
             return nil
         }
+        self.init(list)
+    }
+    
+    init(_ list: ListProtocol) {
+        self.elements = list.elements
     }
     
     public func equals(_ node: Node) -> Bool {
@@ -58,13 +68,9 @@ public struct Vector: MutableListProtocol, NaN {
         return false
     }
     
-    /**
-     Perform an operation with another vector.
-     e.g. [a b] + [c d] = [a+c b+d]
-     
-     - Warning: Do not use * and / as it would cause confusion with
-     the definition of dot product!
-     */
+
+    /// Perform an operation with another vecto;. e.g. `[a b] + [c d] = [a+c b+d]`
+    /// - Warning: Do not use `*` and `/` as it would cause confusion with the definition of dot product!
     public func perform(_ operation: Binary, with vec: Vector) throws -> Vector {
         if vec.count != count {
             throw ExecutionError.dimensionMismatch(self, vec)
@@ -77,12 +83,10 @@ public struct Vector: MutableListProtocol, NaN {
         return Vector(elements)
     }
     
-    /**
-     Calculate the dot product of this vector with the target vector.
-     u1 = <a1, b1, c1, ...n1>,
-     u2 = <a2, b2, c2, ...n2>,
-     u1 • u2 = a1 * a2 + b1 * b2 + ... + n1 * n2.
-     */
+    /// Calculate the dot product of this vector with the target vector.
+    /// `u1 = <a1, b1, c1, ...n1>`,
+    /// `u2 = <a2, b2, c2, ...n2>`,
+    /// `u1 • u2 = a1 * a2 + b1 * b2 + ... + n1 * n2`.
     public func dot(with vec: Vector) throws -> Node {
         if vec.count != count {
             throw ExecutionError.dimensionMismatch(self, vec)
@@ -95,11 +99,8 @@ public struct Vector: MutableListProtocol, NaN {
         }
     }
     
-    /**
-     Perform cross product with target vector.
-     
-     - Note: Only works for vectors of two or three dimensions.
-     */
+    /// Perform cross product with target vector.
+    /// - Note: Only works for vectors of two or three dimensions.
     public func cross(with vec: Vector) throws -> Vector {
         if count != vec.count {
             throw ExecutionError.dimensionMismatch(self, vec)

@@ -935,8 +935,7 @@ println m2x2[1][1]
 
 # 3 dimensional matrix of 3 x 3 x 2
 def m3x3x2 = [[[1, 4], [2, 7], [3, 4]], [[1, 4], [2, 7], [3, 4]], [[1, 4], [2, 7], [3, 4]]]
-
-#                                                         ^
+                               ^
 # get the highlighted element (prints 3)
 println m3x3x2[1][2][0]
 
@@ -968,7 +967,7 @@ println idMat(3)
 
 # Transpose matrix
 println trans(m1)
-println ¡([1, 2, 3] !! @matrix) == [[1], [2], [3]]
+println ¡({{1}, [2], {3}} !! @matrix) == [[1], [2], [3]]
 
 # Transformation
 # $0 -> element
@@ -984,20 +983,38 @@ assert transform(idMat(5)) {
     [4,  3,  2,  1,  1]
 ]
 
-# Cofactor of matrix
-assert cofactor([
+# Find the cofactor matrix
+printMat cofactor([
     [1, -1, -2, -3, -4],
     [1,  1, -1, -2, -3],
     [2,  1,  1, -1, -2],
     [3,  2,  1,  1, -1],
     [4,  3,  2,  1,  1]
-]) == [
-    [21,  21, -12,   3,   6],
-    [19,  36,  11,  -7,   3],
-    [-8,   9,  41,  11, -12],
-    [-3,  -3,   9,  36,  21],
-    [14,  -3,  -8,  19,  21]
-]
+])
+
+# Cofactor determinant vs REF determinant
+def test(n) {
+    m := (random()...n...n) as @matrix;
+    println "testing " & m;
+    ref := (det m);
+    cof := detCof(m);
+    println "det REF = " & ref;
+    println "det COF = " & cof;
+    println "DIFF    = " & (ref - cof);
+    assert round(det m, 10) == round(detCof(m), 10)
+}
+
+
+map(0...5) {test($1 + 1)}
+
+# Finding row reduced echelon form (RREF) and REF
+# Find the REF form
+assert ref(idMat(3)) == idMat(3)
+ref(mat(flatten({random()...3, -4, random()...3, -11, random()...3, 22}),3,4))
+
+# Find the RREF form
+# There's a statistically insignificant chance that 3 random vectors are linearly dependent.
+assert rref randMat(3) == idMat(3)
 ```
 ### [LinearAlgebra/Vector](/Examples/LinearAlgebra/Vector.kel)
 ```ruby
@@ -1247,6 +1264,15 @@ println mean(random()...100000)
 
 # A function that approaches 1 as x approaches infinity.
 def f(x) = min(random()...x) + max(random()...x)
+
+# Random 3 x 3 matrix
+printMat randMat(3)
+
+# Random 2 x 5 matrix
+printMat randMat(2, 5)
+
+# Random boolean
+println randBool()
 ```
 ### [Statistics/ConfidenceInterval](/Examples/Statistics/ConfidenceInterval.kel)
 ```ruby
@@ -1488,15 +1514,21 @@ assert ((x ^ 3)'x << x = 3) == 27
 assert [[1, 3], [1, 2]][1][1] == 2
 assert ({[1]} | $0 as @list) == {{1}}
 
-def mat = [[a, b, c], [x, y, z], [i, q, k]]
-assert det mat == (z * q * -1 + y * k) * a + (z * i * -1 + x * k) * b * -1 + (y * i * -1 + x * q) * c
+def mat = [[12, 7, 1], [3, 3, z], [i, 2, 1]]
+r1 := random()
+r2 := random()
+det1 := (det(mat) << z = r1 << i = r2)
+det2 := (detCof(mat) << z = r1 << i = r2)
+diff := round(det1 - det2, 10)
+println "DIFF = " & diff
+assert diff == 0
 
 assert [[1, 2], [2, 3], [3, 4]] ** [[1, 2, 3], [2, 3, 4]] == [[5, 8, 11], [8, 13, 18], [11, 18, 25]]
 assert [[1, 2, 3], [2, 3, 4]] ** [[1, 2], [2, 3], [3, 4]] == [[14, 20], [20, 29]]
 assert mat == mat ** idMat(size(mat))
 
 # Test matrix transposition
-assert ¡([1, 2, 3] !! @matrix) == [[1], [2], [3]]
+assert ¡(mat({1,2,3},1,3)) == [[1], [2], [3]]
 
 # Test normCdf
 assert normCdf(-inf, 7, 45, 21) == 0.035184776966467601333

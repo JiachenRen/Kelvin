@@ -422,6 +422,10 @@ public class Core: Supplier {
             Program.io?.println($0)
             return $0
         },
+        .unary(.printMat, Matrix.self) {
+            Program.io?.println(KString($0.minimal))
+            return $0
+        },
         .unary(.log, KString.self) {
             Program.io?.log($0.string)
             return $0

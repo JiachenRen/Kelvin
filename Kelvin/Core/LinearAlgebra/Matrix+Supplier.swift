@@ -49,20 +49,23 @@ extension Matrix: Supplier {
         .unary(.determinant, Matrix.self) {
             try $0.determinant()
         },
+        .unary(.determinantCof, Matrix.self) {
+            try $0.determinant(using: .cofactorExpansion)
+        },
         .binary(.createMatrix, Int.self, Int.self) {
-            Matrix(rows: $0, cols: $1)
+            try Matrix(rows: $0, cols: $1)
         },
         .ternary(.createMatrix, ListProtocol.self, Int.self, Int.self) {
             try Matrix($0, rows: $1, cols: $2)
         },
         .unary(.createMatrix, Int.self) {
-            Matrix($0)
+            try Matrix($0)
         },
         .unary(.identityMatrix, Int.self) {
-            Matrix.identityMatrix($0)
+            try Matrix.identityMatrix($0)
         },
         .unary(.transpose, Matrix.self) {
-            $0.transposed
+            $0.transposed()
         },
         .unary(.gaussianElimination, Matrix.self) {
             try Matrix.gaussianElimination($0)
@@ -72,6 +75,12 @@ extension Matrix: Supplier {
         },
         .unary(.inverse, Matrix.self) {
             try $0.inverse()
+        },
+        .unary(.ref, Matrix.self) {
+            try $0.reduce(into: .ref).mat
+        },
+        .unary(.rref, Matrix.self) {
+            try $0.reduce(into: .rref).mat
         }
     ]
 }

@@ -20,5 +20,4 @@ public struct KVoid: LeafNode, NaN {
     public func equals(_ node: Node) -> Bool {
         return node is KVoid
     }
-    
 }

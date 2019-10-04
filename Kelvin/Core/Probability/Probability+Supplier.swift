@@ -21,15 +21,25 @@ extension Probability: Supplier {
             }
             return Float80.random(in: lb.float80...ub.float80)
         },
+        .unary(.random, List.self) {
+            $0.elements.randomElement()
+        },
         .binary(.randomInt, Int.self, Int.self) {(lb, ub) in
             if (lb >= ub) {
                 throw ExecutionError.invalidRange(lowerBound: lb, upperBound: ub)
             }
             return Int.random(in: lb...ub)
         },
-        .unary(.random, List.self) {
-            $0.elements.randomElement()
+        .unary(.randomMatrix, Int.self) {
+            try Matrix(rows: $0, cols: $0) { _, _ in Float80.random(in: 0..<1) }
         },
+        .binary(.randomMatrix, Int.self, Int.self) {
+            try Matrix(rows: $0, cols: $1) { _, _ in Float80.random(in: 0..<1) }
+        },
+        .noArg(.randomBool) {
+            Bool.random()
+        },
+        
 
         // Combination and permutation
         .binary(.npr, Int.self, Int.self) {

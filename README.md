@@ -281,7 +281,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 - [x] Permutation/combination
   - ncr, npr for lists
 - [x] Randomization
-  - `random(lb, ub)`, `random()`, `randomInt(lb, ub)`
+  - `random(lb, ub)`, `random()`, `randomInt(lb, ub)`, `randomMat`, `randomBool`
   - Shuffle list
   - Random element from list
 
@@ -296,7 +296,9 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 
 - [x] Matrix
   - [x] Conversion to/from list/matrix
-  - [x] Determinant
+  - [x] Determinant O(n^3)
+  - [x] Row reduced echelon form (RREF)
+  - [x] Reduced echelon form (REF)
   - [x] Identity
   - [x] Cofactor
   - [x] Transformation

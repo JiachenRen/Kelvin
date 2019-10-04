@@ -24,8 +24,12 @@ public enum ExecutionError: KelvinError {
     case invalidRange(lowerBound: Value, upperBound: Value)
     case invalidSubscript(_ target: Node, _ subscript: Node)
     case invalidCast(from: Node, to: KType)
+    case invalidDimension(rows: Int, cols: Int)
+    case nonUniform
     case circularDefinition
     case nonSquareMatrix
+    case emptyMatrix
+    case singularMatrix
     case unsupportedPlatform(_ supported: String)
     
     private static func getRootCause(_ err: KelvinError) -> String {
@@ -86,14 +90,22 @@ public enum ExecutionError: KelvinError {
         case .invalidCast(from: let node, to: let type):
             let nodeType = (try? KType.resolve(node).description) ?? "unknown"
             return "cannot cast `\(node.stringified)` of type \(nodeType) to \(type)"
+        case .invalidDimension(rows: let r, cols: let c):
+            return "(rows: \(r), cols: \(c)) is not a valid dimension"
         case .circularDefinition:
             return "circular definition"
         case .nonSquareMatrix:
             return "non-square matrix"
+        case .nonUniform:
+            return "the given lists have different lengths"
+        case .emptyMatrix:
+            return "cannot create an empty matrix"
         case .undefined(let v):
             return "'\(v.name)' is undefined"
         case .unsupportedPlatform(let supported):
             return "this feature is supported on \(supported) only"
+        case .singularMatrix:
+            return "the given matrix is singular"
         }
     }
 }

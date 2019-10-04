@@ -24,6 +24,15 @@ public class Assert {
         }
     }
     
+    /// Asserts that the given number of rows and cols form a valid dimension.
+    /// That is, `rows > 0 && cols > 0`.
+    /// - Throws: `.invalidDimension` if either `rows` or `cols` is less than 0.
+    public static func validDimension(rows r: Int, cols c: Int) throws {
+        if r < 1 || c < 1 {
+            throw ExecutionError.invalidDimension(rows: r, cols: c)
+        }
+    }
+    
     /// Asserts that `lb` ad `ub` form a valid range. That is, `lb < ub`.
     /// - Parameters:
     ///     - lb: Lower bound
@@ -76,7 +85,7 @@ public class Assert {
     
     /// Specializes the type erased `list` in Kelvin into an array of specified type `T`
     /// - Parameters:
-    ///     - list: A list in Kelvin.
+    ///     - list: A `ListProtocl`
     ///     - type: Swift Type used to specialize the list.
     /// - Throws: `ExecutionError.unexpectedType` if the list contains types other than `T`
     public static func specialize<T>(list: ListProtocol, as type: T.Type) throws -> [T] {
@@ -88,6 +97,37 @@ public class Assert {
                 expected: .resolve(type),
                 found: .resolve(n)
             )
+        }
+    }
+    
+    /// Asserts that the given matrix is non-singular, otherwise an eror is thrown.
+    /// - Throws: `ExecutionError.singularMatrix`
+    public static func nonSingular(_ mat: Matrix) throws {
+        if try !mat.isSingular() {
+            throw ExecutionError.singularMatrix
+        }
+    }
+    
+    /// Specializes the type erased `matrix` in Kelvin into a 2D array of specified type `T`
+    /// - Parameters:
+    ///     - mat: A `Matrix`.
+    ///     - type: Swift Type used to specialize the list.
+    /// - Throws: `ExecutionError.unexpectedType` if the list contains types other than `T`
+    public func specialize<T>(mat: Matrix, as type: T.Type) throws -> [[T]] {
+        return try mat.rows.map {row in
+            try row.map { e in
+                try Assert.cast(e, to: T.self)
+            }
+        }
+    }
+    
+    /// Asserts that the every list in `lists` has the same length.
+    /// - Throws: `.nonUniform` if any list has a different length.
+    public static func uniform(_ lists: [ListProtocol]) throws {
+        for i in 0..<lists.count - 1 {
+            if lists[i].count != lists[i + 1].count {
+                throw ExecutionError.nonUniform
+            }
         }
     }
 }

@@ -33,5 +33,4 @@ struct Final: UnaryNode, NaN {
         }
         return f.node === self.node
     }
-    
 }

@@ -14,3 +14,12 @@ println mean(random()...100000)
 
 # A function that approaches 1 as x approaches infinity.
 def f(x) = min(random()...x) + max(random()...x)
+
+# Random 3 x 3 matrix
+printMat randMat(3)
+
+# Random 2 x 5 matrix
+printMat randMat(2, 5)
+
+# Random boolean
+println randBool()

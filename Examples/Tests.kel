@@ -87,15 +87,21 @@ assert ((x ^ 3)'x << x = 3) == 27
 assert [[1, 3], [1, 2]][1][1] == 2
 assert ({[1]} | $0 as @list) == {{1}}
 
-def mat = [[a, b, c], [x, y, z], [i, q, k]]
-assert det mat == (z * q * -1 + y * k) * a + (z * i * -1 + x * k) * b * -1 + (y * i * -1 + x * q) * c
+def mat = [[12, 7, 1], [3, 3, z], [i, 2, 1]]
+r1 := random()
+r2 := random()
+det1 := (det(mat) << z = r1 << i = r2)
+det2 := (detCof(mat) << z = r1 << i = r2)
+diff := round(det1 - det2, 10)
+println "DIFF = " & diff
+assert diff == 0
 
 assert [[1, 2], [2, 3], [3, 4]] ** [[1, 2, 3], [2, 3, 4]] == [[5, 8, 11], [8, 13, 18], [11, 18, 25]]
 assert [[1, 2, 3], [2, 3, 4]] ** [[1, 2], [2, 3], [3, 4]] == [[14, 20], [20, 29]]
 assert mat == mat ** idMat(size(mat))
 
 # Test matrix transposition
-assert ¡([1, 2, 3] !! @matrix) == [[1], [2], [3]]
+assert ¡(mat({1,2,3},1,3)) == [[1], [2], [3]]
 
 # Test normCdf
 assert normCdf(-inf, 7, 45, 21) == 0.035184776966467601333

@@ -176,6 +176,7 @@ public struct Syntax {
         .init(for: .eval, associativity: .prefix),
         .init(for: .print, associativity: .prefix, precedence: .prefixCommand),
         .init(for: .println, associativity: .prefix, precedence: .prefixCommand),
+        .init(for: .printMat, associativity: .prefix, precedence: .prefixCommand),
         .init(for: .compile, associativity: .prefix),
         .init(for: .delay, associativity: .prefix),
         .init(for: .run, associativity: .prefix, precedence: .prefixCommand),
@@ -204,6 +205,8 @@ public struct Syntax {
         
         // Matrix & vector
         .init(for: .determinant, associativity: .prefix),
+        .init(for: .ref, associativity: .prefix),
+        .init(for: .rref, associativity: .prefix),
         .init(for: .dotProduct, associativity: .infix, precedence: .scaling, operator: .init("•")),
         .init(for: .crossProduct, associativity: .infix, precedence: .scaling, operator: .init("×")),
         .init(for: .matrixMultiplication, associativity: .infix, precedence: .scaling, operator: .init("**")),

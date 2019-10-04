@@ -132,10 +132,13 @@ public extension OperationName {
     static let angleBetween = "angle"
     static let matrixMultiplication = "mult"
     static let determinant = "det"
-    static let createMatrix = "mat"
-    static let identityMatrix = "idMat"
+    static let determinantCof = "detCof"
+    static let createMatrix = "mat" // mat(dim), mat(rows, cols), mat(list, rows, cols)
+    static let identityMatrix = "idMat" // idMat(dim)
     static let transpose = "trans"
     static let gaussianElimination = "gausElim"
+    static let ref = "ref"
+    static let rref = "rref"
     static let transform = "transform"
     static let cofactor = "cofactor"
     static let adjoint = "adjoint"
@@ -144,7 +147,9 @@ public extension OperationName {
     // MARK: - Probability
     
     static let random = "random"
-    static let randomInt = "randomInt"
+    static let randomInt = "randInt"
+    static let randomMatrix = "randMat" // randMat(dim), randMat(rows, cols)
+    static let randomBool = "randBool"
     static let npr = "npr"
     static let ncr = "ncr"
     static let factorial = "factorial"
@@ -213,6 +218,7 @@ public extension OperationName {
     static let evaluateAt = "at"
     static let print = "print"
     static let println = "println"
+    static let printMat = "printMat"
     static let `inout` = "inout"
     static let readLine = "readLine"
     static let readFile = "readFile"
