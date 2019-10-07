@@ -27,20 +27,21 @@ public class Operation: Equatable, Hashable {
     /// Collect all built-in operations and combine them into a single
     /// operations array.
     public static let defaults: [Operation] = [
-        FlowControl.exports,
-        StackTrace.exports,
-        FileSystem.exports,
-        KString.exports,
-        List.exports,
-        Pair.exports,
-        Core.exports,
-        Probability.exports,
-        Matrix.exports,
-        Vector.exports,
-        Calculus.exports,
-        Rules.exports,
-        Algebra.exports,
-        Stat.exports
+        Exports.algebra,
+        Exports.list,
+        Exports.matrix,
+        Exports.pair,
+        Exports.probability,
+        Exports.rules,
+        Exports.stats,
+        Exports.vector,
+        Exports.strings,
+        Exports.calculus,
+        Exports.core,
+        Exports.iterable,
+        Exports.fileSystem,
+        Exports.flowControl,
+        Exports.stackTrace
     ].flatMap {
         $0
     }
@@ -72,14 +73,12 @@ public class Operation: Equatable, Hashable {
         description.hash(into: &hasher)
     }
     
-    /**
-     Generate the conjugate definition for the given operation.
-     e.g. The signature type [.any, .func] becomes [.func, .any].
-     The premise is that the given operation is commutative, otherwise nil is returned.
-     
-     - Parameter operation: A commutative operation.
-     - Returns: The conjugate definition for the operation, that is, if it exists at all.
-     */
+    /// Generate the conjugate definition for the given operation.
+    /// e.g. The signature type [.any, .func] becomes [.func, .any].
+    /// The premise is that the given operation is commutative, otherwise nil is returned.
+    ///
+    /// - Parameter operation: A commutative operation.
+    /// - Returns: The conjugate definition for the operation, that is, if it exists at all.
     private static func conjugate(for operation: Operation) -> Operation? {
         if operation.signature.count == 2 && operation.name[.commutative] {
 
@@ -149,13 +148,11 @@ public class Operation: Equatable, Hashable {
         registered = process(defaults)
     }
 
-    /**
-     Remove a parametric operation from registration.
-     
-     - Parameters:
-        - name: The name of the operation to be removed.
-        - signature: The signature of the operation to be removed.
-     */
+    /// Remove a parametric operation from registration.
+    ///
+    /// - Parameters:
+    ///    - name: The name of the operation to be removed.
+    ///    - signature: The signature of the operation to be removed.
     static func remove(_ name: OperationName, _ signature: [ParameterType]) {
         let parOp = Operation(name, signature) { _ in
             nil
@@ -171,13 +168,11 @@ public class Operation: Equatable, Hashable {
         registered[name] = nil
     }
 
-    /**
-     Resolves the corresponding parametric operation based on the name and provided arguments.
-     
-     - Parameter fun: The function that requires an operation as its definition.
-     - Parameter args: The arguments supplied to the operation
-     - Returns: A list of operations with matching signature, sorted in order of increasing scope.
-     */
+    /// Resolves the corresponding parametric operation based on the name and provided arguments.
+    ///
+    /// - Parameter fun: The function that requires an operation as its definition.
+    /// - Parameter args: The arguments supplied to the operation
+    /// - Returns: A list of operations with matching signature, sorted in order of increasing scope.
     public static func resolve(for fun: Function) -> [Operation] {
         
         // First find all operations w/ the given name.
@@ -234,7 +229,7 @@ public class Operation: Equatable, Hashable {
                     fallthrough
                 case .list where !(arg is List):
                     fallthrough
-                case .iterable where !(arg is MutableListProtocol):
+                case .iterable where !(arg is Iterable):
                     fallthrough
                 case .number where !(arg is Value):
                     fallthrough
@@ -260,18 +255,15 @@ public class Operation: Equatable, Hashable {
         return matching
     }
 
-    /**
-     Commutatively simplify a list of arguments.
-     Suppose we have an expression, 1 + a + negate(1) + negate(a);
-     First, we check if 1 + a is simplifiable, in this case no.
-     Then, we check if 1 + negate(1) is simplifiable, if so,
-     simplify and put them back into the pool. At this point,
-     we have "a + negate(a) + 0", which then easily simplifies to 0.
-     
-     - Parameter nodes: The list of nodes to be commutatively simplified.
-     - Parameter fun: A function that performs binary simplification.
-     - Returns: A node resulting from the simplification.
-     */
+    /// Commutatively simplify a list of arguments. Suppose we have an expression,
+    /// `1 + a + negate(1) + negate(a)`.
+    /// First, we check if `1 + a` is simplifiable, in this case no.
+    /// Then, we check if `1 + negate(1)` is simplifiable, if so, simplify and put them back into the pool.
+    /// At this point, we have `a + negate(a) + 0`, which then easily simplifies to 0.
+    ///
+    /// - Parameter nodes: The list of nodes to be commutatively simplified.
+    /// - Parameter fun: A function that performs binary simplification.
+    /// - Returns: A node resulting from the simplification.
     public static func simplifyCommutatively(_ nodes: [Node], by fun: OperationName) throws -> Node {
         var nodes = nodes
 
@@ -307,10 +299,7 @@ public class Operation: Equatable, Hashable {
         return Function(fun, nodes)
     }
 
-    /**
-     Two parametric operations are equal to each other if they have the same name
-     and the same signature
-     */
+    /// Two parametric operations are equal to each other if they have the same name and the same signature
     public static func ==(lhs: Operation, rhs: Operation) -> Bool {
         return lhs.name == rhs.name && lhs.signature == rhs.signature
     }

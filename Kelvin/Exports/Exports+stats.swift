@@ -1,5 +1,5 @@
 //
-//  Stat.swift
+//  Exports+stats.swift
 //  Kelvin
 //
 //  Created by Jiachen Ren on 1/28/19.
@@ -8,14 +8,11 @@
 
 import Foundation
 
-/// A collection of stat functions and operations.
-public class Stat: Supplier {
-    
-    public enum DatasetType {
-        case sample
-        case population
-    }
-    
+extension Exports {
+    static let stats = Stat.exports
+}
+
+extension Stat {
     static let exports: [Operation] = [
         
         // Mark: Distribution

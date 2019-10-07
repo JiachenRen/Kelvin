@@ -1,5 +1,5 @@
 //
-//  Probability+Supplier.swift
+//  Exports+probability.swift
 //  Kelvin
 //
 //  Created by Jiachen Ren on 10/1/19.
@@ -8,8 +8,11 @@
 
 import Foundation
 
-extension Probability: Supplier {
-    /// Bridge with KAS
+extension Exports {
+    static let probability: [Operation] = Probability.exports
+}
+
+extension Probability {
     static let exports: [Operation] = [
         // Random number generation
         .noArg(.random) {

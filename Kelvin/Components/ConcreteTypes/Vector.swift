@@ -8,66 +8,23 @@
 
 import Foundation
 
-public struct Vector: MutableListProtocol, NaN {
-    
+public class Vector: Iterable {
     public var elements: [Node]
-    
     public var magnitude: Node {
-        return √(++elements.map {$0 ^ 2})
+        √(++elements.map {$0 ^ 2})
     }
     
     public var unitVector: Vector {
-        let mag = magnitude
-        return Vector(elements.map {$0 / mag})
+        Vector(elements.map { $0 / magnitude })
     }
     
-    public var stringified: String {
-        let e = elements.reduce(nil) {
-            $0 == nil ? $1.stringified : "\($0!), \($1.stringified)"
-        } ?? ""
-        return "[\(e)]"
-    }
-    
-    /// Minimalistic representation of the vector.
-    public var minimal: String {
-        return elements.reduce(nil) {
-            $0 == nil ? $1.stringified : "\($0!) \($1.stringified)"
-        } ?? ""
-    }
-    
-    public var ansiColored: String {
-        let e = elements.reduce(nil) {
-            $0 == nil ? $1.ansiColored : "\($0!), \($1.ansiColored)"
-            } ?? ""
-        return "[".red.bold + "\(e)" + "]".red.bold
-    }
-    
-    public var precedence: Keyword.Precedence {
-        return .node
-    }
-    
-    public init(_ components: [Node]) {
+    public required init(_ components: [Node]) {
         self.elements = components
     }
     
-    init?(_ node: Node) {
-        guard let list = node as? ListProtocol else {
-            return nil
-        }
-        self.init(list)
+    public convenience init(_ list: ListProtocol) {
+        self.init(list.elements)
     }
-    
-    init(_ list: ListProtocol) {
-        self.elements = list.elements
-    }
-    
-    public func equals(_ node: Node) -> Bool {
-        if let v = node as? Vector {
-            return equals(list: v)
-        }
-        return false
-    }
-    
 
     /// Perform an operation with another vecto;. e.g. `[a b] + [c d] = [a+c b+d]`
     /// - Warning: Do not use `*` and `/` as it would cause confusion with the definition of dot product!
@@ -119,13 +76,13 @@ public struct Vector: MutableListProtocol, NaN {
     }
     
     public func appending(_ element: Node) -> Vector {
-        var copy = self
+        let copy = self.copy()
         copy.elements.append(element)
         return copy
     }
     
     public func truncatingLast() -> Vector {
-        var copy = self
+        let copy = self.copy()
         copy.elements.removeLast()
         return copy
     }
@@ -134,4 +91,22 @@ public struct Vector: MutableListProtocol, NaN {
     public static func angleBetween(_ v1: Vector, _ v2: Vector) throws -> Node {
         return try acos(v1.unitVector.dot(with: v2.unitVector))
     }
+    
+    // MARK: - Node
+    
+    public func equals(_ other: Node) -> Bool {
+        guard let vec = other as? Vector else {
+            return false
+        }
+        return equals(list: vec)
+    }
+    
+    public func copy() -> Self {
+        return Self(elements.map { $0.copy() })
+    }
+    
+    public var stringified: String { "[\(concat { $0.stringified })]" }
+    public var ansiColored: String { "[".red.bold + "\(concat { $0.ansiColored })" + "]".red.bold }
+    public var minimal: String { concat(by: " ") { $0.stringified } }
+    public class var kType: KType { .vector }
 }

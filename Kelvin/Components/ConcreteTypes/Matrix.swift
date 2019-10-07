@@ -8,16 +8,19 @@
 
 import Foundation
 
-public struct Matrix: MutableListProtocol, NaN {
-    
+public final class Matrix: Iterable {
     public typealias Row = Vector
     public typealias Dimension = (rows: Int, cols: Int)
     public typealias Cell = (row: Int, col: Int, node: Node)
     
     public var dim: Dimension
-    public var rows: [Row]
-    public var cols: [Vector] {
-        return transposed().rows
+    public var rows: [Vector]
+    public var cols: [Vector] { transposed().rows }
+    
+    // Conform to list protocol
+    public var elements: [Node] {
+        get { rows }
+        set { rows = newValue.map { $0 as? Vector ?? Vector([$0]) } }
     }
     
     /// True if the matrix is a square matrix.
@@ -36,13 +39,13 @@ public struct Matrix: MutableListProtocol, NaN {
     // MARK: - Initializers
     
     /// Initializes a zero matrix of `dim x dim` dimension.
-    public init(_ dim: Int) throws {
+    public convenience init(_ dim: Int) throws {
         try self.init(rows: dim, cols: dim)
     }
     
     /// Initializes a zero matrix of `rows x cols` dimension.
     /// - Throws: `.domain` if either `rows` or `cols` is less than `0`.
-    public init(rows r: Int, cols c: Int) throws {
+    public convenience init(rows r: Int, cols c: Int) throws {
         try self.init(rows: r, cols: c) {_, _ in 0 }
     }
     
@@ -50,13 +53,13 @@ public struct Matrix: MutableListProtocol, NaN {
     /// - Parameter initializer: A transformation that maps `(row, col)` to an element.
     public init(rows: Int, cols: Int, initializer: (Int, Int) -> Node) throws {
         try Assert.validDimension(rows: rows, cols: cols)
-        self.rows = (0..<rows).map { r in Vector((0..<cols).map { c in initializer(r, c) }) }
         self.dim = (rows, cols)
+        self.rows = (0..<rows).map { r in Vector((0..<cols).map { c in initializer(r, c) }) }
     }
     
     /// Initializes a `rows x cols` matrix using elements in `list` as raw values.
     /// For instance, `[1, 0, 0, 1], 2, 2 -> [[1, 0], [0, 1]]`
-    public init(_ list: ListProtocol, rows: Int, cols: Int) throws {
+    public init(_ list: Iterable, rows: Int, cols: Int) throws {
         if list.count != rows * cols {
             let msg = "cannot create a \(rows) x \(cols) matrix from a list of \(list.count) elements"
             throw ExecutionError.general(errMsg: msg)
@@ -71,12 +74,8 @@ public struct Matrix: MutableListProtocol, NaN {
     /// Initializes the matrix from a 2D list.
     /// Note that the provided list must be in the form `[[Node]]`, where every sublist has same length.
     /// - Throws: `.emptyMatrix` if any sublist is empty; `.nonUniform`.
-    public init(_ list: ListProtocol) throws {
-        if list.count == 0 {
-            throw ExecutionError.emptyMatrix
-        }
-        let rows = try Assert.specialize(list: list, as: ListProtocol.self).map { Vector($0) }
-        try Assert.uniform(rows)
+    public convenience init(_ list: Iterable) throws {
+        let rows = try Assert.specialize(list: list, as: Iterable.self).map { Vector($0) }
         try self.init(rows)
     }
     
@@ -84,18 +83,24 @@ public struct Matrix: MutableListProtocol, NaN {
     /// - Parameter rows: A list whose elements represent rows of the matrix. Each row must have the same size.
     /// - Throws: `.emptyMatrix` if count of any row is `0`; `.nonUniform` if any rows have different number of elements.
     public init(_ rows: [Row]) throws {
+        self.dim = (rows: rows.count, cols: rows[0].count)
         self.rows = rows
         if rows.count < 1 || rows.first!.count < 1 {
             throw ExecutionError.emptyMatrix
         }
         try Assert.uniform(rows)
-        self.dim = (rows: rows.count, cols: rows[0].count)
     }
     
     /// Initializes the matrix from a 2D array.
     /// - Throws: `.nonUniform` if the 2D array is not uniform.
-    public init(_ mat: [[Node]]) throws {
+    public convenience init(_ mat: [[Node]]) throws {
         try self.init(mat.map {Row($0)})
+    }
+    
+    /// - Note: Only used for copying, thus internal visibility.
+    private init(validated rows: [Row]) {
+        self.dim = (rows: rows.count, cols: rows[0].count)
+        self.rows = rows
     }
     
     // MARK: - Basic Operations
@@ -103,10 +108,10 @@ public struct Matrix: MutableListProtocol, NaN {
     /// The transpose of the matrix `[[A, B], [C, D]]` is `[[A, C], [B, D]]`
     /// - Returns: The transpose of the matrix.
     public func transposed() -> Matrix {
-        var trans = try! Matrix(rows: dim.cols, cols: dim.rows)
+        let trans = try! Matrix(rows: dim.cols, cols: dim.rows)
         for (i, r) in rows.enumerated() {
             for (j, e) in r.elements.enumerated() {
-                trans[j][i] = e
+                trans[j, i] = e
             }
         }
         return trans
@@ -116,9 +121,10 @@ public struct Matrix: MutableListProtocol, NaN {
     /// - Warning: Do not pass in mult or div as binary operations, as matrices have no such definitions!
     public func perform(_ bin: Binary, with mat: Matrix) throws -> Matrix {
         try Assert.dimension(self, mat)
-        var copy = self
-        cells.forEach {(i, j, e) in
-            copy[i][j] = bin(e, mat[i][j])
+        let copy = self.copy()
+        cells.forEach { arg in
+            let (i, j, e) = arg
+            copy[i, j] = bin(e, mat[i, j])
         }
         return copy
     }
@@ -127,9 +133,10 @@ public struct Matrix: MutableListProtocol, NaN {
     /// - Parameter unary: A unary transformation that is applied to each node in the matrix.
     /// - Returns: A matrix with each element transformed by `unary`
     public func transform(by unary: Unary) -> Matrix {
-        var mat = self
-        cells.forEach {(i, j, e) in
-            mat[i][j] = unary(e)
+        let mat = self.copy()
+        cells.forEach { arg in
+            let (i, j, e) = arg
+            mat[i, j] = unary(e)
         }
         return mat
     }
@@ -138,9 +145,9 @@ public struct Matrix: MutableListProtocol, NaN {
     /// - Parameter unary: A unary transformation that is applied to each `Cell, aka. (row, col, element)`.
     /// - Returns: A matrix with each element transformed by `unary`
     public func transform(by unary: (Cell) -> Node) -> Matrix {
-        var mat = self
+        let mat = self.copy()
         cells.forEach {cell in
-            mat[cell.row][cell.col] = unary(cell)
+            mat[cell.row, cell.col] = unary(cell)
         }
         return mat
     }
@@ -174,9 +181,9 @@ public struct Matrix: MutableListProtocol, NaN {
         guard column.count == dim.rows else {
             throw ExecutionError.dimensionMismatch(self, column)
         }
-        var mat = self
+        let mat = self.copy()
         for i in 0..<dim.rows {
-            mat[i][j] = column[i]
+            mat[i, j] = column[i]
         }
         return mat
     }
@@ -196,7 +203,7 @@ public struct Matrix: MutableListProtocol, NaN {
     /// - Parameter echelonForm: Echelon form to reduce into, either `.ref` or `.rref`.
     /// - Returns: `(swaps: Number of row swaps made, scale: Scalar applied, mat: EF form of the matrix)`
     public func reduce(into echelonForm: EchelonForm) throws -> (swaps: Int, scale: Node, mat: Matrix) {
-        var mat = self
+        let mat = self.copy()
         var lead = 0
         // Keep track of row swaps
         var swaps = 0
@@ -208,7 +215,7 @@ public struct Matrix: MutableListProtocol, NaN {
                 break
             }
             var i = r
-            while mat[i][lead] === 0 {
+            while mat[i, lead] === 0 {
                 i += 1
                 if i == mat.dim.rows {
                     i = r
@@ -223,25 +230,25 @@ public struct Matrix: MutableListProtocol, NaN {
             // Swap rows i and r if i and r are different.
             if i != r {
                 for j in 0..<mat.dim.cols {
-                    let temp = mat[r][j]
-                    mat[r][j] = mat[i][j]
-                    mat[i][j] = temp
+                    let temp = mat[r, j]
+                    mat[r, j] = mat[i, j]
+                    mat[i, j] = temp
                 }
                 swaps += 1
             }
-            let div = mat[r][lead]
+            let div = mat[r, lead]
             if div !== 0 {
                 // Keep track of divisions
                 scale = try (scale * div).simplify()
                 for j in 0..<mat.dim.cols {
-                    mat[r][j] = try (mat[r][j] / div).simplify()
+                    mat[r, j] = try (mat[r, j] / div).simplify()
                 }
             }
             for j in 0..<mat.dim.rows {
                 if (echelonForm == .rref && j != r) || j > r {
-                    let sub = mat[j][lead]
+                    let sub = mat[j, lead]
                     for k in 0..<mat.dim.cols {
-                        mat[j][k] = try (mat[j][k] - (sub * mat[r][k])).simplify()
+                        mat[j, k] = try (mat[j, k] - (sub * mat[r, k])).simplify()
                     }
                 }
             }
@@ -296,7 +303,7 @@ public struct Matrix: MutableListProtocol, NaN {
     private func detCofactor() throws -> Node {
         try Assert.squareMatrix(self)
         if count == 1 { // Base case
-            return self[0][0]
+            return self[0, 0]
         }
 
         // Expand along the first row
@@ -329,7 +336,7 @@ public struct Matrix: MutableListProtocol, NaN {
         try Assert.index(dim.cols, c)
         
         var i = 0, j = 0, n = count
-        var cofactor = try! Matrix(n - 1)
+        let cofactor = try! Matrix(n - 1)
         
         // Looping for each element of the matrix
         for row in 0..<n {
@@ -339,7 +346,7 @@ public struct Matrix: MutableListProtocol, NaN {
                 // only those element which are
                 // not in given row and column
                 if (row != r && col != c) {
-                    cofactor[i][j] = self[row][col]
+                    cofactor[i, j] = self[row, col]
                     j += 1
                     
                     // Row is filled, so increase
@@ -358,9 +365,10 @@ public struct Matrix: MutableListProtocol, NaN {
     /// Computes the cofactor matrix. The cofactor matrix is the cofactor taken at each entry of the matrix.
     /// - Note: Cofactor matrix only exists for square matrices
     public func cofactorMatrix() throws -> Matrix {
-        var coMat = try! Matrix(count)
-        try cells.forEach {(i, j, _) in
-            coMat[i][j] = try cofactor(row: i, col: j).determinant()
+        let coMat = try! Matrix(count)
+        try cells.forEach { arg in
+            let (i, j, _) = arg
+            coMat[i, j] = try cofactor(row: i, col: j).determinant()
         }
         return coMat
     }
@@ -376,7 +384,7 @@ public struct Matrix: MutableListProtocol, NaN {
         let n = count
         if (n == 1) {
             adj = try! Matrix(1)
-            adj[0][0] = 1
+            adj[0, 0] = 1
             return adj
         }
         
@@ -393,7 +401,7 @@ public struct Matrix: MutableListProtocol, NaN {
     
                 // Interchanging rows and columns to get the
                 // transpose of the cofactor matrix
-                adj[j][i] = sign * (try temp.determinant())
+                adj[j, i] = sign * (try temp.determinant())
             }
         }
         
@@ -414,10 +422,10 @@ public struct Matrix: MutableListProtocol, NaN {
         let adj = try adjoint()
       
         // Find inverse using formula "inverse(A) = adj(A)/det(A)"
-        var inv = try! Matrix(count)
+        let inv = try! Matrix(count)
         for i in 0..<count {
             for j in 0..<count {
-                inv[i][j] = try (adj[i][j] / det).simplify()
+                inv[i, j] = try (adj[i, j] / det).simplify()
             }
         }
       
@@ -432,11 +440,22 @@ public struct Matrix: MutableListProtocol, NaN {
     /// - Parameter dim: The dimension of the identity matrix.
     /// - Returns: An identity matrix of the specified dimension.
     public static func identityMatrix(_ dim: Int) throws -> Matrix {
-        var mat = try Matrix(dim)
+        let mat = try Matrix(dim)
         for i in 0..<dim {
-            mat[i][i] = 1
+            mat[i, i] = 1
         }
         return mat
+    }
+    
+    // MARK: - Subscript Getter/Setter
+    
+    public subscript(_ r: Int, _ c: Int) -> Node {
+        get {
+            return rows[r][c]
+        }
+        set {
+           rows[r][c] = newValue
+        }
     }
     
     // MARK: - Node
@@ -457,53 +476,12 @@ public struct Matrix: MutableListProtocol, NaN {
         return true
     }
     
-    // MARK: - List Protocol
-    
-    public subscript(_ idx: Int) -> Row {
-        get {
-            return rows[idx]
-        }
-        set {
-           rows[idx] = newValue
-        }
+    public func copy() -> Self {
+        return Self(validated: rows)
     }
     
-    public var elements: [Node] {
-        set {
-            if let rows = newValue as? [Row] {
-                self.rows = rows
-                return
-            }
-        }
-        get {
-            return self.rows
-        }
-    }
-    
-    // MARK: - Logistics
-    
-    public var stringified: String {
-        let r = rows.reduce(nil) {
-            return $0 == nil ? $1.stringified : $0! + ", " + $1.stringified
-        }
-        return "[\(r!)]"
-    }
-    
-    /// Minimalistic string representation of the matrix.
-    public var minimal: String {
-        return rows.reduce(nil) {
-            return $0 == nil ? $1.minimal : $0! + "\n" + $1.minimal
-        } ?? ""
-    }
-    
-    public var ansiColored: String {
-        let r = rows.reduce(nil) {
-            return $0 == nil ? $1.ansiColored : $0! + ", " + $1.ansiColored
-        }
-        return "[".red.bold + "\(r!)" + "]".red.bold
-    }
-    
-    public var precedence: Keyword.Precedence {
-        return .node
-    }
+    public var stringified: String { "[\(concat { $0.stringified })]" }
+    public var ansiColored: String { "[".red.bold + concat { $0.ansiColored } + "]".red.bold }
+    public var minimal: String { concat(by: "\n") { ($0 as! Vector).minimal } }
+    public class var kType: KType { .matrix }
 }

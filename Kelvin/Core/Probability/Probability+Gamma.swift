@@ -1,6 +1,6 @@
 //
-//  Gamma.swift
-//  macOS Application
+//  Probability+Gamma.swift
+//  Kelvin
 //
 //  Created by Jiachen Ren on 2/19/19.
 //  Copyright © 2019 Jiachen Ren. All rights reserved.

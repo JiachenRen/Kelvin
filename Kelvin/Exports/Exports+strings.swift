@@ -1,5 +1,5 @@
 //
-//  KString+Supplier.swift
+//  Exports+strings.swift
 //  Kelvin
 //
 //  Created by Jiachen Ren on 10/1/19.
@@ -8,8 +8,8 @@
 
 import Foundation
 
-extension KString: Supplier {
-    static let exports: [Operation] = [
+extension Exports {
+    static let strings: [Operation] = [
         // Splitting a string
         .binary(.split, KString.self, KString.self) {
             List($0.string.components(separatedBy: $1.string)

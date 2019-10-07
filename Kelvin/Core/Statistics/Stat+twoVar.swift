@@ -1,6 +1,6 @@
 //
-//  TwoVar.swift
-//  macOS Application
+//  Stat+twoVar.swift
+//  Kelvin
 //
 //  Created by Jiachen Ren on 2/24/19.
 //  Copyright © 2019 Jiachen Ren. All rights reserved.
@@ -9,11 +9,15 @@
 import Foundation
 
 /// Two-variable statistics
-extension Stat {
+public extension Stat {
+    enum DatasetType {
+        case sample
+        case population
+    }
     
-    /// SAMPLE_COV(X, Y) = ∑(Xi - X̄)(Yj - Ȳ) / (n - 1)
-    /// POPULATION_COV(X, Y) = ∑(Xi - X̄)(Yj - Ȳ) / (n)
-    public static func covariance(
+    /// `SAMPLE_COV(X, Y) = ∑(Xi - X̄)(Yj - Ȳ) / (n - 1)`
+    /// `POPULATION_COV(X, Y) = ∑(Xi - X̄)(Yj - Ȳ) / (n)`
+    static func covariance(
         _ type: DatasetType,
         _ datasetX: [Float80],
         _ datasetY: [Float80]
@@ -41,9 +45,9 @@ extension Stat {
     
     /// Correlation is the standardized form of covariance. It is computed
     /// by the following formula:
-    /// R(X, Y) = SAMPLE_COV(X, Y) / (Sx * Sy)
+    /// `R(X, Y) = SAMPLE_COV(X, Y) / (Sx * Sy)`
     /// - returns: Correlation, a value between -1 and 1
-    public static func correlation(
+    static func correlation(
         _ datasetX: [Float80],
         _ datasetY: [Float80]
     ) throws -> Float80 {
@@ -53,11 +57,11 @@ extension Stat {
             stdev(.sample, datasetY)
     }
     
-    /// Calculates coefficient of determination, R².
-    /// For calculation of R², the general definition is used:
-    /// R² = 1 - ssRes / ssTot.
+    /// Calculates coefficient of determination, `R²`.
+    /// For calculation of `R²`, the general definition is used:
+    /// `R² = 1 - ssRes / ssTot`.
     /// Refer to https://en.wikipedia.org/wiki/Coefficient_of_determination
-    public static func determination(
+    static func determination(
         _ datasetY: [Float80],
         _ resid: [Float80]
     ) throws -> Float80 {
@@ -78,8 +82,8 @@ extension Stat {
         return 1.0 - ssRes / ssTot
     }
     
-    /// ∑xy
-    public static func sumXY(
+    /// `∑xy`
+    static func sumXY(
         _ datasetX: [Float80],
         _ datasetY: [Float80]
     ) throws -> Float80 {

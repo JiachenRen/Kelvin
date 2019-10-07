@@ -1,14 +1,18 @@
 //
-//  StackTrace+Supplier.swift
+//  Exports+stackTrace.swift
 //  Kelvin
 //
-//  Created by Jiachen Ren on 9/30/19.
+//  Created by Jiachen Ren on 10/6/19.
 //  Copyright © 2019 Jiachen Ren. All rights reserved.
 //
 
 import Foundation
 
-extension StackTrace: Supplier {
+extension Exports {
+    static let stackTrace = StackTrace.exports
+}
+
+extension StackTrace {
 
     static let exports: [Operation] = [
         .init(.printStackTrace, []) { _ in

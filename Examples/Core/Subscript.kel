@@ -1,5 +1,4 @@
 println a[b[c][d + f]][g] + m
 println a[b][c] + d
 println d + [a, b, c]
-println [a, b, c] + [d, q, f([a, s, t])] + {u, f([v, w, t])[m][x + z[y]]}
-
+println [a, b, c] + [d, q, f([a, s, t])] + {u, f([v, w, t])[m][x + z[y]], zeta}

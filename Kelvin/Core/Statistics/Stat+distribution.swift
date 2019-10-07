@@ -1,5 +1,5 @@
 //
-//  OneVar.swift
+//  Stat+distribution.swift
 //  Kelvin
 //
 //  Created by Jiachen Ren on 1/28/19.
@@ -10,8 +10,8 @@ import Foundation
 import GameKit
 
 /// Distribution
-/// Margin of error = z-score (from confidence interval) * stdev of sampling dist.
-/// Confidence interval = estimate +/- margin of error.
+/// `M.E. = z-score (from C.I.) * stdev of sampling dist`.
+/// `C.I. = estimate +/- M.E.`.
 public extension Stat {
     
     /// Geometric probability function
@@ -100,7 +100,7 @@ public extension Stat {
     }
     
     /// Cummulative distribution frequency from lower bound to upper bound,
-    /// where the normal curve is centered at μ with stdev of σ.
+    /// where the normal curve is centered at `μ` with stdev of `σ`.
     ///
     /// - Parameters:
     ///     - from: Lower bound
@@ -439,7 +439,7 @@ public extension Stat {
     /// - Source: https://github.com/datumbox/datumbox-framework/blob/develop/datumbox-framework-core/src/main/java/com/datumbox/framework/core/statistics/distributions/ContinuousDistributions.java
     ///
     /// - Parameters:
-    ///     - x: The value at which tCdf is evaluated
+    ///     - x: The value at which `tCdf` is evaluated
     ///     - df: Degrees of freedom
     static func tCdf(_ x: Float80, _ df: Int) throws -> Float80 {
         try Assert.domain(df, 1, Float80.infinity)
@@ -498,7 +498,7 @@ public extension Stat {
     }
     
     /// Student's t probability density function:
-    /// tPdf(t,ν)= Γ((ν+1)/2)/(√(νπ)Γ(ν/2))*(1+t^2/ν)^(−1/2*(ν+1))
+    /// `tPdf(t,ν)= Γ((ν+1)/2)/(√(νπ)Γ(ν/2))*(1+t^2/ν)^(−1/2*(ν+1))`
     ///
     /// - Parameters:
     ///     - t: The value where PDF is to be evaluated

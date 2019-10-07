@@ -177,19 +177,28 @@ assert expand((a + b) ^ (-5 * a + 4)) =i= (a + b) ^ (-5 * a) * 4 * a * b ^ 3 + (
 ```ruby
 # Behold, factorization!
 
-factor(x * a + x + a + 1)
-factor(x * c + x * b + c * a + b * a)
-factor(x * a + x * 2 + a + 2)
-factor(z * b + z * a + y * b + y * a + x * b + x * a)
-factor(z * d * a + z * b + y * d * a + y * b + x * d * a + x * b)
-factor(z * d * a + z * b * 2 + y * d * a + y * b * 2 + x * d * a + x * b * 2)
-factor(r * b * a + d * b * a - d * c * a * 2 - r * c * a * 2)
-factor(x * f * c + x * f * b + x * d * c + x * d * b + f * c * a + f * b * a + d * c * a + d * b * a)
+r1 := factor(x * a + x + a + 1)
+r2 := factor(x * c + x * b + c * a + b * a)
+r3 := factor(x * a + x * 2 + a + 2)
+r4 := factor(z * b + z * a + y * b + y * a + x * b + x * a)
+r5 := factor(z * d * a + z * b + y * d * a + y * b + x * d * a + x * b)
+r6 := factor(z * d * a + z * b * 2 + y * d * a + y * b * 2 + x * d * a + x * b * 2)
+r7 := factor(r * b * a + d * b * a - d * c * a * 2 - r * c * a * 2)
+r8 := factor(x * f * c + x * f * b + x * d * c + x * d * b + f * c * a + f * b * a + d * c * a + d * b * a)
+
+assert r1 == (1 + a) * (1 + x)
+assert r2 == (a + x) * (b + c)
+assert r3 == (1 + x) * (2 + a)
+assert r4 == (a + b) * (x + y + z)
+assert r5 == (a * d + b) * (x + y + z)
+assert r6 == (2 * b + a * d) * (x + y + z)
+assert r7 == (-2 * c + b) * a * (d + r)
+assert r8 == (a + x) * (b + c) * (d + f)
 ```
 ### [Algebra/Trigonometry](/Examples/Algebra/Trigonometry.kel)
 ```ruby
-# Prints 1!!!!
-println tan(x) * sec(x) * csc(x) * cos(x) ^ 2
+# The following expression evaluates to 1!
+assert tan(x) * sec(x) * csc(x) * cos(x) ^ 2 == 1
 ```
 ### [Algorithms/BinarySearch](/Examples/Algorithms/BinarySearch.kel)
 ```ruby
@@ -240,11 +249,8 @@ def contains(list, a) {
     return false
 }
 
-# Prints true
-println contains({1, 2, 3}, 2)
-
-# Prints false
-println contains({1, 2, 3}, x)
+assert contains({1, 2, 3}, 2)
+assert !contains({1, 2, 3}, x)
 ```
 ### [Algorithms/Deconstruct](/Examples/Algorithms/Deconstruct.kel)
 ```ruby
@@ -296,8 +302,8 @@ def f(a) {
     return a
 }
 
-println f(1000005)
-println f(15)
+assert f(1000005) == 1.000005
+assert f(15) == 1.5
 ```
 ### [Calculus/Differentiation](/Examples/Calculus/Differentiation.kel)
 ```ruby
@@ -470,8 +476,7 @@ dict["what"][1]
 √dict["what"][1][1]
 dict[shit]
 
-# Prints rpg
-println dict[m][o] ~ $0 & $1
+assert (dict[m][o] ~ $0 & $1) == "rpg"
 
 ```
 ### [Core/ErrorHandling](/Examples/Core/ErrorHandling.kel)
@@ -801,7 +806,7 @@ def g(x) = (
 
 g(10)
 
-println g(10)
+assert g(10) == 3628800
 
 def l1 = {
     "Hello",
@@ -821,7 +826,7 @@ def fibonacci(x) = (
     q
 )
 
-println fibonacci(11)
+assert fibonacci(11) == {1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89}
 ```
 ### [Core/RunShell](/Examples/Core/RunShell.kel)
 ```ruby
@@ -863,8 +868,7 @@ assert regMatches("1,2,3","\d") == {"1", "2", "3"}
 println a[b[c][d + f]][g] + m
 println a[b][c] + d
 println d + [a, b, c]
-println [a, b, c] + [d, q, f([a, s, t])] + {u, f([v, w, t])[m][x + z[y]]}
-
+println [a, b, c] + [d, q, f([a, s, t])] + {u, f([v, w, t])[m][x + z[y]], zeta}
 ```
 ### [Core/TrailingClosure](/Examples/Core/TrailingClosure.kel)
 ```ruby
@@ -935,7 +939,7 @@ println m2x2[1][1]
 
 # 3 dimensional matrix of 3 x 3 x 2
 def m3x3x2 = [[[1, 4], [2, 7], [3, 4]], [[1, 4], [2, 7], [3, 4]], [[1, 4], [2, 7], [3, 4]]]
-                               ^
+
 # get the highlighted element (prints 3)
 println m3x3x2[1][2][0]
 
@@ -1025,15 +1029,15 @@ println unitVec([a, b, c])
 println mag([a, b, c])
 
 # Dot product
-println [a, b] * [c, d]
+assert [a, b] dotP [c, d] == a * c + b * d
 
 # Vector addition/subtraction
-println [a, b, c] + [d, f, g]
+assert [a, b, c] + [d, f, g] == [a + d, b + f, c + g]
 
 # Angle between 2 vectors
 v1 := [1, 3, 5]
 v2 := [4, 7, 9]
-println angle(v1, v2)
+assert round(angle(v1, v2), 9) == 0.204136039
 ```
 ### [Misc/Arcane](/Examples/Misc/Arcane.kel)
 ```ruby

@@ -17,6 +17,5 @@ dict["what"][1]
 √dict["what"][1][1]
 dict[shit]
 
-# Prints rpg
-println dict[m][o] ~ $0 & $1
+assert (dict[m][o] ~ $0 & $1) == "rpg"
 

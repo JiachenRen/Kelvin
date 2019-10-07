@@ -8,160 +8,25 @@
 
 import Foundation
 
-public struct Function: MutableListProtocol {
-    
-    public var evaluated: Value? {
-        return (((try? invoke()) as Node??))??.evaluated
-    }
-
-    /// Complexity of the function is the complexity of the List of args + 1.
-    public var complexity: Int {
-        return args.complexity
-    }
-
-    /// The name of the function
+public class Function: ListProtocol, NaN {
+    public var evaluated: Value? { try? invoke()?.evaluated }
+    public var elements: [Node]
     public let name: OperationName
-
-    /// List of arguments that the function takes in.
-    public let args: List
-    
-    /// Conform to MutableListProtocol by returning the list of arguments
-    /// as elements; since the function itself is immutable, a new function
-    /// is created every time the elements are changed.
-    public var elements: [Node] {
-        get {
-            return args.elements
-        }
-        set {
-            self = Function(name, List(newValue))
-        }
-    }
-
-    /// The syntactic rules of the function (looked up by the name)
-    var keyword: Keyword? {
-        return Syntax.glossary[name]
-    }
-    
-    public var precedence: Keyword.Precedence {
-        return keyword?.precedence ?? .node
-    }
-    
-    /// Whether the function is commutative.
     public let isCommutative: Bool
+    var keyword: Keyword? { Syntax.glossary[name] }
 
-    public init(_ name: String, _ args: List) {
+    public required init(_ name: String, _ args: [Node]) {
         self.name = name
         self.isCommutative = name[.commutative]
-        
-        // If the function is commutative, order its arguments.
-        self.args = isCommutative ? args.ordered() : args
+        self.elements = args
+        if isCommutative {
+            order()
+        }
         flatten()
     }
 
-    public init(_ name: String, _ args: [Node]) {
-        self.init(name, List(args))
-    }
-
-    public var stringified: String {
-        return toString()
-    }
-    
-    public var ansiColored: String {
-        return toString(colored: true)
-    }
-    
-    private var ansiFormattedName: String {
-        return Operation.registered[name] == nil ? name : name.bold.italic
-    }
-
-    private func parenthesize(_ s: String, _ colored: Bool) -> String {
-        return colored ? "(".bold + s + ")".bold : "(\(s))"
-    }
-    
-    private func toString(colored: Bool = false) -> String {
-        let r = elements.map {
-            colored ? $0.ansiColored : $0.stringified
-        }
-        var n = " \(colored ? ansiFormattedName : name) "
-        
-        func formatted() -> String {
-            let l = r.reduce(nil) {
-                $0 == nil ? "\($1)" : "\($0!), \($1)"
-            }
-            return "\(colored ? ansiFormattedName : name)\(parenthesize(l ?? "", colored))"
-        }
-        
-        if let keyword = self.keyword {
-            
-            // Determine which form of the function to use;
-            // there are three options: shorthand, operator, or default.
-            let k = keyword.formatted
-            let n = colored ? (k.replacingOccurrences(of: " ", with: "").isAlphanumeric ? k.bold : k) : k
-            
-            switch keyword.associativity {
-            case .infix where count == 1:
-                
-                // Handle special case of -x.
-                let c = keyword.operator?.name ?? (colored ? ansiFormattedName : name)
-                return "\(c)\(r[0])"
-            case .infix where args.count == 2 || isCommutative:
-                if let s = r.enumerated().reduce(nil, {
-                    (a, c) -> String in
-                    let (i, b) = c
-                    let p = usesParenthesis(forNodeAtIndex: i)
-                    let b1 = p ? parenthesize(b, colored) : "\(b)"
-                    return a == nil ? "\(b1)" : "\(a!)\(n)\(b1)"
-                }) {
-                    return "\(s)"
-                } else {
-                    return ""
-                }
-            case .prefix where r.count == 1:
-                let p = usesParenthesis(forNodeAtIndex: 0)
-                return p ? "\(n)\(parenthesize(r[0], colored))" : "\(n)\(r[0])"
-            case .postfix where r.count == 1:
-                let p = usesParenthesis(forNodeAtIndex: 0)
-                return p ? "\(parenthesize(r[0], colored))\(n)" : "\(r[0])\(n)"
-            default:
-                break
-            }
-        }
-        
-        return formatted()
-    }
-
-    /**
-     Whether the child node should be enveloped in parenthesis when printing.
-     If the parent and the child are both commutative and have the same name,
-     then the parenthesis for the child is omitted; otherwise if the child's
-     precedence is larger than that of the parent, the parenthesis is also omitted.
-     
-     - Note: Parentheses only apply to infix operations.
-     - Parameter idx: The index of the child.
-     - Returns: Whether a parenthesis should be used for the child when printing.
-     */
-    private func usesParenthesis(forNodeAtIndex idx: Int) -> Bool {
-        let child = args[idx]
-        if child.precedence < precedence {
-
-            // e.g. (a + b) * c
-            // If the child's precedence is lower, a parenthesis is always needed.
-            return true
-        } else if child.precedence == precedence {
-            if idx != 0 && name[.forwardCommutative] {
-                return true
-            }
-        }
-        return false
-    }
-
-    /**
-     Resolve the operations associated w/ the function and then perform
-     perform them on the arguements.
-     
-     - Returns: The first successful result acquired by performing the
-                operations on the arguments.
-     */
+    /// Resolve the operations associated w/ the function and then perform them on the arguements.
+    /// - Returns: The first successful result acquired by performing the operations on the arguments.
     public func invoke() throws -> Node? {
         for operation in Operation.resolve(for: self) {
             if let result = try operation.def(elements) {
@@ -170,67 +35,15 @@ public struct Function: MutableListProtocol {
         }
         return nil
     }
-
-    /**
-     Simplify each argument, if possible, then perform the operation defined by this
-     function on the arguments, if possible. Otherwise, a copy of the original function
-     is returned, with each argument simplified.
-     
-     - Returns: a node representing the simplified(computed) value of the function.
-     */
-    public func simplify() throws -> Node {
-        // Push current function invocation onto the stack
-        StackTrace.shared.add(.push, self, name)
-        // Make a copy of self.
-        var copy = self
-        
-        do {
-            // Simplify each argument, if requested.
-            if !name[.preservesArguments] {
-                let preservesFirst = name[.preservesFirstArgument]
-                let args = try copy.elements.enumerated().map {(arg) -> Node in
-                    let (i, e) = arg
-                    if preservesFirst && i == 0 {
-                        return e
-                    }
-                    return try e.simplify()
-                }
-                copy = Function(name, args)
-            }
-
-            // If the operation can be performed on the given arguments, perform the operation.
-            // Then, the result of the operation is simplified;
-            // otherwise returns a copy of the original function with each argument simplified.
-            if let s = try copy.invoke()?.simplify() {
-                // For each branch of return, pop the function from stack
-                StackTrace.shared.add(.pop, s, name)
-                return s
-            } else if name[.commutative] {
-                // Try simplifying in the reserve order if the function is commutative
-                if copy.count > 2 {
-                    let after = try Operation.simplifyCommutatively(copy.elements, by: name)
-                    let s = after.complexity < copy.complexity ? after : copy
-                    StackTrace.shared.add(.pop, s, name)
-                    return s
-                }
-            }
-
-            // Cannot be further simplified
-            StackTrace.shared.add(.pop, copy, name)
-            return copy
-        } catch let e as KelvinError {
-            throw ExecutionError.onNode(self, err: e)
-        }
-    }
     
     public func implement(using template: Node) throws {
         // Create function signature
-        let signature = [ParameterType](repeating: .any, count: args.count)
+        let signature = [ParameterType](repeating: .any, count: count)
         // Make sure the old definition is removed from registry
         Operation.remove(name, signature)
         
         // Check to make sure that every argument is a variable
-        for arg in args.elements {
+        for arg in elements {
             if !(arg is Variable) {
                 let msg = "expecting parameter name, instead found \(arg.stringified)"
                 throw ExecutionError.general(errMsg: msg)
@@ -238,7 +51,7 @@ public struct Function: MutableListProtocol {
         }
         
         // Cast the arguments to variables
-        let parameters = args.map {
+        let parameters = elements.map {
             $0 as! Variable
         }
         
@@ -248,8 +61,7 @@ public struct Function: MutableListProtocol {
         Operation.register(op)
     }
     
-    /// Creates a definition from the template, by replacing
-    /// the variables in template with arguments
+    /// Creates a definition from the template, by replacing the variables in template with arguments
     public static func createDefinition(from template: Node, using parameters: [Variable]) throws -> Definition {
         
         // Generate a unique tag
@@ -260,7 +72,7 @@ public struct Function: MutableListProtocol {
         }
         
         let template = template.replacing(by: {
-            var rpl = $0 as! Variable
+            let rpl = $0 as! Variable
             
             // This is for dealing with the following senario:
             // Suppose we have f(x) = x^2, then call to f({x})
@@ -312,7 +124,7 @@ public struct Function: MutableListProtocol {
                         let msg = "'\(fun.stringified)' is not a valid function reference"
                         throw ExecutionError.general(errMsg: msg)
                     }
-                    return Function(new.name, org.args)
+                    return Function(new.name, org.copy().elements)
                 }) {
                     ($0 as? Function)?.name == parameters[i].name
                 }
@@ -344,21 +156,18 @@ public struct Function: MutableListProtocol {
         }
     }
 
-    /**
-     Unravel the binary operation tree.
-     e.g. +(d,+(+(a,b),c)) becomes +(a,b,c,d)
-     
-     - Warning: Before invoking this function, the expression should be in addtion only form.
-     Under normal circumstances, don't use this function.
-     */
-    private mutating func flatten() {
-        let elements = self.elements
+    /// Unravel the binary operation tree.
+    /// e.g. `+(d,+(+(a,b),c))` becomes `+(a,b,c,d)`
+    ///
+    /// - Warning: Before invoking this function, the expression should be in addtion only form.
+    /// Under normal circumstances, don't use this function.
+    private func flatten() {
         
         // Flatten commutative operations
         if isCommutative {
             var newArgs = [Node]()
             var changed = false
-            elements.forEach { arg in
+            self.elements.forEach { arg in
                 if let fun = arg as? Function, fun.name == name {
                     changed = true
                     newArgs.append(contentsOf: fun.elements)
@@ -369,18 +178,157 @@ public struct Function: MutableListProtocol {
 
             // Prevent stackoverflow due to recursive calling to args' setter
             if changed {
-                self = Function(name, List(newArgs))
+                self.elements = newArgs
             }
         }
     }
+    
+    // MARK: - Node
+    
+    /// Simplify each argument, if possible, then perform the operation defined by this
+    /// function on the arguments, if possible. Otherwise, a copy of the original function
+    /// is returned, with each argument simplified.
+    ///
+    /// - Returns: a node representing the simplified(computed) value of the function.
+    public func simplify() throws -> Node {
+        // Push current function invocation onto the stack
+        StackTrace.shared.add(.push, self, name)
+        // Prevent against stack overflow
+        try StackTrace.shared.checkStackLimit()
+        // Make a copy of self.
+        var copy = self
+        do {
+            // Simplify each argument, if requested.
+            if !name[.preservesArguments] {
+                let preservesFirst = name[.preservesFirstArgument]
+                let args = try copy.elements.enumerated().map {(arg) -> Node in
+                    let (i, e) = arg
+                    if preservesFirst && i == 0 {
+                        return e
+                    }
+                    return try e.simplify()
+                }
+                copy = Function(name, args)
+            }
 
-    /// Functions are equal to each other if their names and arguments are the same
+            // If the operation can be performed on the given arguments, perform the operation.
+            // Then, the result of the operation is simplified;
+            // otherwise returns a copy of the original function with each argument simplified.
+            if let s = try copy.invoke()?.simplify() {
+                // For each branch of return, pop the function from stack
+                StackTrace.shared.add(.pop, s, name)
+                return s
+            } else if name[.commutative] {
+                // Try simplifying in the reserve order if the function is commutative
+                if copy.count > 2 {
+                    let after = try Operation.simplifyCommutatively(copy.elements, by: name)
+                    let s = after.complexity < copy.complexity ? after : copy
+                    StackTrace.shared.add(.pop, s, name)
+                    return s
+                }
+            }
+
+            // Cannot be further simplified
+            StackTrace.shared.add(.pop, copy, name)
+            return copy
+        } catch let e as KelvinError {
+            throw ExecutionError.onNode(self, err: e)
+        }
+    }
+
     public func equals(_ node: Node) -> Bool {
         if let fun = node as? Function {
             if fun.name == name {
-                if equals(list: fun as ListProtocol) {
-                    return true
+                return equals(list: fun)
+            }
+        }
+        return false
+    }
+    
+    public func copy() -> Self {
+        Self.init(name, elements.map { $0.copy() })
+    }
+    
+    public var precedence: Keyword.Precedence { keyword?.precedence ?? .node }
+    public var stringified: String { toString() }
+    public var ansiColored: String { toString(colored: true) }
+    public class var kType: KType { .function }
+
+    private func parenthesize(_ s: String, _ colored: Bool) -> String {
+        return colored ? "(".bold + s + ")".bold : "(\(s))"
+    }
+    
+    private func toString(colored: Bool = false) -> String {
+        let r = elements.map { colored ? $0.ansiColored : $0.stringified }
+        let color: (String) -> String = {
+            colored && Operation.registered[$0] != nil ? $0.bold.italic : $0
+        }
+        var n = " \(color(name)) "
+        
+        func formatted() -> String {
+            let l = r.reduce(nil) {
+                $0 == nil ? "\($1)" : "\($0!), \($1)"
+            }
+            return "\(color(name))\(parenthesize(l ?? "", colored))"
+        }
+        
+        if let keyword = self.keyword {
+            
+            // Determine which form of the function to use;
+            // there are three options: shorthand, operator, or default.
+            let k = keyword.formatted
+            let n = colored ? (k.replacingOccurrences(of: " ", with: "").isAlphanumeric ? k.bold : k) : k
+            
+            switch keyword.associativity {
+            case .infix where count == 1:
+                
+                // Handle special case of -x.
+                let c = keyword.operator?.name ?? (color(name))
+                return "\(c)\(r[0])"
+            case .infix where count == 2 || isCommutative:
+                if let s = r.enumerated().reduce(nil, {
+                    (a, c) -> String in
+                    let (i, b) = c
+                    let p = usesParenthesis(forNodeAtIndex: i)
+                    let b1 = p ? parenthesize(b, colored) : "\(b)"
+                    return a == nil ? "\(b1)" : "\(a!)\(n)\(b1)"
+                }) {
+                    return "\(s)"
+                } else {
+                    return ""
                 }
+            case .prefix where r.count == 1:
+                let p = usesParenthesis(forNodeAtIndex: 0)
+                return p ? "\(n)\(parenthesize(r[0], colored))" : "\(n)\(r[0])"
+            case .postfix where r.count == 1:
+                let p = usesParenthesis(forNodeAtIndex: 0)
+                return p ? "\(parenthesize(r[0], colored))\(n)" : "\(r[0])\(n)"
+            default:
+                break
+            }
+        }
+        
+        return formatted()
+    }
+
+    /// Whether the child node should be enveloped in parenthesis when printing.
+    /// If the parent and the child are both commutative and have the same name,
+    /// then the parenthesis for the child is omitted; otherwise if the child's
+    /// precedence is larger than that of the parent, the parenthesis is also omitted.
+    ///
+    /// - Note: Parentheses only apply to infix operations.
+    /// - Parameter idx: The index of the child.
+    /// - Returns: Whether a parenthesis should be used for the child when printing.
+    private func usesParenthesis(forNodeAtIndex idx: Int) -> Bool {
+        let child = elements[idx]
+        if child.precedence < precedence {
+
+            // e.g. (a + b) * c
+            // If the child's precedence is lower, a parenthesis is always needed.
+            return true
+        } else if child.precedence == precedence {
+            if idx != 0 && name[.forwardCommutative] {
+                return true
             }
         }
         return false

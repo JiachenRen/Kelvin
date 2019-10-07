@@ -21,76 +21,17 @@ public enum KType: String, CustomStringConvertible {
     case pair
     case function
     case bool
-    case closure
     case type
+    case unknown
     
-    public var description: String {
-        return rawValue
-    }
-    
-    /// Symbol  used to represent a type in Kelvin script.
-    /// For instance, String would be `@string`
+    /// Symbol  used to represent a type in Kelvin script. For instance, String would be `@string`
     static let symbol = "@"
     
-    public static func resolve<T>(_ type: T.Type) throws -> KType {
-        if type == KString.self {
-            return .string
-        } else if type == List.self || type == ListProtocol.self || type == MutableListProtocol.self {
-            return .list
-        } else if type == Int.self {
-            return .int
-        } else if type == Float80.self || type == Value.self {
-            return .number
-        } else if type == Variable.self {
-            return .variable
-        } else if type == Vector.self {
-            return .vector
-        } else if type == Matrix.self {
-            return .matrix
-        } else if type == Equation.self {
-            return .equation
-        } else if type == Pair.self {
-            return .pair
-        } else if type == Function.self {
-            return .function
-        } else if type == Bool.self {
-            return .bool
-        } else if type == Closure.self {
-            return .closure
-        } else if type == KType.self {
-            return .type
+    static func resolve<T>(_ type: T.Type) -> KType {
+        if let n = type as? Node.Type {
+            return n.kType
         }
-        throw ExecutionError.general(errMsg: "\(String(describing: type)) is not a valid type")
-    }
-    
-    /// - Todo: store relevant type info in their own class definition.
-    public static func resolve(_ node: Node) throws -> KType {
-        if node is KString {
-            return .string
-        } else if node is List {
-            return .list
-        } else if node is Int {
-            return .int
-        } else if node is Value {
-            return .number
-        } else if node is Variable {
-            return .variable
-        } else if node is Vector {
-            return .vector
-        } else if node is Matrix {
-            return .matrix
-        } else if node is Equation {
-            return .equation
-        } else if node is Pair {
-            return .pair
-        } else if node is Function {
-            return .function
-        } else if node is Bool {
-            return .bool
-        } else if node is KType {
-            return .type
-        }
-        throw ExecutionError.general(errMsg: "unable to resolve type of \(node)")
+        return .unknown
     }
     
     /// Converts `node` to `type`.
@@ -104,17 +45,19 @@ public enum KType: String, CustomStringConvertible {
     public static func convert(_ node: Node, to type: KType) throws -> Node {
         switch type {
         case .list:
-            if let list = List(node) {
-                return list
+            if let str = node as? KString {
+                return List(str.string.map { KString(String($0)) })
+            } else if let list = node as? ListProtocol {
+                return List(list.elements)
             }
             throw ExecutionError.invalidCast(from: node, to: type)
         case .vector:
-            if let vec = Vector(node) {
-                return vec
+            if let list = node as? ListProtocol {
+                return Vector(list)
             }
             throw ExecutionError.invalidCast(from: node, to: type)
         case .matrix:
-            let list = try Assert.cast(node, to: ListProtocol.self)
+            let list = try Assert.cast(node, to: Iterable.self)
             return try Matrix(list)
         case .string:
             return KString(node.stringified)
@@ -135,4 +78,6 @@ public enum KType: String, CustomStringConvertible {
             throw ExecutionError.general(errMsg: "conversion to \(type) is not yet supported")
         }
     }
+    
+    public var description: String { rawValue }
 }

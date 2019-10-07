@@ -1,5 +1,5 @@
 //
-//  Vector+Supplier.swift
+//  Exports+vector.swift
 //  Kelvin
 //
 //  Created by Jiachen Ren on 9/30/19.
@@ -8,8 +8,8 @@
 
 import Foundation
 
-extension Vector: Supplier {
-    static let exports: [Operation] = [
+extension Exports {
+    static let vector: [Operation] = [
         .binary(.add, Vector.self, Vector.self) {
             try $0.perform(+, with: $1)
         },

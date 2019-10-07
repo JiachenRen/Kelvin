@@ -75,9 +75,9 @@ public class Assert {
     /// - Throws: `ExecutionError.unexpectedType`
     public static func cast<T>(_ node: Node?, to type: T.Type) throws -> T {
         guard let instance = node as? T else {
-            throw try ExecutionError.unexpectedType(
-                expected: .resolve(type),
-                found: .resolve(node ?? KVoid())
+            throw ExecutionError.unexpectedType(
+                expected: .resolve(T.self),
+                found: Swift.type(of: node ?? KVoid()).kType
             )
         }
         return instance
@@ -90,13 +90,7 @@ public class Assert {
     /// - Throws: `ExecutionError.unexpectedType` if the list contains types other than `T`
     public static func specialize<T>(list: ListProtocol, as type: T.Type) throws -> [T] {
         return try list.map {(n: Node) throws -> T in
-            if let e = n as? T {
-                return e
-            }
-            throw try ExecutionError.unexpectedType(
-                expected: .resolve(type),
-                found: .resolve(n)
-            )
+            try cast(n, to: T.self)
         }
     }
     
@@ -113,7 +107,7 @@ public class Assert {
     ///     - mat: A `Matrix`.
     ///     - type: Swift Type used to specialize the list.
     /// - Throws: `ExecutionError.unexpectedType` if the list contains types other than `T`
-    public func specialize<T>(mat: Matrix, as type: T.Type) throws -> [[T]] {
+    public func specialize<T: Node>(mat: Matrix, as type: T.Type) throws -> [[T]] {
         return try mat.rows.map {row in
             try row.map { e in
                 try Assert.cast(e, to: T.self)

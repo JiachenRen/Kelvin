@@ -13,10 +13,8 @@ public protocol UnaryNode: Node {
 }
 
 extension UnaryNode {
-    
-    public var precedence: Keyword.Precedence {
-        return .node
-    }
+    public var precedence: Keyword.Precedence { .node }
+    public var complexity: Int { node.complexity + 1 }
     
     /// Perform an action on each node in the tree.
     public func forEach(_ body: (Node) -> ()) {
@@ -24,15 +22,13 @@ extension UnaryNode {
         body(node)
     }
     
-    /**
-     Returns true if self is the target node or contains the target node;
-     otherwise return false.
-     
-     - Parameters:
-     - predicament: The condition for the matching node.
-     - depth: Search depth. Won't search for nodes beyond this designated depth.
-     - Returns: Whether the current node contains the target node.
-     */
+    /// Returns true if self is the target node or contains the target node;
+    /// otherwise return false.
+    ///
+    /// - Parameters:
+    /// - predicament: The condition for the matching node.
+    /// - depth: Search depth. Won't search for nodes beyond this designated depth.
+    /// - Returns: Whether the current node contains the target node.
     public func contains(where predicament: PUnary, depth: Int) -> Bool {
         if predicament(self) {
             return true
@@ -45,15 +41,12 @@ extension UnaryNode {
         return false
     }
     
-    /**
-     Replaces nodes identical to replacement node
-     
-     - Parameter predicament: The condition that needs to be met for a node to be replaced
-     - Parameter replace:   A function that takes the old node as input (and perhaps
-     ignores it) and returns a node as replacement.
-     */
+    /// Replaces nodes identical to replacement node.
+    ///
+    /// - Parameter predicament: The condition that needs to be met for a node to be replaced
+    /// - Parameter replace: A function that takes the old node as input (and perhaps ignores it) and returns a node as replacement.
     public func replacing(by replace: (Node) throws -> Node, where predicament: PUnary) rethrows -> Node {
-        var copy = self
+        var copy = self.copy()
         copy.node = try copy.node.replacing(by: replace, where: predicament)
         return predicament(copy) ? try replace(copy) : copy
     }

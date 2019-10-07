@@ -1,6 +1,6 @@
 //
 //  Final.swift
-//  macOS Application
+//  Kelvin
 //
 //  Created by Jiachen Ren on 2/25/19.
 //  Copyright © 2019 Jiachen Ren. All rights reserved.
@@ -8,19 +8,14 @@
 
 import Foundation
 
-struct Final: UnaryNode, NaN {
+final class Final: UnaryNode, NaN {
+    class var kType: KType { .unknown }
+    var stringified: String { node.stringified }
+    var ansiColored: String { node.ansiColored }
     var node: Node
     
-    var stringified: String {
-        return node.stringified
-    }
-    
-    var ansiColored: String {
-        return node.ansiColored
-    }
-    
-    var complexity: Int {
-        return node.complexity + 1
+    init(_ node: Node) {
+        self.node = node
     }
     
     func simplify() throws -> Node {
@@ -32,5 +27,9 @@ struct Final: UnaryNode, NaN {
             return false
         }
         return f.node === self.node
+    }
+    
+    func copy() -> Self {
+        return Self(node.copy())
     }
 }

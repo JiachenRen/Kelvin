@@ -31,6 +31,7 @@ public enum ExecutionError: KelvinError {
     case emptyMatrix
     case singularMatrix
     case unsupportedPlatform(_ supported: String)
+    case stackOverflow(_ stacks: Int)
     
     private static func getRootCause(_ err: KelvinError) -> String {
         guard let execErr = err as? ExecutionError else {
@@ -88,7 +89,7 @@ public enum ExecutionError: KelvinError {
         case .invalidRange(lowerBound: let lb, upperBound: let ub):
             return "cannot form range from \(lb) to \(ub)"
         case .invalidCast(from: let node, to: let type):
-            let nodeType = (try? KType.resolve(node).description) ?? "unknown"
+            let nodeType = Swift.type(of: node).kType.rawValue
             return "cannot cast `\(node.stringified)` of type \(nodeType) to \(type)"
         case .invalidDimension(rows: let r, cols: let c):
             return "(rows: \(r), cols: \(c)) is not a valid dimension"
@@ -106,6 +107,8 @@ public enum ExecutionError: KelvinError {
             return "this feature is supported on \(supported) only"
         case .singularMatrix:
             return "the given matrix is singular"
+        case .stackOverflow(let i):
+            return "stack overflow - max stack size of \(i) has been exceeded"
         }
     }
 }

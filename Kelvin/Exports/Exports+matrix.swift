@@ -1,5 +1,5 @@
 //
-//  Vector & Matrix.swift
+//  Exports+matrix.swift
 //  Kelvin
 //
 //  Created by Jiachen Ren on 1/24/19.
@@ -8,12 +8,12 @@
 
 import Foundation
 
-extension Matrix: Supplier {
-    public static let exports: [Operation] = [
-        .binary(.add, Matrix.self, Matrix.self) {
-            try $0.perform(+, with: $1)
+extension Exports {
+    static let matrix: [Operation] = [
+        .binary(.add, Matrix.self, Matrix.self) { (m1: Matrix, m2: Matrix) throws -> Node in
+            try m1.perform({a, b in a + b}, with: m2)
         },
-        .binary(.add, Matrix.self, Node.self) {(lhs, rhs) in
+        .binary(.add, Matrix.self, Node.self) { (lhs, rhs) in
             lhs.transform {$0 + rhs}
         },
         .binary(.sub, Matrix.self, Matrix.self) {
@@ -55,7 +55,7 @@ extension Matrix: Supplier {
         .binary(.createMatrix, Int.self, Int.self) {
             try Matrix(rows: $0, cols: $1)
         },
-        .ternary(.createMatrix, ListProtocol.self, Int.self, Int.self) {
+        .ternary(.createMatrix, List.self, Int.self, Int.self) {
             try Matrix($0, rows: $1, cols: $2)
         },
         .unary(.createMatrix, Int.self) {
@@ -66,9 +66,6 @@ extension Matrix: Supplier {
         },
         .unary(.transpose, Matrix.self) {
             $0.transposed()
-        },
-        .unary(.gaussianElimination, Matrix.self) {
-            try Matrix.gaussianElimination($0)
         },
         .unary(.adjoint, Matrix.self) {
             try $0.adjoint()

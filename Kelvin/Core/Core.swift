@@ -9,7 +9,7 @@
 import Foundation
 
 /// Core contains the most basic functions of Kelvin Algebra System.
-public class Core: Supplier {
+public class Core {
     
     public static var date: TimeInterval {
         return Date().timeIntervalSince1970
@@ -274,7 +274,7 @@ public class Core: Supplier {
         
         // Manage variable/function definitions
         .noArg(.listVariables) {
-            Final(node: List(Variable.definitions.keys.compactMap {Variable($0)}))
+            Final(List(Variable.definitions.keys.compactMap { Variable($0) }))
         },
         .noArg(.clearVariables) {
             Variable.restoreDefault()
@@ -508,7 +508,7 @@ public class Core: Supplier {
             try evaluate($0, using: Assert.specialize(list: $1, as: Equation.self))
         },
         // f(x, y) = x ^ 2 + y; f <<< {x, y}
-        .binary(.invoke, Variable.self, ListProtocol.self) { (v, list) in
+        .binary(.invoke, Variable.self, List.self) { (v, list) in
             Function(v.name, list.elements)
         },
         
@@ -524,7 +524,7 @@ public class Core: Supplier {
             return KVoid()
         },
         .unary(.compile, KString.self) {
-            Final(node: try Compiler.shared.compile($0.string))
+            Final(try Compiler.shared.compile($0.string))
         },
         .unary(.eval, [.any]) {
             try $0.simplify()
@@ -539,8 +539,7 @@ public class Core: Supplier {
             try KType.convert($0, to: $1)
         },
         .binary(.is, Node.self, KType.self) {(n, type) in
-            let nodeType = try KType.resolve(n)
-            return nodeType == type
+            Swift.type(of: n).kType == type
         }
     ]
 }

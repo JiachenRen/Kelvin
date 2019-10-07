@@ -1,14 +1,18 @@
 //
-//  Supplier.swift
+//  Exports+fileSystem.swift
 //  Kelvin
 //
-//  Created by Jiachen Ren on 10/1/19.
+//  Created by Jiachen Ren on 10/6/19.
 //  Copyright © 2019 Jiachen Ren. All rights reserved.
 //
 
 import Foundation
 
-extension FileSystem: Supplier {
+extension Exports {
+    static let fileSystem = FileSystem.exports
+}
+
+extension FileSystem {
     static let exports: [Operation] = [
         .unary(.readFile, KString.self) {
             return try KString(shared.readFile(at: $0.string))

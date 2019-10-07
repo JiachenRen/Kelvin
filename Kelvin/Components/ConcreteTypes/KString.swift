@@ -1,5 +1,5 @@
 //
-//  Text.swift
+//  KString.swift
 //  Kelvin
 //
 //  Created by Jiachen Ren on 1/12/19.
@@ -8,16 +8,10 @@
 
 import Foundation
 
-public struct KString: LeafNode, NaN {
-    
-    public var stringified: String {
-        return "\"\(string)\""
-    }
-    
-    public var ansiColored: String {
-        return "\"\(string)\"".green
-    }
-    
+public class KString: LeafNode, NaN {
+    public var stringified: String { "\"\(string)\"" }
+    public var ansiColored: String { "\"\(string)\"".green }
+    public class var kType: KType { .string }
     public let string: String
     
     public init(_ string: String) {

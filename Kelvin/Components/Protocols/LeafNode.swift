@@ -1,5 +1,5 @@
 //
-//  Leaf.swift
+//  LeafNode.swift
 //  Kelvin
 //
 //  Created by Jiachen Ren on 1/7/19.
@@ -11,14 +11,16 @@ import Foundation
 public protocol LeafNode: Node {}
 
 extension LeafNode {
-    
-    public var precedence: Keyword.Precedence {
-        return .node
-    }
+    public var precedence: Keyword.Precedence { .node }
 
     /// Leaf nodes have a complexity of 1
     public var complexity: Int {
         return 1
+    }
+    
+    /// Leaf nodes are immutable.
+    public func copy() -> Self {
+        return self
     }
 
     /// Leaf nodes cannot be further simplified by definition.
@@ -31,27 +33,21 @@ extension LeafNode {
         body(self)
     }
 
-    /**
-     If self satisfies target node, then return true, otherwise return false.
-     
-     - Parameters:
-        - predicament: The condition for the matching node.
-        - depth: Search depth. Won't search for nodes beyond this designated depth.
-     - Returns: Whether the current node contains the target node.
-     */
+    /// If self satisfies target node, then return true, otherwise return false.
+    ///
+    /// - Parameters:
+    ///    - predicament: The condition for the matching node.
+    ///    - depth: Search depth. Won't search for nodes beyond this designated depth.
+    /// - Returns: Whether the current node contains the target node.
     public func contains(where predicament: PUnary, depth: Int) -> Bool {
         return predicament(self)
     }
 
-    /**
-     Replace the designated nodes identical to the node provided with the replacement
-     
-     - Parameter predicament: The condition that needs to be met for a node to be replaced
-     - Parameter replace:   A function that takes the old node as input (and perhaps
-     ignores it) and returns a node as replacement.
-     */
+    /// Replace the designated nodes identical to the node provided with the replacement
+    ///
+    /// - Parameter predicament: The condition that needs to be met for a node to be replaced
+    /// - Parameter replace:   A function that takes the old node as input (and perhaps ignores it) and returns a node as replacement.
     public func replacing(by replace: (Node) throws -> Node, where predicament: PUnary) rethrows -> Node {
         return predicament(self) ? try replace(self) : self
     }
-
 }

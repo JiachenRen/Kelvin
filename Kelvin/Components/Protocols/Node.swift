@@ -21,6 +21,8 @@ public typealias PUnary = (Node) -> Bool
 public typealias PBinary = (Node, Node) -> Bool
 
 public protocol Node {
+    /// Type of the node.
+    static var kType: KType { get }
 
     /// The string representation of the node.
     /// This is used to override the description implemented in Float80;
@@ -43,41 +45,36 @@ public protocol Node {
     var complexity: Int { get }
 
     /// Simplify the node.
-    /// TODO: Implement Log
     func simplify() throws -> Node
 
     /// Perform an action on each node in the tree.
     func forEach(_ body: (Node) -> ())
 
-    /**
-     - Parameters:
-        - predicament: The condition for the matching node.
-        - depth: Search depth. Won't search for nodes beyond this designated depth.
-     - Returns: Whether the current node contains the target node.
-     */
+    /// - Parameters:
+    ///    - predicament: The condition for the matching node.
+    ///    - depth: Search depth. Won't search for nodes beyond this designated depth.
+    /// - Returns: Whether the current node contains the target node.
     func contains(where predicament: PUnary, depth: Int) -> Bool
 
-    /**
-     Replace the designated nodes identical to the node provided with the replacement
-     
-     - Parameter predicament: The condition that needs to be met for a node to be replaced
-     - Parameter replace:   A function that takes the old node as input (and perhaps
-                            ignores it) and returns a node as replacement.
-     */
+    /// Replace the designated nodes identical to the node provided with the replacement
+    ///
+    /// - Parameter predicament: The condition that needs to be met for a node to be replaced
+    /// - Parameter replace:   A function that takes the old node as input (and perhaps
+    ///                        ignores it) and returns a node as replacement.
     func replacing(by replace: (Node) throws -> Node, where predicament: PUnary) rethrows -> Node
 
     /// - Returns: Whether the provided node is identical with self.
     func equals(_ node: Node) -> Bool
+    
+    /// Make a copy of self
+    func copy() -> Self
 }
 
 extension Node {
     
-    /**
-     Replace anonymous closure arguments $0, $1, etc. w/ supplied arguments.
-     
-     - Parameter args: Replacements for anonymous closure args
-     - Returns: Node w/ closure args replaced w/ supplied args.
-     */
+    /// Replace anonymous closure arguments `$0`, `$1`, etc. w/ supplied arguments.
+    /// - Parameter args: Replacements for anonymous closure args
+    /// - Returns: Node w/ closure args replaced w/ supplied args.
     public func replacingAnonymousArgs(with args: [Node]) -> Node {
         return self.replacing(by: {n in
             let v = n as! Variable
@@ -100,7 +97,7 @@ extension Node {
     
     /// Finalizes the node such that it is left as-is during simplification.
     public func finalize() -> Node {
-        return Final(node: self)
+        return Final(self)
     }
 }
 
@@ -134,7 +131,7 @@ prefix operator *
 
 public prefix func *(_ args: [Node]) -> Node {
     assert(args.count > 2)
-    return Function("*", args)
+    return Function("*", args.map {$0})
 }
 
 prefix operator **
@@ -145,14 +142,14 @@ public prefix func **(_ args: [Node]) -> Node {
     } else if args.count == 1 {
         return args[0]
     }
-    return Function("*", args)
+    return Function("*", args.map {$0})
 }
 
 prefix operator +
 
 public prefix func +(_ args: [Node]) -> Node {
     assert(args.count >= 2)
-    return Function("+", args)
+    return Function("+", args.map {$0})
 }
 
 prefix operator ++
@@ -163,7 +160,7 @@ public prefix func ++(_ args: [Node]) -> Node {
     } else if args.count == 1 {
         return args[0]
     }
-    return Function("+", args)
+    return Function("+", args.map {$0})
 }
 
 postfix operator ++

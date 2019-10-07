@@ -1,5 +1,5 @@
 //
-//  Bool+Value.swift
+//  Bool+Node.swift
 //  Kelvin
 //
 //  Created by Jiachen Ren on 1/20/19.
@@ -9,18 +9,14 @@
 import Foundation
 
 extension Bool: LeafNode, NaN {
-    public var stringified: String {
-        return "\(self)"
-    }
+    public static var kType: KType { .bool }
+    public var stringified: String { "\(self)" }
+    public var ansiColored: String { self ? "\(self)".green.bold : "\(self)".red.bold }
     
     public func equals(_ node: Node) -> Bool {
         if let b = node as? Bool {
             return b == self
         }
         return false
-    }
-    
-    public var ansiColored: String {
-        return self ? "\(self)".green.bold : "\(self)".red.bold
     }
 }

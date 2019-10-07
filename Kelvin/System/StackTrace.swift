@@ -1,5 +1,5 @@
 //
-//  CallStack.swift
+//  StackTrace.swift
 //  Kelvin
 //
 //  Created by Jiachen Ren on 9/10/19.
@@ -13,6 +13,8 @@ public class StackTrace {
     public var isEnabled: Bool = false
     public var debugOn: Bool = false
     private var indentLevel = 0
+    private var stacks = 0
+    var maxStackSize = 500
     
     /// List of function to be untracked accessible to the user
     public var untracked: [String] = []
@@ -64,12 +66,22 @@ public class StackTrace {
         instructions = [Instruction]()
     }
     
+    /// Kelvin's recursion ability is very limited. This checks against stackoverflow that could terminate the application!
+    /// - Throws: `ExecutionError.stackOverflow` if max stack size is exceeded.
+    func checkStackLimit() throws {
+        if stacks > maxStackSize {
+            stacks = 0
+            throw ExecutionError.stackOverflow(maxStackSize)
+        }
+    }
+    
     /// Adds a new operation to stack trace if stack trace is enabled, excluding ignored
     ///
     /// - Parameter node: The node for which the instruction is acting upon
     /// - Parameter instr: Action taken for the instruction
     /// - Parameter target: Description for the target of invocation
     func add(_ action: Action, _ node: Node? = nil, _ target: String? = nil) {
+        stacks += action == .push ? 1 : -1
         if !isEnabled || (
             target != nil
             && (ignoredSysOps.contains(target!) || untracked.contains(target!))
@@ -115,6 +127,7 @@ public class StackTrace {
     public func clear() {
         instructions = []
         indentLevel = 0
+        stacks = 0
     }
     
 }

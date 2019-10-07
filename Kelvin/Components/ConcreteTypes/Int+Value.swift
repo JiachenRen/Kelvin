@@ -9,11 +9,7 @@
 import Foundation
 
 extension Int: Value {
-    public var float80: Float80 {
-        return Float80(self)
-    }
-    
-    public var ansiColored: String {
-        return "\(self)".blue
-    }
+    public var float80: Float80 { Float80(self) }
+    public var ansiColored: String { "\(self)".blue }
+    public static var kType: KType { .int }
 }

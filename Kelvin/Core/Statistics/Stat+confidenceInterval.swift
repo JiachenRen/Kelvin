@@ -1,6 +1,6 @@
 //
-//  ConfidenceInterval.swift
-//  macOS Application
+//  Stat+confidenceInterval.swift
+//  Kelvin
 //
 //  Created by Jiachen Ren on 3/3/19.
 //  Copyright © 2019 Jiachen Ren. All rights reserved.
@@ -83,11 +83,11 @@ public extension Stat {
     }
     
     /// Calculates t interval from statistics of sample
-    /// CI = statistic +/- (critical value of t dist. (t)) * Sx / √n,
-    /// where t = abs(invT((1 - Confidence Level) / 2, DF)
+    /// `CI = statistic +/- (critical value of t dist. (t)) * Sx / √n`,
+    /// where `t = abs(invT((1 - Confidence Level) / 2, DF)`
     ///
     /// - Parameters:
-    ///     - statistic: Sample mean (x̅)
+    ///     - statistic: Sample mean `x̅`
     ///     - sx: Sample standard deviation
     ///     - n: The size of the sample
     ///     - c: Confidence level (between 0 and 1)
@@ -125,7 +125,7 @@ public extension Stat {
     }
     
     /// Calculates one sample proportion z interval
-    /// CI = p̂ +/- z * √(p̂(1-p̂)/n)
+    /// `CI = p̂ +/- z * √(p̂(1-p̂)/n)`
     static func zIntervalOneProp(
         successes x: Int,
         sampleSize n: Int,
@@ -140,16 +140,16 @@ public extension Stat {
     }
     
     /// Calculates two sample z interval
-    /// Stdev of sampling dist. of x̅1 - x̅2 is √(σ1 ^ 2 / n1 + σ2 ^ 2 / n2);
+    /// Stdev of sampling dist. of `x̅1 - x̅2 is √(σ1 ^ 2 / n1 + σ2 ^ 2 / n2)`;
     /// The rest is the same as one samp. z interval
     ///
     /// - Parameters:
-    ///     - sigma1: Population standard deviation of x1
-    ///     - sigma2: Population standard deviation of x2
-    ///     - statistic1: Sample mean of x1
-    ///     - n1: Sample size of x1
-    ///     - statistic2: Sample mean of x2
-    ///     - n2: Sample size of x2
+    ///     - sigma1: Population standard deviation of `x1`
+    ///     - sigma2: Population standard deviation of `x2`
+    ///     - statistic1: Sample mean of `x1`
+    ///     - n1: Sample size of `x1`
+    ///     - statistic2: Sample mean of `x2`
+    ///     - n2: Sample size of `x2`
     ///     - c: Confidence level
     ///
     /// - Returns: (Confidence Interval, x̅1 - x̅2, Margin of Err., Stdev of Sampling Dist. of Diff.)

@@ -1,5 +1,5 @@
 //
-//  Number.swift
+//  Value.swift
 //  Kelvin
 //
 //  Created by Jiachen Ren on 11/10/18.
@@ -14,13 +14,9 @@ public protocol Value: LeafNode {
 }
 
 extension Value {
-    public var evaluated: Value? {
-        return self
-    }
-
-    public var stringified: String {
-        return "\(self)"
-    }
+    public var evaluated: Value? { self }
+    public var stringified: String { "\(self)" }
+    public static var kType: KType { .number }
 
     public func equals(_ node: Node) -> Bool {
         if let d = node as? Value {

@@ -8,37 +8,33 @@
 
 import Foundation
 
-public struct Closure: UnaryNode, NaN {
-    
+public class Closure: UnaryNode, NaN {
     public static var symbol = "$"
-    var capturesReturn: Bool
-
-    public var stringified: String {
-        return "\(Closure.symbol)(\(node.stringified))"
-    }
-    
     public var node: Node
+    var capturesReturn: Bool
     
-    public init(_ definition: Node, capturesReturn: Bool = false) {
-        self.node = definition
+    public required init(_ node: Node, capturesReturn: Bool = false) {
+        self.node = node
         self.capturesReturn = capturesReturn
     }
     
-    init?(_ list: List) {
+    convenience init?(_ list: List) {
         if list.count == 1 {
             self.init(list[0])
         } else {
             return nil
         }
     }
+    
+    public var stringified: String {
+        "\(Closure.symbol)(\(node.stringified))"
+    }
 
     public var ansiColored: String {
         return "\(Closure.symbol)(".magenta.bold + node.ansiColored + ")".magenta.bold
     }
-
-    public var complexity: Int {
-        return node.complexity + 1
-    }
+    
+    public class var kType: KType { .unknown }
 
     public func simplify() throws -> Node {
         do {
@@ -59,5 +55,9 @@ public struct Closure: UnaryNode, NaN {
             return node === closure.node
         }
         return false
+    }
+    
+    public func copy() -> Self {
+        Self.init(node.copy(), capturesReturn: capturesReturn)
     }
 }

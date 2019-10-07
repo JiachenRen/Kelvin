@@ -1,5 +1,5 @@
 //
-//  Differentiation.swift
+//  Calculus+differentiation.swift
 //  Kelvin
 //
 //  Created by Jiachen Ren on 1/30/19.
@@ -8,9 +8,7 @@
 
 import Foundation
 
-/// Differentiation
 public extension Calculus {
-    
     
     /// Generic operation for calculating the tangential line/plane/surface of a function
     /// of n variables in multivariable.

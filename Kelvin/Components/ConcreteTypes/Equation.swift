@@ -8,26 +8,7 @@
 
 import Foundation
 
-public struct Equation: BinaryNode, NaN {
-    
-    public var stringified: String {
-        return "\(lhs.stringified) \(mode.rawValue) \(rhs.stringified)"
-    }
-    
-    public var ansiColored: String {
-        return "\(lhs.ansiColored) \(mode.rawValue.bold) \(rhs.ansiColored)"
-    }
-    
-    public var precedence: Keyword.Precedence {
-        return .equation
-    }
-
-    /// The left hand side of the equation
-    public var lhs: Node
-
-    /// The right hand side of the equation
-    public var rhs: Node
-
+public class Equation: Iterable, BinaryNode {
     public enum Mode: String {
         case greaterThan = ">"
         case greaterThanOrEquals = ">="
@@ -35,19 +16,71 @@ public struct Equation: BinaryNode, NaN {
         case lessThanOrEquals = "<="
         case equals = "="
     }
+    
+    public var elements: [Node]
+    public var mode: Mode
 
-    /// The mode of the equation
-    var mode: Mode
-
-    /// TODO: Implement inequality
-    public init(lhs: Node, rhs: Node, mode: Mode = .equals) {
+    public required init(lhs: Node, rhs: Node, mode: Mode = .equals) {
         self.mode = mode
-        self.lhs = lhs
-        self.rhs = rhs
+        self.elements = [lhs, rhs]
     }
 
+    // TODO: Implement
+    func solve() -> Node? {
+        return nil
+    }
+
+    /// Assign the value of rhs to lhs. If lhs is a function, a new Operation is defined
+    /// using lhs as signature and rhs as definition. On the other hand; if lhs is a variable,
+    /// then rhs is assigned to the variable as definition.
+    ///
+    /// - Returns: An error if the definition is unsuccessful.
+    public func define() throws {
+        if mode != .equals {
+            // Only an equality can be used for definition.
+            let msg = "inequality '\(mode)' cannot be used for definition"
+            throw ExecutionError.general(errMsg: msg)
+        }
+
+        guard let fun = lhs as? Function else {
+
+            // If lhs is a var, then rhs is assigned as its definition.
+            if let v = lhs as? Variable {
+
+                // By calling rhs.simplify(), the following behavior is ensured:
+                // Suppose the statement "define a = f(x)".
+                // When the statement is executed, the value of "f(x)" instead of "f(x) is returned.
+                let def = try rhs.simplify()
+                
+                // Check if variable is used within its own initial value
+                // to prevent circular definition.
+                if def.contains(where: {$0 === v}, depth: Int.max) {
+                    throw ExecutionError.circularDefinition
+                }
+                Variable.define(v.name, def)
+                return
+            }
+            
+            let msg = "left hand side of definition must be a variable/function"
+            throw ExecutionError.general(errMsg: msg)
+        }
+        
+        // Use the rhs of the equation as a template to create function definition.
+        try fun.implement(using: Closure(rhs, capturesReturn: true))
+    }
+
+    /// Swap left hand side and right and side of the equation
+    /// e.g. `a + b = c -> c = a + b`
+    ///
+    /// - Returns: The equation with lhs and rhs swapped.
+    func reversed() -> Equation {
+        return Equation(lhs: rhs, rhs: lhs)
+    }
+    
+    // MARK: - Node
+    
     public func simplify() throws -> Node {
-        var eq = self
+        var eq = self.copy()
 
         do {
             // Simplify left and right side.
@@ -88,68 +121,27 @@ public struct Equation: BinaryNode, NaN {
         return eq
     }
 
-    // TODO: Implement
-    func solve() -> Node? {
-        return nil
-    }
-
-    /**
-     Assign the value of rhs to lhs. If lhs is a function, a new Operation is defined
-     using lhs as signature and rhs as definition. On the other hand; if lhs is a variable,
-     then rhs is assigned to the variable as definition.
-     
-     - Returns: An error if the definition is unsuccessful.
-     */
-    public func define() throws {
-        if mode != .equals {
-            // Only an equality can be used for definition.
-            let msg = "inequality '\(mode)' cannot be used for definition"
-            throw ExecutionError.general(errMsg: msg)
-        }
-
-        guard let fun = lhs as? Function else {
-
-            // If lhs is a var, then rhs is assigned as its definition.
-            if let v = lhs as? Variable {
-
-                // By calling rhs.simplify(), the following behavior is ensured:
-                // Suppose the statement "define a = f(x)".
-                // When the statement is executed, the value of "f(x)" instead of "f(x) is returned.
-                let def = try rhs.simplify()
-                
-                // Check if variable is used within its own initial value
-                // to prevent circular definition.
-                if def.contains(where: {$0 === v}, depth: Int.max) {
-                    throw ExecutionError.circularDefinition
-                }
-                Variable.define(v.name, def)
-                return
-            }
-            
-            let msg = "left hand side of definition must be a variable/function"
-            throw ExecutionError.general(errMsg: msg)
-        }
-        
-        // Use the rhs of the equation as a template to create function definition.
-        try fun.implement(using: Closure(rhs, capturesReturn: true))
-    }
-
-    /**
-     Swap left hand side and right and side of the equation
-     e.g. a+b=c -> c=a+b
-     
-     - Returns: The equation with lhs and rhs swapped.
-     */
-    func reversed() -> Equation {
-        return Equation(lhs: rhs, rhs: lhs)
-    }
-
     /// Two equations are considered as identical if their operands are identical
     /// either in the forward direction or backward direction
     public func equals(_ node: Node) -> Bool {
         if let eq = node as? Equation {
-            return equals(list: eq) || reversed().equals(list: eq)
+            return self.looselyEquals(eq)
         }
         return false
     }
+    
+    public func copy() -> Self {
+        Self.init(lhs: lhs.copy(), rhs: rhs.copy(), mode: mode)
+    }
+    
+    public var stringified: String {
+        "\(lhs.stringified) \(mode.rawValue) \(rhs.stringified)"
+    }
+    
+    public var ansiColored: String {
+        "\(lhs.ansiColored) \(mode.rawValue.bold) \(rhs.ansiColored)"
+    }
+    
+    public var precedence: Keyword.Precedence { .equation }
+    public class var kType: KType { .equation }
 }

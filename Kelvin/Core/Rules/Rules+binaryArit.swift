@@ -1,5 +1,5 @@
 //
-//  Arithmetic.swift
+//  Rules+binaryArit.swift
 //  Kelvin
 //
 //  Created by Jiachen Ren on 1/19/19.

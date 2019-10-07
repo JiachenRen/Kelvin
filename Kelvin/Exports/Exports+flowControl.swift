@@ -1,14 +1,18 @@
 //
-//  Conditional Statements.swift
+//  Exports+flowControl.swift
 //  Kelvin
 //
-//  Created by Jiachen Ren on 2/4/19.
+//  Created by Jiachen Ren on 10/6/19.
 //  Copyright © 2019 Jiachen Ren. All rights reserved.
 //
 
 import Foundation
 
-extension FlowControl: Supplier {
+extension Exports {
+    static let flowControl = FlowControl.exports
+}
+
+extension FlowControl {
     
     // Bridge flow control operations
     static let exports: [Operation] = [
@@ -83,7 +87,7 @@ extension FlowControl: Supplier {
         // Loops
         .binary(.for, Pair.self, Closure.self) {(pair, closure) in
             let v = try Assert.cast(pair.lhs, to: Variable.self)
-            let list = try Assert.cast(pair.rhs.simplify(), to: ListProtocol.self)
+            let list = try Assert.cast(pair.rhs.simplify(), to: List.self)
             loop: for e in list.elements {
                 let def = Variable.definitions[v.name]
                 Variable.define(v.name, e)

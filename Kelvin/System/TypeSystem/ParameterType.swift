@@ -10,7 +10,6 @@ import Foundation
 
 /// `ParameterType` is used to represent specify parameter type requirement. By giving a function a name,
 /// the number of arguments, and the types of arguments, we can generate a unique signature that is used later to find definitions.
-/// - Todo: store respective type information in their own classes.
 public enum ParameterType: Int, Equatable {
     case int = 1
     case number
@@ -26,8 +25,8 @@ public enum ParameterType: Int, Equatable {
     case matrix
     case list
     case pair
-    case iterable
     case leaf
+    case iterable = 50
     case any = 100
     case numbers = 1000
     case booleans = 1001
@@ -43,8 +42,6 @@ public enum ParameterType: Int, Equatable {
             return .string
         } else if type == List.self {
             return .list
-        } else if type == ListProtocol.self || type == MutableListProtocol.self {
-            return .iterable
         } else if type == Int.self {
             return .int
         } else if type == Value.self {
@@ -69,7 +66,9 @@ public enum ParameterType: Int, Equatable {
             return .closure
         } else if type == KType.self {
             return .type
+        } else if type == Iterable.self {
+            return .iterable
         }
-        throw ExecutionError.general(errMsg: "\(String(describing: type)) is not a valid type")
+        throw ExecutionError.general(errMsg: "\(String(describing: type)) is not a kelvin type")
     }
 }

@@ -8,8 +8,7 @@
 
 import Foundation
 
-public struct Variable: LeafNode, NaN {
-
+public class Variable: LeafNode, NaN {
     public static var definitions: [String: Node] = {
         constants.reduce(into: [:]) {
             $0[$1.key] = $1.value
@@ -21,56 +20,26 @@ public struct Variable: LeafNode, NaN {
         "pi": Float80.pi,
         "inf": Float80.infinity,
     ]
+    
+    public static let validationRegex = Regex(pattern: "^[a-zA-Z_$]+[a-zA-Z_\\d]*$")
 
-    /// The name of the variable
     public var name: String
 
-    public static let validationRegex = Regex(pattern: "^[a-zA-Z_$]+[a-zA-Z_\\d]*$")
-    
-    public var stringified: String {
-        return name
-    }
-    
-    public var ansiColored: String {
-        if definition != nil {
-            return isConstant ? name.bold.magenta : name.bold
-        }
-        return isAnonymous ? name.cyan.bold : name;
-    }
-
     /// Extract the definition of the variable from the definitions.
-    public var definition: Node? {
-        return Variable.definitions[name]
-    }
+    public var definition: Node? { Variable.definitions[name] }
 
-    /// Whether the variable represents a constant.
-    /// e.g. pi, e
-    public var isConstant: Bool {
-        return Variable.constants[name] != nil
-    }
+    /// Whether the variable represents a constant. e.g. pi, e
+    public var isConstant: Bool { Variable.constants[name] != nil }
     
-    /// Anonymous arguments are replaced by their callers
-    /// with supplied expressions.
+    /// Anonymous arguments are replaced by their callers with supplied expressions.
     public var isAnonymous: Bool {
         return name.starts(with: "$") && Int(name[1..<name.count]) != nil
     }
 
-    public var evaluated: Value? {
-        return definition?.evaluated
-    }
-
-    /// Variables have a complexity of 2.
-    public var complexity: Int {
-        return 3
-    }
-
-    public init?(_ name: String) {
-
-        // Check if the variable name is valid
+    public required init?(_ name: String) {
         if !(name ~ Variable.validationRegex) {
             return nil
         }
-
         self.name = name
     }
 
@@ -81,44 +50,29 @@ public struct Variable: LeafNode, NaN {
         }
     }
 
-    /**
-     Assign a definition to variables with the given name.
-     
-     - Warning: Conflicts are overriden.
-     - Parameters:
-        - name: The name of the variable
-        - def: The definition of the variable, can be a number, expression, or equation.
-     */
+    /// Assign a definition to variables with the given name. Duplicate definitions are overriden.
+    /// - Parameters:
+    ///    - name: The name of the variable
+    ///    - def: The definition of the variable, can be a number, expression, or equation.
     public static func define(_ name: String, _ def: Node) {
         definitions.updateValue(def, forKey: name)
     }
 
-    /**
-     Remove the definition of the variables with the given name.
-     
-     - Parameter name: The name of the variable to be deleted.
-     */
+    /// Remove the definition of the variables with the given name.
+    /// - Parameter name: The name of the variable to be deleted.
     public static func delete(_ name: String) {
         definitions.removeValue(forKey: name)
     }
+    
+    // MARK: - Node
 
-    /// Two variables are equal to each other if they have the same name.
-    public func equals(_ node: Node) -> Bool {
-        if let v = node as? Variable {
-            return v.name == name
-        }
-        return false
-    }
-
-    /**
-     If the variable does not have a definition, the variable itself is returned.
-     If the variable is a constant, then depending on the mode, the exact value
-     of the constant or the name of the constant is returned.
-     - Mode.exact: the name of the constant is returned;
-     - Mode.approximate: the value of the constant is returned.
-     
-     - Returns: The simplified variable.
-     */
+    /// If the variable does not have a definition, the variable itself is returned.
+    /// If the variable is a constant, then depending on the mode, the exact value
+    /// of the constant or the name of the constant is returned.
+    /// - `.exact`: the name of the constant is returned;
+    /// - `.approximate`: the value of the constant is returned.
+    ///
+    /// - Returns: The simplified variable.
     public func simplify() throws -> Node {
         if let def = definition {
             do {
@@ -131,4 +85,29 @@ public struct Variable: LeafNode, NaN {
         }
         return self
     }
+    
+    /// Two variables are equal to each other if they have the same name.
+    public func equals(_ node: Node) -> Bool {
+        if let v = node as? Variable {
+            return v.name == name
+        }
+        return false
+    }
+    
+    public var stringified: String {
+        name.replacingOccurrences(
+            of: #"[^a-zA-Z$_\d]"#,
+            with: "",
+            options: .regularExpression
+        )
+    }
+    public var ansiColored: String {
+        if definition != nil {
+            return isConstant ? name.bold.magenta : name.bold
+        }
+        return isAnonymous ? name.cyan.bold : name;
+    }
+    public var complexity: Int { 3 }
+    public var evaluated: Value? { definition?.evaluated }
+    public class var kType: KType { .variable }
 }

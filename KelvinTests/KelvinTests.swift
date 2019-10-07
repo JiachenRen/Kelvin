@@ -34,6 +34,26 @@ class KelvinTests: XCTestCase {
         Syntax.restoreDefault()
     }
     
+    func testCopy() {
+        let fun = Function(.add, [1, 2])
+        let list = List([1, 2])
+        let vec = Vector([1, 2])
+        let pair = Pair(1, 2)
+        let eq = Equation(lhs: 1, rhs: 2)
+        let revEq = eq.reversed()
+        print(fun.stringified)
+        assert(fun.copy() === fun)
+        assert(fun.copy().stringified == fun.stringified)
+        assert(fun !== list)
+        assert(vec !== list)
+        assert(vec.copy() === vec)
+        assert(pair !== list)
+        assert(pair === pair.copy())
+        assert(eq !== pair)
+        assert(eq === revEq)
+        assert(Function(.add, [Function(.add, [1, 2]), 3]) === Function(.add, [1, 2, 3]))
+    }
+    
     func testSystemCheck() throws {
         do {
             let _ = try Compiler.shared.compile("run \"\(testUrl)\"").simplify()

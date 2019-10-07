@@ -1,5 +1,5 @@
 //
-//  Factorization.swift
+//  Algebra+factorization.swift
 //  Kelvin
 //
 //  Created by Jiachen Ren on 1/30/19.

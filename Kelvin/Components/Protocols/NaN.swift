@@ -11,11 +11,5 @@ import Foundation
 public protocol NaN {}
 
 extension NaN {
-
-    /// Returns NaN because non-numerical classes such as variable
-    /// conforms to this protocol.
-    public var evaluated: Value? {
-        return nil
-    }
-
+    public var evaluated: Value? { nil }
 }

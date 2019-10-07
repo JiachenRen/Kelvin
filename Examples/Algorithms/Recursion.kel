@@ -6,5 +6,5 @@ def f(a) {
     return a
 }
 
-println f(1000005)
-println f(15)
+assert f(1000005) == 1.000005
+assert f(15) == 1.5

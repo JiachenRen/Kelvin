@@ -1,6 +1,6 @@
 //
-//  Regression.swift
-//  macOS Application
+//  Stat+regression.swift
+//  Kelvin
 //
 //  Created by Jiachen Ren on 2/25/19.
 //  Copyright © 2019 Jiachen Ren. All rights reserved.
@@ -13,8 +13,8 @@ public extension Stat {
     
     /// Calculates the least squares regression line.
     /// - Formula:
-    /// Slope(m) = r(sy/sx),
-    /// Intercept(b) = ȳ - mx̅
+    /// `Slope(m) = r(sy/sx)`,
+    /// `Intercept(b) = ȳ - mx̅`
     static func linearRegression(
         _ datasetX: [Float80],
         _ datasetY: [Float80]
@@ -48,10 +48,8 @@ public extension Stat {
         return (eqn, m, b, r, cod, resid)
     }
     
-    /// Polynomial least squares regression based on
-    /// Gaussian elimination and Cramer's Rule.
-    /// The original article that describes the procedure
-    /// can be found here:
+    /// Polynomial least squares regression based on Gaussian elimination and Cramer's Rule.
+    /// The original article that describes the procedure can be found here:
     /// https://neutrium.net/mathematics/least-squares-fitting-of-a-polynomial/
     ///
     /// **Example**

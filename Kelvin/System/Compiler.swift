@@ -399,8 +399,8 @@ public class Compiler {
             return (node as? Function)?.name
         }
 
-        func args(_ node: Node) -> List {
-            return (node as! Function).args
+        func args(_ node: Node) -> [Node] {
+            return (node as! Function).elements
         }
 
         // Replace functions generated from syntactic sugars with their
@@ -418,13 +418,13 @@ public class Compiler {
         }
 
         // Restore list() to {}
-        parent = parent.replacing(by: { args($0) }) {
+        parent = parent.replacing(by: { List(args($0)) }) {
             name($0) == .list
         }
         
         // Restore pair() to (:)
         parent = try parent.replacing(by: {
-            let elements = args($0).elements
+            let elements = args($0)
             if elements.count != 2 {
                 throw CompilerError.syntax(errMsg: "expected expr. on both sides of 'x'")
             }
@@ -446,7 +446,7 @@ public class Compiler {
 
         // Restore equations
         parent = try parent.replacing(by: {
-            let elements = args($0).elements
+            let elements = args($0)
             if elements.count != 2 {
                 throw CompilerError.syntax(errMsg: "expected expr. on both sides of '='")
             }
@@ -457,7 +457,7 @@ public class Compiler {
         
         // Restore else {...}
         parent = parent.replacing(by: {
-            var fun = $0 as! Function
+            let fun = $0 as! Function
             fun[1] = Closure(fun[1] as! List)!
             return fun
         }) {

@@ -1,5 +1,5 @@
 //
-//  Algebra.swift
+//  Algebra+expand.swift
 //  Kelvin
 //
 //  Created by Jiachen Ren on 1/19/19.
@@ -68,5 +68,4 @@ public extension Algebra {
         
         return node
     }
-    
 }

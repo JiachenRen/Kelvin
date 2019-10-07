@@ -8,40 +8,29 @@
 
 import Foundation
 
-public struct Pair: BinaryNode, NaN {
+public class Pair: Iterable, BinaryNode {
+    public var stringified: String { concat(by: " : ") { $0.stringified } }
+    public var ansiColored: String { concat(by: " : ") { $0.ansiColored } }
+    public var precedence: Keyword.Precedence { .pair }
+    public class var kType: KType { .pair }
+    public var elements: [Node]
     
-    public var stringified: String {
-        return "\(lhs.stringified) : \(rhs.stringified)"
+    public required init(_ v1: Node, _ v2: Node) {
+        self.elements = [v1, v2]
     }
     
-    public var ansiColored: String {
-        return "\(lhs.ansiColored) : \(rhs.ansiColored)"
+    public convenience init(_ key: String, _ val: Node) {
+        self.init(KString(key), val)
     }
     
-    public var precedence: Keyword.Precedence {
-        return .pair
-    }
-    
-    /// First value of the pair
-    public var lhs: Node
-    
-    /// Second value of the pair
-    public var rhs: Node
-    
-    public init(_ v1: Node, _ v2: Node) {
-        self.lhs = v1
-        self.rhs = v2
-    }
-    
-    init(_ ks: String, _ v2: Node) {
-        self.lhs = KString(ks)
-        self.rhs = v2
-    }
-    
-    public func equals(_ node: Node) -> Bool {
-        if let t = node as? Pair {
-            return equals(list: t)
+    public func equals(_ other: Node) -> Bool {
+        guard let pair = other as? Pair else {
+            return false
         }
-        return false
+        return equals(list: pair)
+    }
+    
+    public func copy() -> Self {
+        return Self(lhs, rhs)
     }
 }

@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  macOS Application
+//  Calculus+nIntegrate.swift
+//  Kelvin
 //
 //  Created by Jiachen Ren on 2/21/19.
 //  Copyright © 2019 Jiachen Ren. All rights reserved.
