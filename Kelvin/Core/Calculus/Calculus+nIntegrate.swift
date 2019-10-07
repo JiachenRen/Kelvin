@@ -99,7 +99,7 @@ public class Quadrature {
             let msg = "the requested accuracy could not be reached when attempting to integrate. \(integrand.stringified)" +
                 " with respect to \(v.stringified) - abs_tolerance: \(quad_int_options.abs_tolerance);" +
             " abs_err: \(absErr); integral: \(integral)"
-            Program.io?.warning(msg)
+            Program.shared.io?.warning(msg)
             fallthrough
         case 0:
             return integral

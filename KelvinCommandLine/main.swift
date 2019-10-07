@@ -12,7 +12,12 @@ let args = CommandLine.arguments
 
 // Set up console
 let console = Console(verbose: true)
-Program.io = console
+
+// Use unretricted stack size
+Program.shared.config.maxStackSize = .max
+
+// Link program output to console
+Program.shared.io = console
 
 // Parse program arguments and decide what to do
 if args.count == 1 {

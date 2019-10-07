@@ -97,7 +97,15 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
         // Use the theme that matches the current system appearance
         theme = view.isDarkMode() ? defaultDarkTheme : defaultLightTheme
         
-        Program.io = self
+        // Divert program output to self
+        Program.shared.io = self
+        
+        // Set stack trace limit to maximum to prevent stack overflow
+        Program.shared.config = .init(
+            scope: .useDefault,
+            retentionPolicy: .preserveAll,
+            threadContext: .maxStackSize
+        )
         
         // Listen to the notif posted when switching between dark/light mode
         DistributedNotificationCenter.default.addObserver(
@@ -162,22 +170,19 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
         debuggerTextView.selectedTextAttributes = selectedTextAttributes
     }
     
-    /**
-     Compile and run Kelvin scripts defined by `sourceCode`.
-     - Note: This **must** be run on a **separate thread** to reduce latency.
-     - Parameters:
-        - sourceCode: The Kelvin script to be compiled and executed
-        - workItem: The dispatch work item where the script is executed
-     */
+    /// Compile and run Kelvin scripts defined by `sourceCode`.
+    /// - Note: This **must** be run on a **separate thread** to reduce latency.
+    /// - Parameters:
+    ///    - sourceCode: The Kelvin script to be compiled and executed
+    ///    - workItem: The dispatch work item where the script is executed
     private func compileAndRun(_ sourceCode: String, _ workItem: DispatchWorkItem!) {
         clear()
         do {
             log("compiling...")
             let t = time
-            var program = try Compiler.shared.compile(document: sourceCode, workItem: workItem)
+            let statements = try Compiler.shared.compile(document: sourceCode, workItem: workItem)
             log("compilation successful in \(time - t) seconds.")
-            program.config = Program.Configuration(scope: .useDefault, retentionPolicy: .preserveAll)
-            try program.run(workItem: workItem)
+            try Program.shared.run(statements, workItem: workItem)
             lastSuccessfulExecution = Scope.current
             Scope.restoreDefault()
         } catch let e as KelvinError {

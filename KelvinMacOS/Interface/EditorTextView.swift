@@ -16,7 +16,8 @@ class EditorTextView: NSTextView {
         _ word: String,
         forPartialWordRange charRange: NSRange,
         movement: Int,
-        isFinal flag: Bool) {
+        isFinal flag: Bool
+    ) {
         
         func complete() {
             super.insertCompletion(
@@ -40,6 +41,5 @@ class EditorTextView: NSTextView {
         }
         
         isSelecting = false
-        
     }
 }

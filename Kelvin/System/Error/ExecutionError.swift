@@ -32,19 +32,20 @@ public enum ExecutionError: KelvinError {
     case singularMatrix
     case unsupportedPlatform(_ supported: String)
     case stackOverflow(_ stacks: Int)
+    case resolved(_ errMsg: String)
     
-    private static func getRootCause(_ err: KelvinError) -> String {
+    public static func getRootCause(_ err: KelvinError) -> KelvinError {
         guard let execErr = err as? ExecutionError else {
-            return err.localizedDescription
+            return err
         }
         switch execErr {
         case .onLine(_, err: let e), .onNode(_, err: let e):
             if let execErr = e as? ExecutionError {
                 return getRootCause(execErr)
             }
-            return e.localizedDescription
+            return e
         default:
-            return execErr.localizedDescription
+            return execErr
         }
     }
     
@@ -109,6 +110,8 @@ public enum ExecutionError: KelvinError {
             return "the given matrix is singular"
         case .stackOverflow(let i):
             return "stack overflow - max stack size of \(i) has been exceeded"
+        case .resolved(let s):
+            return s
         }
     }
 }

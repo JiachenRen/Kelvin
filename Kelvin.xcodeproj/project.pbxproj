@@ -221,6 +221,18 @@
 		1F966CBF23480659003E9E57 /* ListProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F966CBD2348060D003E9E57 /* ListProtocol.swift */; };
 		1F966CC023480664003E9E57 /* ListProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F966CBD2348060D003E9E57 /* ListProtocol.swift */; };
 		1F966CC12348066C003E9E57 /* ListProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F966CBD2348060D003E9E57 /* ListProtocol.swift */; };
+		1F9790D7234BDC6000D07525 /* Typealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9790D3234BDBC500D07525 /* Typealiases.swift */; };
+		1F9790D8234BDC6000D07525 /* Overloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9790D5234BDC0600D07525 /* Overloads.swift */; };
+		1F9790D9234BDC6000D07525 /* Operation+factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9790CD234BDAB100D07525 /* Operation+factory.swift */; };
+		1F9790DA234BDC6900D07525 /* Typealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9790D3234BDBC500D07525 /* Typealiases.swift */; };
+		1F9790DB234BDC6900D07525 /* Overloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9790D5234BDC0600D07525 /* Overloads.swift */; };
+		1F9790DC234BDC6900D07525 /* Operation+factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9790CD234BDAB100D07525 /* Operation+factory.swift */; };
+		1F9790DD234BDC7200D07525 /* Typealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9790D3234BDBC500D07525 /* Typealiases.swift */; };
+		1F9790DE234BDC7200D07525 /* Overloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9790D5234BDC0600D07525 /* Overloads.swift */; };
+		1F9790DF234BDC7200D07525 /* Operation+factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9790CD234BDAB100D07525 /* Operation+factory.swift */; };
+		1F9790E0234BDD0D00D07525 /* Typealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9790D3234BDBC500D07525 /* Typealiases.swift */; };
+		1F9790E1234BDD0D00D07525 /* Overloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9790D5234BDC0600D07525 /* Overloads.swift */; };
+		1F9790E2234BDD0D00D07525 /* Operation+factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9790CD234BDAB100D07525 /* Operation+factory.swift */; };
 		1FA4D915222F47C500296037 /* install.sh in Resources */ = {isa = PBXBuildFile; fileRef = 1FA4D914222F47C500296037 /* install.sh */; };
 		1FA51BB7234A9E4100B3D06B /* Iterable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA51BB5234A9E1700B3D06B /* Iterable.swift */; };
 		1FA51BB8234A9E4700B3D06B /* Iterable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA51BB5234A9E1700B3D06B /* Iterable.swift */; };
@@ -565,6 +577,9 @@
 		1F8DF7982209381B006351B0 /* Rules+booleanLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rules+booleanLogic.swift"; sourceTree = "<group>"; };
 		1F94B7A5221C738000C47B1D /* EditorTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextView.swift; sourceTree = "<group>"; };
 		1F966CBD2348060D003E9E57 /* ListProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListProtocol.swift; sourceTree = "<group>"; };
+		1F9790CD234BDAB100D07525 /* Operation+factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Operation+factory.swift"; sourceTree = "<group>"; };
+		1F9790D3234BDBC500D07525 /* Typealiases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealiases.swift; sourceTree = "<group>"; };
+		1F9790D5234BDC0600D07525 /* Overloads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Overloads.swift; sourceTree = "<group>"; };
 		1F985D4E221C3F8200EFC404 /* Probability+Gamma.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Probability+Gamma.swift"; sourceTree = "<group>"; };
 		1FA4D914222F47C500296037 /* install.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = install.sh; sourceTree = SOURCE_ROOT; };
 		1FA51BB5234A9E1700B3D06B /* Iterable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Iterable.swift; sourceTree = "<group>"; };
@@ -935,6 +950,15 @@
 			path = Misc;
 			sourceTree = "<group>";
 		};
+		1F9790D1234BDB7D00D07525 /* Logistics */ = {
+			isa = PBXGroup;
+			children = (
+				1F9790D3234BDBC500D07525 /* Typealiases.swift */,
+				1F9790D5234BDC0600D07525 /* Overloads.swift */,
+			);
+			path = Logistics;
+			sourceTree = "<group>";
+		};
 		1F985D4D221C3F6B00EFC404 /* Probability */ = {
 			isa = PBXGroup;
 			children = (
@@ -970,6 +994,7 @@
 		1FB2D04E2343B745008709AE /* System */ = {
 			isa = PBXGroup;
 			children = (
+				1F9790D1234BDB7D00D07525 /* Logistics */,
 				1FB2D05F2343D325008709AE /* Error */,
 				1FB2D0692343D601008709AE /* Operation */,
 				1FB2D0B92343F0BF008709AE /* Syntax */,
@@ -1010,6 +1035,7 @@
 			isa = PBXGroup;
 			children = (
 				1F2E82AB21966FC5005C3353 /* Operation.swift */,
+				1F9790CD234BDAB100D07525 /* Operation+factory.swift */,
 				1F570B5921FF737D0006E342 /* OperationName+operations.swift */,
 				1F0AC9DD222B29C300870367 /* OperationName+attribute.swift */,
 			);
@@ -1437,6 +1463,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F9790DA234BDC6900D07525 /* Typealiases.swift in Sources */,
+				1F9790DB234BDC6900D07525 /* Overloads.swift in Sources */,
+				1F9790DC234BDC6900D07525 /* Operation+factory.swift in Sources */,
 				1F53972C234ADA9100B9C66E /* Exports+stackTrace.swift in Sources */,
 				1F53972D234ADA9100B9C66E /* Exports+fileSystem.swift in Sources */,
 				1F53972E234ADA9100B9C66E /* Exports+flowControl.swift in Sources */,
@@ -1527,6 +1556,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F9790DD234BDC7200D07525 /* Typealiases.swift in Sources */,
+				1F9790DE234BDC7200D07525 /* Overloads.swift in Sources */,
+				1F9790DF234BDC7200D07525 /* Operation+factory.swift in Sources */,
 				1F53972F234ADA9C00B9C66E /* Exports+algebra.swift in Sources */,
 				1F539730234ADA9C00B9C66E /* Exports+rules.swift in Sources */,
 				1F539731234ADA9C00B9C66E /* Exports+vector.swift in Sources */,
@@ -1617,6 +1649,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F9790D7234BDC6000D07525 /* Typealiases.swift in Sources */,
+				1F9790D8234BDC6000D07525 /* Overloads.swift in Sources */,
+				1F9790D9234BDC6000D07525 /* Operation+factory.swift in Sources */,
 				1F53974C234ADAAA00B9C66E /* Exports+stackTrace.swift in Sources */,
 				1F53974D234ADAAA00B9C66E /* Exports+fileSystem.swift in Sources */,
 				1F53974E234ADAAA00B9C66E /* Exports+flowControl.swift in Sources */,
@@ -1726,6 +1761,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F9790E0234BDD0D00D07525 /* Typealiases.swift in Sources */,
+				1F9790E1234BDD0D00D07525 /* Overloads.swift in Sources */,
+				1F9790E2234BDD0D00D07525 /* Operation+factory.swift in Sources */,
 				1F539729234ADA8A00B9C66E /* Exports+stackTrace.swift in Sources */,
 				1F53972A234ADA8A00B9C66E /* Exports+fileSystem.swift in Sources */,
 				1F53972B234ADA8A00B9C66E /* Exports+flowControl.swift in Sources */,
@@ -1972,6 +2010,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				"OTHER_LDFLAGS[arch=*]" = "-Wl,-stack_size,0x10000000";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "KelvinCommandLine/KelvinCLI-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -1984,6 +2023,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				"OTHER_LDFLAGS[arch=*]" = "-Wl,-stack_size,0x10000000";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "KelvinCommandLine/KelvinCLI-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -2128,6 +2168,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.1;
+				"OTHER_LDFLAGS[arch=*]" = "-Wl,-stack_size,0x10000000";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jiachenren.Kelvin;
 				PRODUCT_MODULE_NAME = KelvinMacOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2156,6 +2197,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.1;
+				"OTHER_LDFLAGS[arch=*]" = "-Wl,-stack_size,0x10000000 ";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jiachenren.Kelvin;
 				PRODUCT_MODULE_NAME = KelvinMacOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";

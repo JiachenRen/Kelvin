@@ -16,7 +16,7 @@ class KelvinTests: XCTestCase {
 
     override func tearDown() {
         restoreDefault()
-        Program.io?.flush()
+        Program.shared.io?.flush()
     }
     
     private let examplesUrl = URL(fileURLWithPath: #file)

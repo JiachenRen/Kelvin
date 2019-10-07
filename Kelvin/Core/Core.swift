@@ -124,7 +124,7 @@ public class Core {
         let errData = errPipe.fileHandleForReading.readDataToEndOfFile()
         let errMsg = String(data: errData, encoding: .utf8)!
         if !errMsg.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            Program.io?.error(errMsg)
+            Program.shared.io?.error(errMsg)
         }
         
         let stdData = stdPipe.fileHandleForReading.readDataToEndOfFile()
@@ -274,7 +274,7 @@ public class Core {
         
         // Manage variable/function definitions
         .noArg(.listVariables) {
-            Final(List(Variable.definitions.keys.compactMap { Variable($0) }))
+            List(Variable.definitions.keys.compactMap { Variable($0) }).finalize()
         },
         .noArg(.clearVariables) {
             Variable.restoreDefault()
@@ -415,23 +415,23 @@ public class Core {
         
         // Basic IO
         .unary(.print, [.any]) {
-            Program.io?.print($0)
+            Program.shared.io?.print($0)
             return $0
         },
         .unary(.println, [.any]) {
-            Program.io?.println($0)
+            Program.shared.io?.println($0)
             return $0
         },
         .unary(.printMat, Matrix.self) {
-            Program.io?.println(KString($0.minimal))
+            Program.shared.io?.println(KString($0.minimal))
             return $0
         },
         .unary(.log, KString.self) {
-            Program.io?.log($0.string)
+            Program.shared.io?.log($0.string)
             return $0
         },
         .noArg(.readLine) {
-            guard let io = Program.io else {
+            guard let io = Program.shared.io else {
                 throw ExecutionError.general(errMsg: "program in/out protocol not defined")
             }
             return try KString(io.readLine())
@@ -515,16 +515,17 @@ public class Core {
         // Runtime environment
         /// - Todo: Add the ability to choose scope retention policy.
         .unary(.run, KString.self) {
-            try Program.compileAndRun(fileAt: $0.string)
+            let prg = Program(io: Program.shared.io)
+            try prg.compileAndRun(fileAt: $0.string)
             return KVoid()
         },
         .unary(.import, KString.self) {
             try Program.import(fileAt: $0.string)
-            Program.io?.log("imported \($0.string)")
+            Program.shared.io?.log("imported \($0.string)")
             return KVoid()
         },
         .unary(.compile, KString.self) {
-            Final(try Compiler.shared.compile($0.string))
+            try Compiler.shared.compile($0.string).finalize()
         },
         .unary(.eval, [.any]) {
             try $0.simplify()

@@ -90,7 +90,6 @@ public class Function: ListProtocol, NaN {
         return { args in
             // Push variable scope
             Scope.save()
-            
             var inoutArgs = [String: Variable]()
             try zip(parameters, args).forEach {(par, arg) in
                 var arg = arg
@@ -156,31 +155,22 @@ public class Function: ListProtocol, NaN {
         }
     }
 
-    /// Unravel the binary operation tree.
-    /// e.g. `+(d,+(+(a,b),c))` becomes `+(a,b,c,d)`
+    /// Flattens functions marked as commutative.
+    /// e.g. `(d+((a+b)+c))` becomes `(a+b+c+d)`
     ///
     /// - Warning: Before invoking this function, the expression should be in addtion only form.
     /// Under normal circumstances, don't use this function.
     private func flatten() {
-        
-        // Flatten commutative operations
-        if isCommutative {
-            var newArgs = [Node]()
-            var changed = false
-            self.elements.forEach { arg in
-                if let fun = arg as? Function, fun.name == name {
-                    changed = true
-                    newArgs.append(contentsOf: fun.elements)
-                } else {
-                    newArgs.append(arg)
-                }
-            }
-
-            // Prevent stackoverflow due to recursive calling to args' setter
-            if changed {
-                self.elements = newArgs
+        guard isCommutative else { return }
+        var newArgs = [Node]()
+        for arg in elements {
+            if let fun = arg as? Function, fun.name == name {
+                newArgs.append(contentsOf: fun.elements)
+            } else {
+                newArgs.append(arg)
             }
         }
+        elements = newArgs
     }
     
     // MARK: - Node
@@ -194,9 +184,16 @@ public class Function: ListProtocol, NaN {
         // Push current function invocation onto the stack
         StackTrace.shared.add(.push, self, name)
         // Prevent against stack overflow
-        try StackTrace.shared.checkStackLimit()
+        Program.shared.curStackSize += 1
+        try Program.shared.checkStackLimit()
         // Make a copy of self.
         var copy = self
+        // Manual deferral of stack operations.
+        let finalize: (Node) -> Node = { [unowned self] node in
+            Program.shared.curStackSize -= 1
+            StackTrace.shared.add(.pop, node, self.name)
+            return node
+        }
         do {
             // Simplify each argument, if requested.
             if !name[.preservesArguments] {
@@ -216,22 +213,20 @@ public class Function: ListProtocol, NaN {
             // otherwise returns a copy of the original function with each argument simplified.
             if let s = try copy.invoke()?.simplify() {
                 // For each branch of return, pop the function from stack
-                StackTrace.shared.add(.pop, s, name)
-                return s
+                return finalize(s)
             } else if name[.commutative] {
                 // Try simplifying in the reserve order if the function is commutative
                 if copy.count > 2 {
                     let after = try Operation.simplifyCommutatively(copy.elements, by: name)
                     let s = after.complexity < copy.complexity ? after : copy
-                    StackTrace.shared.add(.pop, s, name)
-                    return s
+                    return finalize(s)
                 }
             }
 
             // Cannot be further simplified
-            StackTrace.shared.add(.pop, copy, name)
-            return copy
+            return finalize(copy)
         } catch let e as KelvinError {
+            Program.shared.curStackSize = 0
             throw ExecutionError.onNode(self, err: e)
         }
     }

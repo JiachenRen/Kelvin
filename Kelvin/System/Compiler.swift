@@ -119,11 +119,10 @@ public class Compiler {
     }
 
     
-    /// Compiles a multi-line document into a program.
-    ///
+    /// Compiles a multi-line document into a statements marked with line number.
     /// - Parameter document: A string containing multiple lines of code
     /// - Returns: A program.
-    public func compile(document: String, workItem: DispatchWorkItem? = nil) throws -> Program {
+    public func compile(document: String, workItem: DispatchWorkItem? = nil) throws -> [Program.Statement] {
         let lines = document.split(separator: "\n", omittingEmptySubsequences: false)
                 .map {
                     String($0)
@@ -206,7 +205,7 @@ public class Compiler {
             }
         }
 
-        return Program(statements)
+        return statements
     }
     
     
