@@ -8,20 +8,19 @@
 
 import Foundation
 
-public protocol BinaryNode: MutableListProtocol {
-    var rhs: Node { get set }
-    var lhs: Node { get set }
+public protocol BinaryNode: Node {
+    var elements: [Node] { get set }
 }
 
 extension BinaryNode {
-    public var elements: [Node] {
-        get {
-            return [lhs, rhs]
-        }
-        set {
-            lhs = newValue[0]
-            rhs = newValue[1]
-        }
+    var lhs: Node {
+        get { elements[0] }
+        set { elements[0] = newValue }
+    }
+    
+    var rhs: Node {
+        get { elements[1] }
+        set { elements[1] = newValue }
     }
 }
 
