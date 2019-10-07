@@ -52,7 +52,7 @@ public struct Program {
         let statements = try Compiler.shared.compile(document: content)
         let millis = Int((Date().timeIntervalSince1970 - t) * 1000)
         io?.log("compilation successful in \(millis) milliseconds.")
-        try run(statements)
+        try exec(statements)
     }
     
     /// Execute the given block on a thread that has stack size set to maximum.
@@ -84,7 +84,7 @@ public struct Program {
     }
 
     /// Executes the program; all outputs are redirected to io specified by `Program.io`
-    public func run(_ statements: [Statement], workItem: DispatchWorkItem? = nil) throws {
+    public func exec(_ statements: [Statement], workItem: DispatchWorkItem? = nil) throws {
         // Record start time
         let startTime = currentTime
         

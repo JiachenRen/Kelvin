@@ -182,7 +182,7 @@ class ConsoleViewController: NSViewController, NSTextViewDelegate {
             let t = time
             let statements = try Compiler.shared.compile(document: sourceCode, workItem: workItem)
             log("compilation successful in \(time - t) seconds.")
-            try Program.shared.run(statements, workItem: workItem)
+            try Program.shared.exec(statements, workItem: workItem)
             lastSuccessfulExecution = Scope.current
             Scope.restoreDefault()
         } catch let e as KelvinError {
