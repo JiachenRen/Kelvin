@@ -11,7 +11,6 @@ import Foundation
 public typealias Token = Character
 
 public class Tokenizer {
-
     /// A unicode scalar value that would never interfere with input
     /// In this case, the scalar value (and the ones after)
     /// does not have any unicode counterparts
@@ -24,14 +23,13 @@ public class Tokenizer {
 
     /// Generate next available encoding from a unique scalar.
     public static func next() -> Token {
-
+        
         // Assign a unique code to the operation consisting of
         // an unused unicode
         let encoding = Character(UnicodeScalar(scalar)!)
-
+        
         // Increment the scalar so that each operator is unique.
         scalar += 1
-
         return encoding
     }
 }

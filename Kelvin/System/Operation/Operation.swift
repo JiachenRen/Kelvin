@@ -87,14 +87,10 @@ public class Operation: Equatable, Hashable {
         }
         var arr = registered[operation.name] ?? [Operation]()
         arr.append(operation)
-        
-
         if let conjugate = Operation.conjugate(for: operation) {
-
             // Register the conjugate as well, if it exists.
             arr.append(conjugate)
         }
-        
         arr.sort {$0.scope < $1.scope}
         registered.updateValue(arr, forKey: operation.name)
     }
@@ -103,11 +99,7 @@ public class Operation: Equatable, Hashable {
     /// their names into a dictionary. This results in a 75% performance boost!
     private static func process(_ operations: [Operation]) -> [OperationName: [Operation]] {
         var operations = operations
-
-        let conjugates = operations
-            .map {conjugate(for: $0)}
-            .compactMap {$0}
-
+        let conjugates = operations.map { conjugate(for: $0) }.compactMap { $0 }
         operations.append(contentsOf: conjugates)
         var dict = [OperationName: [Operation]]()
         for operation in operations {
@@ -119,14 +111,12 @@ public class Operation: Equatable, Hashable {
                 dict[name] = [operation]
             }
         }
-        
         dict.forEach {(key, value) in
             let sorted = dict[key]!.sorted {
                 $0.scope < $1.scope
             }
             dict.updateValue(sorted, forKey: key)
         }
-        
         return dict
     }
 
@@ -162,18 +152,12 @@ public class Operation: Equatable, Hashable {
     /// - Parameter args: The arguments supplied to the operation
     /// - Returns: A list of operations with matching signature, sorted in order of increasing scope.
     public static func resolve(for fun: Function) -> [Operation] {
-        
         // First find all operations w/ the given name.
         // If there are none, return an empty array.
-        guard let candidates = registered[fun.name] else {
-            return []
-        }
-        
+        guard let candidates = registered[fun.name] else { return [] }
         var matching = [Operation]()
-
         candLoop: for cand in candidates {
             var signature = cand.signature
-
             // Deal w/ function signature types that allow any # of args.
             if let first = signature.first {
                 switch first {
@@ -236,7 +220,7 @@ public class Operation: Equatable, Hashable {
                 default: continue
                 }
             }
-
+            
             matching.append(cand)
         }
         
@@ -254,35 +238,27 @@ public class Operation: Equatable, Hashable {
     /// - Returns: A node resulting from the simplification.
     public static func simplifyCommutatively(_ nodes: [Node], by fun: OperationName) throws -> Node {
         var nodes = nodes
-
         if nodes.count == 2 {
-
             // Base case.
             return try Function(fun, nodes).simplify()
         }
-
         for i in 0..<nodes.count - 1 {
             let n = nodes.remove(at: i)
             for j in i..<nodes.count {
-
                 let bin = Function(fun, [nodes[j], n])
                 let simplified = try bin.simplify()
-
                 // If the junction of n and j can be simplified...
                 if simplified.complexity < bin.complexity {
                     nodes.remove(at: j)
                     nodes.append(simplified)
-
                     // Commutatively simplify the updated list of nodes
                     return try simplifyCommutatively(nodes, by: fun)
                 }
             }
-
             // Can't perform simplification w/ current node.
             // Insert it back in and move on to the next.
             nodes.insert(n, at: i)
         }
-
         // Fully simplified. Reconstruct commutative operation and return.
         return Function(fun, nodes)
     }

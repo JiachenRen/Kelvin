@@ -112,7 +112,6 @@ public extension Stat {
         return normCdf((ub - μ) / σ) - normCdf((lb - μ) / σ)
     }
     
-
     /// Normal probability density function.
     /// Definition: `1 / √(2π) * e ^ (-1 / 2) ^ 2`
     static func normPdf(_ x: Node) -> Node {

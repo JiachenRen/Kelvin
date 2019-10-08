@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 /// Compiler  uses definitions in this class to convert keywords into their tokens,
 /// resolve operator precedence, associativity, etc.
 ///
@@ -16,7 +15,6 @@ import Foundation
 /// e.g. the function `and(a, b)` can be invoked with `a and b`
 /// Postfix/prefix associative property - applies to unary operations.
 public struct Syntax {
-
     /// A dictionary that maps an encoding to a keyword.
     static var tokens: [Token: Keyword] = {
         definitions.reduce(into: [:]) {

@@ -10,7 +10,6 @@ import Foundation
 
 /// Factory functions
 public extension Operation {
-    
     /// Factory function for type safe quaternary operation
     static func quaternary<T1, T2, T3, T4>(
         _ name: OperationName,

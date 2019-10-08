@@ -9,7 +9,6 @@
 import Foundation
 
 public class Probability {
-    
     /// Combination
     /// - Returns: Number of possible permutations when selecting r ordered elements from a pool of n elements.
     public static func nCr(_ n: Float80, _ r: Float80) -> Float80 {
@@ -62,10 +61,8 @@ public class Probability {
         return perm
     }
 
-    /**
-     The number of different, unordered combinations of r
-     objects from a set of n objects. Definition: nCr(n,r)=nPr(n,r)/r!=n!/r!(n−r)!
-     */
+    /// The number of different, unordered combinations of `r`
+    /// objects from a set of `n` objects. Definition: `nCr(n,r)=nPr(n,r)/r!=n!/r!(n−r)!`
     public static func combinations<T>(of arr: [T], _ r: Int) -> [[T]] {
         func combinationUtil<T>(
             _ arr: [T],

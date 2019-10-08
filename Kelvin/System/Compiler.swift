@@ -1047,9 +1047,7 @@ public class Compiler {
         return tmp1 + rp1 + tmp2 + rp2 + tmp3
     }
 
-    /**
-     - Returns: The indices of the innermost opening and the closing parenthesis/brackets
-     */
+    /// - Returns: The indices of the innermost opening and the closing parenthesis/brackets
     private func innermost(_ exp: String, _ open: Character, _ close: Character) -> ClosedRange<String.Index> {
         let closeIdx = exp.firstIndex(of: close)!
         let openIdx = exp[..<closeIdx].lastIndex(of: open)!

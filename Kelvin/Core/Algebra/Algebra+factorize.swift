@@ -24,7 +24,6 @@ public extension Algebra {
         }
     }
     
-
     /// Try these!!
     /// `factor(x * a + x + a + 1)`
     /// `factor(x * c + x * b + c * a + b * a)`

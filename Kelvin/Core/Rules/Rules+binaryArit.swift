@@ -72,7 +72,6 @@ extension Rules {
         .unary(.sub, [.any]) {
             -1 * $0
         },
-
         
         .binary(.mult, [.any, .any]) {
             $0 === $1 ? $0 ^ 2 : nil
@@ -152,7 +151,6 @@ extension Rules {
             default: break
             }
             return nil
-        },
-
+        }
     ]
 }
