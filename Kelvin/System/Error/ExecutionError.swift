@@ -34,6 +34,13 @@ public enum ExecutionError: KelvinError {
     case stackOverflow(_ stacks: Int)
     case resolved(_ errMsg: String)
     
+    /// Maximum number of error stacks to unravel.
+    /// In case of stack overflow, it'll take forever to generate error messages if this were not in place!
+    public static let maxStackTrace = 500
+    
+    /// Resolves the root cause of `err` by recursively looking at its child errors.
+    /// - Parameter err: A top level error.
+    /// - Returns: The root cause of the error.
     public static func getRootCause(_ err: KelvinError) -> KelvinError {
         guard let execErr = err as? ExecutionError else {
             return err
@@ -49,12 +56,19 @@ public enum ExecutionError: KelvinError {
         }
     }
     
-    public func stackTrace() -> String {
+    /// Generates stack trace with `self` as the entry point.
+    /// - Parameter maxDepth: Defaults to `Int.max`. Maximum number of stacks to go down.
+    public func stackTrace(_ maxDepth: Int = .max) -> String {
+        if maxDepth == 0 {
+            let msg = ExecutionError.getRootCause(self).localizedDescription
+            let numOmitted = Program.shared.config.maxStackSize - ExecutionError.maxStackTrace
+            return msg + "\n\t... (\(numOmitted) omitted)"
+        }
         switch self {
         case .onNode(let n, err: let e):
             let location = "\n\tat \(n.stringified)"
             if let execErr = e as? ExecutionError {
-                let trace = execErr.stackTrace()
+                let trace = execErr.stackTrace(maxDepth - 1)
                 return trace + location
             }
             return e.localizedDescription + location
@@ -70,7 +84,7 @@ public enum ExecutionError: KelvinError {
         case .onLine(let i, err: let e):
             return "error on line \(i) - \(e.localizedDescription)"
         case .onNode(_, _):
-            return stackTrace()
+            return stackTrace(ExecutionError.maxStackTrace)
         case .cancelled:
             return "program execution has been cancelled"
         case .unexpected:
