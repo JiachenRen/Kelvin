@@ -46,7 +46,6 @@ public extension Calculus {
         return Equation(lhs: lhs, rhs: 0)
     }
     
-    
     /// The directional derivative `del _(u)f(x_0,y_0,z_0)` is the rate at which the function `f(x,y,z)`
     /// changes at a point `(x_0,y_0,z_0)` in the direction `u`.
     /// It is a vector form of the usual derivative, and can be defined as
@@ -85,7 +84,6 @@ public extension Calculus {
         return Vector(vars.map {derivative(of: fun, withRespectTo: $0) ?? Function(.derivative, [fun, $0])})
     }
     
-    
     /// Implicit differentiation using concepts of partial derivatives in multivariable calculus.
     ///
     /// First declare the following:
@@ -115,7 +113,6 @@ public extension Calculus {
         return -fx / fy
     }
     
-    
     /// Takes the nth derivative of node `n`.
     ///
     /// - Parameters:
@@ -135,7 +132,6 @@ public extension Calculus {
         return n
     }
     
-    
     /// Takes the (partial) derivative of node `n`w/ respect to variable `v`.
     ///
     /// - Parameters:
@@ -144,7 +140,6 @@ public extension Calculus {
     /// - Returns: The derivative of `n` w/ respect to `v`.
     static func derivative(of n: Node, withRespectTo v: Variable) -> Node? {
         if let v1 = n as? Variable {
-            
             // Irrelevant variables are treated as constants.
             return v1.name == v.name ? 1 : 0
         } else if n is Value {
@@ -232,7 +227,6 @@ public extension Calculus {
         
         return nil
     }
-    
     
     static func derivative(of nodes: [Node], withRespectTo v: Variable) -> [Node] {
         return nodes.map {

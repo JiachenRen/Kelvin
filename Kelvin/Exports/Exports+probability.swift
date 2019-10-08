@@ -49,13 +49,13 @@ extension Probability {
             Probability.nPr($0.float80, $1.float80)
         },
         .binary(.npr, List.self, Int.self) {
-            List(Probability.permutations(of: $0.elements, $1).map {List($0)})
+            List(Probability.permutations(of: $0.elements, $1).map { List($0) })
         },
         .binary(.ncr, Int.self, Int.self) {
             Probability.nCr($0.float80, $1.float80)
         },
         .binary(.ncr, List.self, Int.self) {
-            List(Probability.combinations(of: $0.elements, $1).map {List($0)})
+            List(Probability.combinations(of: $0.elements, $1).map { List($0) })
         },
 
         // Factorial

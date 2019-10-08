@@ -25,14 +25,20 @@ public class Probability {
     public static func factorial(_ n: Float80) -> Float80 {
         return n < 0 ? .nan : n == 0 ? 1 : n * factorial(n - 1)
     }
+    
+    /// - Returns: Permutations of arr by selecting `n` elements.
+    public static func permutations<T>(of arr: [T], _ n: Int) -> [[T]] {
+        return combinations(of: arr, n)
+            .map { permutations(of: $0) }
+            .flatMap { $0 }
+    }
 
     /// Find all permutations of objects in `[T]`.
     /// Ported from c, original algorithm here: https://www.geeksforgeeks.org/heaps-algorithm-for-generating-permutations/
     /// - Returns: A list of all possible permutations of `[T]`
-    public static func permutations<T>(of arr: [T], _ r: Int) -> [[T]] {
+    public static func permutations<T>(of arr: [T]) -> [[T]] {
         var perm: [[T]] = [[T]]()
-        
-        func heapPermutation(_ a: inout [T], _ size: Int, _ n: Int) {
+        func heapPermutation(_ a: inout [T], _ size: Int) {
             // If size becomes 1 then prints the obtained permutation
             if size == 1 {
                 perm.append(a)
@@ -40,7 +46,7 @@ public class Probability {
             }
           
             for i in 0..<size {
-                heapPermutation(&a, size - 1, n)
+                heapPermutation(&a, size - 1)
           
                 // if size is odd, swap first and last
                 // element
@@ -57,7 +63,7 @@ public class Probability {
         }
         
         var a = arr
-        heapPermutation(&a, a.count, a.count)
+        heapPermutation(&a, a.count)
         return perm
     }
 
