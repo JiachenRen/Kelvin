@@ -19,7 +19,7 @@ public extension OperationName {
     static let sub = "-"
     static let mult = "*"
     static let div = "/"
-    static let exp = "^"
+    static let power = "^"
     static let mod = "mod"
     
     // Unary operations
@@ -112,7 +112,8 @@ public extension OperationName {
     
     // MARK: - Calculus
     
-    static let derivative = "derivative"
+    static let derivative = "der"
+    static let criticalPoints = "criticalPoints"
     static let tangent = "tangent"
     static let implicitDifferentiation = "impDif"
     static let directionalDifferentiation = "dirDif"
@@ -123,6 +124,9 @@ public extension OperationName {
     
     static let factorize = "factor" // Also used for factorizing an integer
     static let expand = "expand"
+    static let solve = "solve"
+    static let numericalSolve = "nSolve"
+    static let coefficients = "coef"
     
     // Linear algebra
     static let dotProduct = "dotP"
@@ -152,6 +156,7 @@ public extension OperationName {
     static let randomBool = "randBool"
     static let npr = "npr"
     static let ncr = "ncr"
+    static let powerset = "powerset"
     static let factorial = "factorial"
     
     // MARK: - Boolean logic
@@ -270,4 +275,7 @@ public extension OperationName {
     static let replace = "replace"
     static let regexReplace = "regReplace"
     static let regexMatches = "regMatches"
+    
+    // MARK: - Mode
+    static let setMode = "setMode"
 }

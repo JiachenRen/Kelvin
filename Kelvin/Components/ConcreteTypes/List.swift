@@ -49,8 +49,6 @@ public class List: Iterable, NaN {
     }
     
     // MARK: - Node
-
-    public class var kType: KType { .list }
     
     /// Check if the two lists are strictly equivalent, i.e. order does matter.
     /// - Parameter list: Another list to be compared to.

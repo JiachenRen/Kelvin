@@ -48,12 +48,9 @@ public class Vector: Iterable {
         if vec.count != count {
             throw ExecutionError.dimensionMismatch(self, vec)
         }
-        
-        return zip(elements, vec.elements).map {
-            $0 * $1
-        }.reduce(0) {
-            $0 + $1
-        }
+        return zip(elements, vec.elements)
+            .map { $0 * $1 }
+            .reduce(0) { $0 + $1 }
     }
     
     /// Perform cross product with target vector.
@@ -108,5 +105,4 @@ public class Vector: Iterable {
     public var stringified: String { "[\(concat { $0.stringified })]" }
     public var ansiColored: String { "[".red.bold + "\(concat { $0.ansiColored })" + "]".red.bold }
     public var minimal: String { concat(by: " ") { $0.stringified } }
-    public class var kType: KType { .vector }
 }

@@ -115,7 +115,7 @@ public extension Stat {
     /// Normal probability density function.
     /// Definition: `1 / √(2π) * e ^ (-1 / 2) ^ 2`
     static func normPdf(_ x: Node) -> Node {
-        return 1 / √(2 * "pi"&) * ("e"& ^ ((-1 / 2) * (x ^ 2)))
+        return 1 / √(2 * Constant(.pi)) * ((Constant(.e)) ^ ((-1 / 2) * (x ^ 2)))
     }
     
     /// `normalPdf(x,μ,σ) = 1 / σ * normalPdf((x−μ) / σ)`
@@ -235,7 +235,7 @@ public extension Stat {
     ///     - p: Area under the `tPdf` curve
     ///     - df: Degrees of freedom (a positive integer)
     /// - Precondition: p is between 0 and 1
-    static func invT<T: Value>(_ p: Float80, _ df: T) throws -> Float80 {
+    static func invT<T: Number>(_ p: Float80, _ df: T) throws -> Float80 {
         try Assert.domain(p, 0, 1)
         try Assert.domain(df, 0, Float80.infinity)
         let df = df.float80

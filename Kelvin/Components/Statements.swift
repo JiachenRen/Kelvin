@@ -9,7 +9,6 @@
 import Foundation
 
 public final class Statements: ListProtocol {
-    public class var kType: KType { .unknown }
     public var elements: [Node]
     public var precedence: Keyword.Precedence { .pipeline }
     public var stringified: String { concat(by: "; ") { $0.stringified } }

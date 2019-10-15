@@ -28,7 +28,7 @@ extension Exports {
         .binary(.div, Matrix.self, Node.self) {(lhs, rhs) in
             lhs.transform {$0 / rhs}
         },
-        .binary(.transform, [.any, .any]) {(a, b) in
+        .binary(.transform, [.node, .node]) {(a, b) in
             let mat = try Assert.cast(a.simplify(), to: Matrix.self)
             return mat.transform {(cell: Matrix.Cell) -> Node in
                 b.replacingAnonymousArgs(with: [cell.node, cell.row, cell.col])

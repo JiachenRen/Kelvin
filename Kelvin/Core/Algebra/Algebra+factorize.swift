@@ -25,14 +25,14 @@ public extension Algebra {
     }
     
     /// Try these!!
-    /// `factor(x * a + x + a + 1)`
-    /// `factor(x * c + x * b + c * a + b * a)`
-    /// `factor(x * a + x * 2 + a + 2)`
-    /// `factor(z * b + z * a + y * b + y * a + x * b + x * a)`
-    /// `factor(z * d * a + z * b + y * d * a + y * b + x * d * a + x * b)`
-    /// `factor(z * d * a + z * b * 2 + y * d * a + y * b * 2 + x * d * a + x * b * 2)`
-    /// `factor(e * b * a + d * b * a - d * c * a * 2 - e * c * a * 2)`
-    /// `factor(x * f * c + x * f * b + x * d * c + x * d * b + f * c * a + f * b * a + d * c * a + d * b * a)`
+    /// `factor(x*a+x+a+1)`
+    /// `factor(x*c+x*b+c*a+b*a)`
+    /// `factor(x*a+x*2+a+2)`
+    /// `factor(z*b+z*a+y*b+y*a+x*b+x*a)`
+    /// `factor(z*d*a+z*b+y*d*a+y*b+x*d*a+x*b)`
+    /// `factor(z*d*a+z*b*2+y*d*a+y*b*2+x*d*a+x*b*2)`
+    /// `factor(e*b*a+d*b*a-d*c*a*2-e*c*a*2)`
+    /// `factor(x*f*c+x*f*b+x*d*c+x*d*b+f*c*a+f*b*a+d*c*a+d*b*a)`
     ///
     /// - Todo: Use long division for factorization!
     /// - Todo: Return once further factorization is no longer possible (this will be hard...)
@@ -169,7 +169,7 @@ public extension Algebra {
                     }.flatMap {
                         $0
                 }
-            case .exp:
+            case .power:
                 let base = fun[0]
                 let exponent = fun[1]
                 // TODO: Handle fractions

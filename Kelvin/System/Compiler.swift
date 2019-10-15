@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import BigInt
 
 /// Created by Jiachen on 19/05/2017.
 public class Compiler {
@@ -330,7 +331,7 @@ public class Compiler {
             }
 
             // Store the extracted string as a node reference
-            dict[encoded] = KString(extracted)
+            dict[encoded] = String(extracted)
 
             count += 1
         }
@@ -662,21 +663,28 @@ public class Compiler {
 
             // Try turning the expr into a node by first trying it as a node reference,
             // then an integer, next a double, and finally a boolean.
-            if let node = dict[expr] ?? Int(expr) ?? Float80(expr) ?? Bool(expr) {
+            if let node = dict[expr] ?? Int(expr) ?? BigInt(expr) ?? Float80(expr) ?? Bool(expr) {
                 return node
             } else if let fun = FlowControl.parse(expr) {
                 // Flow control statements (return, throw, continue, break)
                 return fun
             } else {
-                if expr.starts(with: KType.symbol) {
+                if expr.starts(with: KType.marker) {
                     expr.removeFirst()
                     guard let type = KType(rawValue: expr) else {
-                        throw CompilerError.syntax(errMsg: "\(expr) is not a valid type")
+                        throw CompilerError.invalidType(literal: expr)
                     }
                     return type
                 }
                 
                 // If none of the types above apply, then try to use it as a variable name.
+                if expr.starts(with: Constant.marker) {
+                    let literal = String(expr.dropFirst())
+                    guard let const = Constant(literal) else {
+                        throw CompilerError.noSuchConstant(literal: literal)
+                    }
+                    return const
+                }
                 guard let v = Variable(expr) else {
                     throw CompilerError.syntax(errMsg: "illegal variable name '\(expr)'")
                 }

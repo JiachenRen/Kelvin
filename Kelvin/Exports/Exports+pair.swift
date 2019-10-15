@@ -10,7 +10,7 @@ import Foundation
 
 extension Exports {
     static let pair: [Operation] = [
-        .binary(.pair, [.any, .any]) {
+        .binary(.pair, [.node, .node]) {
             Pair($0, $1)
         },
         .binary(.get, Pair.self, Int.self) { (pair, idx) in

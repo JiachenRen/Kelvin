@@ -142,7 +142,7 @@ public extension Calculus {
         if let v1 = n as? Variable {
             // Irrelevant variables are treated as constants.
             return v1.name == v.name ? 1 : 0
-        } else if n is Value {
+        } else if n is Number {
             return 0
         } else if let fun = n as? Function {
             var bigKahuna: Node?

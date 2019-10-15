@@ -22,8 +22,8 @@ extension Exports {
         .binary(.div, Iterable.self, Node.self) {
             applyToEach(.div, $0, $1)
         },
-        .binary(.exp, Iterable.self, Node.self) {
-            applyToEach(.exp, $0, $1)
+        .binary(.power, Iterable.self, Node.self) {
+            applyToEach(.power, $0, $1)
         },
         .binary(.mod, Iterable.self, Node.self) {
             applyToEach(.mod, $0, $1)
@@ -59,7 +59,7 @@ extension Exports {
                 throw ExecutionError.undefined(v)
             }
             guard var list = val as? Iterable else {
-                throw ExecutionError.unexpectedType(expected: .list, found: type(of: val).kType)
+                throw ExecutionError.unexpectedType(expected: .list, found: .resolve(val))
             }
             list[i] = e
             Variable.define(v.name, list)
@@ -68,7 +68,7 @@ extension Exports {
         .unary(.size, Iterable.self) {
             return $0.count
         },
-        .init(.map, [.any, .any]) { nodes in
+        .init(.map, [.node, .node]) { nodes in
             let list = try Assert.cast(nodes[0].simplify(), to: Iterable.self)
             let updated = list.elements.enumerated().map { (idx, e) in
                 nodes[1].replacingAnonymousArgs(with: [e, idx])
@@ -76,7 +76,7 @@ extension Exports {
             list.elements = updated
             return list
         },
-        .init(.reduce, [.any, .any]) { nodes in
+        .init(.reduce, [.node, .node]) { nodes in
             let list = try Assert.cast(nodes[0].simplify(), to: Iterable.self)
             let reduced = list.elements.reduce(nil) { (e1, e2) -> Node in
                 if e1 == nil {
@@ -86,7 +86,7 @@ extension Exports {
             }
             return reduced ?? KVoid()
         },
-        .init(.filter, [.any, .any]) { nodes in
+        .init(.filter, [.node, .node]) { nodes in
             var list = try Assert.cast(nodes[0].simplify(), to: Iterable.self)
             let updated = try list.elements.enumerated().map {(idx, e) in
                     nodes[1].replacingAnonymousArgs(with: [e, idx])
@@ -104,7 +104,7 @@ extension Exports {
             copy.elements.append($1)
             return copy
         },
-        .init(.sort, [.any, .any]) {nodes in
+        .init(.sort, [.node, .node]) {nodes in
             let l1 = try Assert.cast(nodes[0].simplify(), to: Iterable.self)
             return try l1.sorted {
                 let predicate = try nodes[1].replacingAnonymousArgs(with: [$0, $1])
@@ -112,7 +112,7 @@ extension Exports {
                 return try Assert.cast(predicate, to: Bool.self)
             }
         },
-        .binary(.remove, [.any, .any]) {(l, n) in
+        .binary(.remove, [.node, .node]) {(l, n) in
             let list = try Assert.cast(l.simplify(), to: Iterable.self)
             if let idx = try n.simplify() as? Int {
                 return try list.removing(at: idx)

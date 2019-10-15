@@ -18,16 +18,16 @@ extension Stat {
         // Mark: Distribution
         
         // tPdf, tCdf, and invt
-        .binary(.invT, Value.self, Int.self) {
+        .binary(.invT, Number.self, Int.self) {
             try invT($0.float80, $1)
         },
-        .binary(.tPdf, Value.self, Int.self) {
+        .binary(.tPdf, Number.self, Int.self) {
             try tPdf($0.float80, $1)
         },
-        .binary(.tCdf, Value.self, Int.self) {
+        .binary(.tCdf, Number.self, Int.self) {
             try tCdf($0.float80, $1)
         },
-        .ternary(.tCdf, Value.self, Value.self, Int.self) {
+        .ternary(.tCdf, Number.self, Number.self, Int.self) {
             try tCdf(lowerBound: $0.float80, upperBound: $1.float80, $2)
         },
         
@@ -40,7 +40,7 @@ extension Stat {
         },
         
         // Binomial Pdf/Cdf
-        .ternary(.binomPdf, [.any, .any, .any]) {
+        .ternary(.binomPdf, [.node, .node, .node]) {
             binomPdf(trials: $0, prSuccess: $1, $2)
         },
         .binary(.binomPdf, Int.self, Node.self) {
@@ -51,12 +51,12 @@ extension Stat {
         },
         
         // normCdf from -∞ to x
-        .unary(.normCdf, Value.self) {
+        .unary(.normCdf, Number.self) {
             Float80(normCdf(Double($0.float80)))
         },
         
         // normCdf from a to b, centered at zero with stdev of 1
-        .binary(.normCdf, Value.self, Value.self) {
+        .binary(.normCdf, Number.self, Number.self) {
             Float80(normCdf(from: Double($0≈!), to: Double($1≈!)))
         },
         
@@ -65,19 +65,19 @@ extension Stat {
             let args: [Double] = $0.map {Double($0≈!)}
             return Float80(normCdf(from: args[0], to: args[1], μ: args[2], σ: args[3]))
         },
-        .ternary(.randNorm, Value.self, Value.self, Int.self) {
+        .ternary(.randNorm, Number.self, Number.self, Int.self) {
             let elements = randNorm(μ: $0.float80, σ: $1.float80, n: $2)
             return List(elements)
         },
-        .ternary(.invNorm, Value.self, Value.self, Value.self) {
+        .ternary(.invNorm, Number.self, Number.self, Number.self) {
             let stdev = $2
             let mean = $1
             return try Float80(invNorm(Double($0.float80))) * stdev + mean
         },
-        .unary(.normPdf, [.any]) {
+        .unary(.normPdf, [.node]) {
             normPdf($0)
         },
-        .ternary(.normPdf, [.any, .any, .any]) {
+        .ternary(.normPdf, [.node, .node, .node]) {
             normPdf($0, μ: $1, σ: $2)
         },
         
@@ -89,16 +89,16 @@ extension Stat {
         .unary(.max, List.self) {
             Function(.max, $0.elements)
         },
-        .init(.max, [.numbers]) {
+        .init(.max, [.init(.number, multiplicity: .any)]) {
             max($0.map {$0≈!})
         },
         .unary(.min, List.self) {
             Function(.min, $0.elements)
         },
-        .init(.min, [.numbers]) {
+        .init(.min, [.init(.number, multiplicity: .any)]) {
             min($0.map {$0≈!})
         },
-        .init(.mean, [.universal]) { nodes in
+        .init(.mean, [.init(.node, multiplicity: .any)]) { nodes in
             ++nodes / nodes.count
         },
         .unary(.sumOfDiffSq, List.self) {
@@ -125,7 +125,7 @@ extension Stat {
         .unary(.sum, List.self) {
             sum($0.elements)
         },
-        .init(.sum, [.universal]) { nodes in
+        .init(.sum, [.init(.node, multiplicity: .any)]) { nodes in
             ++nodes
         },
         
@@ -306,7 +306,7 @@ extension Stat {
         
         // Mark: Confidence intervals
         
-        .quaternary(.zInterval, Value.self, Value.self, Int.self, Value.self) {
+        .quaternary(.zInterval, Number.self, Number.self, Int.self, Number.self) {
             let result = try zInterval(
                 sigma: $0.float80,
                 mean: $1.float80,
@@ -320,7 +320,7 @@ extension Stat {
             ]
             return List(stats)
         },
-        .ternary(.zInterval, Value.self, List.self, Value.self) {
+        .ternary(.zInterval, Number.self, List.self, Number.self) {
             let result = try zInterval(
                 sigma: $0.float80,
                 sample: $1.toNumerics(),
@@ -336,7 +336,7 @@ extension Stat {
             ]
             return List(stats)
         },
-        .quaternary(.tInterval, Value.self, Value.self, Int.self, Value.self) {
+        .quaternary(.tInterval, Number.self, Number.self, Int.self, Number.self) {
             let result = try tInterval(
                 mean: $0.float80,
                 sx: $1.float80,
@@ -352,7 +352,7 @@ extension Stat {
             ]
             return List(stats)
         },
-        .binary(.tInterval, List.self, Value.self) {
+        .binary(.tInterval, List.self, Number.self) {
             let result = try tInterval(sample: $0.toNumerics(), confidenceLevel: $1.float80)
             // (result.ci, statistic, result.me, result.df, sx, n)
             let stats: [Pair] = [
@@ -367,7 +367,7 @@ extension Stat {
             ]
             return List(stats)
         },
-        .ternary(.zIntervalOneProp, Int.self, Int.self, Value.self) {
+        .ternary(.zIntervalOneProp, Int.self, Int.self, Number.self) {
             let result = try zIntervalOneProp(
                 successes: $0,
                 sampleSize: $1,
@@ -464,7 +464,7 @@ extension Stat {
             ]
             return List(stats)
         },
-        .ternary(.tIntervalTwoSamp, List.self, List.self, Value.self) {
+        .ternary(.tIntervalTwoSamp, List.self, List.self, Number.self) {
             let result = try tIntervalTwoSamp(
                 sample1: $0.toNumerics(),
                 sample2: $1.toNumerics(),

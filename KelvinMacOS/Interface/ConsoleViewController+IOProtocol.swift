@@ -12,8 +12,8 @@ import Kelvin
 extension ConsoleViewController: IOProtocol {
     
     private func format(_ n: Node) -> String {
-        if let ks = n as? KString {
-            return ks.string
+        if let s = n as? String {
+            return s
         }
         return n.stringified
     }
@@ -77,7 +77,7 @@ extension ConsoleViewController: ConsoleDelegate {
             inputBuffer = nil
         }
         if let input = inputBuffer {
-            self.println(KString(input))
+            self.println(String(input))
             return input
         }
         throw ExecutionError.unexpected

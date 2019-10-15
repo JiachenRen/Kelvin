@@ -31,7 +31,7 @@ public class Equation: Iterable, BinaryNode {
     }
 
     /// Assign the value of rhs to lhs. If lhs is a function, a new Operation is defined
-    /// using lhs as signature and rhs as definition. On the other hand; if lhs is a variable,
+    /// using lhs as parameters and rhs as definition. On the other hand; if lhs is a variable,
     /// then rhs is assigned to the variable as definition.
     ///
     /// - Returns: An error if the definition is unsuccessful.
@@ -73,7 +73,7 @@ public class Equation: Iterable, BinaryNode {
     /// e.g. `a + b = c -> c = a + b`
     ///
     /// - Returns: The equation with lhs and rhs swapped.
-    func reversed() -> Equation {
+    public func reversed() -> Equation {
         return Equation(lhs: rhs, rhs: lhs)
     }
     
@@ -143,5 +143,4 @@ public class Equation: Iterable, BinaryNode {
     }
     
     public var precedence: Keyword.Precedence { .equation }
-    public class var kType: KType { .equation }
 }

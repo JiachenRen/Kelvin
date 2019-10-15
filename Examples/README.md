@@ -294,6 +294,7 @@ assert flat == {1, 1, 1, 2, 3, 2, 3, 4, 4, 5}
 ```
 ### [Algorithms/Recursion](/Examples/Algorithms/Recursion.kel)
 ```ruby
+setMode("rounding", "exact")
 def f(a) {
     if (a > 10) {
         println a;
@@ -302,8 +303,9 @@ def f(a) {
     return a
 }
 
-assert f(1000005) == 1.000005
+assert f(1000005) == 200001/200000
 assert f(15) == 1.5
+setMode("rounding", "approximate")
 ```
 ### [Calculus/Differentiation](/Examples/Calculus/Differentiation.kel)
 ```ruby
@@ -316,9 +318,9 @@ def y(u, s, t) = t^s + ln(u) / atan(s)
 def z(u, s, t) = u + s / t ^ abs(u)
 
 # Partial differentiation
-def df_du = derivative(f(u, s, t), u)
-def df_ds = derivative(f(u, s, t), s)
-def df_dt = derivative(f(u, s, t), t)
+def df_du = der(f(u, s, t), u)
+def df_ds = der(f(u, s, t), s)
+def df_dt = der(f(u, s, t), t)
 
 println "∂f/∂u = " & df_du
 println "∂f/∂s = " & df_ds
@@ -329,7 +331,7 @@ def g(x) = x^3 + ln(cos(x))*sin(x)
 # Shorthand for first derivative
 println g(x ^ 2)'x
 
-println derivative(x ^ 2 + f(x) * x, x)
+println der(x ^ 2 + f(x) * x, x)
 
 # Preliminary implicit differentiation
 println "\nImplicit differentiation: "
@@ -609,7 +611,7 @@ assert f(a) == a^2
 f(a, b) := a^2 - b
 def l1 = {1, 2, 3}
 assert f(l1, 2) = {-1, 2, 7}
-l := ("hello world" as @list).map {$0 & $1}
+l := map("hello world" as @list) {$0 & $1}
 
 # Syntax for defining a multiline function
 def foo(a, b) {
@@ -1456,8 +1458,8 @@ assert a * a * 4 * 3 == a ^ 2 * 12
 assert a * 4 + a * 3 == a * 7
 assert (a * 3) ^ 2 == a ^ 2 * 9
 assert c + (b + a ^ 2 * 2 + a ^ 2 - b) - a ^ 2 * 3 == c
-assert round(cos(12) ^ log(4) % 0.1 + (43 + 33 - 23 * (5 + 47) ^ 2 / 2), 10) == -31019.9971647929
-assert ((3!)!)° / 4 / pi == 1
+assert round(cos(12) ^ log(4) % 0.1 + (43 + 33 - 23 * (5 + 47) ^ 2 / 2), 1) == -31020
+assert ((3!)!)° / 4 / \pi == 1
 assert 1 + 4 + a - 1 - (b - 3) == a + 7 - b
 assert (a || b && true and false || true || d || false) == true
 assert x * x ^ x / x == x ^ x
@@ -1467,7 +1469,7 @@ assert 3a * 4a == 12a ^ 2
 assert 3a + 4a == 7a
 assert (3a) ^ 2 == 9a ^ 2
 assert 2 * a ^ 2 + a ^ 2 + b - b + c - 3 * a ^ 2 == c
-assert (3!)!° / 4 / pi == 1
+assert (3!)!° / 4 / \pi == 1
 
 x:=factor(f * a * 2 + d * a + c * a + b * a)
 assert x == (f * 2 + d + c + b) * a

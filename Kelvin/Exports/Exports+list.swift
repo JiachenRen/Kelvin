@@ -22,13 +22,13 @@ extension Exports {
         .binary(.div, List.self, List.self) {
             try $0.joined(with: $1, by: .div)
         },
-        .binary(.exp, List.self, List.self) {
-            try $0.joined(with: $1, by: .exp)
+        .binary(.power, List.self, List.self) {
+            try $0.joined(with: $1, by: .power)
         },
         .binary(.mod, List.self, List.self) {
             try $0.joined(with: $1, by: .mod)
         },
-        .init(.list, [.universal]) {
+        .init(.list, [.init(.node, multiplicity: .any)]) {
             List($0)
         },
         .binary(.get, List.self, Node.self) {(list, n) in

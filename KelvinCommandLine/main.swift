@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Kelvin
 
 let args = CommandLine.arguments
 

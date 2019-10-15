@@ -32,6 +32,13 @@ public class Probability {
             .map { permutations(of: $0) }
             .flatMap { $0 }
     }
+    
+    /// Returns the powerset of the given array, excluding `[]` empty set.
+    /// `powerset([a,b,c]) = [[a],[b],[c],[a,b],[a,c],[b,c],[a,b,c]]`
+    public static func powerset<T>(of arr: [T]) -> [[T]] {
+        if arr.count == 0 { return [[]] }
+        return (1...arr.count).map { combinations(of: arr, $0) }.flatMap { $0 }
+    }
 
     /// Find all permutations of objects in `[T]`.
     /// Ported from c, original algorithm here: https://www.geeksforgeeks.org/heaps-algorithm-for-generating-permutations/

@@ -7,9 +7,9 @@ def y(u, s, t) = t^s + ln(u) / atan(s)
 def z(u, s, t) = u + s / t ^ abs(u)
 
 # Partial differentiation
-def df_du = derivative(f(u, s, t), u)
-def df_ds = derivative(f(u, s, t), s)
-def df_dt = derivative(f(u, s, t), t)
+def df_du = der(f(u, s, t), u)
+def df_ds = der(f(u, s, t), s)
+def df_dt = der(f(u, s, t), t)
 
 println "∂f/∂u = " & df_du
 println "∂f/∂s = " & df_ds
@@ -20,7 +20,7 @@ def g(x) = x^3 + ln(cos(x))*sin(x)
 # Shorthand for first derivative
 println g(x ^ 2)'x
 
-println derivative(x ^ 2 + f(x) * x, x)
+println der(x ^ 2 + f(x) * x, x)
 
 # Preliminary implicit differentiation
 println "\nImplicit differentiation: "

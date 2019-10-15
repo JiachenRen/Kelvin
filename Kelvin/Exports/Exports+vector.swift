@@ -13,13 +13,13 @@ extension Exports {
         .binary(.add, Vector.self, Vector.self) {
             try $0.perform(+, with: $1)
         },
-        .binary(.add, Vector.self, Value.self) {(lhs, rhs) in
+        .binary(.add, Vector.self, Number.self) {(lhs, rhs) in
             Vector(lhs.map {$0 + rhs})
         },
         .binary(.sub, Vector.self, Vector.self) {
             try $0.perform(-, with: $1)
         },
-        .binary(.sub, Vector.self, Value.self) {(lhs, rhs) in
+        .binary(.sub, Vector.self, Number.self) {(lhs, rhs) in
             Vector(lhs.map {$0 - rhs})
         },
         .binary(.dotProduct, Vector.self, Vector.self) {
@@ -28,10 +28,10 @@ extension Exports {
         .binary(.crossProduct, Vector.self, Vector.self) {
             try $0.cross(with: $1)
         },
-        .binary(.mult, Vector.self, Value.self) {(lhs, rhs) in
+        .binary(.mult, Vector.self, Number.self) {(lhs, rhs) in
             Vector(lhs.map {$0 * rhs})
         },
-        .binary(.div, Vector.self, Value.self) {(lhs, rhs) in
+        .binary(.div, Vector.self, Number.self) {(lhs, rhs) in
             Vector(lhs.map {$0 / rhs})
         },
         .unary(.unitVector, Vector.self) {

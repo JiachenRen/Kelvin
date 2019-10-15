@@ -14,7 +14,7 @@ extension Exports {
 
 extension Calculus {
     static let exports: [Operation] = [
-        .binary(.derivative, [.any, .var]) {
+        .binary(.derivative, [.node, .variable]) {
             let v = $1 as! Variable
             Scope.withholdAccess(to: v)
             let dv = derivative(
@@ -24,7 +24,7 @@ extension Calculus {
             Scope.releaseRestrictions()
             return dv
         },
-        .ternary(.derivative, [.any, .var, .number]) {
+        .ternary(.derivative, [.node, .variable, .number]) {
             let v = $1 as! Variable
             Scope.withholdAccess(to: v)
             let dnv = try derivative(
@@ -35,7 +35,7 @@ extension Calculus {
             Scope.releaseRestrictions()
             return dnv
         },
-        .ternary(.implicitDifferentiation, [.any, .var, .var]) {
+        .ternary(.implicitDifferentiation, [.node, .variable, .variable]) {
             let dv = $1 as! Variable
             let iv = $2 as! Variable
             Scope.withholdAccess(to: dv, iv)
@@ -48,7 +48,7 @@ extension Calculus {
             Scope.releaseRestrictions()
             return r
         },
-        .binary(.gradient, [.any, .list]) {
+        .binary(.gradient, [.node, .list]) {
             let vars = try Assert.specialize(list: $1 as! List, as: Variable.self)
             Scope.withholdAccess(to: vars)
             let fun = try Assert.cast($0.simplify(), to: Function.self)
@@ -56,7 +56,7 @@ extension Calculus {
             Scope.releaseRestrictions()
             return grad
         },
-        .ternary(.directionalDifferentiation, [.func, .list, .any]) {
+        .ternary(.directionalDifferentiation, [.function, .list, .node]) {
             let vars = try Assert.specialize(list: $1 as! List, as: Variable.self)
             let dir = try Assert.cast($2.simplify(), to: Vector.self)
             Scope.withholdAccess(to: vars)
@@ -69,7 +69,7 @@ extension Calculus {
             Scope.releaseRestrictions()
             return grad
         },
-        .ternary(.tangent, [.func, .list, .any]) {
+        .ternary(.tangent, [.function, .list, .node]) {
             let vars = try Assert.specialize(list: $1 as! List, as: Variable.self)
             let vec = try Assert.cast($2.simplify(), to: Vector.self)
             Scope.withholdAccess(to: vars)
@@ -83,8 +83,12 @@ extension Calculus {
             return tan
         },
         
+        .binary(.criticalPoints, Node.self, Variable.self) {
+            Function(.solve, [Equation(lhs: Function(.derivative, [$0, $1]), rhs: 0)])
+        },
+        
         // Mark: Integration
-        .quaternary(.numericalIntegration, [.any, .var, .number, .number]) {
+        .quaternary(.numericalIntegration, [.node, .variable, .number, .number]) {
             let integral = try Quadrature.integrate(
                 $0,
                 from: Double($2≈!),

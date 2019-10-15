@@ -14,11 +14,11 @@ public class Assert {
     
     /// Asserts that the given value `x` is between `lb` and `ub`
     /// - Parameters:
-    ///     - x: Value to be checked against bounds
+    ///     - x: Number to be checked against bounds
     ///     - lb: Lower bound
     ///     - ub: Upper bound
     /// - Throws: `ExecutionError.domain`
-    public static func domain(_ x: Value, _ lb: Value, _ ub: Value) throws {
+    public static func domain(_ x: Number, _ lb: Number, _ ub: Number) throws {
         if x≈! < lb≈! || x≈! > ub≈!  {
             throw ExecutionError.domain(x, lowerBound: lb, upperBound: ub)
         }
@@ -38,7 +38,7 @@ public class Assert {
     ///     - lb: Lower bound
     ///     - ub: Upper bound
     /// - Throws: `ExecutionError.invalidRange`
-    public static func range(_ lb: Value, _ ub: Value) throws {
+    public static func range(_ lb: Number, _ ub: Number) throws {
         if lb≈! > ub≈! {
             throw ExecutionError.invalidRange(lowerBound: lb, upperBound: ub)
         }
@@ -77,7 +77,7 @@ public class Assert {
         guard let instance = node as? T else {
             throw ExecutionError.unexpectedType(
                 expected: .resolve(T.self),
-                found: Swift.type(of: node ?? KVoid()).kType
+                found: KType.resolve(node ?? KVoid())
             )
         }
         return instance

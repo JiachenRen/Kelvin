@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Kelvin
 
 public class Console: IOProtocol {
     private var output = ""
@@ -94,8 +95,8 @@ public class Console: IOProtocol {
     
     /// Converts node to its String representation.
     private func format(_ n: Node) -> String {
-        if let ks = n as? KString {
-            return ks.string
+        if let ks = n as? String {
+            return ks
         }
         return n.ansiColored
     }
@@ -160,7 +161,7 @@ public class Console: IOProtocol {
         var buff: String? = nil
         
         // Add working directory path as first env var.
-        out.append(KString(Process().currentDirectoryPath))
+        out.append(String(Process().currentDirectoryPath))
         
         // Print any outputs to console immediately
         buffered = false

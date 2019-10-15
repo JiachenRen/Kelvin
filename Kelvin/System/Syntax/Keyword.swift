@@ -92,7 +92,7 @@ public struct Keyword {
         case equality           // ==, !=
         case relational         // <, >, <=, >=
         case concat             // &
-        case addition           // +,-
+        case translating        // +,-
         case scaling            // *,/
         case exponent           // ^
         case coersion           // as

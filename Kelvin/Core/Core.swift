@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import BigInt
 
 /// Core contains the most basic functions of Kelvin Algebra System.
 public class Core {
@@ -88,16 +89,43 @@ public class Core {
     ///     - rhs: Right hand side of the binary operation; must be `NaN`
     ///     - binary: A binary operation involving two floating points. E.g. `+, -, *, /`
     /// - Todo: Implement mode exact vs approximate.
-    private static func bin(_ lhs: Node, _ rhs: Node, _ binary: NBinary) -> Float80 {
-        return binary(lhs≈!, rhs≈!)
+    private static func bin(_ lhs: Node, _ rhs: Node, _ binary: NBinary) -> Node? {
+        guard let l = lhs.evaluated, let r = rhs.evaluated else { return nil }
+        let result = binary(l.float80, r.float80)
+        switch Mode.shared.rounding {
+        case .approximate,
+             .auto where lhs is Float80 || rhs is Float80:
+            return result
+        default:
+            return exactResult(from: result)
+        }
+    }
+    
+    /// Converts the provided approximate value to an exact value, if possible.
+    /// - Returns: The exact form of the approximate result, if it exists; if not, return `nil`.
+    private static func exactResult(from result: Float80) -> Exact? {
+        if let i = Int(exactly: result) {
+            return i
+        } else if let f = Fraction(exactly: result) {
+            return f
+        }
+        return nil
     }
     
     /// Computes the raw numerical result of node using the provided unary operation.
-    private static func u(_ operand: Node, _ unary: NUnary) -> Float80 {
-        return unary(operand≈ ?? .nan)
+    private static func u(_ operand: Node, _ unary: NUnary) -> Node? {
+        guard let val = operand.evaluated else { return nil }
+        let result = unary(val.float80)
+        switch Mode.shared.rounding {
+        case .exact,
+             .auto where !(operand is Float80):
+            return exactResult(from: result)
+        default:
+            return result
+        }
     }
     
-    /// Assign `bin(variable, value)` to  `variable`.
+    /// Assign `bin(variable, number)` to  `variable`.
     /// - Parameters:
     ///     - variable: First operand of `bin`, must be a variable.
     ///     - value: Second operand of `bin `
@@ -191,25 +219,25 @@ public class Core {
     static let exports: [Operation] = [
         
         // Relational operators
-        .binary(.equates, [.any, .any]) {
+        .binary(.equates, [.node, .node]) {
             Equation(lhs: $0, rhs: $1)
         },
-        .binary(.lessThan, [.any, .any]) {
+        .binary(.lessThan, [.node, .node]) {
             Equation(lhs: $0, rhs: $1, mode: .lessThan)
         },
-        .binary(.greaterThan, [.any, .any]) {
+        .binary(.greaterThan, [.node, .node]) {
             Equation(lhs: $0, rhs: $1, mode: .greaterThan)
         },
-        .binary(.greaterThanOrEquals, [.any, .any]) {
+        .binary(.greaterThanOrEquals, [.node, .node]) {
             Equation(lhs: $0, rhs: $1, mode: .greaterThanOrEquals)
         },
-        .binary(.lessThanOrEquals, [.any, .any]) {
+        .binary(.lessThanOrEquals, [.node, .node]) {
             Equation(lhs: $0, rhs: $1, mode: .lessThanOrEquals)
         },
-        .binary(.equals, [.any, .any]) {
+        .binary(.equals, [.node, .node]) {
             $0 === $1
         },
-        .binary(.notEquals, [.any, .any]) {
+        .binary(.notEquals, [.node, .node]) {
             $0 !== $1
         },
         
@@ -223,32 +251,32 @@ public class Core {
         .unary(.factorize, Int.self) {
             List(primeFactors(of: $0))
         },
-        .unary(.degrees, [.any]) {
-            $0 / 180 * ("pi"&)
+        .unary(.degrees, [.node]) {
+            $0 / 180 * (Constant(.pi))
         },
-        .unary(.percent, [.any]) {
+        .unary(.percent, [.node]) {
             $0 / 100
         },
-        .binary(.round, Value.self, Int.self) {
+        .binary(.round, Number.self, Int.self) {
             _round($0.float80, toDecimalPlaces: $1)
         },
         
         // System utils
-        .unary(.complexity, [.any]) {
+        .unary(.complexity, [.node]) {
             $0.complexity
         },
         .init(.exit, []) { _ in
             exit(0)
         },
         .init(.date, []) { _ in
-            KString("\(Date())")
+            String("\(Date())")
         },
         .init(.time, []) { _ in
             Float80(date)
         },
-        .unary(.delay, Value.self) {
+        .unary(.delay, Number.self) {
             Thread.sleep(forTimeInterval: Double($0.float80))
-            return KString("done")
+            return String("done")
         },
         .binary(.measure, Int.self, Node.self) {(i, n) in
             let t = date
@@ -258,17 +286,17 @@ public class Core {
             let avg = Float80(date - t) / Float80(i)
             return Pair("avg(s)", avg)
         },
-        .unary(.measure, [.any]) {
+        .unary(.measure, [.node]) {
             let t = date
             let _ = try $0.simplify()
             return Float80(date - t)
         },
-        .binary(.repeat, [.any, .any]) {(lhs, rhs) in
+        .binary(.repeat, [.node, .node]) {(lhs, rhs) in
             let n = try Assert.cast(rhs.simplify(), to: Int.self)
             var elements = [Node](repeating: lhs, count: n)
             return List(elements)
         },
-        .init(.copy, [.any, .int]) {
+        .init(.copy, [.node, .int]) {
             Function(.repeat, $0)
         },
         
@@ -281,7 +309,7 @@ public class Core {
             return KVoid()
         },
         .noArg(.listFunctions) {
-            List(Operation.userDefined.map {KString($0.description)})
+            List(Operation.userDefined.map {String($0.description)})
         },
         .noArg(.clearFunctions) {
             Operation.restoreDefault()
@@ -291,7 +319,7 @@ public class Core {
         // Elementary binary / unary operations
         // On raw values only
         // Elementary boolean operator set
-        .init(.and, [.booleans]) {
+        .init(.and, [.init(.bool, multiplicity: .any)]) {
             for n in $0 {
                 if !(n as! Bool) {
                     return false
@@ -299,7 +327,7 @@ public class Core {
             }
             return true
         },
-        .init(.or, [.booleans]) {
+        .init(.or, [.init(.bool, multiplicity: .any)]) {
             for n in $0 {
                 if n as! Bool {
                     return true
@@ -312,129 +340,157 @@ public class Core {
         },
         
         // Advanced boolean operator set
-        .binary(.xor, [.any, .any]) {
+        .binary(.xor, [.node, .node]) {
             (!!$0 &&& $1) ||| ($0 &&& !!$1)
         },
-        .binary(.nor, [.any, .any]) {
+        .binary(.nor, [.node, .node]) {
             !!($0 ||| $1)
         },
-        .binary(.nand, [.any, .any]) {
+        .binary(.nand, [.node, .node]) {
             !!($0 &&& $1)
         },
         
         // Basic binary arithmetics
-        .binary(.add, [.number, .number]) {
+        .binary(.add, Node.self, Node.self) {
             bin($0, $1, +)
         },
-        .binary(.sub, [.number, .number]) {
+        .binary(.sub, Node.self, Node.self) {
             bin($0, $1, -)
         },
-        .binary(.mult, [.number, .number]) {
+        .binary(.mult, Node.self, Node.self) {
             bin($0, $1, *)
         },
-        .binary(.div, [.number, .number]) {
+        .binary(.div, Node.self, Node.self) {
             bin($0, $1, /)
         },
-        .binary(.mod, [.number, .number]) {
+        .binary(.mod, Node.self, Node.self) {
             bin($0, $1) {
                 $0.truncatingRemainder(dividingBy: $1)
             }
         },
-        .binary(.exp, [.number, .number]) {
+        .binary(.power, Node.self, Node.self) {
             bin($0, $1, pow)
         },
         
         // Basic unary transcendental operations
-        .unary(.log, [.number]) {
+        .unary(.log, Node.self) {
             u($0, log10)
         },
-        .unary(.log2, [.number]) {
+        .unary(.log2, Node.self) {
             u($0, log2)
         },
-        .unary(.ln, [.number]) {
+        .unary(.ln, Node.self) {
             u($0, log)
         },
-        .unary(.cos, [.number]) {
+        .unary(.cos, Node.self) {
             u($0, cos)
         },
-        .unary(.acos, [.number]) {
+        .unary(.acos, Node.self) {
             u($0, acos)
         },
-        .unary(.cosh, [.number]) {
+        .unary(.cosh, Node.self) {
             u($0, cosh)
         },
-        .unary(.sin, [.number]) {
+        .unary(.sin, Node.self) {
             u($0, sin)
         },
-        .unary(.asin, [.number]) {
+        .unary(.asin, Node.self) {
             u($0, asin)
         },
-        .unary(.sinh, [.number]) {
+        .unary(.sinh, Node.self) {
             u($0, sinh)
         },
-        .unary(.tan, [.number]) {
+        .unary(.tan, Node.self) {
             u($0, tan)
         },
-        .unary(.tan, [.any]) {
-            sin($0) / cos($0)
-        },
-        .unary(.atan, [.number]) {
+        .unary(.atan, Node.self) {
             u($0, atan)
         },
-        .unary(.tanh, [.number]) {
+        .unary(.tanh, Node.self) {
             u($0, tanh)
         },
-        .unary(.sec, [.any]) {
-            1 / cos($0)
-        },
-        .unary(.csc, [.any]) {
-            1 / sin($0)
-        },
-        .unary(.cot, [.any]) {
-            1 / tan($0)
-        },
-        .unary(.abs, [.number]) {
+        .unary(.abs, Node.self) {
             u($0, abs)
         },
-        .unary(.int, [.number]) {
-            u($0, floor)
-        },
-        .unary(.round, [.number]) {
-            u($0, round)
-        },
-        .unary(.negate, [.number]) {
+        .unary(.negate, Node.self) {
             u($0, -)
         },
-        .unary(.sqrt, [.number]) {
+        .unary(.sqrt, Node.self) {
             u($0, sqrt)
         },
-        .unary(.sign, Value.self) {
-            let n = $0.float80
-            return n == 0 ? Float80.nan : n > 0 ? 1 : -1
+        
+        .unary(.int, Node.self) {
+            u($0, floor)
+        },
+        .unary(.round, Node.self) {
+            u($0, round)
+        },
+        .unary(.sign, Node.self) {
+            u($0) { $0 == 0 ? 0 : $0 > 0 ? 1 : -1 }
+        },
+        
+        .unary(.int, Number.self) {
+            u($0, floor)
+        },
+        .unary(.round, Number.self) {
+            u($0, round)
+        },
+        .unary(.sign, Number.self) {
+            u($0) { $0 == 0 ? 0 : $0 > 0 ? 1 : -1 }
+        },
+        
+        .binary(.add, Exact.self, Exact.self) {
+            $0.adding($1)
+        },
+        .binary(.sub, Exact.self, Exact.self) {
+            $0.subtracting($1)
+        },
+        .binary(.mult, Exact.self, Exact.self) {
+            $0.multiplying($1)
+        },
+        .binary(.div, Exact.self, Exact.self) {
+            $0.dividing($1)
+        },
+        .binary(.power, Exact.self, Exact.self) {
+            $0.power($1)
+        },
+        
+        .unary(.negate, Exact.self) {
+            $0.negate()
+        },
+        .unary(.abs, Exact.self) {
+            $0.abs()
+        },
+        
+        .binary(.div, Integer.self, Integer.self) {
+            Fraction($0.bigInt, $1.bigInt)
+        },
+        .binary(.mod, Integer.self, Integer.self) {
+            $0.bigInt.modulus($1.bigInt)
         },
         
         // Basic IO
-        .unary(.print, [.any]) {
+        .unary(.print, [.node]) {
             Program.shared.io?.print($0)
             return $0
         },
-        .unary(.println, [.any]) {
+        .unary(.println, [.node]) {
             Program.shared.io?.println($0)
             return $0
         },
         .unary(.printMat, Matrix.self) {
-            Program.shared.io?.println(KString($0.minimal))
+            Program.shared.io?.println(String($0.minimal))
             return $0
         },
-        .unary(.log, KString.self) {
-            Program.shared.io?.log($0.string)
+        .unary(.log, String.self) {
+            Program.shared.io?.log($0)
             return $0
         },
         .noArg(.readLine) {
             guard let io = Program.shared.io else {
                 throw ExecutionError.general(errMsg: "program in/out protocol not defined")
             }
-            return try KString(io.readLine())
+            return try String(io.readLine())
         },
         
         // Variable/function definition
@@ -455,7 +511,7 @@ public class Core {
             return KVoid()
         },
         // a := 3
-        .binary(.assign, [.any, .any]) {
+        .binary(.assign, [.node, .node]) {
             return Function(.define, [Equation(lhs: $0, rhs: $1)])
         },
         
@@ -468,11 +524,11 @@ public class Core {
         
         // C like assignment shorthand
         // ++
-        .unary(.increment, [.var]) {
+        .unary(.increment, [.variable]) {
             $0 +== 1
         },
         // --
-        .unary(.decrement, [.var]) {
+        .unary(.decrement, [.variable]) {
             $0 -== 1
         },
         // +=
@@ -514,25 +570,25 @@ public class Core {
         
         // Runtime environment
         /// - Todo: Add the ability to choose scope retention policy.
-        .unary(.run, KString.self) {
+        .unary(.run, String.self) {
             let prg = Program(io: Program.shared.io)
-            try prg.compileAndRun(fileAt: $0.string)
+            try prg.compileAndRun(fileAt: $0)
             return KVoid()
         },
-        .unary(.import, KString.self) {
-            try Program.import(fileAt: $0.string)
-            Program.shared.io?.log("imported \($0.string)")
+        .unary(.import, String.self) {
+            try Program.import(fileAt: $0)
+            Program.shared.io?.log("imported \($0)")
             return KVoid()
         },
-        .unary(.compile, KString.self) {
-            try Compiler.shared.compile($0.string).finalize()
+        .unary(.compile, String.self) {
+            try Compiler.shared.compile($0).finalize()
         },
-        .unary(.eval, [.any]) {
+        .unary(.eval, [.node]) {
             try $0.simplify()
         },
         // Execute shell command
-        .unary(.runShell, KString.self) { cmd in
-            return KString(runShell(cmd.string))
+        .unary(.runShell, String.self) { cmd in
+            String(runShell(cmd))
         },
         
         // Type system
@@ -540,7 +596,28 @@ public class Core {
             try KType.convert($0, to: $1)
         },
         .binary(.is, Node.self, KType.self) {(n, type) in
-            Swift.type(of: n).kType == type
+            KType.resolve(n) == type
+        },
+        
+        // Set mode
+        .binary(.setMode, String.self, String.self) {
+            (category, option) in
+            switch category {
+            case "rounding":
+                guard let r = Mode.Rounding(rawValue: option) else {
+                    throw ExecutionError.invalidOption(option)
+                }
+                Mode.shared.rounding = r
+            case "extrapolation":
+                guard let e = Mode.Extrapolation(rawValue: option) else {
+                    throw ExecutionError.invalidOption(option)
+                }
+                Mode.shared.extrapolation = e
+            default:
+                throw ExecutionError.invalidOption(category)
+            }
+            Program.shared.io?.log("\(category) set to \(option)")
+            return KVoid()
         }
     ]
 }

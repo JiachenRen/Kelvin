@@ -26,7 +26,7 @@ public extension Stat {
     }
     
     /// Computes t score from C and DF
-    static func tScore<T: Value>(
+    static func tScore<T: Number>(
         confidenceLevel c: Float80,
         degreesOfFreedom df: T
     ) throws -> Float80 {

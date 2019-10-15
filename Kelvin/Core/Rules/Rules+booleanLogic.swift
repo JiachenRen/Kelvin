@@ -40,7 +40,7 @@ extension Rules {
     
     /// Boolean logic operators & simplification rules
     static let booleanLogic: [Operation] = [
-        .binary(.or, [.any, .any]) {
+        .binary(.or, [.node, .node]) {
             if $0 === false {
                 // a or false is a
                 return $1
@@ -53,7 +53,7 @@ extension Rules {
             }
             return nil
         },
-        .binary(.and, [.any, .any]) {
+        .binary(.and, [.node, .node]) {
             if $0 === false {
                 // false and _ is false
                 return false
@@ -66,7 +66,7 @@ extension Rules {
             }
             return nil
         },
-        .unary(.not, [.func]) {
+        .unary(.not, [.function]) {
             let fun = try Assert.cast($0, to: Function.self)
             // Apply De Morgan's laws
             switch fun.name {
@@ -83,7 +83,7 @@ extension Rules {
                 return nil
             }
         },
-        .binary(.and, [.any, .func]) {
+        .binary(.and, [.node, .function]) {
             (node, fun) in
             let fun = try Assert.cast(fun, to: Function.self)
             switch fun.name {
@@ -134,7 +134,7 @@ extension Rules {
             }
             return nil
         },
-        .binary(.or, [.any, .func]) {
+        .binary(.or, [.node, .function]) {
             (node, fun) in
             let fun = try Assert.cast(fun, to: Function.self)
             switch fun.name {

@@ -28,11 +28,23 @@ extension Rules {
             }
             return nil
         },
-        .unary(.negate, [.any]) {
+        .unary(.negate, [.node]) {
             $0 * -1
         },
-        .unary(.sqrt, [.any]) {
+        .unary(.sqrt, [.node]) {
             $0 ^ (Float80(0.5))
+        },
+        .unary(.sec, [.node]) {
+            1 / cos($0)
+        },
+        .unary(.csc, [.node]) {
+            1 / sin($0)
+        },
+        .unary(.cot, [.node]) {
+            1 / tan($0)
+        },
+        .unary(.tan, [.node]) {
+            sin($0) / cos($0)
         },
     ]
 }

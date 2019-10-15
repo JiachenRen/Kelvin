@@ -43,7 +43,7 @@ public extension Algebra {
                 }
                 args.insert(n, at: i)
             }
-        case .exp:
+        case .power:
             let lhs = fun[0], rhs = fun[1]
             if let rhsFun = rhs as? Function {
                 switch rhsFun.name {

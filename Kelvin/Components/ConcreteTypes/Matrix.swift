@@ -483,5 +483,4 @@ public final class Matrix: Iterable {
     public var stringified: String { "[\(concat { $0.stringified })]" }
     public var ansiColored: String { "[".red.bold + concat { $0.ansiColored } + "]".red.bold }
     public var minimal: String { concat(by: "\n") { ($0 as! Vector).minimal } }
-    public class var kType: KType { .matrix }
 }

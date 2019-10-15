@@ -9,7 +9,6 @@
 import Foundation
 
 extension Bool: LeafNode, NaN {
-    public static var kType: KType { .bool }
     public var stringified: String { "\(self)" }
     public var ansiColored: String { self ? "\(self)".green.bold : "\(self)".red.bold }
     

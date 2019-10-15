@@ -33,8 +33,6 @@ public class Closure: UnaryNode, NaN {
     public var ansiColored: String {
         return "\(Closure.symbol)(".magenta.bold + node.ansiColored + ")".magenta.bold
     }
-    
-    public class var kType: KType { .unknown }
 
     public func simplify() throws -> Node {
         do {

@@ -1,3 +1,4 @@
+setMode("rounding", "exact")
 def f(a) {
     if (a > 10) {
         println a;
@@ -6,5 +7,6 @@ def f(a) {
     return a
 }
 
-assert f(1000005) == 1.000005
+assert f(1000005) == 200001/200000
 assert f(15) == 1.5
+setMode("rounding", "approximate")

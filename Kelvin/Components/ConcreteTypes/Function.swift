@@ -9,7 +9,7 @@
 import Foundation
 
 public class Function: ListProtocol, NaN {
-    public var evaluated: Value? { try? invoke()?.evaluated }
+    public var evaluated: Number? { try? invoke()?.evaluated }
     public var elements: [Node]
     public let name: OperationName
     public let isCommutative: Bool
@@ -37,10 +37,10 @@ public class Function: ListProtocol, NaN {
     }
     
     public func implement(using template: Node) throws {
-        // Create function signature
-        let signature = [ParameterType](repeating: .any, count: count)
+        // Create function parameters
+        let parameters = [Parameter](repeating: .node, count: count)
         // Make sure the old definition is removed from registry
-        Operation.remove(name, signature)
+        Operation.remove(name, parameters)
         
         // Check to make sure that every argument is a variable
         for arg in elements {
@@ -51,13 +51,13 @@ public class Function: ListProtocol, NaN {
         }
         
         // Cast the arguments to variables
-        let parameters = elements.map {
+        let variables = elements.map {
             $0 as! Variable
         }
         
         // Create and register function denition as an operation
-        let def = try Function.createDefinition(from: template, using: parameters)
-        let op = Operation(name, signature, definition: def)
+        let def = try Function.createDefinition(from: template, using: variables)
+        let op = Operation(name, parameters, definition: def)
         Operation.register(op)
     }
     
@@ -247,7 +247,6 @@ public class Function: ListProtocol, NaN {
     public var precedence: Keyword.Precedence { keyword?.precedence ?? .node }
     public var stringified: String { toString() }
     public var ansiColored: String { toString(colored: true) }
-    public class var kType: KType { .function }
 
     private func parenthesize(_ s: String, _ colored: Bool) -> String {
         return colored ? "(".bold + s + ")".bold : "(\(s))"

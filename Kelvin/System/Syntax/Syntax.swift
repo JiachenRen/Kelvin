@@ -105,13 +105,13 @@ public struct Syntax {
     private static let definitions: [Keyword] = [
         
         // Arithmetic
-        .init(for: .add, associativity: .infix, precedence: .addition, operator: .init("+")),
-        .init(for: .sub, associativity: .infix, precedence: .addition, operator: .init("-")),
+        .init(for: .add, associativity: .infix, precedence: .translating, operator: .init("+")),
+        .init(for: .sub, associativity: .infix, precedence: .translating, operator: .init("-")),
         .init(for: .negate, associativity: .prefix, operator: .init("-", padding: .none)),
         .init(for: .mult, associativity: .infix, precedence: .scaling, operator: .init("*")),
         .init(for: .div, associativity: .infix, precedence: .scaling, operator: .init("/")),
         .init(for: .mod, associativity: .infix, precedence: .scaling, operator: .init("%")),
-        .init(for: .exp, associativity: .infix, precedence: .exponent, operator: .init("^")),
+        .init(for: .power, associativity: .infix, precedence: .exponent, operator: .init("^")),
         .init(for: .sqrt, associativity: .prefix, operator: .init("√", padding: .none)),
         
         // Assignment

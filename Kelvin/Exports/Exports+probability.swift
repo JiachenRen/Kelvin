@@ -18,13 +18,13 @@ extension Probability {
         .noArg(.random) {
             Float80.random(in: 0..<1)
         },
-        .binary(.random, Value.self, Value.self) {(lb, ub) in
+        .binary(.random, Number.self, Number.self) {(lb, ub) in
             if (lb.float80 > ub.float80) {
                 throw ExecutionError.invalidRange(lowerBound: lb, upperBound: ub)
             }
             return Float80.random(in: lb.float80...ub.float80)
         },
-        .unary(.random, List.self) {
+        .unary(.random, Iterable.self) {
             $0.elements.randomElement()
         },
         .binary(.randomInt, Int.self, Int.self) {(lb, ub) in
@@ -43,19 +43,21 @@ extension Probability {
             Bool.random()
         },
         
-
         // Combination and permutation
         .binary(.npr, Int.self, Int.self) {
             Probability.nPr($0.float80, $1.float80)
         },
-        .binary(.npr, List.self, Int.self) {
+        .binary(.npr, Iterable.self, Int.self) {
             List(Probability.permutations(of: $0.elements, $1).map { List($0) })
         },
         .binary(.ncr, Int.self, Int.self) {
             Probability.nCr($0.float80, $1.float80)
         },
-        .binary(.ncr, List.self, Int.self) {
+        .binary(.ncr, Iterable.self, Int.self) {
             List(Probability.combinations(of: $0.elements, $1).map { List($0) })
+        },
+        .unary(.powerset, Iterable.self) { iterable in
+            List(Probability.powerset(of: iterable.elements).map { List($0) })
         },
 
         // Factorial

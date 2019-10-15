@@ -13,12 +13,12 @@ extension Rules {
     /// Checks if the given node has a numerical value.
     /// Improves readability of code.
     private static let isNumber: PUnary = {
-        $0 is Value
+        $0 is Number
     }
     
     /// Binary arithmetic simplification rules
     static let binaryArithmetic: [Operation] = [
-        .binary(.add, [.any, .any]) {
+        .binary(.add, [.node, .node]) {
             $0 === $1 ? 2 * $0 : nil
         },
         .binary(.add, [.number, .nan]) {
@@ -63,22 +63,22 @@ extension Rules {
             return nil
         },
         
-        .binary(.sub, [.any, .any]) {
+        .binary(.sub, [.node, .node]) {
             if $0 === $1 {
                 return 0
             }
             return $0 + -$1
         },
-        .unary(.sub, [.any]) {
+        .unary(.sub, [.node]) {
             -1 * $0
         },
         
-        .binary(.mult, [.any, .any]) {
+        .binary(.mult, [.node, .node]) {
             $0 === $1 ? $0 ^ 2 : nil
         },
         .binary(.mult, Node.self, Function.self) {(lhs, fun) in
             switch fun.name {
-            case .exp where fun[0] === lhs:
+            case .power where fun[0] === lhs && !(lhs is Number):
                 return lhs ^ (fun[1] + 1)
             default:
                 break
@@ -88,7 +88,7 @@ extension Rules {
         .binary(.mult, Function.self, Function.self) {(lhs, rhs) in
             if lhs.name == rhs.name {
                 switch lhs.name {
-                case .exp where lhs[0] === rhs[0]:
+                case .power where lhs[0] === rhs[0]:
                     return lhs[0] ^ (lhs[1] + rhs[1])
                 default:
                     break
@@ -107,14 +107,14 @@ extension Rules {
             }
         },
 
-        .binary(.div, [.any, .any]) {
+        .binary(.div, [.node, .node]) {
             if $0 === $1 {
                 return 1
             }
             return $0 * ($1 ^ -1)
         },
 
-        .binary(.exp, [.nan, .int]) {
+        .binary(.power, [.nan, .int]) {
             let n = $1 as! Int
             switch n {
             case 0: return 1
@@ -123,10 +123,10 @@ extension Rules {
             }
             return nil
         },
-        .binary(.exp, [.number, .nan]) {(lhs, _) in
+        .binary(.power, [.number, .nan]) {(lhs, _) in
             lhs === 0 ? 0 : nil
         },
-        .binary(.exp, Function.self, Value.self) {(fun, rhs) in
+        .binary(.power, Function.self, Number.self) {(fun, rhs) in
             guard fun.contains(where: isNumber, depth: 1) else {
                 return nil
             }
@@ -134,16 +134,16 @@ extension Rules {
             case .mult:
                 let (nums, nans) = fun.split(by: isNumber)
                 return (**nums ^ rhs) * (**nans ^ rhs)
-            case .exp where fun[0] is Value:
+            case .power where fun[0] is Number:
                 return (fun[0] ^ rhs) ^ fun[1]
-            case .exp where fun[1] is Value:
+            case .power where fun[1] is Number:
                 return fun[0] ^ (fun[1] * rhs)
             default:
                 break
             }
             return nil
         },
-        .binary(.exp, Value.self, Function.self) {(lhs, fun) in
+        .binary(.power, Number.self, Function.self) {(lhs, fun) in
             switch fun.name {
             case .mult where fun.contains(where: isNumber, depth: 1):
                 let (nums, nans) = fun.split(by: isNumber)

@@ -9,8 +9,7 @@
 import Foundation
 
 extension KType: LeafNode, NaN {
-    public static var kType: KType { .type }
-    public var stringified: String { KType.symbol + rawValue }
+    public var stringified: String { KType.marker + rawValue }
     public var ansiColored: String { rawValue.yellow }
     
     public func equals(_ node: Node) -> Bool {

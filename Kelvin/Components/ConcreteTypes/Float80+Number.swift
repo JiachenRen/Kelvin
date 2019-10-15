@@ -1,5 +1,5 @@
 //
-//  Float80+Value.swift
+//  Float80+Number.swift
 //  Kelvin
 //
 //  Created by Jiachen Ren on 1/20/19.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Float80: Value {
+extension Float80: Number {
     public var stringified: String { formatted }
     public var ansiColored: String { formatted.blue }
     public var float80: Float80 { self }
@@ -20,6 +20,11 @@ extension Float80: Value {
     
     /// If the double is an integer, convert it to an integer.
     public func simplify() -> Node {
-        return Int(exactly: self) ?? self
+        switch Mode.shared.rounding {
+        case .approximate, .auto:
+            return Int(exactly: self) ?? self
+        case .exact:
+            return Fraction(self)
+        }
     }
 }

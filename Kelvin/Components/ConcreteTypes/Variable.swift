@@ -9,27 +9,12 @@
 import Foundation
 
 public class Variable: LeafNode, NaN {
-    public static var definitions: [String: Node] = {
-        constants.reduce(into: [:]) {
-            $0[$1.key] = $1.value
-        }
-    }()
-
-    public static var constants: [String: Float80] = [
-        "e": Float80(exactly: M_E)!,
-        "pi": Float80.pi,
-        "inf": Float80.infinity,
-    ]
-    
+    public static var definitions: [String: Node] = [:]
     public static let validationRegex = Regex(pattern: "^[a-zA-Z_$]+[a-zA-Z_\\d]*$")
-
     public var name: String
 
     /// Extract the definition of the variable from the definitions.
     public var definition: Node? { Variable.definitions[name] }
-
-    /// Whether the variable represents a constant. e.g. pi, e
-    public var isConstant: Bool { Variable.constants[name] != nil }
     
     /// Anonymous arguments are replaced by their callers with supplied expressions.
     public var isAnonymous: Bool {
@@ -45,9 +30,7 @@ public class Variable: LeafNode, NaN {
 
     /// Clear all variable definitions and reload all constants.
     public static func restoreDefault() {
-        definitions = constants.reduce(into: [:]) {
-            $0[$1.key] = $1.value
-        }
+        definitions = [:]
     }
 
     /// Assign a definition to variables with the given name. Duplicate definitions are overriden.
@@ -76,9 +59,7 @@ public class Variable: LeafNode, NaN {
     public func simplify() throws -> Node {
         if let def = definition {
             do {
-                // If the definition is not a constant, return the definition
-                return try isConstant && Mode.shared.rounding == .exact ?
-                    self : def.simplify()
+                return try def.simplify()
             } catch let e as KelvinError {
                 throw ExecutionError.onNode(self, err: e)
             }
@@ -101,13 +82,7 @@ public class Variable: LeafNode, NaN {
             options: .regularExpression
         )
     }
-    public var ansiColored: String {
-        if definition != nil {
-            return isConstant ? name.bold.magenta : name.bold
-        }
-        return isAnonymous ? name.cyan.bold : name;
-    }
+    public var ansiColored: String { isAnonymous ? name.cyan.bold : name }
     public var complexity: Int { 3 }
-    public var evaluated: Value? { definition?.evaluated }
-    public class var kType: KType { .variable }
+    public var evaluated: Number? { definition?.evaluated }
 }

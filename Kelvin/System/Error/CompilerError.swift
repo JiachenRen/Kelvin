@@ -13,6 +13,8 @@ import Foundation
 indirect public enum CompilerError: KelvinError {
     case illegalArgument(errMsg: String)
     case syntax(errMsg: String)
+    case noSuchConstant(literal: String)
+    case invalidType(literal: String)
     case on(line: Int, _ err: CompilerError)
     case cancelled
     
@@ -26,6 +28,10 @@ indirect public enum CompilerError: KelvinError {
             return "error on line \(i) - \(e.localizedDescription)"
         case .cancelled:
             return "compilation has been cancelled"
+        case .noSuchConstant(literal: let n):
+            return "\(n) is not a constant"
+        case .invalidType(literal: let l):
+            return "\(l) is not a valid type literal"
         }
     }
 }

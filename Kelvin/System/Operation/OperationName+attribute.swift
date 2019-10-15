@@ -79,6 +79,7 @@ public extension OperationName {
         .mutatingConcat: [.preservesArguments],
         .div: [.forwardCommutative],
         .sub: [.forwardCommutative],
+//        .power: [.forwardCommutative],
         .ternaryConditional: [.preservesArguments],
         .set: [.preservesFirstArgument]
     ]

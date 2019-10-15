@@ -11,5 +11,5 @@ import Foundation
 public protocol NaN {}
 
 extension NaN {
-    public var evaluated: Value? { nil }
+    public var evaluated: Number? { nil }
 }

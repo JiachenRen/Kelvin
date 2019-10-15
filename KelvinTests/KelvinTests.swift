@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import Kelvin
 
 class KelvinTests: XCTestCase {
 
@@ -52,6 +53,12 @@ class KelvinTests: XCTestCase {
         assert(eq !== pair)
         assert(eq === revEq)
         assert(Function(.add, [Function(.add, [1, 2]), 3]) === Function(.add, [1, 2, 3]))
+    }
+    
+    func testKTypeResolve() {
+        let fun: Node = Function("sdfdsf", [])
+        assert(KType.resolve(fun) == .function)
+        assert(KType.resolve(Node.self) == .node)
     }
     
     func testSystemCheck() throws {

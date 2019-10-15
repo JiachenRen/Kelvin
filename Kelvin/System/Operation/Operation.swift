@@ -16,6 +16,7 @@ public class Operation: Equatable, Hashable {
     
     /// Built in operations
     public static let defaults: [Operation] = [
+        Exports.core,
         Exports.algebra,
         Exports.list,
         Exports.matrix,
@@ -26,7 +27,6 @@ public class Operation: Equatable, Hashable {
         Exports.vector,
         Exports.strings,
         Exports.calculus,
-        Exports.core,
         Exports.iterable,
         Exports.fileSystem,
         Exports.flowControl,
@@ -40,21 +40,26 @@ public class Operation: Equatable, Hashable {
 
     /// A value that represents the scope of the signature
     /// The larger the scope, the more universally applicable the function.
-    let scope: Int
-
+    public let scope: Int
+    
+    /// Definition of the operation that transforms arguments, aka. `[Node]` into a result `Node?`.
     public let def: Definition
+    
+    /// Name of the operation. A String.
     public let name: OperationName
-    public let signature: [ParameterType]
+    
+    /// Parameter requirements of the operation. The name and parameters of the operation consists the signature.
+    public let parameters: [Parameter]
 
-    init(_ name: OperationName, _ signature: [ParameterType], definition: @escaping Definition) {
+    /// Creates a new operation from `name`, `parameters`, and `definition`.
+    /// Note that it is not automatically registered.
+    init(_ name: OperationName, _ parameters: [Parameter], definition: @escaping Definition) {
         self.name = name
         self.def = definition
-        self.signature = signature
+        self.parameters = parameters
         
         // Scope is calculated by summing up the specificity of argument requirements.
-        self.scope = signature.reduce(0) {
-            $0 + $1.rawValue
-        }
+        self.scope = parameters.reduce(0) { $0 + $1.scope }
     }
     
     /// Generates a hash from description, since each unique operation has a unique description.
@@ -63,16 +68,15 @@ public class Operation: Equatable, Hashable {
     }
     
     /// Generate the conjugate definition for the given operation.
-    /// e.g. The signature type `[.any, .func]` becomes `[.func, .any]`.
+    /// e.g. The parameters type `[.node, .function]` becomes `[.function, .node]`.
     /// The premise is that the given operation is commutative, otherwise nil is returned.
     ///
     /// - Parameter operation: A commutative operation.
     /// - Returns: The conjugate definition for the operation, that is, if it exists at all.
     private static func conjugate(for operation: Operation) -> Operation? {
-        if operation.signature.count == 2 && operation.name[.commutative] {
-
-            // The original com. op. w/ signature and def. reversed.
-            let op = Operation(operation.name, operation.signature.reversed()) {
+        if operation.parameters.count == 2 && operation.name[.commutative] {
+            // The original com. op. w/ parameters and def. reversed.
+            let op = Operation(operation.name, operation.parameters.reversed()) {
                 return try operation.def($0.reversed())
             }
             return op
@@ -80,7 +84,7 @@ public class Operation: Equatable, Hashable {
         return nil
     }
 
-    /// Register the operation.
+    /// Registers the operation s.t. it is visible within Kelvin.
     public static func register(_ operation: Operation, isUserDefined: Bool = true) {
         if isUserDefined {
             userDefined.insert(operation)
@@ -95,7 +99,7 @@ public class Operation: Equatable, Hashable {
         registered.updateValue(arr, forKey: operation.name)
     }
 
-    /// Find the conjugates of commutative operations, then assort all operations by
+    /// Finds the conjugates of commutative operations, then assort all operations by
     /// their names into a dictionary. This results in a 75% performance boost!
     private static func process(_ operations: [Operation]) -> [OperationName: [Operation]] {
         var operations = operations
@@ -130,9 +134,9 @@ public class Operation: Equatable, Hashable {
     ///
     /// - Parameters:
     ///    - name: The name of the operation to be removed.
-    ///    - signature: The signature of the operation to be removed.
-    static func remove(_ name: OperationName, _ signature: [ParameterType]) {
-        let parOp = Operation(name, signature) { _ in
+    ///    - parameters: The parameters of the operation to be removed.
+    public static func remove(_ name: OperationName, _ parameters: [Parameter]) {
+        let parOp = Operation(name, parameters) { _ in
             nil
         }
         registered[name]?.removeAll {
@@ -142,89 +146,61 @@ public class Operation: Equatable, Hashable {
 
     /// Remove the parametric operations with the given name.
     /// - Parameter name: The name of the operations to be removed.
-    static func remove(_ name: OperationName) {
+    public static func remove(_ name: OperationName) {
         registered[name] = nil
+    }
+    
+    /// - Parameter fun: The function that supplies the arguments to the operation.
+    /// - Returns: True if the operation can be applied on the function. That is, the arguments of the function
+    ///            matches the requirements of the operation specified by its parameters.
+    private func canApply(to fun: Function) -> Bool {
+        var args = fun.elements
+        
+        /// Checks if the first argument in `args` matches the parameter.
+        /// If so, it is removed and `true` is returned; otherwise returns `false`.
+        func matches(_ par: Parameter) -> Bool {
+            if let arg = args.first, KType.resolve(arg).is(par.kType) {
+                args.removeFirst()
+                return true
+            }
+            return false
+        }
+        
+        /// Ensure that requirements specified by the parameter is satisfied by the arguments of the function.
+        for par in parameters {
+            switch par.multiplicity {
+            case .unary:
+                // Requires a single parameter
+                guard matches(par) else { return false }
+            case .count(let c):
+                // Requires a specific number of the same parameter
+                var i = 0
+                while i < c {
+                    guard matches(par) else {
+                        return false
+                    }
+                    i += 1
+                }
+            case .any:
+                // Requires any number of the specified paramter.
+                while matches(par) {}
+            }
+        }
+        
+        return args.count == 0
     }
 
     /// Resolves the appropriate operation based on the name and provided arguments.
     ///
     /// - Parameter fun: The function that requires an operation as its definition.
     /// - Parameter args: The arguments supplied to the operation
-    /// - Returns: A list of operations with matching signature, sorted in order of increasing scope.
+    /// - Returns: A list of operations with matching parameters, sorted in order of increasing scope.
     public static func resolve(for fun: Function) -> [Operation] {
         // First find all operations w/ the given name.
         // If there are none, return an empty array.
-        guard let candidates = registered[fun.name] else { return [] }
-        var matching = [Operation]()
-        candLoop: for cand in candidates {
-            var signature = cand.signature
-            // Deal w/ function signature types that allow any # of args.
-            if let first = signature.first {
-                switch first {
-                case .multivariate where fun.count <= 1:
-                    break candLoop
-                case .multivariate:
-                    fallthrough
-                case .universal:
-                    signature = [ParameterType](repeating: .any, count: fun.count)
-                case .numbers:
-                    signature = [ParameterType](repeating: .number, count: fun.count)
-                case .booleans:
-                    signature = [ParameterType](repeating: .bool, count: fun.count)
-                default: break
-                }
-            }
-
-            // Bail out if # of parameters does not match # of args.
-            if signature.count != fun.count {
-                continue
-            }
-
-            // Make sure that each parameter is the required type
-            for i in 0..<signature.count {
-                let argType = signature[i]
-                let arg = fun[i]
-                switch argType {
-                case .any:
-                    continue
-                case .pair where !(arg is Pair):
-                    fallthrough
-                case .var where !(arg is Variable):
-                    fallthrough
-                case .type where !(arg is KType):
-                    fallthrough
-                case .bool where !(arg is Bool):
-                    fallthrough
-                case .vec where !(arg is Vector):
-                    fallthrough
-                case .matrix where !(arg is Matrix):
-                    fallthrough
-                case .list where !(arg is List):
-                    fallthrough
-                case .iterable where !(arg is Iterable):
-                    fallthrough
-                case .number where !(arg is Value):
-                    fallthrough
-                case .nan where arg is Value:
-                    fallthrough
-                case .equation where !(arg is Equation):
-                    fallthrough
-                case .string where !(arg is KString):
-                    fallthrough
-                case .int where !(arg is Int):
-                    fallthrough
-                case .closure where !(arg is Closure):
-                    fallthrough
-                case .func where !(arg is Function):
-                    continue candLoop
-                default: continue
-                }
-            }
-            
-            matching.append(cand)
-        }
-        
-        return matching
+        guard let cands = registered[fun.name] else { return [] }
+        // Candidates are already sorted in ascending order by scope.
+        return cands.filter { $0.canApply(to: fun)}
     }
 
     /// Commutatively simplify a list of arguments. Suppose we have an expression,
@@ -238,8 +214,8 @@ public class Operation: Equatable, Hashable {
     /// - Returns: A node resulting from the simplification.
     public static func simplifyCommutatively(_ nodes: [Node], by fun: OperationName) throws -> Node {
         var nodes = nodes
+        // Base case.
         if nodes.count == 2 {
-            // Base case.
             return try Function(fun, nodes).simplify()
         }
         for i in 0..<nodes.count - 1 {
@@ -247,32 +223,36 @@ public class Operation: Equatable, Hashable {
             for j in i..<nodes.count {
                 let bin = Function(fun, [nodes[j], n])
                 let simplified = try bin.simplify()
+                
                 // If the junction of n and j can be simplified...
                 if simplified.complexity < bin.complexity {
                     nodes.remove(at: j)
                     nodes.append(simplified)
+                    
                     // Commutatively simplify the updated list of nodes
                     return try simplifyCommutatively(nodes, by: fun)
                 }
             }
+            
             // Can't perform simplification w/ current node.
             // Insert it back in and move on to the next.
             nodes.insert(n, at: i)
         }
+        
         // Fully simplified. Reconstruct commutative operation and return.
         return Function(fun, nodes)
     }
 
-    /// Two parametric operations are equal to each other if they have the same name and the same signature
+    /// Two parametric operations are equal to each other if they have the same name and the same parameters
     public static func ==(lhs: Operation, rhs: Operation) -> Bool {
-        return lhs.name == rhs.name && lhs.signature == rhs.signature
+        return lhs.name == rhs.name && lhs.parameters == rhs.parameters
     }
 }
 
 extension Operation: CustomStringConvertible {
     public var description: String {
-        let parameterTypes = signature.reduce(nil) {
-            $0 == nil ? $1.name : "\($0!),\($1.name)"
+        let parameterTypes = parameters.reduce(nil) {
+            $0 == nil ? $1.description : "\($0!),\($1.description)"
         } ?? ""
         return "\(name)(\(parameterTypes))"
     }

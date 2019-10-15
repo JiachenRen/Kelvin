@@ -20,8 +20,8 @@ public enum ExecutionError: KelvinError {
     case unexpectedType(expected: KType, found: KType)
     case indexOutOfBounds(maxIdx: Int, idx: Int)
     case dimensionMismatch(_ a: Node, _ b: Node)
-    case domain(_ val: Value, lowerBound: Value, upperBound: Value)
-    case invalidRange(lowerBound: Value, upperBound: Value)
+    case domain(_ val: Number, lowerBound: Number, upperBound: Number)
+    case invalidRange(lowerBound: Number, upperBound: Number)
     case invalidSubscript(_ target: Node, _ subscript: Node)
     case invalidCast(from: Node, to: KType)
     case invalidDimension(rows: Int, cols: Int)
@@ -33,6 +33,8 @@ public enum ExecutionError: KelvinError {
     case unsupportedPlatform(_ supported: String)
     case stackOverflow(_ stacks: Int)
     case resolved(_ errMsg: String)
+    case invalidPolynomial(_ term: Node)
+    case invalidOption(_ option: String)
     
     /// Maximum number of error stacks to unravel.
     /// In case of stack overflow, it'll take forever to generate error messages if this were not in place!
@@ -104,7 +106,7 @@ public enum ExecutionError: KelvinError {
         case .invalidRange(lowerBound: let lb, upperBound: let ub):
             return "cannot form range from \(lb) to \(ub)"
         case .invalidCast(from: let node, to: let type):
-            let nodeType = Swift.type(of: node).kType.rawValue
+            let nodeType = KType.resolve(node).rawValue
             return "cannot cast `\(node.stringified)` of type \(nodeType) to \(type)"
         case .invalidDimension(rows: let r, cols: let c):
             return "(rows: \(r), cols: \(c)) is not a valid dimension"
@@ -126,6 +128,10 @@ public enum ExecutionError: KelvinError {
             return "stack overflow - max stack size of \(i) has been exceeded"
         case .resolved(let s):
             return s
+        case .invalidPolynomial(let n):
+            return "\(n.stringified) is not a proper polynomial term"
+        case .invalidOption(let s):
+            return "\(s) is not a valid option"
         }
     }
 }

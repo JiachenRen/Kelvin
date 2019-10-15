@@ -12,15 +12,10 @@ public class Pair: Iterable, BinaryNode {
     public var stringified: String { concat(by: " : ") { $0.stringified } }
     public var ansiColored: String { concat(by: " : ") { $0.ansiColored } }
     public var precedence: Keyword.Precedence { .pair }
-    public class var kType: KType { .pair }
     public var elements: [Node]
     
     public required init(_ v1: Node, _ v2: Node) {
         self.elements = [v1, v2]
-    }
-    
-    public convenience init(_ key: String, _ val: Node) {
-        self.init(KString(key), val)
     }
     
     public func equals(_ other: Node) -> Bool {

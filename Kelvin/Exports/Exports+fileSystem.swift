@@ -14,51 +14,51 @@ extension Exports {
 
 extension FileSystem {
     static let exports: [Operation] = [
-        .unary(.readFile, KString.self) {
-            return try KString(shared.readFile(at: $0.string))
+        .unary(.readFile, String.self) {
+            return try String(shared.readFile(at: $0))
         },
-        .binary(.appendToFile, KString.self, KString.self) {
-            try shared.write($1.string, to: $0.string, append: true)
+        .binary(.appendToFile, String.self, String.self) {
+            try shared.write($1, to: $0, append: true)
             return KVoid()
         },
-        .binary(.writeToFile, KString.self, KString.self) {
-            try shared.write($1.string, to: $0.string, append: false)
+        .binary(.writeToFile, String.self, String.self) {
+            try shared.write($1, to: $0, append: false)
             return KVoid()
         },
         .noArg(.getWorkingDirectory) {
             #if os(OSX)
-            return KString(shared.workingDirectoryPath)
+            return String(shared.workingDirectoryPath)
             #else
             throw ExecutionError.general(errMsg: "unable to resolve working directory - unsupported platform")
             #endif
         },
-        .unary(.setWorkingDirectory, KString.self) {
-            try shared.setWorkingDirectory($0.string)
+        .unary(.setWorkingDirectory, String.self) {
+            try shared.setWorkingDirectory($0)
             return KVoid()
         },
-        .unary(.pathExists, KString.self) {
-            return shared.exists($0.string)
+        .unary(.pathExists, String.self) {
+            return shared.exists($0)
         },
-        .unary(.isDirectory, KString.self) {
-            return shared.assert($0.string, asDirectory: true)
+        .unary(.isDirectory, String.self) {
+            return shared.assert($0, asDirectory: true)
         },
-        .unary(.removePath, KString.self) {
-            try shared.remove(at: $0.string)
+        .unary(.removePath, String.self) {
+            try shared.remove(at: $0)
             return KVoid()
         },
-        .unary(.createFile, KString.self) {
-            try shared.createFile(at: $0.string)
+        .unary(.createFile, String.self) {
+            try shared.createFile(at: $0)
             return KVoid()
         },
-        .unary(.createDirectory, KString.self) {
-            try shared.createDirectory(at: $0.string)
+        .unary(.createDirectory, String.self) {
+            try shared.createDirectory(at: $0)
             return KVoid()
         },
         .noArg(.listPaths) {
-            return try List(shared.list().map {KString($0)})
+            return try List(shared.list())
         },
-        .unary(.listPaths, KString.self) {
-            return try List(shared.list($0.string).map {KString($0)})
+        .unary(.listPaths, String.self) {
+            return try List(shared.list($0))
         },
     ]
 }

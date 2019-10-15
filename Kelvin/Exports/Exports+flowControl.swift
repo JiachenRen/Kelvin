@@ -19,16 +19,22 @@ extension FlowControl {
         
         // Pileline, conditional statements
         .binary(.ternaryConditional, Node.self, Pair.self) {(n, pair) in
-            let predicate = try Assert.cast(n.simplify(), to: Bool.self)
-            return predicate ? pair.lhs : pair.rhs
-        },
-        .binary(.if, [.any, .any]) {
-            let predicate = try Assert.cast($0.simplify(), to: Bool.self)
-            if predicate {
-                let _ = try $1.simplify()
-                return true
+            let predicate = try n.simplify()
+            if let bool = predicate as? Bool {
+                return bool ? pair.lhs : pair.rhs
             }
-            return KVoid()
+            return nil
+        },
+        .binary(.if, [.node, .node]) {
+            let predicate = try $0.simplify()
+            if let bool = predicate as? Bool {
+                if bool {
+                    let _ = try $1.simplify()
+                    return true
+                }
+                return false
+            }
+            return nil
         },
         .binary(.else, Function.self, Node.self) {(fun, rhs) in
             guard fun.name == .if || fun.name == .else else {
@@ -37,19 +43,27 @@ extension FlowControl {
             guard (rhs as? Function)?.name == .if || rhs is Closure else {
                 throw ExecutionError.general(errMsg: "right hand side of 'else' must be a if statement or closure")
             }
-            if try fun.simplify() === true {
-                return true
-            } else {
-                return try rhs.simplify()
+            // Resolve preceding if clause.
+            let prevResult = try fun.simplify()
+            if let wasTrue = prevResult as? Bool {
+                if wasTrue {
+                    // Previous clause has been executed. Return immediately.
+                    return true
+                } else {
+                    // Previous clause was not executed, try the next if clause.
+                    return try rhs.simplify()
+                }
             }
+            // Previous if clause was not resolved.
+            return nil
         },
-        .binary(.pipe, [.any, .any]) {
+        .binary(.pipe, [.node, .node]) {
             let simplified = try $0.simplify()
             return $1.replacingAnonymousArgs(with: [simplified])
         },
         
         // Transfer
-        .unary(.return, [.any]) {
+        .unary(.return, [.node]) {
             throw FlowControl.return($0)
         },
         .init(.break, []) {_ in
@@ -60,7 +74,7 @@ extension FlowControl {
         },
         
         // Error handling
-        .unary(.throw, [.any]) {
+        .unary(.throw, [.node]) {
             throw ExecutionError.general(errMsg: $0.stringified)
         },
         .unary(.try, Pair.self) {
@@ -70,11 +84,11 @@ extension FlowControl {
                 return try $0.rhs.simplify()
             }
         },
-        .unary(.try, [.any]) {
+        .unary(.try, [.node]) {
             do {
                 return try $0.simplify()
             } catch let e as KelvinError {
-                return KString(e.localizedDescription)
+                return String(e.localizedDescription)
             }
         },
         .unary(.assert, Bool.self) {predicate in
@@ -128,7 +142,7 @@ extension FlowControl {
             }
             return KVoid()
         },
-        .ternary(.stride, Value.self, Value.self, Value.self) {
+        .ternary(.stride, Number.self, Number.self, Number.self) {
             var lb = $0.float80, ub = $1.float80, step = $2.float80
             var elements = [Node]()
             while lb <= ub {

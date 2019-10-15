@@ -14,8 +14,11 @@ extension Exports {
 
 extension Algebra {
     static let exports: [Operation] = [
-        .unary(.factorize, [.any]) { try factorize($0) },
-        .unary(.expand, [.any]) { expand($0) },
+        .unary(.factorize, [.node]) { try factorize($0) },
+        .unary(.expand, [.node]) { expand($0) },
+        .binary(.coefficients, Node.self, Variable.self) {
+            try List(coefficients(of: $0, $1).map { d, c in Pair(d, c) })
+        }
     ]
 }
 

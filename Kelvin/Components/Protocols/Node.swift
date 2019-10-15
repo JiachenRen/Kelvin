@@ -9,9 +9,7 @@
 import Foundation
 
 public protocol Node {
-    /// Type of the node.
-    static var kType: KType { get }
-
+    
     /// The string representation of the node.
     /// This is used to override the description implemented in Float80;
     /// It serves as an intermediate.
@@ -20,7 +18,7 @@ public protocol Node {
     var ansiColored: String { get }
 
     /// Computes the numerical value that the node represents.
-    var evaluated: Value? { get }
+    var evaluated: Number? { get }
     
     /// Used to determine if a parenthesis is needed
     var precedence: Keyword.Precedence { get }
