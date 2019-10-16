@@ -24,4 +24,43 @@ extension BigInt: Integer {
     public func simplify() -> Node { Int(exactly: self) ?? self }
     public func negate() -> BigInt { -self }
     public func abs() -> BigInt { self > 0 ? self : -self }
+    
+    /// - Returns: The least common multiple with i.
+    public func leastCommonMultiple(with i: BigInt) -> BigInt {
+        self * i / greatestCommonDivisor(with: i)
+    }
+    
+    /// - Returns: The prime factors of this integer expressed in tuples `(factor, multiplicity)`
+    public func primeFactors() -> [(factor: BigInt, multiplicity: BigInt)] {
+        var n = self
+        var factors: [(BigInt, BigInt)] = []
+        var divisor: BigInt = 2
+        while divisor * divisor <= n {
+            var power: BigInt = 0
+            while n % divisor == 0 {
+                power += 1
+                n /= divisor
+            }
+            if power != 0 {
+                factors.append((divisor, power))
+            }
+            divisor += divisor == 2 ? 1 : 2
+        }
+        if n > 1 {
+            factors.append((n, 1))
+        }
+
+        return factors
+    }
+    
+    /// Generates a prime of the specified bit width.
+    public static func generatePrime(_ width: Int) -> BigInt {
+        while true {
+            var random = BigUInt.randomInteger(withExactWidth: width)
+            random |= BigUInt(1)
+            if random.isPrime() {
+                return BigInt(random)
+            }
+        }
+    }
 }

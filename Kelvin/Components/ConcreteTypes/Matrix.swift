@@ -290,8 +290,12 @@ public final class Matrix: Iterable {
     /// - Throws: `ExecutionError.nonSquareMatrix` if the matrix is not a square matrix.
     private func detREF() throws -> Node {
         try Assert.squareMatrix(self)
-        let (swaps, scale, _) = try self.reduce(into: .ref)
-        return (swaps % 2 == 0) ? scale : -scale
+        let (swaps, scale, mat) = try self.reduce(into: .ref)
+        var diagProd: Node = swaps % 2 == 0 ? 1 : -1
+        for i in 0..<mat.rows.count {
+            diagProd = diagProd * mat[i, i]
+        }
+        return try (diagProd * scale).simplify()
     }
     
     /// Calculates the determinant of the matrix using **cofactor expansion**.
@@ -477,7 +481,7 @@ public final class Matrix: Iterable {
     }
     
     public func copy() -> Self {
-        return Self(validated: rows)
+        return Self(validated: rows.map { $0.copy() })
     }
     
     public var stringified: String { "[\(concat { $0.stringified })]" }

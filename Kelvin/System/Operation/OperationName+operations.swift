@@ -122,7 +122,7 @@ public extension OperationName {
     
     // MARK: - Algebra
     
-    static let factorize = "factor" // Also used for factorizing an integer
+    static let factor = "factor" // Factoring an algebraic expression
     static let expand = "expand"
     static let solve = "solve"
     static let numericalSolve = "nSolve"
@@ -154,10 +154,17 @@ public extension OperationName {
     static let randomInt = "randInt"
     static let randomMatrix = "randMat" // randMat(dim), randMat(rows, cols)
     static let randomBool = "randBool"
+    static let randomPrime = "randPrime"
+    
+    // MARK: - Number theory
+    
     static let npr = "npr"
     static let ncr = "ncr"
     static let powerset = "powerset"
-    static let factorial = "factorial"
+    static let factorial = "factorial" // Find the factorial of the integer
+    static let factorize = "factorize" // Factorizes the integer
+    static let factors = "factors" // Factors of an integer
+    static let isPrime = "isPrime" // Checks if the integer is a prime
     
     // MARK: - Boolean logic
     

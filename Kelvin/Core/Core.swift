@@ -241,15 +241,29 @@ public class Core {
             $0 !== $1
         },
         
-        // Number utils
-        .binary(.greatestCommonDivisor, Int.self, Int.self) {
-            gcd($0, $1)
+        // Number theory
+        .binary(.greatestCommonDivisor, Integer.self, Integer.self) {
+            $0.bigInt.greatestCommonDivisor(with: $1.bigInt)
         },
-        .binary(.leastCommonMultiple, Int.self, Int.self) {
-            lcm($0, $1)
+        .binary(.leastCommonMultiple, Integer.self, Integer.self) {
+            $0.bigInt.leastCommonMultiple(with: $1.bigInt)
         },
-        .unary(.factorize, Int.self) {
-            List(primeFactors(of: $0))
+        .unary(.factorize, Integer.self) {
+            (n: Integer) throws -> Node? in
+            List(n.bigInt.primeFactors().map {
+                [BigInt](repeating: $0.factor, count: Int($0.multiplicity))
+            }.flatMap { $0 })
+        },
+        .unary(.factors, Integer.self) {
+            (n: Integer) throws -> Node? in
+            let primeFactors = n.bigInt.primeFactors()
+            return List([
+                List(primeFactors.map { $0.factor }),
+                List(primeFactors.map { $0.multiplicity })
+            ])
+        },
+        .unary(.isPrime, Integer.self) {
+            $0.bigInt.isPrime()
         },
         .unary(.degrees, [.node]) {
             $0 / 180 * (Constant(.pi))
@@ -463,7 +477,8 @@ public class Core {
         },
         
         .binary(.div, Integer.self, Integer.self) {
-            Fraction($0.bigInt, $1.bigInt)
+            if Mode.shared.rounding == .approximate { return nil }
+            return Fraction($0.bigInt, $1.bigInt)
         },
         .binary(.mod, Integer.self, Integer.self) {
             $0.bigInt.modulus($1.bigInt)

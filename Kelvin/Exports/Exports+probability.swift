@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import BigInt
 
 extension Exports {
     static let probability: [Operation] = Probability.exports
@@ -32,6 +33,13 @@ extension Probability {
                 throw ExecutionError.invalidRange(lowerBound: lb, upperBound: ub)
             }
             return Int.random(in: lb...ub)
+        },
+        .unary(.randomInt, Int.self) {i in
+            try Assert.domain(i, 1, Int.max)
+            return BigInt(BigUInt.randomInteger(withExactWidth: i))
+        },
+        .unary(.randomPrime, Int.self) {
+            BigInt.generatePrime($0)
         },
         .unary(.randomMatrix, Int.self) {
             try Matrix(rows: $0, cols: $0) { _, _ in Float80.random(in: 0..<1) }
@@ -62,7 +70,7 @@ extension Probability {
 
         // Factorial
         .unary(.factorial, Int.self) {
-            Probability.factorial($0.float80)
+            $0.factorial()
         }
     ]
 }

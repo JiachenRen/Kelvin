@@ -75,14 +75,15 @@ public class Variable: LeafNode, NaN {
         return false
     }
     
-    public var stringified: String {
+    public var sanitized: String {
         name.replacingOccurrences(
             of: #"[^a-zA-Z$_\d]"#,
             with: "",
             options: .regularExpression
         )
     }
-    public var ansiColored: String { isAnonymous ? name.cyan.bold : name }
+    public var stringified: String { sanitized }
+    public var ansiColored: String { isAnonymous ? sanitized.cyan.bold : sanitized }
     public var complexity: Int { 3 }
     public var evaluated: Number? { definition?.evaluated }
 }

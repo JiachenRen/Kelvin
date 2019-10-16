@@ -16,4 +16,9 @@ extension Int: Integer {
     public var bigInt: BigInt { BigInt(self) }
     public func abs() -> Int { Swift.abs(self) }
     public func negate() -> Int { -self }
+    
+    /// - Returns: The factorial of this integer
+    public func factorial() -> BigInt {
+        return (1...self).map { BigInt($0) }.reduce(BigInt(1), *)
+    }
 }

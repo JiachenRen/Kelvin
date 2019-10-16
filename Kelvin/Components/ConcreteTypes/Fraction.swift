@@ -119,7 +119,7 @@ public final class Fraction: Exact {
         case 0:
             return Float80.nan
         case 1:
-            return Int(numerator * sign)
+            return numerator * sign
         default:
             break
         }
@@ -145,29 +145,6 @@ public final class Fraction: Exact {
         return self.denominator == f.denominator
             && self.numerator == f.numerator
             && self.sign == f.sign
-    }
-    
-    private static func primeFactors(of n: BigInt) -> [(factor: BigInt, multiplicity: BigInt)] {
-        var n = n
-        var factors: [(BigInt, BigInt)] = []
-
-        var divisor: BigInt = 2
-        while divisor * divisor <= n {
-            var power: BigInt = 0
-            while n % divisor == 0 {
-                power += 1
-                n /= divisor
-            }
-            if power != 0 {
-                factors.append((divisor, power))
-            }
-            divisor += divisor == 2 ? 1 : 2
-        }
-        if n > 1 {
-            factors.append((n, 1))
-        }
-
-        return factors
     }
     
     public func negate() -> Fraction {
@@ -258,8 +235,8 @@ public final class Fraction: Exact {
         // (n/d) ^ (1/r) => a/b * (m/t) ^ (1/r)
         let r = exponent.denominator
         let n = s.numerator, d = s.denominator
-        let p1 = Fraction.primeFactors(of: n)
-        let p2 = Fraction.primeFactors(of: d)
+        let p1 = n.primeFactors()
+        let p2 = d.primeFactors()
         var a: BigInt = 1, b: BigInt = 1, m: BigInt = 1, t: BigInt = 1
         for (i, k) in p1 {
             guard let q = Int(exactly: k / r) else {

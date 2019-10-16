@@ -16,7 +16,7 @@ public extension Algebra {
     }
     
     /// Factorizes the parent node; e.g.` a * b + a * c` becomes `a * (b + c)`
-    static func factorize(_ parent: Node) throws -> Node {
+    static func factor(_ parent: Node) throws -> Node {
         return try parent.replacing(by: {
             try factorize(time, limitedBy: 1.0, ($0 as! Function).elements)
         }) {
@@ -80,13 +80,13 @@ public extension Algebra {
                 let n2 = nodes.remove(at: j)
                 let factors = commonFactors([n1, n2])
                 
-                // For each common factor, factorize n1 and n2 by the common factor,
+                // For each common factor, factor n1 and n2 by the common factor,
                 // simplify (if possible), then add the factored form back into the pool
                 // for further factorization.
                 for f in factors {
                     let a = factorize(n1, by: f)
                     let b = factorize(n2, by: f)
-                    let fab = try factorize(a + b)
+                    let fab = try factor(a + b)
                         .simplify()
                     
                     var pool = nodes
@@ -118,7 +118,7 @@ public extension Algebra {
                     for f in commonFactors([n1, combined]) {
                         let a = factorize(n1, by: f)
                         let b = factorize(combined, by: f)
-                        let fab = try factorize(a + b).simplify()
+                        let fab = try factor(a + b).simplify()
                         c.append(f * fab)
                         
                         let factorized = try factorize(startTime, limitedBy: duration, c)
@@ -149,7 +149,7 @@ public extension Algebra {
     /// - Note: This function assumes that the relationship b/w node and factor is addition.
     /// - Parameters:
     ///     - node: The node to be factorized with factor
-    ///     - factor: The factor used to factorize the node.
+    ///     - factor: The factor used to factor the node.
     /// - Returns: Given node with factor factorized out.
     private static func factorize(_ node: Node, by factor: Node) -> Node {
         return try! (node / factor).simplify()
@@ -243,7 +243,7 @@ public extension Algebra {
             }
             
             // If 'o' is a common factor, then we add 'o' to the common factor array,
-            // then factorize each term by 'o', and recursively factor what remains
+            // then factor each term by 'o', and recursively factor what remains
             // to find the rest of the factors.
             if isCommon {
                 common.append(o)
