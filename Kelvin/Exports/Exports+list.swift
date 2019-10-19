@@ -13,8 +13,8 @@ extension Exports {
         .binary(.add, List.self, List.self) {
             try $0.joined(with: $1, by: .add)
         },
-        .binary(.sub, List.self, List.self) {
-            try $0.joined(with: $1, by: .sub)
+        .binary(.minus, List.self, List.self) {
+            try $0.joined(with: $1, by: .minus)
         },
         .binary(.mult, List.self, List.self) {
             try $0.joined(with: $1, by: .mult)

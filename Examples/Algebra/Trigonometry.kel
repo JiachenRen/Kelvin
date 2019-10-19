@@ -1,2 +1,2 @@
 # The following expression evaluates to 1!
-assert tan(x) * sec(x) * csc(x) * cos(x) ^ 2 == 1
+tan(x) * sec(x) * csc(x) * cos(x) ^ 2 === 1

@@ -73,7 +73,7 @@ def test(n) {
     println "det REF = " & ref;
     println "det COF = " & cof;
     println "DIFF    = " & (ref - cof);
-    assert round(det m, 10) == round(detCof(m), 10)
+    round(det m, 10) === round(detCof(m), 10)
 }
 
 
@@ -81,9 +81,9 @@ map(0...5) {test($1 + 1)}
 
 # Finding row reduced echelon form (RREF) and REF
 # Find the REF form
-assert ref(idMat(3)) == idMat(3)
+ref(idMat(3)) === idMat(3)
 ref(mat(flatten({random()...3, -4, random()...3, -11, random()...3, 22}),3,4))
 
 # Find the RREF form
 # There's a statistically insignificant chance that 3 random vectors are linearly dependent.
-assert rref randMat(3) == idMat(3)
+rref randMat(3) === idMat(3)

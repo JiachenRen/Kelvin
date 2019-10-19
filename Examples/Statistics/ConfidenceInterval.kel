@@ -1,15 +1,15 @@
 # z interval
 a := zInterval(0.5,2,3,0.95)
 b := zInterval(0.5,{1,2,3},0.95)
-assert round(reduce(a["CI"] - b["CI"]) {$0 + $1}, 5) == 0
+round(reduce(a["CI"] - b["CI"]) {$0 + $1}, 5) === 0
 
 # t interval from sample data
 c := tInterval({1,2,3,5}, 0.95)
-assert round(c["CI"][0], 5) == 0.03247
+round(c["CI"][0], 5) === 0.03247
 
 # t interval from statistics
 d := tInterval(5,1,3,0.95)
-assert round(d["ME"], 5) == 2.48414
+round(d["ME"], 5) === 2.48414
 
 # One proportion z interval
 zIntervalOneProp(5,10,0.95) | println($0)
@@ -22,8 +22,8 @@ zIntervalTwoSamp(5,7,214,20,195,30,0.95)
 
 # Two sample t interval from stats
 def result = tIntervalTwoSamp(20.3,2.1,40,19.2,1.9,40,0.9)
-assert round(result["df"], 3) == 77.232
-assert round(result["ME"], 3) == 0.745
-assert round(result["CI"][0], 3) == 0.355
-assert round(result["CI"][1], 3) == 1.845
+round(result["df"], 3) === 77.232
+round(result["ME"], 3) === 0.745
+round(result["CI"][0], 3) === 0.355
+round(result["CI"][1], 3) === 1.845
 result | println($0)

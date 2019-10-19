@@ -1,6 +1,6 @@
 # Syntax for defining inline function
 def f(x) = x^3 / a
-assert f(a) == a^2
+f(a) === a^2
 
 # Alternatively, use the assignment operator :=
 f(a, b) := a^2 - b
@@ -34,7 +34,7 @@ def foo(a, b) {
 }
 
 def result = foo(1, 3)
-assert print(result) == {114, 67}
+print(result) === {114, 67}
 
 # List all user defined functions
 listFuncs()

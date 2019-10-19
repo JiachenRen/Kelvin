@@ -63,13 +63,13 @@ extension Rules {
             return nil
         },
         
-        .binary(.sub, [.node, .node]) {
+        .binary(.minus, [.node, .node]) {
             if $0 === $1 {
                 return 0
             }
             return $0 + -$1
         },
-        .unary(.sub, [.node]) {
+        .unary(.minus, [.node]) {
             -1 * $0
         },
         

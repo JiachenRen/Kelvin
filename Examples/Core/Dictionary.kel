@@ -17,5 +17,5 @@ dict["what"][1]
 √dict["what"][1][1]
 dict[shit]
 
-assert (dict[m][o] ~ $0 & $1) == "rpg"
+(dict[m][o] ~ $0 & $1) === "rpg"
 

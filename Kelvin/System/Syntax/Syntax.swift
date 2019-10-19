@@ -34,7 +34,8 @@ public struct Syntax {
         for name: String,
         associativity: Keyword.Associativity,
         precedence: Keyword.Precedence? = nil,
-        operator: Operator? = nil
+        operator: Operator? = nil,
+        checkAmbiguity: Bool = true
     ) {
 
         // Create the keyword
@@ -52,8 +53,9 @@ public struct Syntax {
         // Register the keyword in glossary and encodings
         tokens[keyword.token] = keyword
         glossary[keyword.name] = keyword
-        
-        ambiguousOperators = findAmbiguousOperators()
+        if checkAmbiguity {
+            ambiguousOperators = disambiguateOperators()
+        }
     }
     
     /// Some operators have ambiguous definitions. i.e., they use the same
@@ -62,10 +64,10 @@ public struct Syntax {
     /// as a postfix, say in `a!`, it means `factorial`.
     /// This function finds all ambiguous keyword operators.
     public static var ambiguousOperators: [String: [Keyword]] = {
-        return findAmbiguousOperators()
+        return disambiguateOperators()
     }()
     
-    private static func findAmbiguousOperators() -> [String: [Keyword]] {
+    private static func disambiguateOperators() -> [String: [Keyword]] {
         var dict = [String: [Keyword]]()
         var d = [String: [Keyword.Associativity: Keyword]]()
         for keyword in tokens.values {
@@ -90,6 +92,19 @@ public struct Syntax {
         }
         return dict
     }
+    
+    /// Removes the syntax definition for keyword with specified name.
+    public static func remove(_ name: String) {
+        guard let keyword = glossary[name] else {
+            return
+        }
+        glossary[name] = nil
+        tokens[keyword.token] = nil
+        guard let o = keyword.operator else {
+            return
+        }
+        ambiguousOperators[o.name] = nil
+    }
 
     /// Reset to syntactic definitions for operations by first reset encoder scalar, then reloading glossary and tokens
     public static func restoreDefault() {
@@ -106,7 +121,7 @@ public struct Syntax {
         
         // Arithmetic
         .init(for: .add, associativity: .infix, precedence: .translating, operator: .init("+")),
-        .init(for: .sub, associativity: .infix, precedence: .translating, operator: .init("-")),
+        .init(for: .minus, associativity: .infix, precedence: .translating, operator: .init("-")),
         .init(for: .negate, associativity: .prefix, operator: .init("-", padding: .none)),
         .init(for: .mult, associativity: .infix, precedence: .scaling, operator: .init("*")),
         .init(for: .div, associativity: .infix, precedence: .scaling, operator: .init("/")),
@@ -117,11 +132,11 @@ public struct Syntax {
         // Assignment
         .init(for: .increment, associativity: .postfix, operator: .init("++", padding: .rightSide)),
         .init(for: .decrement, associativity: .postfix, operator: .init("--", padding: .rightSide)),
-        .init(for: .mutatingAdd, associativity: .infix, precedence: .assignment, operator: .init("+=")),
-        .init(for: .mutatingSub, associativity: .infix, precedence: .assignment, operator: .init("-=")),
-        .init(for: .mutatingMult, associativity: .infix, precedence: .assignment, operator: .init("*=")),
-        .init(for: .mutatingDiv, associativity: .infix, precedence: .assignment, operator: .init("/=")),
-        .init(for: .mutatingConcat, associativity: .infix, precedence: .assignment, operator: .init("&=")),
+        .init(for: .addAssign, associativity: .infix, precedence: .assignment, operator: .init("+=")),
+        .init(for: .minusAssign, associativity: .infix, precedence: .assignment, operator: .init("-=")),
+        .init(for: .multAssign, associativity: .infix, precedence: .assignment, operator: .init("*=")),
+        .init(for: .divAssign, associativity: .infix, precedence: .assignment, operator: .init("/=")),
+        .init(for: .concatAssign, associativity: .infix, precedence: .assignment, operator: .init("&=")),
         .init(for: .assign, associativity: .infix, precedence: .assignment, operator: .init(":=", padding: .bothSides)),
         .init(for: .define, associativity: .prefix, precedence: .assignment),
         .init(for: .del, associativity: .prefix),
@@ -132,8 +147,8 @@ public struct Syntax {
         .init(for: .percent, associativity: .postfix, operator: .init("%", padding: .none)),
         .init(for: .round, associativity: .prefix),
         .init(for: .int, associativity: .prefix),
-        .init(for: .npr, associativity: .infix),
-        .init(for: .ncr, associativity: .infix),
+        .init(for: .npr, associativity: .infix, precedence: .binary),
+        .init(for: .ncr, associativity: .infix, precedence: .binary),
         
         // Relational
         .init(for: .equates, associativity: .infix, precedence: .equation, operator: .init("=")),
@@ -159,7 +174,7 @@ public struct Syntax {
         .init(for: .map, associativity: .infix, operator: .init("|")),
         .init(for: .reduce, associativity: .infix, operator: .init("~")),
         .init(for: .filter, associativity: .infix, operator: .init("|?")),
-        .init(for: .zip, associativity: .infix, operator: .init("><")),
+        .init(for: .zip, associativity: .infix),
         .init(for: .append, associativity: .infix, precedence: .concat, operator: .init("++")),
         .init(for: .sort, associativity: .infix, operator: .init(">?")),
         .init(for: .remove, associativity: .infix),
@@ -185,24 +200,25 @@ public struct Syntax {
         
         // Transfer, flow control, and error handling
         .init(for: .return, associativity: .prefix, precedence: .prefixCommand),
-        .init(for: .for, associativity: .prefix),
         .init(for: .ternaryConditional, associativity: .infix, precedence: .conditional, operator: .init("?")),
         .init(for: .assert, associativity: .prefix, precedence: .prefixCommand),
+        .init(for: .assertEquals, associativity: .infix, operator: .init("===")),
         .init(for: .try, associativity: .prefix, precedence: .prefixCommand),
         .init(for: .throw, associativity: .prefix, precedence: .prefixCommand),
         .init(for: .else, associativity: .infix, precedence: .binding),
-        .init(for: .inout, associativity: .prefix, operator: .init("&", padding: .none)),
+        .init(for: .inout, associativity: .prefix, precedence: .prefixA, operator: .init("&", padding: .none)),
         
         // Calculus
-        .init(for: .derivative, associativity: .infix, precedence: .derivative, operator: .init("'", padding: .none)),
-        .init(for: .gradient, associativity: .infix, precedence: .derivative, operator: .init("∇")),
+        .init(for: .derivative, associativity: .infix, precedence: .binary, operator: .init("'", padding: .none)),
+        .init(for: .gradient, associativity: .infix, precedence: .binary, operator: .init("∇")),
         
         // Type casting
-        .init(for: .as, associativity: .infix, precedence: .coersion, operator: .init("!!")),
-        .init(for: .is, associativity: .infix, precedence: .coersion, operator: .init("??")),
+        .init(for: .as, associativity: .infix, precedence: .binary, operator: .init("!!")),
+        .init(for: .is, associativity: .infix, precedence: .binary, operator: .init("??")),
         
         // Matrix & vector
         .init(for: .determinant, associativity: .prefix),
+        .init(for: .inverse, associativity: .prefix),
         .init(for: .ref, associativity: .prefix),
         .init(for: .rref, associativity: .prefix),
         .init(for: .dotProduct, associativity: .infix, precedence: .scaling, operator: .init("•")),
@@ -212,6 +228,12 @@ public struct Syntax {
         
         // Others
         .init(for: .pair, associativity: .infix, precedence: .pair, operator: .init(":")),
-        .init(for: .concat, associativity: .infix, precedence: .concat, operator: .init("&"))
+        .init(for: .concat, associativity: .infix, precedence: .concat, operator: .init("&")),
+        
+        // Syntax
+        .init(for: .auto, associativity: .prefix),
+        .init(for: .prefix, associativity: .prefix),
+        .init(for: .infix, associativity: .prefix),
+        .init(for: .postfix, associativity: .prefix),
     ]
 }

@@ -13,8 +13,8 @@ extension Exports {
         .binary(.add, Iterable.self, Node.self) {
             applyToEach(.add, $0, $1)
         },
-        .binary(.sub, Iterable.self, Node.self) {
-            applyToEach(.sub, $0, $1)
+        .binary(.minus, Iterable.self, Node.self) {
+            applyToEach(.minus, $0, $1)
         },
         .binary(.mult, Iterable.self, Node.self) {
             applyToEach(.mult, $0, $1)

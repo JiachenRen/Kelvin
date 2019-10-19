@@ -17,6 +17,7 @@ indirect public enum CompilerError: KelvinError {
     case invalidType(literal: String)
     case on(line: Int, _ err: CompilerError)
     case cancelled
+    case duplicateKeyword(_ name: String)
     
     public var localizedDescription: String {
         switch self {
@@ -32,6 +33,8 @@ indirect public enum CompilerError: KelvinError {
             return "\(n) is not a constant"
         case .invalidType(literal: let l):
             return "\(l) is not a valid type literal"
+        case .duplicateKeyword(let n):
+            return "syntax definition for \(n) already exists; please remove it first or choose another keyword"
         }
     }
 }

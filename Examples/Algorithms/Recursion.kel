@@ -7,6 +7,6 @@ def f(a) {
     return a
 }
 
-assert f(1000005) == 200001/200000
-assert f(15) == 1.5
+f(1000005) === 200001/200000
+f(15) === 1.5
 setMode("rounding", "approximate")

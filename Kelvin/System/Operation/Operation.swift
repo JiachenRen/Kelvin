@@ -48,6 +48,9 @@ public class Operation: Equatable, Hashable {
     /// Name of the operation. A String.
     public let name: OperationName
     
+    /// Number of parameters to take in, since some operations have variatic parameters, this value is optional.
+    public private(set) var numArgs: Int?
+    
     /// Parameter requirements of the operation. The name and parameters of the operation consists the signature.
     public let parameters: [Parameter]
 
@@ -57,9 +60,25 @@ public class Operation: Equatable, Hashable {
         self.name = name
         self.def = definition
         self.parameters = parameters
-        
         // Scope is calculated by summing up the specificity of argument requirements.
         self.scope = parameters.reduce(0) { $0 + $1.scope }
+        self.countArgs()
+    }
+    
+    /// Counts the number of arguments.
+    private func countArgs() {
+        var c = 0
+        for par in parameters {
+            switch par.multiplicity {
+            case .unary:
+                c += 1
+            case .count(let n):
+                c += n
+            case .any:
+                return
+            }
+        }
+        self.numArgs = c
     }
     
     /// Generates a hash from description, since each unique operation has a unique description.
@@ -89,14 +108,15 @@ public class Operation: Equatable, Hashable {
         if isUserDefined {
             userDefined.insert(operation)
         }
-        var arr = registered[operation.name] ?? [Operation]()
+        let name = operation.name
+        var arr = registered[name] ?? [Operation]()
         arr.append(operation)
         if let conjugate = Operation.conjugate(for: operation) {
             // Register the conjugate as well, if it exists.
             arr.append(conjugate)
         }
         arr.sort {$0.scope < $1.scope}
-        registered.updateValue(arr, forKey: operation.name)
+        registered.updateValue(arr, forKey: name)
     }
 
     /// Finds the conjugates of commutative operations, then assort all operations by
@@ -139,9 +159,7 @@ public class Operation: Equatable, Hashable {
         let parOp = Operation(name, parameters) { _ in
             nil
         }
-        registered[name]?.removeAll {
-            $0 == parOp
-        }
+        registered[name]?.removeAll { $0 == parOp }
     }
 
     /// Remove the parametric operations with the given name.
@@ -201,46 +219,6 @@ public class Operation: Equatable, Hashable {
         guard let cands = registered[fun.name] else { return [] }
         // Candidates are already sorted in ascending order by scope.
         return cands.filter { $0.canApply(to: fun)}
-    }
-
-    /// Commutatively simplify a list of arguments. Suppose we have an expression,
-    /// `1 + a + negate(1) + negate(a)`.
-    /// First, we check if `1 + a` is simplifiable, in this case no.
-    /// Then, we check if `1 + negate(1)` is simplifiable, if so, simplify and put them back into the pool.
-    /// At this point, we have `a + negate(a) + 0`, which then easily simplifies to 0.
-    ///
-    /// - Parameter nodes: The list of nodes to be commutatively simplified.
-    /// - Parameter fun: A function that performs binary simplification.
-    /// - Returns: A node resulting from the simplification.
-    public static func simplifyCommutatively(_ nodes: [Node], by fun: OperationName) throws -> Node {
-        var nodes = nodes
-        // Base case.
-        if nodes.count == 2 {
-            return try Function(fun, nodes).simplify()
-        }
-        for i in 0..<nodes.count - 1 {
-            let n = nodes.remove(at: i)
-            for j in i..<nodes.count {
-                let bin = Function(fun, [nodes[j], n])
-                let simplified = try bin.simplify()
-                
-                // If the junction of n and j can be simplified...
-                if simplified.complexity < bin.complexity {
-                    nodes.remove(at: j)
-                    nodes.append(simplified)
-                    
-                    // Commutatively simplify the updated list of nodes
-                    return try simplifyCommutatively(nodes, by: fun)
-                }
-            }
-            
-            // Can't perform simplification w/ current node.
-            // Insert it back in and move on to the next.
-            nodes.insert(n, at: i)
-        }
-        
-        // Fully simplified. Reconstruct commutative operation and return.
-        return Function(fun, nodes)
     }
 
     /// Two parametric operations are equal to each other if they have the same name and the same parameters

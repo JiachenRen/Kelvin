@@ -91,10 +91,15 @@ extension FlowControl {
                 return String(e.localizedDescription)
             }
         },
-        .unary(.assert, Bool.self) {predicate in
+        .unary(.assert, Node.self) {
+            let predicate = try Assert.cast($0, to: Bool.self)
             if !predicate {
                 throw ExecutionError.general(errMsg: "assertion failed")
             }
+            return true
+        },
+        .binary(.assertEquals, Node.self, Node.self) {
+            try Assert.equals($0, $1, message: "assertion failed: expected")
             return true
         },
         

@@ -290,7 +290,7 @@ public class Core {
         },
         .unary(.delay, Number.self) {
             Thread.sleep(forTimeInterval: Double($0.float80))
-            return String("done")
+            return KVoid()
         },
         .binary(.measure, Int.self, Node.self) {(i, n) in
             let t = date
@@ -368,7 +368,7 @@ public class Core {
         .binary(.add, Node.self, Node.self) {
             bin($0, $1, +)
         },
-        .binary(.sub, Node.self, Node.self) {
+        .binary(.minus, Node.self, Node.self) {
             bin($0, $1, -)
         },
         .binary(.mult, Node.self, Node.self) {
@@ -456,7 +456,7 @@ public class Core {
         .binary(.add, Exact.self, Exact.self) {
             $0.adding($1)
         },
-        .binary(.sub, Exact.self, Exact.self) {
+        .binary(.minus, Exact.self, Exact.self) {
             $0.subtracting($1)
         },
         .binary(.mult, Exact.self, Exact.self) {
@@ -516,9 +516,8 @@ public class Core {
             try $0.define()
             return KVoid()
         },
-        // def f(x) { return x + g(x) }
-        .unary(.define, Function.self) {
-            var fun = $0
+        // def [prefix, postfix, infix, auto] f(x) { return x + g(x) }
+        .unary(.define, Function.self) { fun in
             var closure = try Assert.cast(fun.elements.last, to: Closure.self)
             fun.elements.removeLast()
             closure.capturesReturn = true
@@ -534,6 +533,7 @@ public class Core {
         .unary(.del, Variable.self) {v in
             Variable.delete(v.name)
             Operation.remove(v.name)
+            Syntax.remove(v.name)
             return KVoid()
         },
         
@@ -547,23 +547,23 @@ public class Core {
             $0 -== 1
         },
         // +=
-        .binary(.mutatingAdd, Variable.self, Node.self) {
+        .binary(.addAssign, Variable.self, Node.self) {
             try assign($1, to: $0, byApplying: +)
         },
         // -=
-        .binary(.mutatingSub, Variable.self, Node.self) {
+        .binary(.minusAssign, Variable.self, Node.self) {
             try assign($1, to: $0, byApplying: -)
         },
         // *=
-        .binary(.mutatingMult, Variable.self, Node.self) {
+        .binary(.multAssign, Variable.self, Node.self) {
             try assign($1, to: $0, byApplying: *)
         },
         // /=
-        .binary(.mutatingDiv, Variable.self, Node.self) {
+        .binary(.divAssign, Variable.self, Node.self) {
             try assign($1, to: $0, byApplying: /)
         },
         // &=
-        .binary(.mutatingConcat, Variable.self, Node.self) {(v, n) in
+        .binary(.concatAssign, Variable.self, Node.self) {(v, n) in
             try Equation(lhs: v, rhs: Function(.concat, [v, n]))
                 .define()
             return v

@@ -16,10 +16,10 @@ extension Exports {
         .binary(.add, Matrix.self, Node.self) { (lhs, rhs) in
             lhs.transform {$0 + rhs}
         },
-        .binary(.sub, Matrix.self, Matrix.self) {
+        .binary(.minus, Matrix.self, Matrix.self) {
             try $0.perform(-, with: $1)
         },
-        .binary(.sub, Matrix.self, Node.self) {(lhs, rhs) in
+        .binary(.minus, Matrix.self, Node.self) {(lhs, rhs) in
             lhs.transform {$0 - rhs}
         },
         .binary(.mult, Matrix.self, Node.self) {(lhs, rhs) in

@@ -114,7 +114,7 @@ public class Compiler {
         let parent = try resolve(expr, &dict, binOps)
 
         // Restore tokens to their original form.
-        let compiled =  try decode(parent)
+        let compiled =  try postprocess(parent)
         compiledExpressions[preserved] = compiled
         return compiled
     }
@@ -125,9 +125,7 @@ public class Compiler {
     /// - Returns: A program.
     public func compile(document: String, workItem: DispatchWorkItem? = nil) throws -> [Program.Statement] {
         let lines = document.split(separator: "\n", omittingEmptySubsequences: false)
-                .map {
-                    String($0)
-                }
+                .map { String($0) }
         var statements = [Program.Statement]()
         var buff: String? = nil
         
@@ -385,14 +383,14 @@ public class Compiler {
     }
 
     
-    /// During compilation, all data types are functionalized.
-    /// This restores the functions back to their original data type.
+    /// During compilation, everything is encoded into a AST.
+    /// This function decodes the AST and does numerous post-compilation processings.
     /// e.g. `list(a,b,c) -> {a,b,c}`
     ///      `=(a+b, c+x) -> a+b=c+x`
     ///
     /// - Parameter parent: The parent node to have DTs restored.
     /// - Returns: The parent node with DTs restored.
-    private func decode(_ parent: Node) throws -> Node {
+    private func postprocess(_ parent: Node) throws -> Node {
         var parent = parent
 
         func name(_ node: Node) -> String? {
@@ -403,8 +401,7 @@ public class Compiler {
             return (node as! Function).elements
         }
 
-        // Replace functions generated from syntactic sugars with their
-        // corrected names.
+        // Decode encoded operators & keywords
         parent = parent.replacing(by: {
             let keyword = Syntax.tokens[Token(name($0)!)]!
             return Function(keyword.name, args($0))
@@ -491,7 +488,70 @@ public class Compiler {
             $0 is Vector && $0.contains(where: {$0 is Vector}, depth: 1)
         }
         
+        // Define prefix, postfix, infix, and auto syntax.
+        if let assocFun = parent as? Function {
+            let assoc = assocFun.name
+            switch assoc {
+            case .prefix, .infix, .postfix, .auto:
+                guard let arg = assocFun.elements.first else {
+                    throw CompilerError.illegalArgument(errMsg: "expected function, but found nothing");
+                }
+                let fun = try Assert.cast(arg, to: Function.self)
+                let name = fun.name
+                try Assert.newKeyword(name)
+                switch assoc {
+                    case .prefix:
+                        // prefix f(_) {...}; prefix f(a)
+                        try Assert.numArgs(fun.count, 2)
+                        Syntax.define(for: name, associativity: .prefix)
+                    case .postfix:
+                        // postfix f(_) {...}; postfix f(a)
+                        try Assert.numArgs(fun.count, 2)
+                        Syntax.define(for: name, associativity: .postfix, precedence: .binary)
+                    case .infix:
+                        // infix f(_) {...}; infix f(a,b)
+                        try Assert.numArgs(fun.count, 3)
+                        Syntax.define(for: name, associativity: .infix)
+                    case .auto:
+                        // auto f(_) {...}; auto f(a)
+                        try defineSyntax(for: fun)
+                default:
+                    fatalError()
+                }
+                parent = Function(.define, assocFun.elements)
+            default:
+                break
+            }
+        }
+        
         return parent
+    }
+    
+    /// Automatically derives prefix syntax for unary operations and infix syntax for binary operations.
+    /// If a custom syntax definition for the operation already exists, the automatic definitions are omitted.
+    /// - Parameter operation: The operation to derive a syntax definition for.
+    private func defineSyntax(for fun: Function) throws {
+        let name = fun.name
+        guard Syntax.glossary[name] == nil else {
+            throw CompilerError.duplicateKeyword(name)
+        }
+        switch fun.count {
+        case 2:
+            Syntax.define(
+                for: name,
+                associativity: .prefix,
+                checkAmbiguity: false
+            )
+        case 3:
+            Syntax.define(
+                for: name,
+                associativity: .infix,
+                precedence: .binary,
+                checkAmbiguity: false
+            )
+        default:
+            break
+        }
     }
     
     
@@ -729,17 +789,21 @@ public class Compiler {
 
         var dict = OperatorReference()
         for keywords in prioritized {
-            var precedenceGrp = [Character: String]()
+            var grp = [Character: String]()
             keywords.forEach {
                 let id = "\(Flag.operator)\(dict.count)"
                 dict[id] = $0.token
-                precedenceGrp[$0.token] = id
+                grp[$0.token] = id
             }
-            try parenthesize(&expr, keywords, precedenceGrp)
+            try parenthesize(&expr, grp, keywords.first!.precedence)
         }
         return dict
     }
     
+    private enum Order {
+        case leftToRight
+        case rightToLeft
+    }
     
     /// Finds the index of the first appearance of any of the operators.
     /// e.g. in a+b-c, first index returns index of "+", then next time, after
@@ -747,14 +811,25 @@ public class Compiler {
     ///
     /// - Parameter operators: A group of operators with same precedence.
     /// - Returns: The first index of any of the operators, if there is one.
-    private func firstIndex(
+    private func index(
+        order: Order,
         from startIdx: String.Index,
         of encodings: [Token: String],
         in expr: String
-        ) -> String.Index? {
-        for (i, c) in expr[startIdx..<expr.endIndex].enumerated() {
-            if encodings[c] != nil {
-                return expr.index(startIdx, offsetBy: i)
+    ) -> String.Index? {
+        let seq = expr[startIdx..<expr.endIndex].enumerated()
+        switch order {
+        case .rightToLeft:
+            for (i, c) in seq.reversed() {
+                if encodings[c] != nil {
+                    return expr.index(startIdx, offsetBy: i)
+                }
+            }
+        case .leftToRight:
+            for (i, c) in seq {
+                if encodings[c] != nil {
+                    return expr.index(startIdx, offsetBy: i)
+                }
             }
         }
         return nil
@@ -762,12 +837,13 @@ public class Compiler {
 
     private func parenthesize(
         _ expr: inout String,
-        _ keywords: [Keyword],
-        _ precedenceGrp: [Token: String]
-        ) throws {
-        
+        _ grp: [Token: String],
+        _ precedence: Keyword.Precedence
+    ) throws {
         var curIdx = expr.startIndex
-        while let idx = firstIndex(from: curIdx, of: precedenceGrp, in: expr) {
+        let order: Order = precedence == .prefix ? .rightToLeft : .leftToRight
+        
+        while let idx = index(order: order, from: curIdx, of: grp, in: expr) {
             let idx_ = expr.index(after: idx)
             let _idx = expr.index(before: idx)
             var left: String?, right: String?
@@ -883,7 +959,7 @@ public class Compiler {
             let rRight = String(expr[expr.index(after: end)...])
             let token = e ?? expr[idx]
             
-            if let id = precedenceGrp[token] {
+            if let id = grp[token] {
                 expr = rLeft + "\(id)(\(args))" + rRight
             } else {
                 
@@ -964,7 +1040,7 @@ public class Compiler {
         // Apply implied multiplicity
         // f1() should be seen as a function whereas 3(x) = 3*x
         // 3a*4x = 3*a*4*x, +3(x+b) = 3*(x+b), (a+b)(a-b) = (a+b)*(a-b)
-        let e = Syntax.glossary["*"]!.token
+        let e = Syntax.glossary[.mult]!.token
         expr = expr.replacingOccurrences(of: #"\b(\d+|\))([a-zA-Z_$]+|\()"#, with: "$1\(e)$2", options: .regularExpression)
     }
 

@@ -45,6 +45,7 @@ def core_files = {
     "String.kel",
     "RunShell.kel",
     "Subscript.kel",
+    "CustomSyntax.kel",
     "TrailingClosure.kel",
 }
 

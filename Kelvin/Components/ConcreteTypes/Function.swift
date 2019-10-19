@@ -217,7 +217,7 @@ public class Function: ListProtocol, NaN {
             } else if name[.commutative] {
                 // Try simplifying in the reserve order if the function is commutative
                 if copy.count > 2 {
-                    let after = try Operation.simplifyCommutatively(copy.elements, by: name)
+                    let after = try Function.simplifyCommutatively(copy.elements, by: name)
                     let s = after.complexity < copy.complexity ? after : copy
                     return finalize(s)
                 }
@@ -229,6 +229,46 @@ public class Function: ListProtocol, NaN {
             Program.shared.curStackSize = 0
             throw ExecutionError.onNode(self, err: e)
         }
+    }
+    
+    /// Commutatively simplify a list of arguments. Suppose we have an expression,
+    /// `1 + a + negate(1) + negate(a)`.
+    /// First, we check if `1 + a` is simplifiable, in this case no.
+    /// Then, we check if `1 + negate(1)` is simplifiable, if so, simplify and put them back into the pool.
+    /// At this point, we have `a + negate(a) + 0`, which then easily simplifies to 0.
+    ///
+    /// - Parameter nodes: The list of nodes to be commutatively simplified.
+    /// - Parameter fun: A function that performs binary simplification.
+    /// - Returns: A node resulting from the simplification.
+    public static func simplifyCommutatively(_ nodes: [Node], by fun: OperationName) throws -> Node {
+        var nodes = nodes
+        // Base case.
+        if nodes.count == 2 {
+            return try Function(fun, nodes).simplify()
+        }
+        for i in 0..<nodes.count - 1 {
+            let n = nodes.remove(at: i)
+            for j in i..<nodes.count {
+                let bin = Function(fun, [nodes[j], n])
+                let simplified = try bin.simplify()
+                
+                // If the junction of n and j can be simplified...
+                if simplified.complexity < bin.complexity {
+                    nodes.remove(at: j)
+                    nodes.append(simplified)
+                    
+                    // Commutatively simplify the updated list of nodes
+                    return try simplifyCommutatively(nodes, by: fun)
+                }
+            }
+            
+            // Can't perform simplification w/ current node.
+            // Insert it back in and move on to the next.
+            nodes.insert(n, at: i)
+        }
+        
+        // Fully simplified. Reconstruct commutative operation and return.
+        return Function(fun, nodes)
     }
 
     public func equals(_ node: Node) -> Bool {

@@ -59,6 +59,10 @@ extension Exports {
                 String(String(str[Range($0.range, in: str)!]))
             }
             return List(matches)
-        }
+            },
+        
+        // Utilities
+        .unary(.lowercased, String.self) { $0.lowercased() },
+        .unary(.uppercased, String.self) { $0.uppercased() }
     ]
 }

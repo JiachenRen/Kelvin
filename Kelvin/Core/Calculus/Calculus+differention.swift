@@ -149,35 +149,35 @@ public extension Calculus {
             if fun.count == 1 {
                 let o = fun[0]
                 switch fun.name {
-                case "log":
+                case .log:
                     bigKahuna = 1 / o * log("e"&)
-                case "ln":
+                case .ln:
                     bigKahuna = 1 / fun[0]
-                case "cos":
+                case .cos:
                     bigKahuna = -sin(o)
-                case "sin":
+                case .sin:
                     bigKahuna = cos(o)
-                case "tan":
+                case .tan:
                     bigKahuna = 1 / (cos(o) ^ 2)
-                case "acos":
+                case .acos:
                     bigKahuna = -1 / √(1 - o ^ 2)
-                case "asin":
+                case .asin:
                     bigKahuna = -acos(o)
-                case "atan":
+                case .atan:
                     bigKahuna = 1 / (o ^ 2 + 1)
-                case "abs":
+                case .abs:
                     bigKahuna = sign(o)
-                case "csc":
+                case .csc:
                     bigKahuna = -cos(o) / (sin(o) ^ 2)
-                case "sec":
+                case .sec:
                     bigKahuna = sin(o) / (cos(o) ^ 2)
-                case "cot":
+                case .cot:
                     bigKahuna = -1 / (sin(o) ^ 2)
-                case "cosh":
+                case .cosh:
                     bigKahuna = sinh(o)
-                case "sinh":
+                case .sinh:
                     bigKahuna = cosh(o)
-                case "tanh":
+                case .tanh:
                     bigKahuna = 1 / (cosh(o) ^ 2)
                 default:
                     break
@@ -190,12 +190,12 @@ public extension Calculus {
                 }
             } else {
                 switch fun.name {
-                case "+":
+                case .add:
                     
                     // d/dx [f(x) + g(x) + ...] = d/dx(g(x)) + d/dx(g(x)) + ...
                     let smallKahunas = derivative(of: fun.elements, withRespectTo: v)
                     return ++smallKahunas
-                case "*":
+                case .mult:
                     
                     // d/dx [f(x) * g(x) * ...] = d/dx(f(x)) * g(x) + d/dx(g(x)) * f(x) + ...
                     var nodes = [Node]()
@@ -207,7 +207,7 @@ public extension Calculus {
                     }
                     
                     return ++nodes
-                case "^":
+                case .power:
                     
                     // Logarithmic differentiation
                     // y = f(x)^g(x)

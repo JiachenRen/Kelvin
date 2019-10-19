@@ -180,6 +180,38 @@ define(a, 3)
 a := b; b := c; c := d;
 ```
 
+#### Custom Syntax
+```ruby
+# Define an infix function
+infix a(x, y) { x && y xor false }
+
+# Define a prefix function
+prefix give(x) { x a (!x) nand true }
+
+# Define a postfix function
+postfix five(x) { x nor x }
+
+me := true
+scott := true
+marcus := false
+
+# Now try this!
+give me and scott or marcus a high five
+
+# If you are smart enough, the whole expression simplifies to
+give me and scott or marcus a high five === !high
+
+# Therefore, we also have
+high := true
+give me and scott or marcus a high five === false
+high := false
+give me and scott or marcus a high five === true
+
+# What's more, you can have the interpreter automatically resolve associativity!
+auto smarterThan(a, b) { lowercased(a) == "jiachen" }
+assert "Jiachen" smarterThan "Anyone... you name it."
+```
+
 > As a side note, _Kelvin_ even has trailing closure syntax and anonymous arguments, a feature loved by Swift users!
 
 ### Examples

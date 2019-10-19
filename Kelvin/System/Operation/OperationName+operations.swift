@@ -15,11 +15,11 @@ public extension OperationName {
     // MARK: - Arithmetic
     
     // Binary operations
-    static let add = "+"
-    static let sub = "-"
-    static let mult = "*"
-    static let div = "/"
-    static let power = "^"
+    static let add = "add"
+    static let minus = "minus"
+    static let mult = "mult"
+    static let div = "div"
+    static let power = "power"
     static let mod = "mod"
     
     // Unary operations
@@ -134,7 +134,7 @@ public extension OperationName {
     static let unitVector = "unitVec"
     static let magnitude = "mag"
     static let angleBetween = "angle"
-    static let matrixMultiplication = "mult"
+    static let matrixMultiplication = "matMult"
     static let determinant = "det"
     static let determinantCof = "detCof"
     static let createMatrix = "mat" // mat(dim), mat(rows, cols), mat(list, rows, cols)
@@ -182,11 +182,11 @@ public extension OperationName {
     static let del = "del"
     static let increment = "++"
     static let decrement = "--"
-    static let mutatingAdd = "+="
-    static let mutatingSub = "-="
-    static let mutatingMult = "*="
-    static let mutatingDiv = "/="
-    static let mutatingConcat = "&="
+    static let addAssign = "+="
+    static let minusAssign = "-="
+    static let multAssign = "*="
+    static let divAssign = "/="
+    static let concatAssign = "&="
     
     // MARK: - Flow control
     
@@ -254,6 +254,7 @@ public extension OperationName {
     static let `try` = "try"
     static let `throw` = "throw"
     static let `assert` = "assert"
+    static let assertEquals = "assertEquals"
     
     // MARK: - Relational
     
@@ -282,7 +283,15 @@ public extension OperationName {
     static let replace = "replace"
     static let regexReplace = "regReplace"
     static let regexMatches = "regMatches"
+    static let lowercased = "lowercased"
+    static let uppercased = "uppercased"
     
     // MARK: - Mode
     static let setMode = "setMode"
+    
+    // MARK: - Syntax
+    static let `prefix` = "prefix"
+    static let `infix` = "infix"
+    static let `postfix` = "postfix"
+    static let `auto` = "auto"
 }

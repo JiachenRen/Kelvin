@@ -124,4 +124,35 @@ public class Assert {
             }
         }
     }
+    
+    /// Asserts that the provided keyword is a valid new keyword for creating a syntax definition.
+    /// - Throws: `.duplicateSyntax` if previous keyword definition exists.
+    public static func newKeyword(_ keyword: String) throws {
+        guard Syntax.glossary[keyword] == nil else {
+            throw CompilerError.duplicateKeyword(keyword)
+        }
+    }
+    
+    /// Asserts that `o` equals `e`, otherwise throw an error.
+    /// - Parameters:
+    ///     - o: Actual
+    ///     - e: Expected
+    ///     - message: Optional message to show if assertion fails.
+    /// - Throws: `.general`
+    public static func equals(_ o: Node, _ e: Node, message: String? = nil) throws {
+        guard o === e else {
+            let msg = (message ?? "expected") + " \(e.stringified), but found \(o.stringified)"
+            throw ExecutionError.general(errMsg: msg)
+        }
+    }
+    
+    /// Asserts that the actual number of arguments received matches the expected number of arguments during compile time.
+    /// - Parameters:
+    ///     - actual: Actual number of arguments.
+    ///     - expected: Expected number of arguments.
+    public static func numArgs(_ actual: Int, _ expected: Int) throws {
+        guard actual == expected else {
+            throw CompilerError.illegalArgument(errMsg: "expected \(expected) arguments, but found \(actual)")
+        }
+    }
 }

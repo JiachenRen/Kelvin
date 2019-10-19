@@ -2,4 +2,4 @@ def shellAdd(a, b, $(script := a & "+" & b; return replace(shell "echo '" & scri
 
 # Using shell to add 2 numbers!!!
 println shellAdd(10000, 23423.25)
-assert shellAdd(10000, 23423.25) == (10000 + 23423.25)
+shellAdd(10000, 23423.25) === (10000 + 23423.25)

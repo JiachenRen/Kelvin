@@ -16,4 +16,4 @@ original := {1, {1, {1, 2, 3}, 2}, {3, 4}, 4, 5}
 flat := flatMap(original)
 println "original: " & original
 println "flat mapped: " & flat
-assert flat == {1, 1, 1, 2, 3, 2, 3, 4, 4, 5}
+flat === {1, 1, 1, 2, 3, 2, 3, 4, 4, 5}

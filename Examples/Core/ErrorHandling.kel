@@ -12,5 +12,13 @@ def err() {
 try err() : "shit happened"
 
 # Assertions
+
+# assert(@bool)
 assert true
 try (assert false) : "assertion was false"
+
+# assertEquals(@node, @node)
+assert({1, 2, 3}, {1, 2, 3})
+# which is equavalent to
+{1, 2, 3} === {1, 2, 3}
+

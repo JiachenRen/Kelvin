@@ -6,4 +6,4 @@ def definition = result[0][1][1]
 def regEq(a) = (definition << x = a)
 
 regEq(3)
-assert round(regEq(3) - (3.00909 + 0.654545 * 3), 3) == 0
+round(regEq(3) - (3.00909 + 0.654545 * 3), 3) === 0

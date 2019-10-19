@@ -2,7 +2,7 @@
 def a = 3
 b := 4
 
-assert a + b == 7
+a + b === 7
 
 # Mutating a variable
 a++
@@ -22,13 +22,13 @@ def f(x) {
 println f(a)
 
 # Prints 3 - a has not changed
-assert a == 3
+a === 3
 
 # Prints 9
 println f(&a)
 
 # a is now 9 because the reference operator "&" passes a as an inout variable
-assert a == 9
+a === 9
 
 # List all user defined variables
 listVars()

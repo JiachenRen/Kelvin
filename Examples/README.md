@@ -41,6 +41,7 @@ This directory contains various examples that demonstrate how to the Kelvin lang
     - [Variable](/Examples/Core/Variable.kel)
     - [Working with string](/Examples/Core/String.kel)
     - [Run shell script](/Examples/Core/RunShell.kel)
+    - [Custom Syntax](/Examples/Core/CustomSyntax.kel)
     
 ### Just to whet your appetite...
 
@@ -79,7 +80,7 @@ def l1 = {1, 2, 3, 5, 7, 8, 9, 10}
 
 # 
 println bin_search(l1, 8.5)
-assert bin_search(l1, 9) == 6
+bin_search(l1, 9) === 6
 ```
 
 ## Using Kelvin with macOS built-in Grapher
@@ -98,42 +99,42 @@ This is a comprehensive demonstration of how you can use Kelvin to suit your mat
 
 # Test for base cases
 # a and a is a
-assert (a && a) == a
-assert (a && b && a) == (a && b)
+(a && a) === a
+(a && b && a) === (a && b)
 # a or a is a
-assert (a || a) == a
-assert (a || b || a) == (a || b)
+(a || a) === a
+(a || b || a) === (a || b)
 # not not a is a
-assert !(!a) == a
-assert (a && !(!a)) == a
+!(!a) === a
+(a && !(!a)) === a
 # a or false is a
-assert (a || false || b) == (a || b)
-assert (a || b || false) == (false || b || a)
-assert (a || b || false) == (a || b)
+(a || false || b) === (a || b)
+(a || b || false) === (false || b || a)
+(a || b || false) === (a || b)
 # a or true is true
-assert (a || true) == true
+(a || true) === true
 # a and ... and false is false
-assert (a && b && false) == false
-assert (false && a && b) == false
-assert (b && false && a) == false
+(a && b && false) === false
+(false && a && b) === false
+(b && false && a) === false
 # a and true is a
-assert (a && b && true) == (a && b)
+(a && b && true) === (a && b)
 # a and not a is false
-assert (a && b && !(!(!a))) == false
+(a && b && !(!(!a))) === false
 # a or not a is true
-assert (a || b || !a) == true
+(a || b || !a) === true
 # a and (b or a) is a
-assert (a && (b || a)) == a
-assert ((a || b) && b) == b
+(a && (b || a)) === a
+((a || b) && b) === b
 assert (a && (b || (b && a))) != a
 # a or (a and b) is a
-assert (f() && g() || f()) == f()
+(f() && g() || f()) === f()
 
 # Test for complex cases (where expanding & factoring are needed)
-assert ((!a || b) && (a || b)) == b
-assert (!a && (a || b)) == (!a && b)
-assert ((a && b) || (a && c)) == (a && (b || c))
-assert ((a || b) && (a || c || d)) == (a || b && (c || d))
+((!a || b) && (a || b)) === b
+(!a && (a || b)) === (!a && b)
+((a && b) || (a && c)) === (a && (b || c))
+((a || b) && (a || c || d)) === (a || b && (c || d))
 
 def f1(a, b, c, d) {
     return ((a || b) && (a || c || d))
@@ -156,22 +157,21 @@ def test(f, g, i) {
     return ((f <<< tmp) == (g <<< tmp))...i
 }
 
-assert test(f1, f2, 10) == (true...10)
-assert (a or (b and (c or a))) == (a || b && c)
-assert (a or (b and (c or !a))) == (a || b)
+test(f1, f2, 10) === (true...10)
+(a or (b and (c or a))) === (a || b && c)
+(a or (b and (c or !a))) === (a || b)
 
 # The ultimate test, from CS 2051 HW
-assert !(!(!x && !(!y || x)) || !y) == (!x && y)
-assert (not (not (not x and not (not y or x)) or not y)) == (not x and y)
+!(!(!x && !(!y || x)) || !y) === (!x && y)
+(not (not (not x and not (not y or x)) or not y)) === (not x and y)
 ```
 ### [Algebra/Expand](/Examples/Algebra/Expand.kel)
 ```ruby
-assert expand((a + b)(a - b)) == a ^ 2 - b ^ 2
-assert expand((a - b) ^ 3) == a ^ 3 + 3 * a * b ^ 2 - 3 * a ^ 2 * b - b ^ 3
-# assert expand(3 ^ (b - 3)) == 3 ^ -3 * 3 ^ b
-assert expand((a + b) ^ (4 - a * 5))
-assert expand((a + b) ^ (4 + a)) == (a + b) ^ a * 4 * a * b ^ 3 + (a + b) ^ a * 4 * a ^ 3 * b + (a + b) ^ a * 6 * a ^ 2 * b ^ 2 + (a + b) ^ a * a ^ 4 + (a + b) ^ a * b ^ 4
-assert expand((a + b) ^ (-5 * a + 4)) =i= (a + b) ^ (-5 * a) * 4 * a * b ^ 3 + (a + b) ^ (-5 * a) * 4 * a ^ 3 * b + (a + b) ^ (-5 * a) * 6 * a ^ 2 * b ^ 2 + (a + b) ^ (-5 * a) * a ^ 4 + (a + b) ^ (-5 * a) * b ^ 4
+expand((a + b)(a - b)) === a ^ 2 - b ^ 2
+expand((a - b) ^ 3) === a ^ 3 + 3 * a * b ^ 2 - 3 * a ^ 2 * b - b ^ 3
+expand(3 ^ (b - 3)) === 3 ^ -3 * 3 ^ b
+expand((a + b) ^ (4 + a)) === (a + b) ^ a * 4 * a * b ^ 3 + (a + b) ^ a * 4 * a ^ 3 * b + (a + b) ^ a * 6 * a ^ 2 * b ^ 2 + (a + b) ^ a * a ^ 4 + (a + b) ^ a * b ^ 4
+expand((a + b) ^ (-5 * a + 4)) === (a + b) ^ (-5 * a) * 4 * a * b ^ 3 + (a + b) ^ (-5 * a) * 4 * a ^ 3 * b + (a + b) ^ (-5 * a) * 6 * a ^ 2 * b ^ 2 + (a + b) ^ (-5 * a) * a ^ 4 + (a + b) ^ (-5 * a) * b ^ 4
 ```
 ### [Algebra/Factor](/Examples/Algebra/Factor.kel)
 ```ruby
@@ -186,19 +186,19 @@ r6 := factor(z * d * a + z * b * 2 + y * d * a + y * b * 2 + x * d * a + x * b *
 r7 := factor(r * b * a + d * b * a - d * c * a * 2 - r * c * a * 2)
 r8 := factor(x * f * c + x * f * b + x * d * c + x * d * b + f * c * a + f * b * a + d * c * a + d * b * a)
 
-assert r1 == (1 + a) * (1 + x)
-assert r2 == (a + x) * (b + c)
-assert r3 == (1 + x) * (2 + a)
-assert r4 == (a + b) * (x + y + z)
-assert r5 == (a * d + b) * (x + y + z)
-assert r6 == (2 * b + a * d) * (x + y + z)
-assert r7 == (-2 * c + b) * a * (d + r)
-assert r8 == (a + x) * (b + c) * (d + f)
+r1 === (1 + a) * (1 + x)
+r2 === (a + x) * (b + c)
+r3 === (1 + x) * (2 + a)
+r4 === (a + b) * (x + y + z)
+r5 === (a * d + b) * (x + y + z)
+r6 === (2 * b + a * d) * (x + y + z)
+r7 === (-2 * c + b) * a * (d + r)
+r8 === (a + x) * (b + c) * (d + f)
 ```
 ### [Algebra/Trigonometry](/Examples/Algebra/Trigonometry.kel)
 ```ruby
 # The following expression evaluates to 1!
-assert tan(x) * sec(x) * csc(x) * cos(x) ^ 2 == 1
+tan(x) * sec(x) * csc(x) * cos(x) ^ 2 === 1
 ```
 ### [Algorithms/BinarySearch](/Examples/Algorithms/BinarySearch.kel)
 ```ruby
@@ -234,8 +234,8 @@ def bin_search(arr, search) {
 }
 
 def l1 = {1, 2, 3, 5, 7, 8, 9, 10}
-assert println(bin_search(l1, 8.5)) == "not found"
-assert bin_search(l1, 9) == 6
+println(bin_search(l1, 8.5)) === "not found"
+bin_search(l1, 9) === 6
 ```
 ### [Algorithms/Contains](/Examples/Algorithms/Contains.kel)
 ```ruby
@@ -290,7 +290,7 @@ original := {1, {1, {1, 2, 3}, 2}, {3, 4}, 4, 5}
 flat := flatMap(original)
 println "original: " & original
 println "flat mapped: " & flat
-assert flat == {1, 1, 1, 2, 3, 2, 3, 4, 4, 5}
+flat === {1, 1, 1, 2, 3, 2, 3, 4, 4, 5}
 ```
 ### [Algorithms/Recursion](/Examples/Algorithms/Recursion.kel)
 ```ruby
@@ -303,8 +303,8 @@ def f(a) {
     return a
 }
 
-assert f(1000005) == 200001/200000
-assert f(15) == 1.5
+f(1000005) === 200001/200000
+f(15) === 1.5
 setMode("rounding", "approximate")
 ```
 ### [Calculus/Differentiation](/Examples/Calculus/Differentiation.kel)
@@ -352,22 +352,22 @@ println dirDif(f(x, y, z), {x, y, z}, [a, b, c])
 # Gradient at specific point
 def f(x, y, z) = z ^ 2 + 2y * x + x ^ 3
 def g = (f(x, y, z) grad {x, y, z} << x = 3 << y = 2 << z = 1)
-assert g == [31, 6, 2]
+g === [31, 6, 2]
 
 # Another way to use point specific evaluation
 def f(x,y) = x^2 + x*y^2
-assert (f(x, y)'x << {x = 3, y = 4}) == 22
-assert (f(x, y)'y << {x = 3, y = 4}) == 24
-assert (f(y, x)'x << {x = 3, y = 4}) == 24
-assert (f(x, y)'x << {x = 3, y = 4}) == 22
+(f(x, y)'x << {x = 3, y = 4}) === 22
+(f(x, y)'y << {x = 3, y = 4}) === 24
+(f(y, x)'x << {x = 3, y = 4}) === 24
+(f(x, y)'x << {x = 3, y = 4}) === 22
 
 
 def f(x, y, z) = 2x * y + 3x + 2y + x^2 + z^3
 def g1 = (f(x, y, z) grad {x, y, z} << {x = 2, y = 2, z = 6})
-assert g1 = [13, 8, 108]
+g1 === [11, 6, 108]
 
 def g2 = (f(x, y, z) grad {x, y, z} << {x = a, y = b, z = c})
-assert g2 == [2 * a + 2 * b + 3, 2 + 2 * a, 3 * c ^ 2]
+g2 === [2 * a + 2 * b + 3, 2 + 2 * a, 3 * c ^ 2]
 
 # Finding the tangent line/plane/surface/hyper-blablabla in higher dimensions
 def f(x,y,z) = x ^ 2 + 2 * x * y + z ^ 3
@@ -387,7 +387,7 @@ for (point: points) {
 ```
 ### [Calculus/Integration](/Examples/Calculus/Integration.kel)
 ```ruby
-assert nIntegrate(1 / x ^ 2, x, 1, inf) == 1
+nIntegrate(1 / x ^ 2, x, 1, inf) === 1
 ```
 ### [Core/Benchmarking](/Examples/Core/Benchmarking.kel)
 ```ruby
@@ -407,6 +407,41 @@ measure {factor(expr)}
 
 # Measure the time average of factorizing 'expr' 10 times
 measure(10) {factor(expr)}
+```
+### [Core/CustomSyntax](/Examples/Core/CustomSyntax.kel)
+```ruby
+# You can define custom infix, prefix, or postfix keywords!
+
+# Define an infix function
+infix a(x, y) { x && y xor false }
+
+# Define a prefix function
+prefix give(x) { x a (!x) nand true }
+
+# Define a postfix function
+postfix five(x) { x nor x }
+
+me := true
+scott := true
+marcus := false
+
+# Now try this!
+give me and scott or marcus a high five
+
+# If you are smart enough, the whole expression simplifies to
+give me and scott or marcus a high five === !high
+
+# Therefore, we also have
+high := true
+give me and scott or marcus a high five === false
+high := false
+give me and scott or marcus a high five === true
+
+# What's more, you can have the interpreter automatically resolve associativity!
+auto smarterThan(a, b) { lowercased(a) == "jiachen" }
+assert "Jiachen" smarterThan "Anyone... you name it."
+
+
 ```
 ### [Core/Debugging/StackTrace](/Examples/Core/Debugging/StackTrace.kel)
 ```ruby
@@ -478,7 +513,7 @@ dict["what"][1]
 √dict["what"][1][1]
 dict[shit]
 
-assert (dict[m][o] ~ $0 & $1) == "rpg"
+(dict[m][o] ~ $0 & $1) === "rpg"
 
 ```
 ### [Core/ErrorHandling](/Examples/Core/ErrorHandling.kel)
@@ -497,8 +532,16 @@ def err() {
 try err() : "shit happened"
 
 # Assertions
+
+# assert(@bool)
 assert true
 try (assert false) : "assertion was false"
+
+# assertEquals(@node, @node)
+assert({1, 2, 3}, {1, 2, 3})
+# which is equavalent to
+{1, 2, 3} === {1, 2, 3}
+
 ```
 ### [Core/FlowControl/Conditionals](/Examples/Core/FlowControl/Conditionals.kel)
 ```ruby
@@ -512,7 +555,7 @@ if (a == 1) {
 }
 
 # Make sure that a is 2 at this point.
-assert a == 2
+a === 2
 
 # "a+=2" increments the value of a by 2, then returns the value of a.
 if ((a+=2) == 2) {
@@ -525,7 +568,7 @@ if ((a+=2) == 2) {
 
 # Ternary conditional statement
 a := (a < 10 ? 0 : 10)
-assert a == 0
+a === 0
 ```
 ### [Core/FlowControl/Loops/ForLoop](/Examples/Core/FlowControl/Loops/ForLoop.kel)
 ```ruby
@@ -565,7 +608,7 @@ for (p: map(l1) {$0: $1}) {
 # p[0] refers to the element, while p[1], the second element
 # of the pair, refers to the index.
 println l2
-assert l2 == {2, 4, 6, 2 * x, 2 * a, 2 * f(x), 2 * a + 2 * x}
+l2 === {2, 4, 6, 2 * x, 2 * a, 2 * f(x), 2 * a + 2 * x}
 
 # Iterate through a string with for loop
 def str = "hello world"
@@ -574,7 +617,7 @@ for (c: str as @list) {
     chars &= c;
     print c
 }
-assert chars == str
+chars === str
 
 # How to use stride(lowerBound, upperBound, step)
 # Prints "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, "
@@ -599,13 +642,13 @@ def a = 0;
 while (a < 10) {
     a++;
 }
-assert a == 10
+a === 10
 ```
 ### [Core/Function](/Examples/Core/Function.kel)
 ```ruby
 # Syntax for defining inline function
 def f(x) = x^3 / a
-assert f(a) == a^2
+f(a) === a^2
 
 # Alternatively, use the assignment operator :=
 f(a, b) := a^2 - b
@@ -639,7 +682,7 @@ def foo(a, b) {
 }
 
 def result = foo(1, 3)
-assert print(result) == {114, 67}
+print(result) === {114, 67}
 
 # List all user defined functions
 listFuncs()
@@ -688,9 +731,9 @@ def c(x) {
 }
 
 # Invoke c
-assert c(3) == 729
+c(3) === 729
 
-assert f(*{a,b}[0],x) == x ^ 2
+f(*{a,b}[0],x) === x ^ 2
 def test() {
     map({a, b, c}) {
         try f(*$0, x) : undef
@@ -698,8 +741,8 @@ def test() {
 }
 result := test()
 
-assert (result contains undef) == false
-assert result == {x^2, x^3, x^6}
+(result contains undef) === false
+result === {x^2, x^3, x^6}
 ```
 ### [Core/IO/IO](/Examples/Core/IO/IO.kel)
 ```ruby
@@ -737,16 +780,16 @@ writeToFile("file.txt", "println \"Hello World!\"\n")
 appendToFile("file.txt", "println (a + b - a)")
 
 # Checks if the path given is a directory
-assert isDir("file.txt") == false
+isDir("file.txt") === false
 
 # List paths under "/tmp/folder"
-assert listPaths() == {"file.txt"}
+listPaths() === {"file.txt"}
 
 # Let's run the file we just created!
 run "file.txt"
 
 # Delete everything! Be careful!
-assert getWorkingDir() == "/tmp/folder"
+getWorkingDir() === "/tmp/folder"
 removePath("/tmp/folder")
 
 
@@ -757,11 +800,11 @@ def l1 = {1, 2, 3, 4, 5}
 
 # Append
 def l2 = (l1 ++ {6, 7, 8, 9, 10})
-assert l2 == map(1...10) {$1 + 1}
+l2 === map(1...10) {$1 + 1}
 
 # Map
 def l3 = (l2 | $0 + $1)
-assert l3 == map(l2) {$0 + $1}
+l3 === map(l2) {$0 + $1}
 
 # Filter
 def l4 = (l1 |? $0 % 2 == 0)
@@ -777,11 +820,11 @@ l1 := (l1 rm 3)
 
 # Subscript by range
 l6 := l1[1,3]
-assert l6 == {2, 3}
+l6 === {2, 3}
 
 # Reverse
 print(l1)
-assert reverse(l1) == {5, 3, 2, 1}
+reverse(l1) === {5, 3, 2, 1}
 
 # Produces "gip a ma I"
 reverse("I am a pig" as @list) ~ $0 & $1
@@ -789,7 +832,7 @@ reverse("I am a pig" as @list) ~ $0 & $1
 # Mutating a list at index
 my_list := {2, 3, 7, 9}
 set(my_list, 3, "pig")
-assert my_list == {2, 3, 7, "pig"}
+my_list === {2, 3, 7, "pig"}
 ```
 ### [Core/Multiline](/Examples/Core/Multiline.kel)
 ```ruby
@@ -808,7 +851,7 @@ def g(x) = (
 
 g(10)
 
-assert g(10) == 3628800
+g(10) === 3628800
 
 def l1 = {
     "Hello",
@@ -828,7 +871,7 @@ def fibonacci(x) = (
     q
 )
 
-assert fibonacci(11) == {1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89}
+fibonacci(11) === {1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89}
 ```
 ### [Core/RunShell](/Examples/Core/RunShell.kel)
 ```ruby
@@ -836,7 +879,7 @@ def shellAdd(a, b, $(script := a & "+" & b; return replace(shell "echo '" & scri
 
 # Using shell to add 2 numbers!!!
 println shellAdd(10000, 23423.25)
-assert shellAdd(10000, 23423.25) == (10000 + 23423.25)
+shellAdd(10000, 23423.25) === (10000 + 23423.25)
 ```
 ### [Core/String](/Examples/Core/String.kel)
 ```ruby
@@ -847,23 +890,23 @@ println (random()...10 ~ $0 & $1)
 
 # Iterating a stirng
 "123456" as @list | $0
-assert (("123456" !! @list | $0 ~ $0 & $1) == "123456")
+(("123456" !! @list | $0 ~ $0 & $1) === "123456")
 
 # Replace substring in string
-assert replace("I am a pig", "pig", "genius") == "I am a genius"
+replace("I am a pig", "pig", "genius") === "I am a genius"
 
 # Access through subscript
-assert "21345"[3] == "4"
+"21345"[3] === "4"
 
 # Contains
 assert "BadPerson" contains "dP"
 
 # Regex replace
-assert regReplace("aaa3aa43aa5aa6aa7aa8","[\d]+","($0)") == "aaa(3)aa(43)aa(5)aa(6)aa(7)aa(8)"
-assert regReplace("a\/\3", "\\\\", "\.") == "a./.3"
+regReplace("aaa3aa43aa5aa6aa7aa8","[\d]+","($0)") === "aaa(3)aa(43)aa(5)aa(6)aa(7)aa(8)"
+regReplace("a\/\3", "\\\\", "\.") === "a./.3"
 
 # Regex matches
-assert regMatches("1,2,3","\d") == {"1", "2", "3"}
+regMatches("1,2,3","\d") === {"1", "2", "3"}
 ```
 ### [Core/Subscript](/Examples/Core/Subscript.kel)
 ```ruby
@@ -896,7 +939,7 @@ println sort(l1) {$0 > $1}
 def a = 3
 b := 4
 
-assert a + b == 7
+a + b === 7
 
 # Mutating a variable
 a++
@@ -916,13 +959,13 @@ def f(x) {
 println f(a)
 
 # Prints 3 - a has not changed
-assert a == 3
+a === 3
 
 # Prints 9
 println f(&a)
 
 # a is now 9 because the reference operator "&" passes a as an inout variable
-assert a == 9
+a === 9
 
 # List all user defined variables
 listVars()
@@ -1007,7 +1050,7 @@ def test(n) {
     println "det REF = " & ref;
     println "det COF = " & cof;
     println "DIFF    = " & (ref - cof);
-    assert round(det m, 10) == round(detCof(m), 10)
+    round(det m, 10) === round(detCof(m), 10)
 }
 
 
@@ -1015,12 +1058,12 @@ map(0...5) {test($1 + 1)}
 
 # Finding row reduced echelon form (RREF) and REF
 # Find the REF form
-assert ref(idMat(3)) == idMat(3)
+ref(idMat(3)) === idMat(3)
 ref(mat(flatten({random()...3, -4, random()...3, -11, random()...3, 22}),3,4))
 
 # Find the RREF form
 # There's a statistically insignificant chance that 3 random vectors are linearly dependent.
-assert rref randMat(3) == idMat(3)
+rref randMat(3) === idMat(3)
 ```
 ### [LinearAlgebra/Vector](/Examples/LinearAlgebra/Vector.kel)
 ```ruby
@@ -1031,15 +1074,15 @@ println unitVec([a, b, c])
 println mag([a, b, c])
 
 # Dot product
-assert [a, b] dotP [c, d] == a * c + b * d
+[a, b] dotP [c, d] === a * c + b * d
 
 # Vector addition/subtraction
-assert [a, b, c] + [d, f, g] == [a + d, b + f, c + g]
+[a, b, c] + [d, f, g] === [a + d, b + f, c + g]
 
 # Angle between 2 vectors
 v1 := [1, 3, 5]
 v2 := [4, 7, 9]
-assert round(angle(v1, v2), 9) == 0.204136039
+round(angle(v1, v2), 9) === 0.204136039
 ```
 ### [Misc/Arcane](/Examples/Misc/Arcane.kel)
 ```ruby
@@ -1262,7 +1305,7 @@ println (9 npr 3)
 println ({1, 2, 3, x, a, b, 4, 5} ncr 4)
 
 # Generate a list of all possible permutations of n elements from a list
-assert size({a, b, c} npr 3) == 6
+size({a, b, c} npr 3) === 6
 
 # Random number generation
 println "Calculating average of 100000 random numbers..."
@@ -1285,15 +1328,15 @@ println randBool()
 # z interval
 a := zInterval(0.5,2,3,0.95)
 b := zInterval(0.5,{1,2,3},0.95)
-assert round(reduce(a["CI"] - b["CI"]) {$0 + $1}, 5) == 0
+round(reduce(a["CI"] - b["CI"]) {$0 + $1}, 5) === 0
 
 # t interval from sample data
 c := tInterval({1,2,3,5}, 0.95)
-assert round(c["CI"][0], 5) == 0.03247
+round(c["CI"][0], 5) === 0.03247
 
 # t interval from statistics
 d := tInterval(5,1,3,0.95)
-assert round(d["ME"], 5) == 2.48414
+round(d["ME"], 5) === 2.48414
 
 # One proportion z interval
 zIntervalOneProp(5,10,0.95) | println($0)
@@ -1306,10 +1349,10 @@ zIntervalTwoSamp(5,7,214,20,195,30,0.95)
 
 # Two sample t interval from stats
 def result = tIntervalTwoSamp(20.3,2.1,40,19.2,1.9,40,0.9)
-assert round(result["df"], 3) == 77.232
-assert round(result["ME"], 3) == 0.745
-assert round(result["CI"][0], 3) == 0.355
-assert round(result["CI"][1], 3) == 1.845
+round(result["df"], 3) === 77.232
+round(result["ME"], 3) === 0.745
+round(result["CI"][0], 3) === 0.355
+round(result["CI"][1], 3) === 1.845
 result | println($0)
 ```
 ### [Statistics/Distribution](/Examples/Statistics/Distribution.kel)
@@ -1323,9 +1366,9 @@ println normCdf(0)
 println oneVar(l1)
 
 # Binomial probability distribution
-# assert binomPdf(1000, 0.1, 5) == 2.4421153439624504*10^-38
-assert geomCdf(0.5, 2, 4) == 0.4375
-assert tCdf(-inf, inf, 20) == 1
+# binomPdf(1000, 0.1, 5) === 2.4421153439624504*10^-38
+geomCdf(0.5, 2, 4) === 0.4375
+tCdf(-inf, inf, 20) === 1
 ```
 ### [Statistics/OneVar](/Examples/Statistics/OneVar.kel)
 ```ruby
@@ -1356,7 +1399,7 @@ def definition = result[0][1][1]
 def regEq(a) = (definition << x = a)
 
 regEq(3)
-assert round(regEq(3) - (3.00909 + 0.654545 * 3), 3) == 0
+round(regEq(3) - (3.00909 + 0.654545 * 3), 3) === 0
 ```
 ### [SystemCheck](/Examples/SystemCheck.kel)
 ```ruby
@@ -1407,6 +1450,7 @@ def core_files = {
     "String.kel",
     "RunShell.kel",
     "Subscript.kel",
+    "CustomSyntax.kel",
     "TrailingClosure.kel",
 }
 
@@ -1435,90 +1479,90 @@ println "System check completed in " & (time() - start_time) & " seconds."
 # true = PASS
 # false = FAIL
 
-assert (c := f(3,4)...3; c) == {f(3, 4), f(3, 4), f(3, 4)}
-assert (a...2...3) == {{a, a}, {a, a}, {a, a}}
+(c := f(3,4)...3; c) === {f(3, 4), f(3, 4), f(3, 4)}
+(a...2...3) === {{a, a}, {a, a}, {a, a}}
 del c
 
 def f() = ({1, 2, 3, x} | $0 ^ 2 -> define(f(x), sum($0)); f(12) -> $0...5 | $0 % 7 -> (sum($0)!)° -> define(a, $0 % 12345 / 3 * e); cos(log(a) ^ 2) * √((5!)!) * 360°)
-# assert f() == 3.8082405532548922906*10^99
+# f() === 3.8082405532548922906*10^99
 del f
 del a
 
-assert ((1 + (a - 1 - (b - 3)) + 4) == (-1 * b + a + 7))
+((1 + (a - 1 - (b - 3)) + 4) === (-1 * b + a + 7))
 
 def bool = ((round random()...5...5)[4][3] -> $0 == 1 || $0 == 0)
-assert bool == true
+bool === true
 
-assert ({1, 2, 3} | $0 > 1 ? (true : false)) == {false, true, true}
-assert (true && false && b || true || false || d || a) == (true || false && b || d || a)
-assert x ^ x * x / x == x ^ x
-assert v + d + c + b + a - b - (d - c + a) - a - v == c * 2 + a * -1
-assert a ^ x * (0 - a) ^ 3 == a ^ (x + 3) * -1
-assert a * a * 4 * 3 == a ^ 2 * 12
-assert a * 4 + a * 3 == a * 7
-assert (a * 3) ^ 2 == a ^ 2 * 9
-assert c + (b + a ^ 2 * 2 + a ^ 2 - b) - a ^ 2 * 3 == c
-assert round(cos(12) ^ log(4) % 0.1 + (43 + 33 - 23 * (5 + 47) ^ 2 / 2), 1) == -31020
-assert ((3!)!)° / 4 / \pi == 1
-assert 1 + 4 + a - 1 - (b - 3) == a + 7 - b
-assert (a || b && true and false || true || d || false) == true
-assert x * x ^ x / x == x ^ x
-assert a + b + c + d + v - b - (a + d - c) - a - v == 2c - a
-assert a ^ x * -a ^ 3 == -(a ^ (x + 3))
-assert 3a * 4a == 12a ^ 2
-assert 3a + 4a == 7a
-assert (3a) ^ 2 == 9a ^ 2
-assert 2 * a ^ 2 + a ^ 2 + b - b + c - 3 * a ^ 2 == c
-assert (3!)!° / 4 / \pi == 1
+({1, 2, 3} | $0 > 1 ? (true : false)) === {false, true, true}
+(true && false && b || true || false || d || a) === (true || false && b || d || a)
+x ^ x * x / x === x ^ x
+v + d + c + b + a - b - (d - c + a) - a - v === c * 2 + a * -1
+a ^ x * (0 - a) ^ 3 === a ^ (x + 3) * -1
+a * a * 4 * 3 === a ^ 2 * 12
+a * 4 + a * 3 === a * 7
+(a * 3) ^ 2 === a ^ 2 * 9
+c + (b + a ^ 2 * 2 + a ^ 2 - b) - a ^ 2 * 3 === c
+round(cos(12) ^ log(4) % 0.1 + (43 + 33 - 23 * (5 + 47) ^ 2 / 2), 1) === -31020
+((3!)!)° / 4 / \pi === 1
+1 + 4 + a - 1 - (b - 3) === a + 7 - b
+(a || b && true and false || true || d || false) === true
+x * x ^ x / x === x ^ x
+a + b + c + d + v - b - (a + d - c) - a - v === 2c - a
+a ^ x * -a ^ 3 === -(a ^ (x + 3))
+3a * 4a === 12a ^ 2
+3a + 4a === 7a
+(3a) ^ 2 === 9a ^ 2
+2 * a ^ 2 + a ^ 2 + b - b + c - 3 * a ^ 2 === c
+(3!)!° / 4 / \pi === 1
 
 x:=factor(f * a * 2 + d * a + c * a + b * a)
-assert x == (f * 2 + d + c + b) * a
+x === (f * 2 + d + c + b) * a
 del x
 
-assert {log(x), 2, 5 ^ 2} + {1, 3, 4} == {log(x) + 1, 5, 29}
+{log(x), 2, 5 ^ 2} + {1, 3, 4} === {log(x) + 1, 5, 29}
 
 def l1 = {2, 3, 7, x, log(a), g(x)}
 def f(x) = x ^ 3 + x * 3 + 4
-assert f(l1) == {8, 27, 343, x ^ 3, log(a) ^ 3, g(x) ^ 3} + {6, 9, 21, x * 3, log(a) * 3, g(x) * 3} + 4
+f(l1) === {8, 27, 343, x ^ 3, log(a) ^ 3, g(x) ^ 3} + {6, 9, 21, x * 3, log(a) * 3, g(x) * 3} + 4
 del f
 del l1
 
-assert ({1, 2, 3, 4, 5, 6} | (9 ncr $0)) == {9, 36, 84, 126, 126, 84}
-assert tan(x) * sec(x) * csc(x) * cos(x) ^ 2 == 1
-assert (2 * x * a) ^ 2 == 4 * (x * a) ^ 2
-assert (2 ^ x) ^ 3 == 8 ^ x
-assert (x ^ 2) ^ 3 == x ^ 6
+({1, 2, 3, 4, 5, 6} | (9 ncr $0)) === {9, 36, 84, 126, 126, 84}
+tan(x) * sec(x) * csc(x) * cos(x) ^ 2 === 1
+(2 * x * a) ^ 2 === 4 * (x * a) ^ 2
+(2 ^ x) ^ 3 === 8 ^ x
+(x ^ 2) ^ 3 === x ^ 6
 
 def x = 100
 x += √x
-assert x == 110
+x === 110
 
 def a = 0
 a++
-assert (a += x) == 111
-# assert (a := a % 11) == 1
-assert !(!true || false) == true
-assert (a xor b) == (b && !a || a && !b)
-assert (sum5n({1, 3, 7, 9, 11, 12, 17}) | $0::1) == {1, 3, 9, 12, 17}
+(a += x) === 111
+# (a := a % 11) === 1
+!(!true || false) === true
+(a xor b) === (b && !a || a && !b)
+(sum5n({1, 3, 7, 9, 11, 12, 17}) | $0::1) === {1, 3, 9, 12, 17}
 del a
 del b
 
 def l1 = {1, 1, 2, 2, 3, 3, 3, 4, 2, 6, 9, 49, 107}
-assert size(l1) == 13
+size(l1) === 13
 
 # Test implied multiplicity
-assert f1(x) == f1(x)
-assert (a)(b)(c-d) == a*b*(c-d)
-assert f(b)x == f(b)*x
-assert 3x3(a) == 3*x3(a)
+f1(x) === f1(x)
+(a)(b)(c-d) === a*b*(c-d)
+f(b)x === f(b)*x
+3x3(a) === 3*x3(a)
 
 # Test replace
 del x
-assert ((x ^ 3)'x << x = 3) == 27
+((x ^ 3)'x << x = 3) === 27
 
 # Test matrix
-assert [[1, 3], [1, 2]][1][1] == 2
-assert ({[1]} | $0 as @list) == {{1}}
+[[1, 3], [1, 2]][1][1] === 2
+({[1]} | $0 as @list) === {{1}}
 
 def mat = [[12, 7, 1], [3, 3, z], [i, 2, 1]]
 r1 := random()
@@ -1527,22 +1571,22 @@ det1 := (det(mat) << z = r1 << i = r2)
 det2 := (detCof(mat) << z = r1 << i = r2)
 diff := round(det1 - det2, 10)
 println "DIFF = " & diff
-assert diff == 0
+diff === 0
 
-assert [[1, 2], [2, 3], [3, 4]] ** [[1, 2, 3], [2, 3, 4]] == [[5, 8, 11], [8, 13, 18], [11, 18, 25]]
-assert [[1, 2, 3], [2, 3, 4]] ** [[1, 2], [2, 3], [3, 4]] == [[14, 20], [20, 29]]
-assert mat == mat ** idMat(size(mat))
+[[1, 2], [2, 3], [3, 4]] ** [[1, 2, 3], [2, 3, 4]] === [[5, 8, 11], [8, 13, 18], [11, 18, 25]]
+[[1, 2, 3], [2, 3, 4]] ** [[1, 2], [2, 3], [3, 4]] === [[14, 20], [20, 29]]
+mat === mat ** idMat(size(mat))
 
 # Test matrix transposition
-assert ¡(mat({1,2,3},1,3)) == [[1], [2], [3]]
+¡(mat({1,2,3},1,3)) === [[1], [2], [3]]
 
 # Test normCdf
-assert normCdf(-inf, 7, 45, 21) == 0.035184776966467601333
-assert normCdf(-1, 1) == 0.6826894808737367093
-assert normCdf(0) == 0.500000000524808641
+normCdf(-inf, 7, 45, 21) === 0.035184776966467601333
+normCdf(-1, 1) === 0.6826894808737367093
+normCdf(0) === 0.500000000524808641
 
 # Test map, reduce, oneVar, repeat, subscript, and closure arguments
-assert round((oneVar(0...1000 | 1 + $1) | $0::1 ~ $1 + $0), 5) == 417671830.49443
+round((oneVar(0...1000 | 1 + $1) | $0::1 ~ $1 + $0), 5) === 417671830.49443
 
 # Test list operations
 def l1 = {1, 2, 3, 4, 5}
@@ -1568,25 +1612,25 @@ l1 := (l1 rm 3)
 # Subscript by range
 l6 := l1[1, 2]
 
-assert l1 == {1, 2, 3, 5}
-assert l2 == {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
-assert l3 == {1, 3, 5, 7, 9, 11, 13, 15, 17, 19}
-assert l4 == {2, 4}
-assert l5 == {5, 4, 3, 2, 1}
-assert n == 385
-assert l6 == {2}
+l1 === {1, 2, 3, 5}
+l2 === {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+l3 === {1, 3, 5, 7, 9, 11, 13, 15, 17, 19}
+l4 === {2, 4}
+l5 === {5, 4, 3, 2, 1}
+n === 385
+l6 === {2}
 
 # Test string concatenation
-assert "asdf" & "sdfsdf"[1] == "asdfd"
+"asdf" & "sdfsdf"[1] === "asdfd"
 
 println "Test completed. No errors identified. System operational."
 
 # Test binomCdf
-assert sum(binomPdf(10, 0.1)) == 0.99999999999999999973
+sum(binomPdf(10, 0.1)) === 0.99999999999999999973
 
 # Test inout variables
 def f(x) = (return x++)
 def a = 3
 f(&a)
-assert a == 4
+a === 4
 ```

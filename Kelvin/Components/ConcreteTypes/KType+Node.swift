@@ -10,7 +10,7 @@ import Foundation
 
 extension KType: LeafNode, NaN {
     public var stringified: String { KType.marker + rawValue }
-    public var ansiColored: String { rawValue.yellow }
+    public var ansiColored: String { stringified.yellow }
     
     public func equals(_ node: Node) -> Bool {
         guard let dataType = node as? KType else {

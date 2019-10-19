@@ -95,8 +95,8 @@ public struct Keyword {
         case translating        // +,-
         case scaling            // *,/
         case exponent           // ^
-        case coersion           // as
-        case derivative         // '
+        case binary             // derivative('), as(!!), gradient(∇), ncr, npr.
+        case prefixA            // ambiguous prefix
         case prefix             // √, !(not), * prefix as function reference
         case postfix            // ++, --, !(factorial), °, %
         case `subscript`        // ::

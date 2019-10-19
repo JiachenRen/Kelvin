@@ -8,7 +8,7 @@ if (a == 1) {
 }
 
 # Make sure that a is 2 at this point.
-assert a == 2
+a === 2
 
 # "a+=2" increments the value of a by 2, then returns the value of a.
 if ((a+=2) == 2) {
@@ -21,4 +21,4 @@ if ((a+=2) == 2) {
 
 # Ternary conditional statement
 a := (a < 10 ? 0 : 10)
-assert a == 0
+a === 0

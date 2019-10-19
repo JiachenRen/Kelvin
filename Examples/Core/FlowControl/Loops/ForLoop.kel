@@ -34,7 +34,7 @@ for (p: map(l1) {$0: $1}) {
 # p[0] refers to the element, while p[1], the second element
 # of the pair, refers to the index.
 println l2
-assert l2 == {2, 4, 6, 2 * x, 2 * a, 2 * f(x), 2 * a + 2 * x}
+l2 === {2, 4, 6, 2 * x, 2 * a, 2 * f(x), 2 * a + 2 * x}
 
 # Iterate through a string with for loop
 def str = "hello world"
@@ -43,7 +43,7 @@ for (c: str as @list) {
     chars &= c;
     print c
 }
-assert chars == str
+chars === str
 
 # How to use stride(lowerBound, upperBound, step)
 # Prints "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, "

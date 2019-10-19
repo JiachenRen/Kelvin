@@ -2,4 +2,4 @@ def a = 0;
 while (a < 10) {
     a++;
 }
-assert a == 10
+a === 10

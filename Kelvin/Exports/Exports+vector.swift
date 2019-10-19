@@ -16,10 +16,10 @@ extension Exports {
         .binary(.add, Vector.self, Number.self) {(lhs, rhs) in
             Vector(lhs.map {$0 + rhs})
         },
-        .binary(.sub, Vector.self, Vector.self) {
+        .binary(.minus, Vector.self, Vector.self) {
             try $0.perform(-, with: $1)
         },
-        .binary(.sub, Vector.self, Number.self) {(lhs, rhs) in
+        .binary(.minus, Vector.self, Number.self) {(lhs, rhs) in
             Vector(lhs.map {$0 - rhs})
         },
         .binary(.dotProduct, Vector.self, Vector.self) {

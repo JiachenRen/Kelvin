@@ -234,6 +234,7 @@
 		1FA51BD0234AD52E00B3D06B /* Algebra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA51BBF234ACDC900B3D06B /* Algebra.swift */; };
 		1FA51BD1234AD52E00B3D06B /* Rules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA51BC1234ACE0300B3D06B /* Rules.swift */; };
 		1FA51BD2234AD52E00B3D06B /* Calculus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA51BC3234ACE6800B3D06B /* Calculus.swift */; };
+		1FA70522235BAD4C00B6B74B /* CustomSyntax.kel in Resources */ = {isa = PBXBuildFile; fileRef = 1FA70521235BAD4C00B6B74B /* CustomSyntax.kel */; };
 		1FA8EF7523281BC000D66971 /* StackTrace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA8EF73232815A200D66971 /* StackTrace.swift */; };
 		1FA8EF7C232857CC00D66971 /* Console.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF73322050CD3006351B0 /* Console.swift */; };
 		1FA8EF7D232857CC00D66971 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82BD219757FC005C3353 /* main.swift */; };
@@ -287,6 +288,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 1F48D9A9222E0D8100639F26;
 			remoteInfo = "Kelvin-macOS";
+		};
+		1F41D29123580F5F00204FDE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1FFD8C97218F50850004ECEB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1FDEA4B9225914C800D88542;
+			remoteInfo = "Kelvin CLI";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -468,6 +476,7 @@
 		1FA51BC1234ACE0300B3D06B /* Rules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rules.swift; sourceTree = "<group>"; };
 		1FA51BC3234ACE6800B3D06B /* Calculus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calculus.swift; sourceTree = "<group>"; };
 		1FA51BC5234ACEC600B3D06B /* Exports+core.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Exports+core.swift"; sourceTree = "<group>"; };
+		1FA70521235BAD4C00B6B74B /* CustomSyntax.kel */ = {isa = PBXFileReference; lastKnownFileType = text; path = CustomSyntax.kel; sourceTree = "<group>"; };
 		1FA8EF73232815A200D66971 /* StackTrace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackTrace.swift; sourceTree = "<group>"; };
 		1FB0F174232AC07800281559 /* libedit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libedit.tbd; path = usr/lib/libedit.tbd; sourceTree = SDKROOT; };
 		1FB0F176232AC24B00281559 /* KelvinCLI-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KelvinCLI-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -724,6 +733,7 @@
 				1F3E30A2232C37A9002971F9 /* TrailingClosure.kel */,
 				1F3E30A3232C37A9002971F9 /* String.kel */,
 				1F8244D5233AF32800F32C21 /* RunShell.kel */,
+				1FA70521235BAD4C00B6B74B /* CustomSyntax.kel */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1185,6 +1195,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				1F41D29223580F5F00204FDE /* PBXTargetDependency */,
 			);
 			name = KelvinTests;
 			productName = KelvinTests;
@@ -1272,6 +1283,7 @@
 				1F8C8C88233960C0007FCD4F /* BooleanLogic.kel in Resources */,
 				1F3E30B1232C37AA002971F9 /* Differentiation.kel in Resources */,
 				1F3E30C2232C37AA002971F9 /* StackTrace.kel in Resources */,
+				1FA70522235BAD4C00B6B74B /* CustomSyntax.kel in Resources */,
 				1F3E30BD232C37AA002971F9 /* ForLoop.kel in Resources */,
 				1F3E30B8232C37AA002971F9 /* FindBest.kel in Resources */,
 				1F3E30BE232C37AA002971F9 /* Benchmarking.kel in Resources */,
@@ -1628,6 +1640,11 @@
 			isa = PBXTargetDependency;
 			target = 1F48D9A9222E0D8100639F26 /* Kelvin-macOS */;
 			targetProxy = 1F1C761D23565DA2005DC633 /* PBXContainerItemProxy */;
+		};
+		1F41D29223580F5F00204FDE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1FDEA4B9225914C800D88542 /* Kelvin CLI */;
+			targetProxy = 1F41D29123580F5F00204FDE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
