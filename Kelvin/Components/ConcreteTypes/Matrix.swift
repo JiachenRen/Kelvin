@@ -105,6 +105,23 @@ public final class Matrix: Iterable {
     
     // MARK: - Basic Operations
     
+    /// The power of a mtrix is defined as the matrix multiplying itself n times.
+    /// - Returns: The matrix raised to the power of `n`.
+    public func power(_ n: Int) throws -> Matrix {
+        if n == 0 {
+            return try Matrix.identityMatrix(dim.rows)
+        } else if n < 0 {
+            return try inverse().power(-n)
+        }
+        var n = n
+        var mat = self.copy()
+        while n > 1 {
+            mat = try mat.mult(self)
+            n -= 1
+        }
+        return mat
+    }
+    
     /// The transpose of the matrix `[[A, B], [C, D]]` is `[[A, C], [B, D]]`
     /// - Returns: The transpose of the matrix.
     public func transposed() -> Matrix {

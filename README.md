@@ -235,7 +235,8 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 - [x] Prime number generation
 - [x] Factorize
 - [x] Round to decimal places
-- [x] Fraction arithmetic
+- [x] Fraction
+  - [x] Enter fraction mode with `setMode("rounding", "exact")`
 - [x] Irrational number simplification
 - [x] Rounding mode
   - Exact vs approximate vs automatic
@@ -341,6 +342,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - [x] Transformation
   - [x] Multiplication
   - [x] Addition/Subtraction
+  - [x] Power
   - [x] Transposition
   - [x] Inverse
   - [x] Adjoint

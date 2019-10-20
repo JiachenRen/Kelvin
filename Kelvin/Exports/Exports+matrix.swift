@@ -20,13 +20,13 @@ extension Exports {
             try $0.perform(-, with: $1)
         },
         .binary(.minus, Matrix.self, Node.self) {(lhs, rhs) in
-            lhs.transform {$0 - rhs}
+            lhs.transform { $0 - rhs }
         },
         .binary(.mult, Matrix.self, Node.self) {(lhs, rhs) in
-            lhs.transform {$0 * rhs}
+            lhs.transform { $0 * rhs }
         },
         .binary(.div, Matrix.self, Node.self) {(lhs, rhs) in
-            lhs.transform {$0 / rhs}
+            lhs.transform { $0 / rhs }
         },
         .binary(.transform, [.node, .node]) {(a, b) in
             let mat = try Assert.cast(a.simplify(), to: Matrix.self)
@@ -45,6 +45,9 @@ extension Exports {
         },
         .binary(.matrixMultiplication, Matrix.self, Matrix.self) {
             try $0.mult($1)
+        },
+        .binary(.power, Matrix.self, Int.self) {
+            try $0.power($1)
         },
         .unary(.determinant, Matrix.self) {
             try $0.determinant()
