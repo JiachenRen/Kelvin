@@ -231,9 +231,14 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 ### Number
 - [x] Greatest common divisor & least common multiple
 - [x] Prime factors
+- [x] Big (I mean BIG) integers
+- [x] Prime number generation
+- [x] Factorize
 - [x] Round to decimal places
-- [ ] Fraction
-- [ ] Exact vs. approximate
+- [x] Fraction arithmetic
+- [x] Irrational number simplification
+- [x] Rounding mode
+  - Exact vs approximate vs automatic
 
 ### Algebra
 - [x] Commutative simplification
