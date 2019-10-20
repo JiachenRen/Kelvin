@@ -48,9 +48,10 @@ public class Vector: Iterable {
         if vec.count != count {
             throw ExecutionError.dimensionMismatch(self, vec)
         }
-        return zip(elements, vec.elements)
+        return try zip(elements, vec.elements)
             .map { $0 * $1 }
             .reduce(0) { $0 + $1 }
+            .simplify()
     }
     
     /// Perform cross product with target vector.
