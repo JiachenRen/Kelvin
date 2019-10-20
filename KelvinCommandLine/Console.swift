@@ -231,7 +231,7 @@ public class Console: IOProtocol {
     }
     
     public static func printUsage() {
-        Swift.print("Usage: kelvin -i (enter interactive mode)")
+        Swift.print("Usage: kelvin (enter interactive mode)")
         Swift.print("   or  kelvin -e <expr> (evaluate the expression that follows)")
         Swift.print("   or  kelvin -f [options] <filepath> (execute file at path)\n")
         Swift.print(" where options include:", terminator: "\n\n")
@@ -244,7 +244,6 @@ public class Console: IOProtocol {
         case expression = "e"
         case file = "f"
         case verbose = "v"
-        case interactive = "i"
         case debug = "d"
         
         /// Parses raw argument string to option

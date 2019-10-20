@@ -21,8 +21,9 @@ Program.shared.config.maxStackSize = .max
 Program.shared.io = console
 
 // Parse program arguments and decide what to do
+// No arguments passed, enter REPL interactive mode
 if args.count == 1 {
-    Console.printUsage()
+    try console.repl()
     exit(EXIT_SUCCESS)
 }
 switch try Console.Argument.parse(args[1]) {
@@ -30,9 +31,6 @@ case .expression where args.count == 3:
     // Evaluate expression
     let expr = args[2]
     console.eval(expr)
-case .interactive:
-    // Enter REPL interactive mode
-    try console.repl()
 case .file where args.count == 3:
     // Execute file at path (verbose = false)
     console.verbose = false

@@ -42,13 +42,13 @@ If you prefer, you can use `kelvin` as a command line tool.
 $ cd /tmp && curl https://raw.githubusercontent.com/JiachenRen/kelvin-cas/master/install.sh > install.sh && bash install.sh
 ```
 
-3. You are done! Now try `kelvin -i`.
+3. You are done! Now try `kelvin`.
 
 
 ### Usage
 
 ```bash
-Usage: kelvin -i (enter interactive mode)
+Usage: kelvin (enter interactive mode)
   or  kelvin -e <expr> (evaluate the expression that follows)
   or  kelvin -f [options] <filepath> (execute file at path)
 

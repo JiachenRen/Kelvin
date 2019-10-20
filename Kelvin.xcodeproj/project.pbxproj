@@ -1359,7 +1359,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncp $BUILT_PRODUCTS_DIR/Kelvin\\ CLI /usr/local/bin/kelvin\nrm -rf /usr/local/bin/Kelvin.framework\ncp -r $BUILT_PRODUCTS_DIR/Kelvin.framework /usr/local/bin/\necho \"cd \\\"$PROJECT_DIR/Examples/\\\" && kelvin -i\" > /tmp/launch.sh\nchmod +x /tmp/launch.sh\nopen -a iTerm /tmp/launch.sh || open -a Terminal /tmp/launch.sh\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncp $BUILT_PRODUCTS_DIR/Kelvin\\ CLI /usr/local/bin/kelvin\nrm -rf /usr/local/bin/Kelvin.framework\ncp -r $BUILT_PRODUCTS_DIR/Kelvin.framework /usr/local/bin/\necho \"cd \\\"$PROJECT_DIR/Examples/\\\" && kelvin\" > /tmp/launch.sh\nchmod +x /tmp/launch.sh\nopen -a iTerm /tmp/launch.sh || open -a Terminal /tmp/launch.sh\n";
 		};
 		1F0AA8962353DED9006D7523 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;

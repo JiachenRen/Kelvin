@@ -14,4 +14,4 @@ mv /usr/local/bin/Kelvin.framework /Library/Frameworks/
 echo "Cleaning up..."
 rm -rf /tmp/kelvin-cas
 echo "Success. Kelvin is installed in /usr/bin/local"
-echo "Example usage: kelvin -i"
+echo "Example usage: kelvin"
