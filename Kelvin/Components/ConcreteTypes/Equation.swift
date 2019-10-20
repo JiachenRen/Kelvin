@@ -9,19 +9,19 @@
 import Foundation
 
 public class Equation: Iterable, BinaryNode {
-    public enum Mode: String {
+    public var elements: [Node]
+    public var relation: Relation
+    
+    public enum Relation: String {
         case greaterThan = ">"
         case greaterThanOrEquals = ">="
         case lessThan = "<"
         case lessThanOrEquals = "<="
         case equals = "="
     }
-    
-    public var elements: [Node]
-    public var mode: Mode
 
-    public required init(lhs: Node, rhs: Node, mode: Mode = .equals) {
-        self.mode = mode
+    public required init(lhs: Node, rhs: Node, relation: Relation = .equals) {
+        self.relation = relation
         self.elements = [lhs, rhs]
     }
 
@@ -36,9 +36,9 @@ public class Equation: Iterable, BinaryNode {
     ///
     /// - Returns: An error if the definition is unsuccessful.
     public func define() throws {
-        if mode != .equals {
+        if relation != .equals {
             // Only an equality can be used for definition.
-            let msg = "inequality '\(mode)' cannot be used for definition"
+            let msg = "inequality '\(relation)' cannot be used for definition"
             throw ExecutionError.general(errMsg: msg)
         }
 
@@ -91,8 +91,18 @@ public class Equation: Iterable, BinaryNode {
         }
 
         // After simplification, lhs = rhs, equation is always true.
-        if mode.rawValue.contains("=") && eq.lhs === eq.rhs {
+        if relation.rawValue.contains("=") && eq.lhs === eq.rhs {
             return true
+        }
+        
+        // Compare big integers before forcibly compressing them to floating point
+        if let a = eq.lhs as? Integer, let b = eq.rhs as? Integer {
+            return compare(a.bigInt, b.bigInt)
+        }
+        
+        // Compare strings
+        if let a = eq.lhs as? String, let b = eq.rhs as? String {
+            return compare(a, b)
         }
 
         // If lhs and rhs comes down to a number, compare their numerical values.
@@ -102,23 +112,29 @@ public class Equation: Iterable, BinaryNode {
             let d2 = v2.float80
 
             if d1 != .nan && d2 != .nan {
-                switch mode {
-                case .equals:
-                    return d1 == d2
-                case .greaterThanOrEquals:
-                    return d1 >= d2
-                case .lessThanOrEquals:
-                    return d1 <= d2
-                case .lessThan:
-                    return d1 < d2
-                case .greaterThan:
-                    return d1 > d2
-                }
+                return compare(d1, d2)
             }
         }
 
         // If nothing could be done, then return a copy of self
         return eq
+    }
+    
+    /// Compares comparable `a` and `b` using the specified relation of this equation.
+    /// - Returns: True if the comparison holds, otherwise false.
+    private func compare<T: Comparable>(_ a: T, _ b: T) -> Bool {
+        switch relation {
+        case .equals:
+            return a == b
+        case .greaterThanOrEquals:
+            return a >= b
+        case .lessThanOrEquals:
+            return a <= b
+        case .lessThan:
+            return a < b
+        case .greaterThan:
+            return a > b
+        }
     }
 
     /// Two equations are considered as identical if their operands are identical
@@ -131,15 +147,15 @@ public class Equation: Iterable, BinaryNode {
     }
     
     public func copy() -> Self {
-        Self.init(lhs: lhs.copy(), rhs: rhs.copy(), mode: mode)
+        Self.init(lhs: lhs.copy(), rhs: rhs.copy(), relation: relation)
     }
     
     public var stringified: String {
-        "\(lhs.stringified) \(mode.rawValue) \(rhs.stringified)"
+        "\(lhs.stringified) \(relation.rawValue) \(rhs.stringified)"
     }
     
     public var ansiColored: String {
-        "\(lhs.ansiColored) \(mode.rawValue.bold) \(rhs.ansiColored)"
+        "\(lhs.ansiColored) \(relation.rawValue.bold) \(rhs.ansiColored)"
     }
     
     public var precedence: Keyword.Precedence { .equation }

@@ -223,16 +223,16 @@ public class Core {
             Equation(lhs: $0, rhs: $1)
         },
         .binary(.lessThan, [.node, .node]) {
-            Equation(lhs: $0, rhs: $1, mode: .lessThan)
+            Equation(lhs: $0, rhs: $1, relation: .lessThan)
         },
         .binary(.greaterThan, [.node, .node]) {
-            Equation(lhs: $0, rhs: $1, mode: .greaterThan)
+            Equation(lhs: $0, rhs: $1, relation: .greaterThan)
         },
         .binary(.greaterThanOrEquals, [.node, .node]) {
-            Equation(lhs: $0, rhs: $1, mode: .greaterThanOrEquals)
+            Equation(lhs: $0, rhs: $1, relation: .greaterThanOrEquals)
         },
         .binary(.lessThanOrEquals, [.node, .node]) {
-            Equation(lhs: $0, rhs: $1, mode: .lessThanOrEquals)
+            Equation(lhs: $0, rhs: $1, relation: .lessThanOrEquals)
         },
         .binary(.equals, [.node, .node]) {
             $0 === $1
