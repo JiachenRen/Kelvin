@@ -35,7 +35,7 @@ Otherwise if you are only using the macOS Framework, do ```carthage update --pla
 ## Command Line
 If you prefer, you can use `kelvin` as a command line tool.
 ### Setup
-1. Before proceeding, you must have the latest `git` and `xcodebuild` installed.
+1. Before proceeding, you must have the latest `git`, `carthage`, and `xcodebuild` installed.
 2. Run the following command in terminal.
 
 ```bash

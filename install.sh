@@ -4,6 +4,8 @@ cd /tmp
 rm -rf kelvin-cas
 git clone https://github.com/JiachenRen/kelvin-cas.git
 cd kelvin-cas
+echo "Building dependencies... please wait..."
+carthage update --platform macOS
 echo "Building kelvin... this may take a while, please wait..."
 xcodebuild -project Kelvin.xcodeproj -scheme "Kelvin CLI" -configuration Release -quiet CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
 echo "Success."
