@@ -275,6 +275,7 @@ public extension OperationName {
     static let leastCommonMultiple = "lcm"
     static let degrees = "degrees"
     static let percent = "pct"
+    static let approximateFraction = "frac"
     
     // MARK: - Strings
     

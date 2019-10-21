@@ -22,6 +22,7 @@ public class Operation: Equatable, Hashable {
         Exports.listProtocol,
         Exports.matrix,
         Exports.pair,
+        Exports.approx,
         Exports.probability,
         Exports.rules,
         Exports.stats,

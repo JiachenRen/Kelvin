@@ -264,6 +264,8 @@
 		1FDC863A22132F4300EAC346 /* tangent_plane_grapher.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */; };
 		1FE487FD220E9028005361AC /* ruby_github_theme.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FE487FB220E9027005361AC /* ruby_github_theme.png */; };
 		1FE487FE220E9028005361AC /* ruby_dracula_theme.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FE487FC220E9028005361AC /* ruby_dracula_theme.png */; };
+		1FEC4179235E5E94006A0E76 /* Approximator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FEC4177235E5C1D006A0E76 /* Approximator.swift */; };
+		1FEC417C235E678D006A0E76 /* Exports+approx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FEC417A235E6751006A0E76 /* Exports+approx.swift */; };
 		1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FFD8CA9218F50870004ECEB /* Assets.xcassets */; };
 		1FFD8CAD218F50870004ECEB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1FFD8CAB218F50870004ECEB /* Main.storyboard */; };
 /* End PBXBuildFile section */
@@ -516,6 +518,8 @@
 		1FE487F4220E416F005361AC /* ConsoleViewController+NSOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConsoleViewController+NSOutlineView.swift"; sourceTree = "<group>"; };
 		1FE487FB220E9027005361AC /* ruby_github_theme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ruby_github_theme.png; sourceTree = "<group>"; };
 		1FE487FC220E9028005361AC /* ruby_dracula_theme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ruby_dracula_theme.png; sourceTree = "<group>"; };
+		1FEC4177235E5C1D006A0E76 /* Approximator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Approximator.swift; sourceTree = "<group>"; };
+		1FEC417A235E6751006A0E76 /* Exports+approx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Exports+approx.swift"; sourceTree = "<group>"; };
 		1FFD8C9F218F50850004ECEB /* Kelvin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kelvin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FFD8CA2218F50850004ECEB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1FFD8CA7218F50850004ECEB /* Kelvin.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Kelvin.xcdatamodel; sourceTree = "<group>"; };
@@ -579,6 +583,7 @@
 		1F0936BF21F3C08100E707BD /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				1FEC4176235E5C0B006A0E76 /* Approximation */,
 				1F570B5221FF6D8E0006E342 /* Statistics */,
 				1F3D316B2202871800462F10 /* Algebra */,
 				1F0936C921F4E26700E707BD /* Rules */,
@@ -867,6 +872,7 @@
 			isa = PBXGroup;
 			children = (
 				1F0936D621F4E80A00E707BD /* Exports+pair.swift */,
+				1FEC417A235E6751006A0E76 /* Exports+approx.swift */,
 				1F570B5521FF6F670006E342 /* Exports+stats.swift */,
 				1FB2D03F234395E7008709AE /* Exports+algebra.swift */,
 				1FB2D03C2343900A008709AE /* Exports+rules.swift */,
@@ -1003,6 +1009,14 @@
 				1FE487FB220E9027005361AC /* ruby_github_theme.png */,
 			);
 			path = Screenshots;
+			sourceTree = "<group>";
+		};
+		1FEC4176235E5C0B006A0E76 /* Approximation */ = {
+			isa = PBXGroup;
+			children = (
+				1FEC4177235E5C1D006A0E76 /* Approximator.swift */,
+			);
+			path = Approximation;
 			sourceTree = "<group>";
 		};
 		1FFD8C96218F50850004ECEB = {
@@ -1406,6 +1420,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FEC417C235E678D006A0E76 /* Exports+approx.swift in Sources */,
+				1FEC4179235E5E94006A0E76 /* Approximator.swift in Sources */,
 				1FCB0337235E201C00130834 /* Exports+listProtocol.swift in Sources */,
 				1F1C761A23564A2E005DC633 /* Constant.swift in Sources */,
 				1F0AA8992354CA68006D7523 /* Exact.swift in Sources */,
