@@ -20,7 +20,7 @@ public class Approximator {
         for i in 2...maxDenominator {
             for j in 1..<i {
                 let r = Float80(j) / Float80(i)
-                root.store(String(r), (BigInt(i), BigInt(j)), overwrite: false)
+                root.store(String(r), (BigInt(j), BigInt(i)), overwrite: false)
             }
         }
         return root
