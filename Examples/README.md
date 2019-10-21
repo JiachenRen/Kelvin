@@ -54,7 +54,7 @@ This directory contains various examples that demonstrate how to the Kelvin lang
 def bin_search(arr, search) {
     c := 0;
     first := 0;
-    n := size(arr);
+    n := count(arr);
     last := n - 1;
     middle := int((first + last) / 2);
 
@@ -206,7 +206,7 @@ tan(x) * sec(x) * csc(x) * cos(x) ^ 2 === 1
 def bin_search(arr, search) {
     c := 0;
     first := 0;
-    n := size(arr);
+    n := count(arr);
     last := n - 1;
     middle := int((first + last) / 2);
 
@@ -753,24 +753,24 @@ result === {x^2, x^3, x^6}
 println("Hello, " & name)
 
 # To get current working directory
-println getWorkingDir()
+println dir()
 
 # Set current working directory
-setWorkingDir("/tmp")
+setDir "/tmp"
 
 # Read file at path (if no '/' at the beginning, relative path to working dir. is used)
-# readFile("/Users/jiachenren/iCloudDrive (Archive)/Documents/Developer/Kelvin/Examples/Developer/Benchmarking")
+# readFile "/Users/jiachenren/iCloudDrive (Archive)/Documents/Developer/Kelvin/Examples/Developer/Benchmarking"
 
 # Creating a directory named "folder" relative to "/tmp"
 # If a file/folder named folder already exists, an error is thrown.
-createDir("folder")
+createDir "folder"
 
 # Change to the dir just created
-setWorkingDir("folder")
+setDir "folder"
 
 # Create a new file named "file.txt"
 # Overwrites previous content
-createFile("file.txt")
+createFile "file.txt"
 
 # Write to the file
 writeToFile("file.txt", "println \"Hello World!\"\n")
@@ -780,7 +780,7 @@ writeToFile("file.txt", "println \"Hello World!\"\n")
 appendToFile("file.txt", "println (a + b - a)")
 
 # Checks if the path given is a directory
-isDir("file.txt") === false
+isDir "file.txt" === false
 
 # List paths under "/tmp/folder"
 listPaths() === {"file.txt"}
@@ -789,7 +789,7 @@ listPaths() === {"file.txt"}
 run "file.txt"
 
 # Delete everything! Be careful!
-getWorkingDir() === "/tmp/folder"
+dir() === "/tmp/folder"
 removePath("/tmp/folder")
 
 
@@ -864,7 +864,7 @@ def fibonacci(x) = (
     (x == 0 || x == 1 || x == 2) ? (1...x) : (
         q := {1, 1};
         repeat(
-            q := (q ++ q[size q - 2] + q[size q - 1]),
+            q := (q ++ q[count q - 2] + q[count q - 1]),
             x - 2
         )
     );
@@ -1305,7 +1305,7 @@ println (9 npr 3)
 println ({1, 2, 3, x, a, b, 4, 5} ncr 4)
 
 # Generate a list of all possible permutations of n elements from a list
-size({a, b, c} npr 3) === 6
+count({a, b, c} npr 3) === 6
 
 # Random number generation
 println "Calculating average of 100000 random numbers..."
@@ -1548,7 +1548,7 @@ del a
 del b
 
 def l1 = {1, 1, 2, 2, 3, 3, 3, 4, 2, 6, 9, 49, 107}
-size(l1) === 13
+count(l1) === 13
 
 # Test implied multiplicity
 f1(x) === f1(x)
@@ -1575,7 +1575,7 @@ diff === 0
 
 [[1, 2], [2, 3], [3, 4]] ** [[1, 2, 3], [2, 3, 4]] === [[5, 8, 11], [8, 13, 18], [11, 18, 25]]
 [[1, 2, 3], [2, 3, 4]] ** [[1, 2], [2, 3], [3, 4]] === [[14, 20], [20, 29]]
-mat === mat ** idMat(size(mat))
+mat === mat ** idMat(count(mat))
 
 # Test matrix transposition
 ¡(mat({1,2,3},1,3)) === [[1], [2], [3]]

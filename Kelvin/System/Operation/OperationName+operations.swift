@@ -94,14 +94,14 @@ public extension OperationName {
     // MARK: - List & Pair
     
     static let list = "list"
-    static let pair = "pair"
+    static let pair = "to"
     static let get = "get"
     static let set = "set"
     static let map = "map"
     static let reduce = "reduce"
     static let filter = "filter"
     static let append = "append"
-    static let size = "size"
+    static let count = "count"
     static let sort = "sort"
     static let zip = "zip"
     static let shuffle = "shuffle"
@@ -180,13 +180,13 @@ public extension OperationName {
     static let define = "def"
     static let assign = "assign"
     static let del = "del"
-    static let increment = "++"
-    static let decrement = "--"
-    static let addAssign = "+="
-    static let minusAssign = "-="
-    static let multAssign = "*="
-    static let divAssign = "/="
-    static let concatAssign = "&="
+    static let increment = "increment"
+    static let decrement = "decrement"
+    static let addAssign = "addAssign"
+    static let minusAssign = "minusAssign"
+    static let multAssign = "multAssign"
+    static let divAssign = "divAssign"
+    static let concatAssign = "concatAssign"
     
     // MARK: - Flow control
     
@@ -242,8 +242,8 @@ public extension OperationName {
     static let createFile = "createFile"
     static let createDirectory = "createDir"
     static let listPaths = "listPaths"
-    static let getWorkingDirectory = "getWorkingDir"
-    static let setWorkingDirectory = "setWorkingDir"
+    static let getWorkingDirectory = "dir"
+    static let setWorkingDirectory = "setDir"
     
     // MARK: - Debug & Error
     
@@ -258,13 +258,13 @@ public extension OperationName {
     
     // MARK: - Relational
     
-    static let equals = "=="
-    static let notEquals = "!="
-    static let equates = "="
-    static let greaterThan = ">"
-    static let lessThan = "<"
-    static let greaterThanOrEquals = ">="
-    static let lessThanOrEquals = "<="
+    static let equals = "equals"
+    static let notEquals = "neq"
+    static let equates = "equates"
+    static let greaterThan = "greaterThan"
+    static let lessThan = "lessThan"
+    static let greaterThanOrEquals = "geq"
+    static let lessThanOrEquals = "leq"
     
     // Type system
     static let `as` = "as"
@@ -285,9 +285,6 @@ public extension OperationName {
     static let regexMatches = "regMatches"
     static let lowercased = "lowercased"
     static let uppercased = "uppercased"
-    
-    // MARK: - Mode
-    static let setMode = "setMode"
     
     // MARK: - Syntax
     static let `prefix` = "prefix"

@@ -67,6 +67,7 @@ public struct Syntax {
         return disambiguateOperators()
     }()
     
+    /// Finds ambiguous operators (e.g. the `!`  means `factorial` in `3!` and `negate` in `!true` and sort them in descending precedence.
     private static func disambiguateOperators() -> [String: [Keyword]] {
         var dict = [String: [Keyword]]()
         var d = [String: [Keyword.Associativity: Keyword]]()
@@ -89,6 +90,12 @@ public struct Syntax {
                     d[o] = m
                 }
             }
+        }
+        // Sort the ambiguous operators by descending precedence.
+        for key in dict.keys {
+            dict.updateValue(dict[key]!.sorted {
+                $0.precedence > $1.precedence
+            }, forKey: key)
         }
         return dict
     }
@@ -125,7 +132,7 @@ public struct Syntax {
         .init(for: .negate, associativity: .prefix, operator: .init("-", padding: .none)),
         .init(for: .mult, associativity: .infix, precedence: .scaling, operator: .init("*")),
         .init(for: .div, associativity: .infix, precedence: .scaling, operator: .init("/")),
-        .init(for: .mod, associativity: .infix, precedence: .scaling, operator: .init("%")),
+        .init(for: .mod, associativity: .infix, precedence: .scaling, operator: .init("%", isPreferred: false)),
         .init(for: .power, associativity: .infix, precedence: .exponent, operator: .init("^")),
         .init(for: .sqrt, associativity: .prefix, operator: .init("√", padding: .none)),
         
@@ -162,14 +169,15 @@ public struct Syntax {
         // Boolean logic
         .init(for: .and, associativity: .infix, precedence: .and, operator: .init("&&")),
         .init(for: .or, associativity: .infix, precedence: .or, operator: .init("||")),
-        .init(for: .xor, associativity: .infix, precedence: .xor, operator: .init("^^")),
+        .init(for: .xor, associativity: .infix, precedence: .xor, operator: .init("^^", isPreferred: false)),
         .init(for: .not, associativity: .prefix, operator: .init("!", padding: .none)),
-        .init(for: .nand, associativity: .infix, precedence: .nand, operator: .init("!&")),
-        .init(for: .nor, associativity: .infix, precedence: .nor, operator: .init("!|")),
+        .init(for: .nand, associativity: .infix, precedence: .nand, operator: .init("!&", isPreferred: false)),
+        .init(for: .nor, associativity: .infix, precedence: .nor, operator: .init("!|", isPreferred: false)),
         
         // List
         .init(for: .get, associativity: .infix, precedence: .subscript, operator: .init("::", padding: .none)), // Preserve arguments?
-        .init(for: .size, associativity: .prefix),
+        .init(for: .set, associativity: .prefix, precedence: .prefixCommand),
+        .init(for: .count, associativity: .prefix),
         .init(for: .shuffle, associativity: .prefix),
         .init(for: .map, associativity: .infix, operator: .init("|")),
         .init(for: .reduce, associativity: .infix, operator: .init("~")),
@@ -213,8 +221,8 @@ public struct Syntax {
         .init(for: .gradient, associativity: .infix, precedence: .binary, operator: .init("∇")),
         
         // Type casting
-        .init(for: .as, associativity: .infix, precedence: .binary, operator: .init("!!")),
-        .init(for: .is, associativity: .infix, precedence: .binary, operator: .init("??")),
+        .init(for: .as, associativity: .infix, precedence: .binary, operator: .init("!!", isPreferred: false)),
+        .init(for: .is, associativity: .infix, precedence: .binary, operator: .init("??", isPreferred: false)),
         
         // Matrix & vector
         .init(for: .determinant, associativity: .prefix),
@@ -224,7 +232,7 @@ public struct Syntax {
         .init(for: .dotProduct, associativity: .infix, precedence: .scaling, operator: .init("•")),
         .init(for: .crossProduct, associativity: .infix, precedence: .scaling, operator: .init("×")),
         .init(for: .matrixMultiplication, associativity: .infix, precedence: .scaling, operator: .init("**")),
-        .init(for: .transpose, associativity: .prefix, operator: .init("¡", padding: .none)),
+        .init(for: .transpose, associativity: .prefix, operator: .init("¡", padding: .none, isPreferred: false)),
         
         // Others
         .init(for: .pair, associativity: .infix, precedence: .pair, operator: .init(":")),
@@ -235,5 +243,12 @@ public struct Syntax {
         .init(for: .prefix, associativity: .prefix),
         .init(for: .infix, associativity: .prefix),
         .init(for: .postfix, associativity: .prefix),
+        
+        // File system
+        .init(for: .setWorkingDirectory, associativity: .prefix),
+        .init(for: .createFile, associativity: .prefix),
+        .init(for: .readFile, associativity: .prefix),
+        .init(for: .createDirectory, associativity: .prefix),
+        .init(for: .isDirectory, associativity: .prefix),
     ]
 }

@@ -2,7 +2,7 @@
 def bin_search(arr, search) {
     c := 0;
     first := 0;
-    n := size(arr);
+    n := count(arr);
     last := n - 1;
     middle := int((first + last) / 2);
 

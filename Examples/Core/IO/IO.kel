@@ -5,24 +5,24 @@
 println("Hello, " & name)
 
 # To get current working directory
-println getWorkingDir()
+println dir()
 
 # Set current working directory
-setWorkingDir("/tmp")
+setDir "/tmp"
 
 # Read file at path (if no '/' at the beginning, relative path to working dir. is used)
-# readFile("/Users/jiachenren/iCloudDrive (Archive)/Documents/Developer/Kelvin/Examples/Developer/Benchmarking")
+# readFile "/Users/jiachenren/iCloudDrive (Archive)/Documents/Developer/Kelvin/Examples/Developer/Benchmarking"
 
 # Creating a directory named "folder" relative to "/tmp"
 # If a file/folder named folder already exists, an error is thrown.
-createDir("folder")
+createDir "folder"
 
 # Change to the dir just created
-setWorkingDir("folder")
+setDir "folder"
 
 # Create a new file named "file.txt"
 # Overwrites previous content
-createFile("file.txt")
+createFile "file.txt"
 
 # Write to the file
 writeToFile("file.txt", "println \"Hello World!\"\n")
@@ -32,7 +32,7 @@ writeToFile("file.txt", "println \"Hello World!\"\n")
 appendToFile("file.txt", "println (a + b - a)")
 
 # Checks if the path given is a directory
-isDir("file.txt") === false
+isDir "file.txt" === false
 
 # List paths under "/tmp/folder"
 listPaths() === {"file.txt"}
@@ -41,7 +41,7 @@ listPaths() === {"file.txt"}
 run "file.txt"
 
 # Delete everything! Be careful!
-getWorkingDir() === "/tmp/folder"
+dir() === "/tmp/folder"
 removePath("/tmp/folder")
 
 

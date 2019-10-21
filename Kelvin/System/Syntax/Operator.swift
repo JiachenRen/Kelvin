@@ -29,13 +29,15 @@ public struct Operator: CustomStringConvertible {
     /// The name of the operator, e.g. `+`, `-`.
     public let name: String
     public let padding: Padding
+    public let isPreferred: Bool
 
     /// Instantiates a new `Operator`.
     /// - Parameter name: Name of the operator, e.g. `+`
     /// - Parameter padding: Padding for the operator. Defaults to `.bothSides`
-    public init(_ name: String, padding: Padding = .bothSides) {
+    public init(_ name: String, padding: Padding = .bothSides, isPreferred: Bool = true) {
         self.name = name
         self.padding = padding
+        self.isPreferred = isPreferred
     }
 
     public var description: String {

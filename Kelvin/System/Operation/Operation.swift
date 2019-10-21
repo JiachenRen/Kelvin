@@ -19,6 +19,7 @@ public class Operation: Equatable, Hashable {
         Exports.core,
         Exports.algebra,
         Exports.list,
+        Exports.listProtocol,
         Exports.matrix,
         Exports.pair,
         Exports.probability,

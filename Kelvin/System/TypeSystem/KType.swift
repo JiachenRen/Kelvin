@@ -27,6 +27,7 @@ public enum KType: String, CustomStringConvertible {
     case function
     case bool
     case kType
+    case kVoid
     case closure
     case statements
 
@@ -54,7 +55,7 @@ public enum KType: String, CustomStringConvertible {
     /// Description for the Kelvin type
     public var description: String { "\(KType.marker)\(rawValue)" }
     
-    /// The parent of this type, if it exists.
+    /// The parent of this type, if it exists.
     public var parent: KType? { KType.parent[self]! }
     
     /// Enumeration of the immediate parent of each KType.
@@ -73,6 +74,7 @@ public enum KType: String, CustomStringConvertible {
       .variable: .naN,
       .bool: .naN,
       .kType: .naN,
+      .kVoid: .naN,
       .closure: .naN,
       .naN: .node,
       

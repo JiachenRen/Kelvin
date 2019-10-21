@@ -36,6 +36,14 @@ extension Exports {
             try Assert.index(s.count, n)
             return "\(s[n])"
         },
+        .binary(.get, String.self, List.self) {
+            (str, idxList) in
+            let indices = try Assert.specialize(list: idxList, as: Int.self)
+            guard indices.count == 2 else {
+                throw ExecutionError.invalidSubscript(str, idxList)
+            }
+            return String(str[indices[0]..<indices[1]])
+        },
         
         // Replace
         .ternary(.replace, String.self, String.self, String.self) {
@@ -46,6 +54,8 @@ extension Exports {
         .binary(.contains, String.self, String.self) {
             $0.contains($1)
         },
+        
+        .unary(.count, String.self) { $0.count },
         
         // Regex
         .ternary(.regexReplace, String.self, String.self, String.self) {
@@ -59,7 +69,7 @@ extension Exports {
                 String(String(str[Range($0.range, in: str)!]))
             }
             return List(matches)
-            },
+        },
         
         // Utilities
         .unary(.lowercased, String.self) { $0.lowercased() },

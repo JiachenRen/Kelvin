@@ -31,11 +31,15 @@ public struct Keyword {
         return self.operator?.name.count ?? 0
     }
 
-    /// Properly formatted w/ keyword.
     var formatted: String {
-        // If the keyword has an operator associated with it, return the operator instead.
         if let o = self.operator {
-            return o.description
+            switch Mode.shared.outputFormat {
+            case .default where o.isPreferred,
+                 .prefersSymbols:
+                return o.description
+            default:
+                break
+            }
         }
         switch associativity {
         case .infix:
@@ -92,15 +96,15 @@ public struct Keyword {
         case equality           // ==, !=
         case relational         // <, >, <=, >=
         case concat             // &
-        case translating        // +,-
-        case scaling            // *,/
+        case translating        // +, -
+        case scaling            // *, /
         case exponent           // ^
         case binary             // derivative('), as(!!), gradient(∇), ncr, npr.
         case prefixA            // ambiguous prefix
         case prefix             // √, !(not), * prefix as function reference
         case postfix            // ++, --, !(factorial), °, %
-        case `subscript`        // ::
         case invocation         // <<<
+        case `subscript`        // ::
         case binding            // binding between closures
         case node               // leaf nodes should never require parenthesis
 

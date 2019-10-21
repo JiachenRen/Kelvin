@@ -14,6 +14,7 @@ public struct Mode {
     /// The rounding mode, either `.approximate`, `.exact`, or `.auto`
     public var rounding: Rounding = .approximate
     public var extrapolation: Extrapolation = .advanced
+    public var outputFormat: OutputFormat = .default
     
     private var formatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -50,6 +51,15 @@ public struct Mode {
         case approximate
         /// Kelvin CAS decides whether to leave results as exact or approximate based on user input.
         case auto
+    }
+    
+    public enum OutputFormat: String {
+        /// Output expressions using symbols everywhere, if possible
+        case prefersSymbols = "symbols"
+        /// Use the default preference for symbols/keywords
+        case `default` = "default"
+        /// Output expressions by replacing symbols with their keywords
+        case prefersKeywords = "keywords"
     }
 }
 

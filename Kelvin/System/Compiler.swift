@@ -352,9 +352,7 @@ public class Compiler {
             // use the encoding for the most prioritized definition
             // in terms of associative property.
             if let disambiguated = Syntax.ambiguousOperators[o] {
-                c = disambiguated.sorted {
-                    $0.precedence > $1.precedence
-                }.first!.token
+                c = disambiguated.first!.token
             }
             
             expr = expr.replacingOccurrences(of: o, with: "\(c)")

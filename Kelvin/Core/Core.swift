@@ -615,8 +615,9 @@ public class Core {
         },
         
         // Set mode
-        .binary(.setMode, String.self, String.self) {
-            (category, option) in
+        .unary(.set, Pair.self) { pair in
+            let category = try Assert.cast(pair.lhs, to: String.self)
+            let option = try Assert.cast(pair.rhs, to: String.self)
             switch category {
             case "rounding":
                 guard let r = Mode.Rounding(rawValue: option) else {
@@ -628,6 +629,11 @@ public class Core {
                     throw ExecutionError.invalidOption(option)
                 }
                 Mode.shared.extrapolation = e
+            case "outputFormat":
+                guard let f = Mode.OutputFormat(rawValue: option) else {
+                    throw ExecutionError.invalidOption(option)
+                }
+                Mode.shared.outputFormat = f
             default:
                 throw ExecutionError.invalidOption(category)
             }

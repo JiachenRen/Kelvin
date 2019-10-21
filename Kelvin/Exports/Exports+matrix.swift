@@ -55,14 +55,36 @@ extension Exports {
         .unary(.determinantCof, Matrix.self) {
             try $0.determinant(using: .cofactorExpansion)
         },
+        // Create matrix of dimension r * c
         .binary(.createMatrix, Int.self, Int.self) {
             try Matrix(rows: $0, cols: $1)
+        },
+        // Create matrix of dimension dim * dim
+        .unary(.createMatrix, Int.self) {
+            try Matrix($0)
+        },
+        // Create matrix of dimension r * c with initializer
+        .ternary(.createMatrix, Node.self, Node.self, Node.self) {
+            (r, c, template) in
+            let rows = try Assert.cast(r.simplify(), to: Int.self)
+            let cols = try Assert.cast(c.simplify(), to: Int.self)
+            return try Matrix(rows: rows, cols: cols) {
+                template.replacingAnonymousArgs(with: [$0, $1])
+            }
+        },
+        .binary(.createMatrix, Node.self, Node.self) {
+            (dim, template) in
+            Function(.createMatrix, [dim, dim, template])
         },
         .ternary(.createMatrix, List.self, Int.self, Int.self) {
             try Matrix($0, rows: $1, cols: $2)
         },
-        .unary(.createMatrix, Int.self) {
-            try Matrix($0)
+        .binary(.createMatrix, List.self, Int.self) {
+            try Matrix($0, rows: $1, cols: $0.count / $1)
+        },
+        .unary(.createMatrix, List.self) {
+            let dim = Int(sqrt(Double($0.count)))
+            return try Matrix($0, rows: dim, cols: dim)
         },
         .unary(.identityMatrix, Int.self) {
             try Matrix.identityMatrix($0)

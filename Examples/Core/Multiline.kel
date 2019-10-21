@@ -26,7 +26,7 @@ def fibonacci(x) = (
     (x == 0 || x == 1 || x == 2) ? (1...x) : (
         q := {1, 1};
         repeat(
-            q := (q ++ q[size q - 2] + q[size q - 1]),
+            q := (q ++ q[count q - 2] + q[count q - 1]),
             x - 2
         )
     );

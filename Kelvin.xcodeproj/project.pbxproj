@@ -260,6 +260,7 @@
 		1FB70A2A2342AEF400C12343 /* Exports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB70A272342AE4800C12343 /* Exports.swift */; };
 		1FB70A2F2342B65800C12343 /* Exports+vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB70A2B2342B11D00C12343 /* Exports+vector.swift */; };
 		1FB70A302342B65800C12343 /* Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB70A2D2342B62E00C12343 /* Core.swift */; };
+		1FCB0337235E201C00130834 /* Exports+listProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCB0335235E1FE900130834 /* Exports+listProtocol.swift */; };
 		1FDC863A22132F4300EAC346 /* tangent_plane_grapher.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */; };
 		1FE487FD220E9028005361AC /* ruby_github_theme.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FE487FB220E9027005361AC /* ruby_github_theme.png */; };
 		1FE487FE220E9028005361AC /* ruby_dracula_theme.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FE487FC220E9028005361AC /* ruby_dracula_theme.png */; };
@@ -505,6 +506,7 @@
 		1FC67C8F2224C3C600A8E6BC /* Final.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Final.swift; sourceTree = "<group>"; };
 		1FC67CA6222741FA00A8E6BC /* Assert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assert.swift; sourceTree = "<group>"; };
 		1FC67CAA22278C5500A8E6BC /* ConsoleTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleTextView.swift; sourceTree = "<group>"; };
+		1FCB0335235E1FE900130834 /* Exports+listProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Exports+listProtocol.swift"; sourceTree = "<group>"; };
 		1FDC863822132F4300EAC346 /* tangent_plane_grapher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tangent_plane_grapher.png; sourceTree = "<group>"; };
 		1FDC86582214BFAF00EAC346 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		1FDEA4BA225914C800D88542 /* Kelvin CLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Kelvin CLI"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -873,6 +875,7 @@
 				1F09370321F54E6200E707BD /* Exports+calculus.swift */,
 				1FB70A252342ABCF00C12343 /* Exports+list.swift */,
 				1FA51BBB234ACCB100B3D06B /* Exports+iterable.swift */,
+				1FCB0335235E1FE900130834 /* Exports+listProtocol.swift */,
 				1FB2D04B23439B9D008709AE /* Exports+strings.swift */,
 				1FB2D041234396F0008709AE /* Exports+probability.swift */,
 				1FA51BC5234ACEC600B3D06B /* Exports+core.swift */,
@@ -1403,6 +1406,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FCB0337235E201C00130834 /* Exports+listProtocol.swift in Sources */,
 				1F1C761A23564A2E005DC633 /* Constant.swift in Sources */,
 				1F0AA8992354CA68006D7523 /* Exact.swift in Sources */,
 				1F7DBB4223523CC200904DA8 /* Integer.swift in Sources */,
