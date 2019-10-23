@@ -32,7 +32,7 @@ public class StackTrace {
     
     /// The action that the instruction performed.
     enum Action: String {
-        case push, pop
+        case push = "+", pop = "-"
     }
     
     /// History of stack trace consist of operations; each operation contains
@@ -44,7 +44,7 @@ public class StackTrace {
         let node: Node?
         
         public var description: String {
-            return "- \(action.rawValue.uppercased())(\(target ?? "NONE")) \(node?.stringified ?? "NONE")"
+            return "\(action.rawValue) (\(target ?? "NONE")) \(node?.stringified ?? "NONE")"
         }
         
         init(_ action: Action, _ node: Node?, _ target: String?) {
