@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		1F010C67236223D0003B6497 /* RationalRoots.kel in Sources */ = {isa = PBXBuildFile; fileRef = 1F010C66236223D0003B6497 /* RationalRoots.kel */; };
+		1F010C6B23622F76003B6497 /* kelvin_vscode_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F010C6823622F75003B6497 /* kelvin_vscode_1.png */; };
+		1F010C6C23622F76003B6497 /* kelvin_vscode_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F010C6923622F75003B6497 /* kelvin_vscode_2.png */; };
+		1F010C6D23622F76003B6497 /* kelvin_vscode_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F010C6A23622F76003B6497 /* kelvin_vscode_3.png */; };
 		1F065EE72350F7B7002321E3 /* Fraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F065EE52350F77D002321E3 /* Fraction.swift */; };
 		1F065EEC23510553002321E3 /* BigInt+Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F065EEA2351052A002321E3 /* BigInt+Integer.swift */; };
 		1F0AA88E2353C557006D7523 /* Kelvin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F48D9AA222E0D8100639F26 /* Kelvin.framework */; };
@@ -349,6 +352,9 @@
 
 /* Begin PBXFileReference section */
 		1F010C66236223D0003B6497 /* RationalRoots.kel */ = {isa = PBXFileReference; lastKnownFileType = text; path = RationalRoots.kel; sourceTree = "<group>"; };
+		1F010C6823622F75003B6497 /* kelvin_vscode_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kelvin_vscode_1.png; sourceTree = "<group>"; };
+		1F010C6923622F75003B6497 /* kelvin_vscode_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kelvin_vscode_2.png; sourceTree = "<group>"; };
+		1F010C6A23622F76003B6497 /* kelvin_vscode_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kelvin_vscode_3.png; sourceTree = "<group>"; };
 		1F065EE52350F77D002321E3 /* Fraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fraction.swift; sourceTree = "<group>"; };
 		1F065EE823510022002321E3 /* BigInt.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BigInt.framework; path = Carthage/Build/Mac/BigInt.framework; sourceTree = "<group>"; };
 		1F065EEA2351052A002321E3 /* BigInt+Integer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BigInt+Integer.swift"; sourceTree = "<group>"; };
@@ -1000,6 +1006,9 @@
 		1FE487FA220E8DC8005361AC /* Screenshots */ = {
 			isa = PBXGroup;
 			children = (
+				1F010C6823622F75003B6497 /* kelvin_vscode_1.png */,
+				1F010C6923622F75003B6497 /* kelvin_vscode_2.png */,
+				1F010C6A23622F76003B6497 /* kelvin_vscode_3.png */,
 				1F43991F232D6DCE00AC5D38 /* kelvin_dark_theme.png */,
 				1F439920232D6DCE00AC5D38 /* kelvin_light_theme.png */,
 				1F43991B232D681800AC5D38 /* kelvin_terminal_dark.gif */,
@@ -1302,6 +1311,7 @@
 				1F3E30D0232C37AA002971F9 /* Tests.kel in Resources */,
 				1F8C8C88233960C0007FCD4F /* BooleanLogic.kel in Resources */,
 				1F3E30B1232C37AA002971F9 /* Differentiation.kel in Resources */,
+				1F010C6B23622F76003B6497 /* kelvin_vscode_1.png in Resources */,
 				1F3E30C2232C37AA002971F9 /* StackTrace.kel in Resources */,
 				1FA70522235BAD4C00B6B74B /* CustomSyntax.kel in Resources */,
 				1F3E30BD232C37AA002971F9 /* ForLoop.kel in Resources */,
@@ -1338,6 +1348,7 @@
 				1F3E30BB232C37AA002971F9 /* Conditionals.kel in Resources */,
 				1FB2D0DF2344464C008709AE /* Expand.kel in Resources */,
 				1FFD8CAD218F50870004ECEB /* Main.storyboard in Resources */,
+				1F010C6D23622F76003B6497 /* kelvin_vscode_3.png in Resources */,
 				1F3E30B0232C37AA002971F9 /* Integration.kel in Resources */,
 				1F3E30C7232C37AA002971F9 /* FlatMap.kel in Resources */,
 				1F3E30B3232C37AA002971F9 /* Arcane.kel in Resources */,
@@ -1347,6 +1358,7 @@
 				1F3E30BC232C37AA002971F9 /* WhileLoop.kel in Resources */,
 				1F3E30D2232C37AA002971F9 /* SystemCheck.kel in Resources */,
 				1F3E30C3232C37AA002971F9 /* IO.kel in Resources */,
+				1F010C6C23622F76003B6497 /* kelvin_vscode_2.png in Resources */,
 				1F3E30B6232C37AA002971F9 /* DiceRoll.kel in Resources */,
 				1F322829222C8AA9004417CB /* finding_tangent.png in Resources */,
 				1F3E30BA232C37AA002971F9 /* Variable.kel in Resources */,

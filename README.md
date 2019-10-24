@@ -113,7 +113,7 @@ You can run & debug kelvin script using VSCode's terminal (with proper syntax hi
 
 ![VSCode Screenshot 2](/Misc/Screenshots/kelvin_vscode_2.png)
 
-![VSCode Screenshot 3](/Misc/Screenshots/kelvin_vscode_2.png)
+![VSCode Screenshot 3](/Misc/Screenshots/kelvin_vscode_3.png)
 
 ## The Kelvin Language
 Kelvin was originally designed to be a CAS. Nevertheless, over the course of its development it gradually evolved into its own functional programming language, with all the nuances of a modern programming language such as **recursion**, **loops**, **if statements**, **higher order functions**, **anonymous closure arguments** , and so much more. Read the subsections below to get a taste of Kelvin.
