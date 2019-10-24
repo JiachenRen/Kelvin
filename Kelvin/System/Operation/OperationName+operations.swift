@@ -127,6 +127,7 @@ public extension OperationName {
     static let solve = "solve"
     static let numericalSolve = "nSolve"
     static let coefficients = "coef"
+    static let rRoots = "rRoots" // Find rational roots of polynomial
     
     // Linear algebra
     static let dotProduct = "dotP"
@@ -163,7 +164,8 @@ public extension OperationName {
     static let powerset = "powerset"
     static let factorial = "factorial" // Find the factorial of the integer
     static let factorize = "factorize" // Factorizes the integer
-    static let factors = "factors" // Factors of an integer
+    static let primeFactors = "primeFactors" // Prime factors of an integer
+    static let factors = "factors" // All natural factors of an integer
     static let isPrime = "isPrime" // Checks if the integer is a prime
     
     // MARK: - Boolean logic

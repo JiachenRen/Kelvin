@@ -53,6 +53,30 @@ extension BigInt: Integer {
         return factors
     }
     
+    /// All non-negative factors of this integer, including `1` and the integer itself.
+    /// - Complexity: O(n)
+    /// - Returns: An array of factors of the integer, from 1 to itself.
+    public func factors() -> [BigInt] {
+        var factors = [BigInt]()
+        var n = self
+        if n == 0 {
+            return [n]
+        }
+        if n < 0 {
+            n *= -1
+        }
+        for i in 1...n.squareRoot() {
+            let (quotient, remainder) = n.quotientAndRemainder(dividingBy: i)
+            if remainder == 0 {
+                factors.append(i)
+                if quotient != i {
+                    factors.append(quotient)
+                }
+            }
+        }
+        return factors
+    }
+    
     /// Generates a prime of the specified bit width.
     public static func generatePrime(_ width: Int) -> BigInt {
         while true {

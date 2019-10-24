@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F010C67236223D0003B6497 /* RationalRoots.kel in Sources */ = {isa = PBXBuildFile; fileRef = 1F010C66236223D0003B6497 /* RationalRoots.kel */; };
 		1F065EE72350F7B7002321E3 /* Fraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F065EE52350F77D002321E3 /* Fraction.swift */; };
 		1F065EEC23510553002321E3 /* BigInt+Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F065EEA2351052A002321E3 /* BigInt+Integer.swift */; };
 		1F0AA88E2353C557006D7523 /* Kelvin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F48D9AA222E0D8100639F26 /* Kelvin.framework */; };
@@ -347,6 +348,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1F010C66236223D0003B6497 /* RationalRoots.kel */ = {isa = PBXFileReference; lastKnownFileType = text; path = RationalRoots.kel; sourceTree = "<group>"; };
 		1F065EE52350F77D002321E3 /* Fraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fraction.swift; sourceTree = "<group>"; };
 		1F065EE823510022002321E3 /* BigInt.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BigInt.framework; path = Carthage/Build/Mac/BigInt.framework; sourceTree = "<group>"; };
 		1F065EEA2351052A002321E3 /* BigInt+Integer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BigInt+Integer.swift"; sourceTree = "<group>"; };
@@ -684,6 +686,7 @@
 				1FB2D0DE2344464C008709AE /* Expand.kel */,
 				1F3E3078232C37A9002971F9 /* Trigonometry.kel */,
 				1F8C8C87233960C0007FCD4F /* BooleanLogic.kel */,
+				1F010C66236223D0003B6497 /* RationalRoots.kel */,
 			);
 			path = Algebra;
 			sourceTree = "<group>";
@@ -1624,6 +1627,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F48DA9A222E18F600639F26 /* Kelvin.entitlements in Sources */,
+				1F010C67236223D0003B6497 /* RationalRoots.kel in Sources */,
 				1F48DA46222E113000639F26 /* AppDelegate.swift in Sources */,
 				1F48DA47222E113000639F26 /* ConsoleViewController.swift in Sources */,
 				1F48DA48222E113000639F26 /* ConsoleTextView.swift in Sources */,

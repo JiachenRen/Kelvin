@@ -24,6 +24,16 @@ public class Assert {
         }
     }
     
+    /// Asserts that the given value is positive, that is, `x > 0`
+    public static func positive(_ x: Number) throws {
+        try domain(x, Float80.leastNonzeroMagnitude, Float80.infinity)
+    }
+    
+    /// Asserts that the given value is non-negative, that  is, `x >= 0`
+    public static func nonNegative(_ x: Number) throws {
+        try domain(x, 0, Float80.infinity)
+    }
+    
     /// Asserts that the given number of rows and cols form a valid dimension.
     /// That is, `rows > 0 && cols > 0`.
     /// - Throws: `.invalidDimension` if either `rows` or `cols` is less than 0.

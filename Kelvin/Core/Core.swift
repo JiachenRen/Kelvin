@@ -250,17 +250,22 @@ public class Core {
         },
         .unary(.factorize, Integer.self) {
             (n: Integer) throws -> Node? in
-            List(n.bigInt.primeFactors().map {
+            try Assert.positive(n)
+            return List(n.bigInt.primeFactors().map {
                 [BigInt](repeating: $0.factor, count: Int($0.multiplicity))
             }.flatMap { $0 })
         },
-        .unary(.factors, Integer.self) {
+        .unary(.primeFactors, Integer.self) {
             (n: Integer) throws -> Node? in
+            try Assert.positive(n)
             let primeFactors = n.bigInt.primeFactors()
             return List([
                 List(primeFactors.map { $0.factor }),
                 List(primeFactors.map { $0.multiplicity })
             ])
+        },
+        .unary(.factors, Integer.self) {
+            List($0.bigInt.factors())
         },
         .unary(.isPrime, Integer.self) {
             $0.bigInt.isPrime()

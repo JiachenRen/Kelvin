@@ -1,0 +1,5 @@
+# Find the rational root of a polynomial
+def poly = expand((x-3)(x+4)(3x-7))
+poly === -4 * x ^ 2 + -43 * x + 3 * x ^ 3 + 84
+set "rounding" to "exact"
+rRoots(poly) === {3, -4, 7/3, -4}

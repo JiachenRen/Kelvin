@@ -21,18 +21,40 @@ public class Algebra {
     ///     - v: The variable that the polynomial is expressed in.
     /// - Returns: A list of rational roots of `poly`.
     public static func findRRoots(of poly: Node, _ v: Variable) throws -> [Node] {
-        let coef = try coefficients(of: poly, v)
+        var terms = try coefficients(of: poly, v)
+        var roots: [Node] = []
         // If the polynomial has only the constant term, then it has no roots.
-        if coef.count == 1 {
+        if terms.count == 1 {
             return []
         }
-        guard let f = coef.first, let l = coef.last else {
-            throw ExecutionError.unexpected
+        while let c = terms.first?.coef, c === 0 {
+            terms.removeFirst()
+            roots.append(0)
         }
-        fatalError("Not implemented")
+        guard let f = terms.first?.coef as? Integer,
+            let l = terms.last?.coef as? Integer else {
+                let msg = "cannot guess rational root of a polynomial with non-integer lowest/highest degree term coefficients"
+                throw ExecutionError.general(errMsg: msg)
+        }
+        for p in f.bigInt.factors() {
+            for q in l.bigInt.factors() {
+                for sign in [1, -1] {
+                    let e = sign * p as Node / q as Node
+                    let test = poly.replacing(
+                        by: { _ in e },
+                        where: { $0 === v }
+                    )
+                    if try test.simplify() === 0 {
+                        roots.append(e)
+                    }
+                }
+            }
+        }
+        return roots
     }
     
     /// Deconstructs the given polynomial into a list of tuples of form `(degree, coef)`.
+    /// Sorted in order of rising degree.
     /// - Parameters:
     ///     - poly: A polynomial with `v` as its variable.
     ///     - v: The variable that the polynomial is expressed in.

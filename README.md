@@ -32,7 +32,7 @@ Run `carthage update` to build the framework and drag the built `Kelvin.framewor
 > **Note** - If `carthage update` fails with the `Kelvin-iOS` framework, you can still build it manually from Xcode. 
 Otherwise if you are only using the macOS Framework, do ```carthage update --platform macOS``` instead.
 
-## Command Line
+## Kelvin CLI
 If you prefer, you can use `kelvin` as a command line tool.
 ### Setup
 1. Before proceeding, you must have the latest `git`, `carthage`, and `xcodebuild` installed.
@@ -100,17 +100,20 @@ Finally, the UI is here! Using `Highlightr` (which uses [highlight.js](https://h
 ### Integrated Development Environment
 The IDE works like the old [Swift Playground](https://developer.apple.com/swift-playgrounds/ "Apple's Introduction on Swift Playgrounds") - that is, as you edit your code, the editor automatically compiles and runs it for you! Only this time, it is faster. The window on the lower left is the `console`, which serves as the program's `IO` interface. The window on the lower right is the `debugger`, all execution logs including compilation time, run time, errors & stack trace, and step by step execution result go in there. 
 
-Below is a screenshot of Kelvin IDE in the default theme (keep in mind that you can choose from a large poo of candidates), highlighted using `kelvin`'s syntax . The screenshot demonstrates how to find the **tangent line/plane** of multivariate functions. (Notice how the whole script is compiled and evaluated in under **0.1 seconds**!) Even if the execution time lasts longer, there won't be any lagging since the scripts run on a separate thread and are cancelled/started automatically. 
+Below is a screenshot of Kelvin IDE in the default theme (keep in mind that you can choose from a large pool of candidates), highlighted using `kelvin`'s syntax . The screenshot demonstrates how to find the **tangent line/plane** of multivariate functions. (Notice how the whole script is compiled and evaluated in under **0.1 seconds**!) Even if the execution time lasts longer, there won't be any lagging since the scripts run on a separate thread and are cancelled/started automatically. 
 
 ![Finding Tangent with IDE and Kelvin](/Misc/Screenshots/kelvin_dark_theme.png)
 
-Another one of the **85** themes you can choose from.
-![Screenshot of IDE with Light Theme](/Misc/Screenshots/kelvin_light_theme.png)
+## Use Kelvin in VSCode
+You can now use Kelvin in **VSCode** by installing a plug-in! Just search for `Kelvin Lang` under `Install Extensions`, install it, and you are all set to go! The syntax highlighting rules for Kelvin are written using `TextMate`. 
 
-Try it out, 'cause it's awesome ~~ why not??
+![VSCode Screenshot 1](/Misc/Screenshots/kelvin_vscode_1.png)
 
-### Support for Dark Mode on Sierra
-The IDE now automatically chooses/changes its theme according to the system's theme! (You can still customize if wanted)
+You can run & debug kelvin script using VSCode's terminal (with proper syntax highlight even in debug messages)!
+
+![VSCode Screenshot 2](/Misc/Screenshots/kelvin_vscode_2.png)
+
+![VSCode Screenshot 3](/Misc/Screenshots/kelvin_vscode_2.png)
 
 ## The Kelvin Language
 Kelvin was originally designed to be a CAS. Nevertheless, over the course of its development it gradually evolved into its own functional programming language, with all the nuances of a modern programming language such as **recursion**, **loops**, **if statements**, **higher order functions**, **anonymous closure arguments** , and so much more. Read the subsections below to get a taste of Kelvin.
@@ -245,6 +248,10 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 - [x] Commutative simplification
 - [x] Preliminary factorization
 - [x] Expand expressions
+- [x] Extract coefficients of polynomial
+- [x] Polynomial rational root finder
+  - e.g. `rRoots(-4 * x ^ 2 + -43 * x + 3 * x ^ 3 + 84) === {3, -4, 7/3, -4}`
+- [ ] Long division
 - [ ] Complete the square
 - [ ] Exponential simplification
 - [ ] Solve
@@ -348,6 +355,8 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - [x] Adjoint
   - [x] **Algebraic Gaussian elimination (row reduction)**
   - [ ] LU decomposition
+  - [ ] Characteristic polynomial
+  - [ ] Eigen values/vectors
 
 ### List math/operations
 - [x] Zip, map, and reduce w/ anonymous closure arguments.
