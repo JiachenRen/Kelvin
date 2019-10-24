@@ -90,6 +90,8 @@ extension Rules {
                 switch lhs.name {
                 case .power where lhs[0] === rhs[0]:
                     return lhs[0] ^ (lhs[1] + rhs[1])
+                case .power where lhs[1] === rhs[1]:
+                    return (lhs[0] * rhs[0]) ^ lhs[1]
                 default:
                     break
                 }
