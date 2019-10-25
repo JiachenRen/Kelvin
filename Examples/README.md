@@ -195,6 +195,14 @@ r6 === (2 * b + a * d) * (x + y + z)
 r7 === (-2 * c + b) * a * (d + r)
 r8 === (a + x) * (b + c) * (d + f)
 ```
+### [Algebra/RationalRoots](/Examples/Algebra/RationalRoots.kel)
+```ruby
+# Find the rational root of a polynomial
+def poly = expand((x-3)(x+4)(3x-7))
+poly === -4 * x ^ 2 + -43 * x + 3 * x ^ 3 + 84
+set "rounding" to "exact"
+rRoots(poly) === {3, -4, 7/3, -4}
+```
 ### [Algebra/Trigonometry](/Examples/Algebra/Trigonometry.kel)
 ```ruby
 # The following expression evaluates to 1!
@@ -1322,6 +1330,24 @@ printMat randMat(2, 5)
 
 # Random boolean
 println randBool()
+
+# Factorize a number
+factorize(1000) === {2, 2, 2, 5, 5, 5}
+
+# Prime factors of a number
+primeFactors(1000) === {{2, 5}, {3, 3}}
+
+# All positive natural number factors of a number
+factors(1000) >? $0 < $1 = {1, 2, 4, 5, 8, 10, 20, 25, 40, 50, 100, 125, 200, 250, 500, 1000}
+
+# Generate a random prime number of bit width 100
+println randPrime(100)
+
+# Check if a number is prime
+isPrime(915028868864095205704862544107) === true
+
+# Find the powerset of a list
+powerset({1,2,3}) === {{1}, {2}, {3}, {1, 2}, {1, 3}, {2, 3}, {1, 2, 3}}
 ```
 ### [Statistics/ConfidenceInterval](/Examples/Statistics/ConfidenceInterval.kel)
 ```ruby
@@ -1422,6 +1448,7 @@ def files = {
     "Algebra/Factor.kel",
     "Algebra/Expand.kel",
     "Algebra/BooleanLogic.kel",
+    "Algebra/RationalRoots.kel",
     "Calculus/Differentiation.kel",
     "Calculus/Integration.kel",
     "LinearAlgebra/Vector.kel",

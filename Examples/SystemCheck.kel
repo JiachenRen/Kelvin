@@ -17,6 +17,7 @@ def files = {
     "Algebra/Factor.kel",
     "Algebra/Expand.kel",
     "Algebra/BooleanLogic.kel",
+    "Algebra/RationalRoots.kel",
     "Calculus/Differentiation.kel",
     "Calculus/Integration.kel",
     "LinearAlgebra/Vector.kel",

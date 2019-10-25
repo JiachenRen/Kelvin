@@ -77,7 +77,7 @@ public class Probability {
     /// The number of different, unordered combinations of `r`
     /// objects from a set of `n` objects. Definition: `nCr(n,r)=nPr(n,r)/r!=n!/r!(n−r)!`
     public static func combinations<T>(of arr: [T], _ r: Int) -> [[T]] {
-        func combinationUtil<T>(
+        func combinationUntil<T>(
             _ arr: [T],
             _ data: inout [T?],
             _ start: Int,
@@ -100,13 +100,13 @@ public class Probability {
                     return combinations
                 }
                 data[index] = arr[i];
-                let comb = combinationUtil(arr, &data, i + 1, end, index + 1, r)
+                let comb = combinationUntil(arr, &data, i + 1, end, index + 1, r)
                 combinations.append(contentsOf: comb)
             }
             return combinations
         }
         
         var data = [T?](repeating: nil, count: r)
-        return combinationUtil(arr, &data, 0, arr.count - 1, 0, r)
+        return combinationUntil(arr, &data, 0, arr.count - 1, 0, r)
     }
 }
