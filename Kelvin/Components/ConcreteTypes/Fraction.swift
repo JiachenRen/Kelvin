@@ -73,12 +73,13 @@ public final class Fraction: Exact {
     ///     - float: A `Float80` that would be used to construct the fraction.
     ///     - tolerance: The max difference between the provided `float` and the fraction.
     convenience init(_ val: Float80, tolerance: Float80 = Fraction.defaultTolerance) {
-        let sign = val < 0 ? -1 : 1
+        let sign: BigInt = val < 0 ? -1 : 1
         let val = Swift.abs(val)
-        var num = 1, h2: Int = 0, denom = 0, k2 = 1
         var b = val
+        var num: BigInt = 1, h2: BigInt = 0, denom: BigInt = 0, k2: BigInt = 1
+        
         repeat {
-            let a = Int(b)
+            let a = BigInt(b)
             var aux = num
             num = a * num + h2
             h2 = aux

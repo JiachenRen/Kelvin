@@ -42,6 +42,9 @@ extension Exports {
         },
         .binary(.angleBetween, Vector.self, Vector.self) {
             try Vector.angleBetween($0, $1)
+        },
+        .binary(.project, Vector.self, Vector.self) {
+            try $0.project(onto: $1)
         }
     ]
 }

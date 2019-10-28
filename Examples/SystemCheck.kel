@@ -1,7 +1,7 @@
 # Run all Kelvin scripts and tests and do a pansystemic performance analysis.
 
 # Replace with your absolute directory to Examples
-def examples_dir = "/Users/jiachenren/iCloudDrive (Archive)/Documents/Developer/Kelvin/Examples/"
+def examples_dir = "/tmp/Examples/"
 
 def start_time = time()
 def files = {

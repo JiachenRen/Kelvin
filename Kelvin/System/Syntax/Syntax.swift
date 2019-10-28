@@ -233,6 +233,7 @@ public struct Syntax {
         .init(for: .crossProduct, associativity: .infix, precedence: .scaling, operator: .init("×")),
         .init(for: .matrixMultiplication, associativity: .infix, precedence: .scaling, operator: .init("**")),
         .init(for: .transpose, associativity: .prefix, operator: .init("¡", padding: .none, isPreferred: false)),
+        .init(for: .project, associativity: .infix, precedence: .binary),
         
         // Others
         .init(for: .pair, associativity: .infix, precedence: .pair, operator: .init(":")),

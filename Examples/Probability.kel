@@ -31,7 +31,7 @@ factorize(1000) === {2, 2, 2, 5, 5, 5}
 primeFactors(1000) === {{2, 5}, {3, 3}}
 
 # All positive natural number factors of a number
-factors(1000) >? $0 < $1 = {1, 2, 4, 5, 8, 10, 20, 25, 40, 50, 100, 125, 200, 250, 500, 1000}
+factors(1000) >? $0 < $1 === {1, 2, 4, 5, 8, 10, 20, 25, 40, 50, 100, 125, 200, 250, 500, 1000}
 
 # Generate a random prime number of bit width 100
 println randPrime(100)

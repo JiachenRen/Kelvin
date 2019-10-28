@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1F010C67236223D0003B6497 /* RationalRoots.kel in Sources */ = {isa = PBXBuildFile; fileRef = 1F010C66236223D0003B6497 /* RationalRoots.kel */; };
 		1F010C6B23622F76003B6497 /* kelvin_vscode_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F010C6823622F75003B6497 /* kelvin_vscode_1.png */; };
 		1F010C6C23622F76003B6497 /* kelvin_vscode_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F010C6923622F75003B6497 /* kelvin_vscode_2.png */; };
 		1F010C6D23622F76003B6497 /* kelvin_vscode_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F010C6A23622F76003B6497 /* kelvin_vscode_3.png */; };
@@ -1408,7 +1407,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\necho \"kelvin -f -v \\\"$PROJECT_DIR/Examples/SystemCheck.kel\\\"\" > /tmp/test.sh\nchmod +x /tmp/test.sh\nopen -a Terminal /tmp/test.sh\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nrm -rf \"/tmp/Examples\"\ncp -r \"$PROJECT_DIR/Examples\" \"/tmp/Examples\"\necho \"kelvin -f -v \\\"/tmp/Examples/SystemCheck.kel\\\"\" > /tmp/test.sh\nchmod +x /tmp/test.sh\nopen -a Terminal /tmp/test.sh\n";
 		};
 		1F6D0A05220D196600807377 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1639,7 +1638,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F48DA9A222E18F600639F26 /* Kelvin.entitlements in Sources */,
-				1F010C67236223D0003B6497 /* RationalRoots.kel in Sources */,
 				1F48DA46222E113000639F26 /* AppDelegate.swift in Sources */,
 				1F48DA47222E113000639F26 /* ConsoleViewController.swift in Sources */,
 				1F48DA48222E113000639F26 /* ConsoleTextView.swift in Sources */,

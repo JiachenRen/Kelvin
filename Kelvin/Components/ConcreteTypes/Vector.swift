@@ -45,12 +45,18 @@ public class Vector: Iterable {
     /// `u2 = <a2, b2, c2, ...n2>`,
     /// `u1 • u2 = a1 * a2 + b1 * b2 + ... + n1 * n2`.
     public func dot(with vec: Vector) throws -> Node {
-        if vec.count != count {
-            throw ExecutionError.dimensionMismatch(self, vec)
-        }
+        try Assert.dimension(self, vec)
         return try zip(elements, vec.elements)
             .map { $0 * $1 }
             .reduce(0) { $0 + $1 }
+            .simplify()
+    }
+    
+    /// The projection of vector `a` onto `b` is `(a•b)/(b•b)*b`
+    /// - Returns: The vector obtained by projecting a onto b.
+    public func project(onto vec: Vector) throws -> Node {
+        try Assert.dimension(self, vec)
+        return try ((self.dot(with: vec) / vec.dot(with: vec)) * vec)
             .simplify()
     }
     

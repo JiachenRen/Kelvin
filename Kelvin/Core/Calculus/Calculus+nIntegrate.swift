@@ -81,6 +81,8 @@ public class Quadrature {
             fun_arg: &arg
         )
         Scope.save()
+        let rounding = Mode.shared.rounding
+        Mode.shared.rounding = .approximate
         
         // Calculate the definite integral using Swift's Accelerate framework
         let integral = quadrature_integrate(
@@ -93,6 +95,7 @@ public class Quadrature {
             0,
             nil
         )
+        Mode.shared.rounding = rounding
         Scope.restore()
         switch status.rawValue {
         case -101:

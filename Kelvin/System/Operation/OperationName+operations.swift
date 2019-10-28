@@ -148,6 +148,7 @@ public extension OperationName {
     static let cofactor = "cofactor"
     static let adjoint = "adjoint"
     static let inverse = "inv"
+    static let project = "proj"
     
     // MARK: - Probability
     

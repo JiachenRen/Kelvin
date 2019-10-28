@@ -81,6 +81,14 @@ public class Assert {
         }
     }
     
+    /// Asserts that `vec1` and  `vec2` have the same dimension.
+    /// - Throws: `ExecutionError.dimensionMismatch`
+    public static func dimension(_ vec1: Vector, _ vec2: Vector) throws {
+        if vec1.count != vec2.count {
+            throw ExecutionError.dimensionMismatch(vec1, vec2)
+        }
+    }
+    
     /// Casts the given node to specified Swift type, otherwise throw type cast exception.
     /// - Throws: `ExecutionError.unexpectedType`
     public static func cast<T>(_ node: Node?, to type: T.Type) throws -> T {

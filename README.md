@@ -338,12 +338,14 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - [x] Subscript access
   - [x] Addition/subtraction
   - [x] Angle between
+  - [x] Orthogonal projection
 
 - [x] Matrix
   - [x] Conversion to/from list/matrix
   - [x] Determinant O(n^3)
-  - [x] Row reduced echelon form (RREF)
-  - [x] Reduced echelon form (REF)
+  - [x] Gaussian elimination
+    - Row reduced echelon form (RREF)
+    - Reduced echelon form (REF)
   - [x] Identity
   - [x] Cofactor
   - [x] Transformation
@@ -353,7 +355,6 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - [x] Transposition
   - [x] Inverse
   - [x] Adjoint
-  - [x] **Algebraic Gaussian elimination (row reduction)**
   - [ ] LU decomposition
   - [ ] Characteristic polynomial
   - [ ] Eigen values/vectors

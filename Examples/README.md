@@ -201,7 +201,8 @@ r8 === (a + x) * (b + c) * (d + f)
 def poly = expand((x-3)(x+4)(3x-7))
 poly === -4 * x ^ 2 + -43 * x + 3 * x ^ 3 + 84
 set "rounding" to "exact"
-rRoots(poly) === {3, -4, 7/3, -4}
+rRoots(poly, x) === {3, -4, 7/3, -4}
+set "rounding" to "approximate"
 ```
 ### [Algebra/Trigonometry](/Examples/Algebra/Trigonometry.kel)
 ```ruby
@@ -1091,6 +1092,13 @@ println mag([a, b, c])
 v1 := [1, 3, 5]
 v2 := [4, 7, 9]
 round(angle(v1, v2), 9) === 0.204136039
+
+# Find the projection of a vector onto another vector
+set "rounding" to "exact"
+def y = [a, b, c]
+def u = [r, s, t]
+proj(y, u) << {a = 1, b = 2, c = 3, r = 4, s = 5, t = 6} === [128/77, 160/77, 192/77]
+set "rounding" to "approximate"
 ```
 ### [Misc/Arcane](/Examples/Misc/Arcane.kel)
 ```ruby
@@ -1338,7 +1346,7 @@ factorize(1000) === {2, 2, 2, 5, 5, 5}
 primeFactors(1000) === {{2, 5}, {3, 3}}
 
 # All positive natural number factors of a number
-factors(1000) >? $0 < $1 = {1, 2, 4, 5, 8, 10, 20, 25, 40, 50, 100, 125, 200, 250, 500, 1000}
+factors(1000) >? $0 < $1 === {1, 2, 4, 5, 8, 10, 20, 25, 40, 50, 100, 125, 200, 250, 500, 1000}
 
 # Generate a random prime number of bit width 100
 println randPrime(100)
@@ -1432,7 +1440,7 @@ round(regEq(3) - (3.00909 + 0.654545 * 3), 3) === 0
 # Run all Kelvin scripts and tests and do a pansystemic performance analysis.
 
 # Replace with your absolute directory to Examples
-def examples_dir = "/Users/jiachenren/iCloudDrive (Archive)/Documents/Developer/Kelvin/Examples/"
+def examples_dir = "/tmp/Examples/"
 
 def start_time = time()
 def files = {
