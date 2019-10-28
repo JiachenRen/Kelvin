@@ -10,11 +10,11 @@ import Foundation
 
 public struct Mode {
     public static var shared: Mode = Mode()
-    
     /// The rounding mode, either `.approximate`, `.exact`, or `.auto`
     public var rounding: Rounding = .approximate
     public var extrapolation: Extrapolation = .advanced
     public var outputFormat: OutputFormat = .default
+    public var detStrategy: Matrix.DeterminantStrategy = .ref
     
     private var formatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -55,7 +55,7 @@ public struct Mode {
     
     public enum OutputFormat: String {
         /// Output expressions using symbols everywhere, if possible
-        case prefersSymbols = "symbols"
+        case prefersOperators = "operators"
         /// Use the default preference for symbols/keywords
         case `default` = "default"
         /// Output expressions by replacing symbols with their keywords

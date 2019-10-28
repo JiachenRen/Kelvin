@@ -13,7 +13,6 @@
 		1F065EE72350F7B7002321E3 /* Fraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F065EE52350F77D002321E3 /* Fraction.swift */; };
 		1F065EEC23510553002321E3 /* BigInt+Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F065EEA2351052A002321E3 /* BigInt+Integer.swift */; };
 		1F0AA88E2353C557006D7523 /* Kelvin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F48D9AA222E0D8100639F26 /* Kelvin.framework */; };
-		1F0AA88F2353C557006D7523 /* Kelvin.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1F48D9AA222E0D8100639F26 /* Kelvin.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1F0AA8992354CA68006D7523 /* Exact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0AA8972354CA23006D7523 /* Exact.swift */; };
 		1F1C761A23564A2E005DC633 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1C761823564A03005DC633 /* Constant.swift */; };
 		1F321B772335542400460CC2 /* FlowControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3E306C232B39CC002971F9 /* FlowControl.swift */; };
@@ -311,7 +310,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				1F0AA88F2353C557006D7523 /* Kelvin.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1833,10 +1831,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
-				LD_RUNPATH_SEARCH_PATHS = (
-					/Library/Frameworks/,
-					"@executable_path/",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/";
 				MACH_O_TYPE = mh_execute;
 				OTHER_LDFLAGS = "-Wl,-stack_size,0x10000000";
 				"OTHER_LDFLAGS[arch=*]" = "";
@@ -1856,10 +1851,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
-				LD_RUNPATH_SEARCH_PATHS = (
-					/Library/Frameworks/,
-					"@executable_path/",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/";
 				MACH_O_TYPE = mh_execute;
 				OTHER_LDFLAGS = "-Wl,-stack_size,0x10000000";
 				"OTHER_LDFLAGS[arch=*]" = "";

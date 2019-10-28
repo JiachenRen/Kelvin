@@ -634,11 +634,16 @@ public class Core {
                     throw ExecutionError.invalidOption(option)
                 }
                 Mode.shared.extrapolation = e
-            case "outputFormat":
+            case "output-format":
                 guard let f = Mode.OutputFormat(rawValue: option) else {
                     throw ExecutionError.invalidOption(option)
                 }
                 Mode.shared.outputFormat = f
+            case "det-strategy":
+                guard let s = Matrix.DeterminantStrategy(rawValue: option) else {
+                    throw ExecutionError.invalidOption(option)
+                }
+                Mode.shared.detStrategy = s
             default:
                 throw ExecutionError.invalidOption(category)
             }

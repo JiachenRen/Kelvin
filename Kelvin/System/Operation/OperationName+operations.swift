@@ -149,6 +149,7 @@ public extension OperationName {
     static let adjoint = "adjoint"
     static let inverse = "inv"
     static let project = "proj"
+    static let characteristicEquation = "charEqn"
     
     // MARK: - Probability
     

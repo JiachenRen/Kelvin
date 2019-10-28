@@ -103,6 +103,9 @@ extension Exports {
         },
         .unary(.rref, Matrix.self) {
             try $0.reduce(into: .rref).mat
+        },
+        .binary(.characteristicEquation, Matrix.self, Variable.self) {
+            try $0.characteristicEquation($1)
         }
     ]
 }

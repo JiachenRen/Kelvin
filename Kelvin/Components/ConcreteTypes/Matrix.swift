@@ -105,6 +105,14 @@ public final class Matrix: Iterable {
     
     // MARK: - Basic Operations
     
+    /// - Returns: True if the matrix is singular (non-invertible)
+    public func isSingular() throws -> Bool {
+        guard isSquareMatrix else {
+            return false
+        }
+        return try determinant() === 0
+    }
+    
     /// The power of a mtrix is defined as the matrix multiplying itself n times.
     /// - Returns: The matrix raised to the power of `n`.
     public func power(_ n: Int) throws -> Matrix {
@@ -205,7 +213,7 @@ public final class Matrix: Iterable {
         return mat
     }
     
-    // MARK: - Determinant
+    // MARK: - Determinant & Row Reduce
     
     public enum EchelonForm {
         /// Row echelon form
@@ -276,11 +284,11 @@ public final class Matrix: Iterable {
     }
     
     /// The strategy to use when calculating the determinant of the matrix.
-    public enum DeterminantStrategy {
+    public enum DeterminantStrategy: String {
         /// Calculates determinant using cofactor expansion. `O(n!)`
-        case cofactorExpansion
+        case cofactorExpansion = "cofactor"
         /// Calculates the determinant using REF form. Much faster `(O(n^3))`
-        case ref
+        case ref = "ref"
     }
     
     /// Calculates the determinant of the matrix using the specified strategy.
@@ -289,7 +297,7 @@ public final class Matrix: Iterable {
     /// - Parameter strategy: The strategy to use, either `.cofactorExpansion` or `.ref`
     /// - Returns: The determinant of the matrix.
     /// - Throws: `ExecutionError.nonSquareMatrix` if the matrix is not a square matrix.
-    public func determinant(using strategy: DeterminantStrategy = .ref) throws -> Node {
+    public func determinant(using strategy: DeterminantStrategy = Mode.shared.detStrategy) throws -> Node {
         switch strategy {
         case .cofactorExpansion:
             return try detCofactor()
@@ -339,14 +347,6 @@ public final class Matrix: Iterable {
         }
     }
     
-    /// - Returns: True if the matrix is singular (non-invertible)
-    public func isSingular() throws -> Bool {
-        guard isSquareMatrix else {
-            return false
-        }
-        return try determinant() === 0
-    }
-    
     /// Computes the minor cofactor of the matrix
     /// - Parameters:
     ///     - row: The row to be excluded
@@ -394,6 +394,32 @@ public final class Matrix: Iterable {
         return coMat
     }
     
+    // MARK: - Inverse
+    
+    /// Calculates inverse of the matrix using the formula
+    ///  `inverse(A) = adj(A)/det(A)`
+    /// - Returns: The inverse of the matrix
+    public func inverse() throws -> Matrix {
+        // Find determinant
+        let det = try determinant()
+        if (det.evaluated?.float80 == 0) {
+            throw ExecutionError.singularMatrix
+        }
+      
+        // Find adjoint
+        let adj = try adjoint()
+      
+        // Find inverse using formula "inverse(A) = adj(A)/det(A)"
+        let inv = try! Matrix(count)
+        for i in 0..<count {
+            for j in 0..<count {
+                inv[i, j] = try (adj[i, j] / det).simplify()
+            }
+        }
+      
+        return inv
+    }
+    
     /// Calculates adjoint of the matrix.
     /// Ported from C, source: https://www.geeksforgeeks.org/adjoint-inverse-matrix/
     /// - Returns: The adjoint of this matrix, which is an N x N matrix
@@ -429,28 +455,16 @@ public final class Matrix: Iterable {
         return adj
     }
     
-    /// Calculates inverse of the matrix using the formula
-    ///  `inverse(A) = adj(A)/det(A)`
-    /// - Returns: The inverse of the matrix
-    public func inverse() throws -> Matrix {
-        // Find determinant
-        let det = try determinant()
-        if (det.evaluated?.float80 == 0) {
-            throw ExecutionError.singularMatrix
-        }
-      
-        // Find adjoint
-        let adj = try adjoint()
-      
-        // Find inverse using formula "inverse(A) = adj(A)/det(A)"
-        let inv = try! Matrix(count)
-        for i in 0..<count {
-            for j in 0..<count {
-                inv[i, j] = try (adj[i, j] / det).simplify()
-            }
-        }
-      
-        return inv
+    /// Computes the characteristic equation of this matrix.
+    /// Characteristic equaiton of matrix `A` has the form `det(A - I_x)`
+    /// - Returns: The characteristic equation of this matrix.
+    public func characteristicEquation(_ v: Variable) throws -> Node {
+        try Assert.squareMatrix(self)
+        let I_x = try Matrix.identityMatrix(self.dim.rows)
+            .transform(by: {$0 * v})
+        return try self.perform(-, with: I_x)
+            .determinant()
+            .simplify()
     }
     
     /// Creates an identity matrix of the specified dimension

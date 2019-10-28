@@ -35,7 +35,7 @@ public struct Keyword {
         if let o = self.operator {
             switch Mode.shared.outputFormat {
             case .default where o.isPreferred,
-                 .prefersSymbols:
+                 .prefersOperators:
                 return o.description
             default:
                 break
