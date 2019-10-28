@@ -355,8 +355,8 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - [x] Transposition
   - [x] Inverse
   - [x] Adjoint
+  - [x] Characteristic polynomial
   - [ ] LU decomposition
-  - [ ] Characteristic polynomial
   - [ ] Eigen values/vectors
 
 ### List math/operations

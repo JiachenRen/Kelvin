@@ -455,15 +455,16 @@ public final class Matrix: Iterable {
         return adj
     }
     
-    /// Computes the characteristic equation of this matrix.
-    /// Characteristic equaiton of matrix `A` has the form `det(A - I_x)`
-    /// - Returns: The characteristic equation of this matrix.
-    public func characteristicEquation(_ v: Variable) throws -> Node {
+    /// Computes the characteristic polynomial of this matrix.
+    /// Characteristic polynomial of matrix `A` has the form `det(A - I_x)`
+    /// - Returns: The characteristic polynomial of this matrix.
+    public func characteristicPolynomial(_ v: Variable) throws -> Node {
         try Assert.squareMatrix(self)
         let I_x = try Matrix.identityMatrix(self.dim.rows)
             .transform(by: {$0 * v})
         return try self.perform(-, with: I_x)
-            .determinant()
+            // Here we use cofactor expansion because it yields simpler algebraic forms for matrices of lower dimensions.
+            .determinant(using: .cofactorExpansion)
             .simplify()
     }
     
