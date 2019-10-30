@@ -20,4 +20,7 @@ set "rounding" to "exact"
 def y = [a, b, c]
 def u = [r, s, t]
 proj(y, u) << {a = 1, b = 2, c = 3, r = 4, s = 5, t = 6} === [128/77, 160/77, 192/77]
+
+# Find the orthogonal basis of a set of vectors
+orthBasis({[0, 4, 2], [5, 7, -9]}) === {[0, 4, 2], [5, 5, -10]}
 set "rounding" to "approximate"
