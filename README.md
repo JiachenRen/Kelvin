@@ -332,30 +332,30 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 
 ### Linear Algebra
 - [x] Vector
-  - [x] Compilation
-  - [x] Dot product
-  - [x] Cross Product
-  - [x] Subscript access
-  - [x] Addition/subtraction
-  - [x] Angle between
-  - [x] Orthogonal projection
+  - Dot product
+  - Cross Product
+  - Subscript access
+  - Addition/subtraction
+  - Angle between
+  - Orthogonal projection
+  - Orthogonal basis using Gram-Schmidt
 
 - [x] Matrix
-  - [x] Conversion to/from list/matrix
-  - [x] Determinant O(n^3)
-  - [x] Gaussian elimination
+  - Conversion to/from list/matrix
+  - Determinant O(n^3)
+  - Gaussian elimination
     - Row reduced echelon form (RREF)
     - Reduced echelon form (REF)
-  - [x] Identity
-  - [x] Cofactor
-  - [x] Transformation
-  - [x] Multiplication
-  - [x] Addition/Subtraction
-  - [x] Power
-  - [x] Transposition
-  - [x] Inverse
-  - [x] Adjoint
-  - [x] Characteristic polynomial
+  - Identity
+  - Cofactor
+  - Transformation
+  - Multiplication
+  - Addition/Subtraction
+  - Power
+  - Transposition
+  - Inverse
+  - Adjoint
+  - Characteristic polynomial
   - [ ] LU decomposition
   - [ ] Eigen values/vectors
 

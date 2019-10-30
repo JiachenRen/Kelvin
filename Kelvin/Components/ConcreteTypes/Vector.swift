@@ -54,10 +54,10 @@ public class Vector: Iterable {
     
     /// The projection of vector `a` onto `b` is `(a•b)/(b•b)*b`
     /// - Returns: The vector obtained by projecting a onto b.
-    public func project(onto vec: Vector) throws -> Node {
+    public func project(onto vec: Vector) throws -> Vector {
         try Assert.dimension(self, vec)
         return try ((self.dot(with: vec) / vec.dot(with: vec)) * vec)
-            .simplify()
+            .simplify() as! Vector
     }
     
     /// Perform cross product with target vector.
@@ -94,6 +94,22 @@ public class Vector: Iterable {
     /// - Returns: Angle between v1 and v2 in radians
     public static func angleBetween(_ v1: Vector, _ v2: Vector) throws -> Node {
         return try acos(v1.unitVector.dot(with: v2.unitVector))
+    }
+    
+    /// Finds the orthogonal basis of the given set of vectors using the **Gram-Schmidt** method.
+    /// - Returns: The orthogonal basis of the given set of basis.
+    public static func orthogonalBasis(of basis: [Vector]) throws -> [Vector] {
+        try Assert.uniform(basis)
+        var basis = basis
+        var orthBasis = [Vector]()
+        while(basis.count > 0) {
+            var x = basis.removeFirst()
+            for v in orthBasis {
+                x = try (x - x.project(onto: v)).simplify() as! Vector
+            }
+            orthBasis.append(x)
+        }
+        return orthBasis
     }
     
     // MARK: - Node

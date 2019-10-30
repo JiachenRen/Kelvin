@@ -129,12 +129,18 @@ public extension OperationName {
     static let coefficients = "coef"
     static let rRoots = "rRoots" // Find rational roots of polynomial
     
-    // Linear algebra
+    // MARK: - Vector
+    
     static let dotProduct = "dotP"
     static let crossProduct = "crossP"
     static let unitVector = "unitVec"
     static let magnitude = "mag"
     static let angleBetween = "angle"
+    static let project = "proj"
+    static let orthogonalBasis = "orthBasis"
+    
+    // MARK: - Matrix
+    
     static let matrixMultiplication = "matMult"
     static let determinant = "det"
     static let determinantCof = "detCof"
@@ -148,7 +154,6 @@ public extension OperationName {
     static let cofactor = "cofactor"
     static let adjoint = "adjoint"
     static let inverse = "inv"
-    static let project = "proj"
     static let characteristicPolynomial = "charPoly"
     
     // MARK: - Probability
