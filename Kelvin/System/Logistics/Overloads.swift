@@ -32,6 +32,12 @@ public func *(_ lhs: Node, _ rhs: Node) -> Node {
     return Function(.mult, [lhs, rhs])
 }
 
+infix operator **
+
+public func **(_ lhs: Node, _ rhs: Node) -> Node {
+    return Function(.matrixMultiplication, [lhs, rhs])
+}
+
 prefix operator *
 
 public prefix func *(_ args: [Node]) -> Node {

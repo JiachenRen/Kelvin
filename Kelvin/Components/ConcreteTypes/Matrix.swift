@@ -51,10 +51,10 @@ public final class Matrix: Iterable {
     
     /// Initializes a a matrix of `rows x cols` dimensions using the initilizer.
     /// - Parameter initializer: A transformation that maps `(row, col)` to an element.
-    public init(rows: Int, cols: Int, initializer: (Int, Int) -> Node) throws {
+    public init(rows: Int, cols: Int, initializer: (Int, Int) throws -> Node) throws {
         try Assert.validDimension(rows: rows, cols: cols)
         self.dim = (rows, cols)
-        self.rows = (0..<rows).map { r in Vector((0..<cols).map { c in initializer(r, c) }) }
+        self.rows = try (0..<rows).map { r in try Vector((0..<cols).map { c in try initializer(r, c) }) }
     }
     
     /// Initializes a `rows x cols` matrix using elements in `list` as raw values.
@@ -455,6 +455,21 @@ public final class Matrix: Iterable {
         return adj
     }
     
+    // MARK: - Advanced
+    
+    /// - Warning: Ensure that the columns of the matrix are linearly independent before proceeding.
+    /// - Returns: Converts the matrix into a matrix of orthogonal vectors, using the original columns as basis.
+    public func toOrthogonalMatrix() throws -> Matrix {
+        Matrix(validated: try Vector.orthogonalBasis(of: self.cols)).transposed()
+    }
+    
+    /// - Returns: A matrix whose columns are the normalized columns of the current matrix.
+    public func normalized() throws -> Matrix {
+        try Matrix(validated: self.cols.map { $0.unitVector })
+            .transposed()
+            .simplify() as! Matrix
+    }
+    
     /// Computes the characteristic polynomial of this matrix.
     /// Characteristic polynomial of matrix `A` has the form `det(A - I_x)`
     /// - Returns: The characteristic polynomial of this matrix.
@@ -466,6 +481,20 @@ public final class Matrix: Iterable {
             // Here we use cofactor expansion because it yields simpler algebraic forms for matrices of lower dimensions.
             .determinant(using: .cofactorExpansion)
             .simplify()
+    }
+    
+    /// Factorizes the matrix into the product of an orthonormal matrix `Q` and an upper triangular matrix `R`.
+    /// - Warning: Ensure that the columns of the matrix are linearly independent before proceeding.
+    /// - Returns: Matrices `Q`and `R`
+    public func factorizeQR() throws -> (Q: Matrix, R: Matrix) {
+        // Compute the orthonormal matrix Q
+        let Q = try self.toOrthogonalMatrix().normalized()
+        let R = try Matrix(rows: self.dim.cols, cols: self.dim.cols) {
+            (r, c) in
+            if (r > c) { return 0 }
+            return try self.cols[c].dot(with: Q.cols[r])
+        }
+        return (Q, R)
     }
     
     /// Creates an identity matrix of the specified dimension

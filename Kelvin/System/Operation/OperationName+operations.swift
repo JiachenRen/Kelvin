@@ -155,6 +155,7 @@ public extension OperationName {
     static let adjoint = "adjoint"
     static let inverse = "inv"
     static let characteristicPolynomial = "charPoly"
+    static let QRFactorization = "factorizeQR"
     
     // MARK: - Probability
     

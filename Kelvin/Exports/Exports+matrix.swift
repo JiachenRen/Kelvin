@@ -106,6 +106,10 @@ extension Exports {
         },
         .binary(.characteristicPolynomial, Matrix.self, Variable.self) {
             try $0.characteristicPolynomial($1)
+        },
+        .unary(.QRFactorization, Matrix.self) {
+            let (Q, R) = try $0.factorizeQR()
+            return Final(Q ** R)
         }
     ]
 }
