@@ -1073,6 +1073,11 @@ ref(mat(flatten({random()...3, -4, random()...3, -11, random()...3, 22}),3,4))
 # Find the RREF form
 # There's a statistically insignificant chance that 3 random vectors are linearly dependent.
 rref randMat(3) === idMat(3)
+
+# QR Factorization of matrix
+set "rounding" to "exact"
+factorizeQR(mat({1, 0, 1, 0, 1, 1, 1, 1}, 4)) as @string === "[[1/2, -1/2], [1/2, -1/2], [1/2, 1/2], [1/2, 1/2]] ** [[2, 1], [0, 1]]"
+set "rounding" to "approximate"
 ```
 ### [LinearAlgebra/Vector](/Examples/LinearAlgebra/Vector.kel)
 ```ruby
