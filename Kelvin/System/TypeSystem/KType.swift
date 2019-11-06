@@ -137,11 +137,17 @@ public enum KType: String, CustomStringConvertible {
             }
             throw ExecutionError.invalidCast(from: node, to: type)
         case .vector:
+            if let mat = node as? Matrix {
+                return try Vector(mat)
+            }
             if let list = node as? ListProtocol {
                 return Vector(list)
             }
             throw ExecutionError.invalidCast(from: node, to: type)
         case .matrix:
+            if let vec = node as? Vector {
+                return try Matrix(vec)
+            }
             let list = try Assert.cast(node, to: Iterable.self)
             return try Matrix(list)
         case .string:

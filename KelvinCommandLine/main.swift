@@ -15,7 +15,7 @@ let args = CommandLine.arguments
 let console = Console(verbose: true)
 
 // Use unretricted stack size
-Program.shared.config.maxStackSize = .max
+Program.shared.config.threadContext = .maxStackSize
 
 // Link program output to console
 Program.shared.io = console

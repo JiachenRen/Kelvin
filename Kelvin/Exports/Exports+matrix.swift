@@ -116,6 +116,12 @@ extension Exports {
         },
         .binary(.leastSquares, Matrix.self, Vector.self) {
             try $0.leastSquares($1)
+        },
+        .binary(.augment, Matrix.self, Vector.self) {
+            try $0.augment($1)
+        },
+        .binary(.augment, Matrix.self, Matrix.self) {
+            try $0.augment($1)
         }
     ]
 }

@@ -111,6 +111,18 @@ public final class Matrix: Iterable {
     
     // MARK: - Basic Operations
     
+    /// Augments this matrix by another matrix.
+    public func augment(_ mat: Matrix) throws -> Matrix {
+        try Assert.equals(mat.dim.rows, self.dim.rows)
+        return Matrix(validated: [self.cols, mat.cols].flatMap { $0 })
+            .transposed()
+    }
+    
+    /// Augments the matrisx by a vector
+    public func augment(_ vec: Vector) throws -> Matrix {
+        return try augment(Matrix(vec))
+    }
+    
     /// - Returns: True if the matrix is singular (non-invertible)
     public func isSingular() throws -> Bool {
         guard isSquareMatrix else {

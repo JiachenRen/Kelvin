@@ -234,6 +234,7 @@ public struct Syntax {
         .init(for: .matrixMultiplication, associativity: .infix, precedence: .scaling, operator: .init("**")),
         .init(for: .transpose, associativity: .prefix, operator: .init("¡", padding: .none, isPreferred: false)),
         .init(for: .project, associativity: .infix, precedence: .binary),
+        .init(for: .augment, associativity: .infix, precedence: .concat),
         
         // Others
         .init(for: .pair, associativity: .infix, precedence: .pair, operator: .init(":")),
