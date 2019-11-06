@@ -1,6 +1,6 @@
 # invoke is represented by <<<, where lhs is the name of the function to invoke and rhs is list of arguments
 def f(x, y, a, b) {
-    # This is equivalent to 'invoke(x, {invoke(y, {a, b + a}), b^2, c})'
+    # This is equivalent to 'invoke(x, {invoke(y, [a, b + a]), b^2, c})'
     return x <<< (y <<< (a, b + a), b^2, c)
 }
 
@@ -33,19 +33,19 @@ def b(x) {
 
 # Define c, a function that looks up and invokes the arbitrary definitions a, b
 def c(x) {
-    return {a,b}[0] <<< {b <<< {x}}
+    return [a,b][0] <<< [b <<< [x]]
 }
 
 # Invoke c
 c(3) === 729
 
-f(*{a,b}[0],x) === x ^ 2
+f(*[a,b][0], x) === x ^ 2
 def test() {
-    map({a, b, c}) {
+    map([a, b, c]) {
         try f(*$0, x) : undef
     }
 }
 result := test()
 
 (result contains undef) === false
-result === {x^2, x^3, x^6}
+result === [x^2, x^3, x^6]

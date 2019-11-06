@@ -1,5 +1,5 @@
 # Declare a list, l1
-def l1 = {1, 2, 3, x, a, f(x), x + a}
+def l1 = [1, 2, 3, x, a, f(x), x + a]
 
 # A simple for loop that iterates through every element in the list
 # Prints "1, 2, 3, x, a, f(x), a + x, " in console.
@@ -23,23 +23,23 @@ println ""
 # You can access list and elements with subscripts
 # There are two ways to subscript - with :: accessor and [].
 # The following code demonstrates the use of both
-l2 := {}
+l2 := []
 for (p: map(l1) {$0: $1}) {
     def element = p[0] + l1::p[1];
     l2 := (l2 append element)
 }
 
-# Prints {2, 4, 6, 2 * x, 2 * a, 2 * f(x), 2 * a + 2 * x}
+# Prints [2, 4, 6, 2 * x, 2 * a, 2 * f(x), 2 * a + 2 * x]
 # See if you can figure out what's happening given that
 # p[0] refers to the element, while p[1], the second element
 # of the pair, refers to the index.
 println l2
-l2 === {2, 4, 6, 2 * x, 2 * a, 2 * f(x), 2 * a + 2 * x}
+l2 === [2, 4, 6, 2 * x, 2 * a, 2 * f(x), 2 * a + 2 * x]
 
 # Iterate through a string with for loop
 def str = "hello world"
 def chars = ""
-for (c: str as @list) {
+for (c: str as @vector) {
     chars &= c;
     print c
 }

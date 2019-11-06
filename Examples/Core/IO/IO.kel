@@ -35,7 +35,7 @@ appendToFile("file.txt", "println (a + b - a)")
 isDir "file.txt" === false
 
 # List paths under "/tmp/folder"
-listPaths() === {"file.txt"}
+listPaths() === ["file.txt"]
 
 # Let's run the file we just created!
 run "file.txt"

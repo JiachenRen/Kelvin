@@ -14,19 +14,19 @@ extension Exports {
             try Assert.index(iterable.count, idx)
             return iterable[idx]
         },
-        .binary(.get, ListProtocol.self, List.self) {(list, idxList) in
+        .binary(.get, ListProtocol.self, Vector.self) {(list, idxList) in
             let indices = try Assert.specialize(list: idxList, as: Int.self)
             guard indices.count == 2 else {
                 throw ExecutionError.invalidSubscript(list, idxList)
             }
-            return try List(list.sublist(from: indices[0], to: indices[1]))
+            return try Vector(list.sublist(from: indices[0], to: indices[1]))
         },
         .ternary(.set, Variable.self, Int.self, Node.self) { (v, i, e) in
             guard let val = Variable.definitions[v.name] else {
                 throw ExecutionError.undefined(v)
             }
             guard var list = val as? ListProtocol else {
-                throw ExecutionError.unexpectedType(expected: .list, found: .resolve(val))
+                throw ExecutionError.unexpectedType(expected: .listProtocol, found: .resolve(val))
             }
             list[i] = e
             Variable.define(v.name, list)
@@ -73,11 +73,11 @@ extension Exports {
         },
         .init(.sort, [.node, .node]) {nodes in
             let l1 = try Assert.cast(nodes[0].simplify(), to: ListProtocol.self)
-            return try l1.sorted {
+            return try Vector(l1.elements.sorted {
                 let predicate = try nodes[1].replacingAnonymousArgs(with: [$0, $1])
                     .simplify()
                 return try Assert.cast(predicate, to: Bool.self)
-            }
+            })
         },
         .binary(.remove, [.node, .node]) {(l, n) in
             let list = try Assert.cast(l.simplify(), to: ListProtocol.self)

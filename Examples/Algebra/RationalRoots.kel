@@ -2,5 +2,5 @@
 def poly = expand((x-3)(x+4)(3x-7))
 poly === -4 * x ^ 2 + -43 * x + 3 * x ^ 3 + 84
 set "rounding" to "exact"
-rRoots(poly, x) === {3, -4, 7/3, -4}
+rRoots(poly, x) === [3, -4, 7/3, -4]
 set "rounding" to "approximate"

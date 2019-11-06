@@ -13,7 +13,7 @@ public enum KType: String, CustomStringConvertible {
     
     // Child (level 1) types
     case string
-    case list
+    case kSet
     case float80
     case int
     case bigInt
@@ -61,7 +61,7 @@ public enum KType: String, CustomStringConvertible {
     /// Enumeration of the immediate parent of each KType.
     static let parent: [KType: KType?] = [
       // NaN types
-      .list: .iterable,
+      .kSet: .iterable,
       .vector: .iterable,
       .matrix: .iterable,
       .equation: .iterable,
@@ -121,7 +121,7 @@ public enum KType: String, CustomStringConvertible {
     
     /// Converts `node` to `type`.
     /// Supported casts:
-    /// `@iterable ->  @list` (only 1 level)
+    /// `@iterable ->  @kSet` (only 1 level)
     /// `@iterable ->  @vector`  (only 1 level)
     /// `@iterable ->  @matrix`  (2 levels)
     /// `@string   ->  @variable`
@@ -129,15 +129,15 @@ public enum KType: String, CustomStringConvertible {
     /// - Todo: Implement all possible type coersions.
     public static func convert(_ node: Node, to type: KType) throws -> Node {
         switch type {
-        case .list:
-            if let str = node as? String {
-                return List(str.map { String($0) })
-            } else if let list = node as? ListProtocol {
-                return List(list.elements)
+        case .kSet:
+            if let list = node as? ListProtocol {
+                return KSet(list.elements)
             }
             throw ExecutionError.invalidCast(from: node, to: type)
         case .vector:
-            if let list = node as? ListProtocol {
+            if let str = node as? String {
+                return Vector(str.map { String($0) })
+            } else if let list = node as? ListProtocol {
                 return Vector(list)
             }
             throw ExecutionError.invalidCast(from: node, to: type)

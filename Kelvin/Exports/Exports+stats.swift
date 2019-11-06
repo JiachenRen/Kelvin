@@ -44,7 +44,7 @@ extension Stat {
             binomPdf(trials: $0, prSuccess: $1, $2)
         },
         .binary(.binomPdf, Int.self, Node.self) {
-            List(binomPdf(trials: $0, prSuccess: $1))
+            Vector(binomPdf(trials: $0, prSuccess: $1))
         },
         .quaternary(.binomCdf, Int.self, Node.self, Int.self, Int.self) {
             try binomCdf(trials: $0, prSuccess: $1, lowerBound: $2, upperBound: $3)
@@ -67,7 +67,7 @@ extension Stat {
         },
         .ternary(.randNorm, Number.self, Number.self, Int.self) {
             let elements = randNorm(μ: $0.float80, σ: $1.float80, n: $2)
-            return List(elements)
+            return Vector(elements)
         },
         .ternary(.invNorm, Number.self, Number.self, Number.self) {
             let stdev = $2
@@ -83,16 +83,16 @@ extension Stat {
         
         // Mark: One-variable statistics
         
-        .unary(.mean, List.self) {
+        .unary(.mean, Vector.self) {
             Function(.sum, [$0]) / $0.count
         },
-        .unary(.max, List.self) {
+        .unary(.max, Vector.self) {
             Function(.max, $0.elements)
         },
         .init(.max, [.init(.number, multiplicity: .any)]) {
             max($0.map {$0≈!})
         },
-        .unary(.min, List.self) {
+        .unary(.min, Vector.self) {
             Function(.min, $0.elements)
         },
         .init(.min, [.init(.number, multiplicity: .any)]) {
@@ -101,28 +101,28 @@ extension Stat {
         .init(.mean, [.init(.node, multiplicity: .any)]) { nodes in
             ++nodes / nodes.count
         },
-        .unary(.sumOfDiffSq, List.self) {
-            try ssx($0.toNumerics())
+        .unary(.sumOfDiffSq, Vector.self) {
+            try ssx($0.toFloat80s())
         },
-        .unary(.variance, List.self) {
-            let list = try $0.toNumerics()
-            return List([
+        .unary(.variance, Vector.self) {
+            let list = try $0.toFloat80s()
+            return Vector([
                 Pair("sample", variance(.sample, list)),
                 Pair("population", variance(.population, list))
             ])
         },
-        .unary(.stdev, List.self) {
-            let list = try $0.toNumerics()
+        .unary(.stdev, Vector.self) {
+            let list = try $0.toFloat80s()
 
             let es = [
                 Pair("Sₓ", stdev(.sample, list)),
                 Pair("σₓ", stdev(.population, list))
             ]
-            return List(es)
+            return Vector(es)
         },
         
         // Summation
-        .unary(.sum, List.self) {
+        .unary(.sum, Vector.self) {
             sum($0.elements)
         },
         .init(.sum, [.init(.node, multiplicity: .any)]) { nodes in
@@ -130,8 +130,8 @@ extension Stat {
         },
         
         // IQR, 5 number summary
-        .unary(.fiveNumberSummary, List.self) {
-            let list = try $0.toNumerics()
+        .unary(.fiveNumberSummary, Vector.self) {
+            let list = try $0.toFloat80s()
             let sum5n = try fiveNSummary(list)
             let stats: [Pair] = [
                 .init("min", sum5n[0]),
@@ -140,28 +140,28 @@ extension Stat {
                 .init("q3", sum5n[3]),
                 .init("max", sum5n[4])
             ]
-            return List(stats)
+            return Vector(stats)
         },
-        .unary(.interQuartileRange, List.self) {
-            let list = try $0.toNumerics()
+        .unary(.interQuartileRange, Vector.self) {
+            let list = try $0.toFloat80s()
             let stat = try quartiles(list)
             return stat.q3 - stat.q1
         },
-        .unary(.median, List.self) {
-            let list = try $0.toNumerics()
+        .unary(.median, Vector.self) {
+            let list = try $0.toFloat80s()
             let (m, _) = median(list)
             return m
         },
-        .unary(.outliers, List.self) {
-            let list = try $0.toNumerics()
+        .unary(.outliers, Vector.self) {
+            let list = try $0.toFloat80s()
             let outliers = try Stat.outliers(list)
-            return List([
-                Pair("lower end", List(outliers.lowerEnd)),
-                Pair("upper end", List(outliers.upperEnd))
+            return Vector([
+                Pair("lower end", Vector(outliers.lowerEnd)),
+                Pair("upper end", Vector(outliers.upperEnd))
             ])
         },
-        .unary(.oneVar, List.self) {
-            let list = try $0.toNumerics()
+        .unary(.oneVar, Vector.self) {
+            let list = try $0.toFloat80s()
             let mean = Stat.mean(list)
             let sum = Stat.sum(list)
             let sumSq = sumSquared(list)
@@ -186,35 +186,35 @@ extension Stat {
                 .init("SSX", ssx),
             ]
             
-            return List(stats)
+            return Vector(stats)
         },
         
         // Mark: Two-variable statistics
         
-        .binary(.covariance, List.self, List.self) {
-            let datasetX = try $0.toNumerics()
-            let datasetY = try $1.toNumerics()
+        .binary(.covariance, Vector.self, Vector.self) {
+            let datasetX = try $0.toFloat80s()
+            let datasetY = try $1.toFloat80s()
             
-            return try List([
+            return try Vector([
                 Pair("sample", covariance(.sample, datasetX, datasetY)),
                 Pair("population", covariance(.population, datasetX, datasetY))
             ])
         },
-        .binary(.correlation, List.self, List.self) {
-            let datasetX = try $0.toNumerics()
-            let datasetY = try $1.toNumerics()
+        .binary(.correlation, Vector.self, Vector.self) {
+            let datasetX = try $0.toFloat80s()
+            let datasetY = try $1.toFloat80s()
             
             return try correlation(datasetX, datasetY)
         },
-        .binary(.determination, List.self, List.self) {
-            let datasetY = try $0.toNumerics()
-            let resid = try $1.toNumerics()
+        .binary(.determination, Vector.self, Vector.self) {
+            let datasetY = try $0.toFloat80s()
+            let resid = try $1.toFloat80s()
             
             return try determination(datasetY, resid)
         },
-        .binary(.twoVar, List.self, List.self) {
-            let datasetX = try $0.toNumerics()
-            let datasetY = try $1.toNumerics()
+        .binary(.twoVar, Vector.self, Vector.self) {
+            let datasetX = try $0.toFloat80s()
+            let datasetY = try $1.toFloat80s()
             
             let meanX = mean(datasetX)
             let sumX = sum(datasetX)
@@ -272,35 +272,35 @@ extension Stat {
                 .init("Population COV", pCov)
             ]
             
-            return List(stats)
+            return Vector(stats)
         },
         
         // Mark: Regression
         
-        .binary(.linReg, List.self, List.self) {
-            let X = try $0.toNumerics()
-            let Y = try $1.toNumerics()
+        .binary(.linReg, Vector.self, Vector.self) {
+            let X = try $0.toFloat80s()
+            let Y = try $1.toFloat80s()
             let result = try linearRegression(X, Y)
             
-            return List([
+            return Vector([
                 Pair("RegEqn", result.eqn),
                 Pair("slope(m)", result.slope),
                 Pair("y-int(b)", result.yIntercept),
                 Pair("r²", result.cod),
                 Pair("r", result.r),
-                Pair("Resid", List(result.resid))
+                Pair("Resid", Vector(result.resid))
             ])
         },
-        .ternary(.polyReg, Int.self, List.self, List.self) {
-            let l1 = try $1.toNumerics()
-            let l2 = try $2.toNumerics()
+        .ternary(.polyReg, Int.self, Vector.self, Vector.self) {
+            let l1 = try $1.toFloat80s()
+            let l2 = try $2.toFloat80s()
             let (eq, coefs, cod, resid) = try polynomialRegression(degrees: $0, l1, l2)
             
-            return List([
+            return Vector([
                 Pair("RegEqn", eq),
-                Pair("Coef(s)", List(coefs)),
+                Pair("Coef(s)", Vector(coefs)),
                 Pair("R²", cod),
-                Pair("Resid", List(resid)),
+                Pair("Resid", Vector(resid)),
             ])
         },
         
@@ -314,27 +314,27 @@ extension Stat {
                 confidenceLevel: $3.float80
             )
             let stats: [Pair] = [
-                .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
+                .init("CI", Vector([result.ci.lowerBound, result.ci.upperBound])),
                 .init("ME", result.me),
                 .init("z", result.z)
             ]
-            return List(stats)
+            return Vector(stats)
         },
-        .ternary(.zInterval, Number.self, List.self, Number.self) {
+        .ternary(.zInterval, Number.self, Vector.self, Number.self) {
             let result = try zInterval(
                 sigma: $0.float80,
-                sample: $1.toNumerics(),
+                sample: $1.toFloat80s(),
                 confidenceLevel: $2.float80
             )
             let stats: [Pair] = [
-                .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
+                .init("CI", Vector([result.ci.lowerBound, result.ci.upperBound])),
                 .init("x̅", result.oneVar.mean),
                 .init("ME", result.me),
                 .init("Sx", result.oneVar.sx),
                 .init("n", result.oneVar.n),
                 .init("z", result.z)
             ]
-            return List(stats)
+            return Vector(stats)
         },
         .quaternary(.tInterval, Number.self, Number.self, Int.self, Number.self) {
             let result = try tInterval(
@@ -344,19 +344,19 @@ extension Stat {
                 confidenceLevel: $3.float80
             )
             let stats: [Pair] = [
-                .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
+                .init("CI", Vector([result.ci.lowerBound, result.ci.upperBound])),
                 .init("ME", result.me),
                 .init("SE", result.se),
                 .init("t", result.t),
                 .init("df", result.df),
             ]
-            return List(stats)
+            return Vector(stats)
         },
-        .binary(.tInterval, List.self, Number.self) {
-            let result = try tInterval(sample: $0.toNumerics(), confidenceLevel: $1.float80)
+        .binary(.tInterval, Vector.self, Number.self) {
+            let result = try tInterval(sample: $0.toFloat80s(), confidenceLevel: $1.float80)
             // (result.ci, statistic, result.me, result.df, sx, n)
             let stats: [Pair] = [
-                .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
+                .init("CI", Vector([result.ci.lowerBound, result.ci.upperBound])),
                 .init("x̅", result.oneVar.mean),
                 .init("ME", result.me),
                 .init("SE", result.se),
@@ -365,7 +365,7 @@ extension Stat {
                 .init("Sx", result.oneVar.sx),
                 .init("n", result.oneVar.n)
             ]
-            return List(stats)
+            return Vector(stats)
         },
         .ternary(.zIntervalOneProp, Int.self, Int.self, Number.self) {
             let result = try zIntervalOneProp(
@@ -374,19 +374,19 @@ extension Stat {
                 confidenceLevel: $2.float80
             )
             let stats: [Pair] = [
-                .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
+                .init("CI", Vector([result.ci.lowerBound, result.ci.upperBound])),
                 .init("p̂", result.pHat),
                 .init("ME", result.me),
                 .init("SE", result.se)
             ]
-            return List(stats)
+            return Vector(stats)
         },
-        .init(.zIntervalTwoSamp, [.number, .number, .list, .list, .number]) {
+        .init(.zIntervalTwoSamp, [.number, .number, .vector, .vector, .number]) {
             let (sigma1, sigma2, l1, l2, cl) = try (
                 $0[0]≈!,
                 $0[1]≈!,
-                ($0[2] as! List).toNumerics(),
-                ($0[3] as! List).toNumerics(),
+                ($0[2] as! Vector).toFloat80s(),
+                ($0[3] as! Vector).toFloat80s(),
                 $0[4]≈!
             )
             let result = try zIntervalTwoSamp(
@@ -397,7 +397,7 @@ extension Stat {
                 confidenceLevel: cl
             )
             let stats: [Pair] = [
-                .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
+                .init("CI", Vector([result.ci.lowerBound, result.ci.upperBound])),
                 .init("x̅1 - x̅2", result.meanDiff),
                 .init("ME", result.me),
                 .init("x̅1", result.twoVar.mean1),
@@ -407,7 +407,7 @@ extension Stat {
                 .init("n1", result.twoVar.n1),
                 .init("n2", result.twoVar.n2),
             ]
-            return List(stats)
+            return Vector(stats)
         },
         .init(.zIntervalTwoSamp, [.number, .number, .number, .int, .number, .int, .number]) {
             let (sigma1, sigma2, stat1, n1, stat2, n2, c) = (
@@ -429,12 +429,12 @@ extension Stat {
                 confidenceLevel: c
             )
             let stats: [Pair] = [
-                .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
+                .init("CI", Vector([result.ci.lowerBound, result.ci.upperBound])),
                 .init("x̅1 - x̅2", result.meanDiff),
                 .init("ME", result.me),
                 .init("σDiff", result.sigmaDiff),
             ]
-            return List(stats)
+            return Vector(stats)
         },
         .init(.tIntervalTwoSamp, [.number, .number, .int, .number, .number, .int, .number]) {
             let (mean1, sx1, n1, mean2, sx2, n2, c) = (
@@ -456,22 +456,22 @@ extension Stat {
                 confidenceLevel: c
             )
             let stats: [Pair] = [
-                .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
+                .init("CI", Vector([result.ci.lowerBound, result.ci.upperBound])),
                 .init("x̅1 - x̅2", result.meanDiff),
                 .init("SE", result.se),
                 .init("ME", result.me),
                 .init("df", result.df)
             ]
-            return List(stats)
+            return Vector(stats)
         },
-        .ternary(.tIntervalTwoSamp, List.self, List.self, Number.self) {
+        .ternary(.tIntervalTwoSamp, Vector.self, Vector.self, Number.self) {
             let result = try tIntervalTwoSamp(
-                sample1: $0.toNumerics(),
-                sample2: $1.toNumerics(),
+                sample1: $0.toFloat80s(),
+                sample2: $1.toFloat80s(),
                 confidenceLevel: $2.float80
             )
             let stats: [Pair] = [
-                .init("CI", List([result.ci.lowerBound, result.ci.upperBound])),
+                .init("CI", Vector([result.ci.lowerBound, result.ci.upperBound])),
                 .init("x̅1 - x̅2", result.meanDiff),
                 .init("SE", result.se),
                 .init("ME", result.me),
@@ -483,7 +483,7 @@ extension Stat {
                 .init("n1", result.twoVar.n1),
                 .init("n2", result.twoVar.n2),
             ]
-            return List(stats)
+            return Vector(stats)
         }
     ]
 }

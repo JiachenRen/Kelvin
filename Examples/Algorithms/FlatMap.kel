@@ -1,8 +1,8 @@
 def flatMap(l) {
-    tmp := {};
+    tmp := [];
 
     for (element: l) {
-        if (element is @list) {
+        if (element is @vector) {
             tmp := tmp ++ flatMap(element);
             continue;
         };
@@ -12,8 +12,8 @@ def flatMap(l) {
     return tmp
 }
 
-original := {1, {1, {1, 2, 3}, 2}, {3, 4}, 4, 5}
+original := [1, [1, [1, 2, 3], 2], [3, 4], 4, 5]
 flat := flatMap(original)
 println "original: " & original
 println "flat mapped: " & flat
-flat === {1, 1, 1, 2, 3, 2, 3, 4, 4, 5}
+flat === [1, 1, 1, 2, 3, 2, 3, 4, 4, 5]

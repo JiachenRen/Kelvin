@@ -1,6 +1,6 @@
 # Try statements
-msg1 := (try ({1, 2, 3} zip {1, 2}) : "an error has occurred.")
-msg2 := (try ({1, 2, 3} zip {1, 2}))
+msg1 := (try ([1, 2, 3] zip [1, 2]) : "an error has occurred.")
+msg2 := (try ([1, 2, 3] zip [1, 2]))
 
 println msg1
 println msg2
@@ -18,7 +18,8 @@ assert true
 try (assert false) : "assertion was false"
 
 # assertEquals(@node, @node)
-assert({1, 2, 3}, {1, 2, 3})
+assertEquals([1, 2, 3], [1, 2, 3])
+assertEquals({1, 2}, {1, 2, 2})
 # which is equavalent to
-{1, 2, 3} === {1, 2, 3}
+[1, 2, 3] === [1, 2, 3]
 

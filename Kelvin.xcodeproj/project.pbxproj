@@ -95,7 +95,6 @@
 		1F48DA24222E0EB800639F26 /* KVoid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF7802207EE9A006351B0 /* KVoid.swift */; };
 		1F48DA25222E0EB800639F26 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AD2197331F005C3353 /* Function.swift */; };
 		1F48DA26222E0EB800639F26 /* Closure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF7742207D755006351B0 /* Closure.swift */; };
-		1F48DA27222E0EB800639F26 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82B32197416D005C3353 /* List.swift */; };
 		1F48DA28222E0EB800639F26 /* Statements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF78422089E30006351B0 /* Statements.swift */; };
 		1F48DA29222E0EB800639F26 /* Final.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67C8F2224C3C600A8E6BC /* Final.swift */; };
 		1F48DA2A222E0EB800639F26 /* Pair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Pair.swift */; };
@@ -154,7 +153,6 @@
 		1F48DA78222E167700639F26 /* KVoid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF7802207EE9A006351B0 /* KVoid.swift */; };
 		1F48DA79222E167700639F26 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82AD2197331F005C3353 /* Function.swift */; };
 		1F48DA7A222E167700639F26 /* Closure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF7742207D755006351B0 /* Closure.swift */; };
-		1F48DA7B222E167700639F26 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82B32197416D005C3353 /* List.swift */; };
 		1F48DA7C222E167700639F26 /* Statements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8DF78422089E30006351B0 /* Statements.swift */; };
 		1F48DA7D222E167700639F26 /* Final.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC67C8F2224C3C600A8E6BC /* Final.swift */; };
 		1F48DA7E222E167700639F26 /* Pair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1697521F2D44A0006712C /* Pair.swift */; };
@@ -183,6 +181,7 @@
 		1F48DA9C222E195400639F26 /* Kelvin.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1F48D9AA222E0D8100639F26 /* Kelvin.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1F48DAAD222E3F7700639F26 /* Kelvin.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F48DAAB222E3DE900639F26 /* Kelvin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1F48DAAE222E3F9D00639F26 /* Kelvin.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F48DAAB222E3DE900639F26 /* Kelvin.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1F4BFFBD236A180800E02AF8 /* KSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4BFFBB236A17CC00E02AF8 /* KSet.swift */; };
 		1F4E05FC23526A6400659D4F /* BigInt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F065EE823510022002321E3 /* BigInt.framework */; };
 		1F4E05FD23526A6400659D4F /* BigInt.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1F065EE823510022002321E3 /* BigInt.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1F53972C234ADA9100B9C66E /* Exports+stackTrace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F539723234AD8E000B9C66E /* Exports+stackTrace.swift */; };
@@ -381,7 +380,6 @@
 		1F2E82AD2197331F005C3353 /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
 		1F2E82AF2197338B005C3353 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		1F2E82B121973FF7005C3353 /* Number.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Number.swift; sourceTree = "<group>"; };
-		1F2E82B32197416D005C3353 /* List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		1F2E82B521974368005C3353 /* Variable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Variable.swift; sourceTree = "<group>"; };
 		1F2E82BD219757FC005C3353 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		1F322824222C76E0004417CB /* KType+Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KType+Node.swift"; sourceTree = "<group>"; };
@@ -448,6 +446,7 @@
 		1F48DAA9222E325C00639F26 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		1F48DAAB222E3DE900639F26 /* Kelvin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Kelvin.h; sourceTree = "<group>"; };
 		1F48DAAC222E3F3900639F26 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1F4BFFBB236A17CC00E02AF8 /* KSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KSet.swift; sourceTree = "<group>"; };
 		1F539723234AD8E000B9C66E /* Exports+stackTrace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Exports+stackTrace.swift"; sourceTree = "<group>"; };
 		1F539725234AD8EE00B9C66E /* Exports+fileSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Exports+fileSystem.swift"; sourceTree = "<group>"; };
 		1F539727234AD91400B9C66E /* Exports+flowControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Exports+flowControl.swift"; sourceTree = "<group>"; };
@@ -961,7 +960,7 @@
 				1F065EEA2351052A002321E3 /* BigInt+Integer.swift */,
 				1F0CF2C321EA420400E40086 /* String+Node.swift */,
 				1F2E82AD2197331F005C3353 /* Function.swift */,
-				1F2E82B32197416D005C3353 /* List.swift */,
+				1F4BFFBB236A17CC00E02AF8 /* KSet.swift */,
 				1FE1697521F2D44A0006712C /* Pair.swift */,
 				1F2E82B521974368005C3353 /* Variable.swift */,
 				1F1C761823564A03005DC633 /* Constant.swift */,
@@ -1432,6 +1431,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F4BFFBD236A180800E02AF8 /* KSet.swift in Sources */,
 				1FEC417C235E678D006A0E76 /* Exports+approx.swift in Sources */,
 				1FEC4179235E5E94006A0E76 /* Approximator.swift in Sources */,
 				1FCB0337235E201C00130834 /* Exports+listProtocol.swift in Sources */,
@@ -1502,7 +1502,6 @@
 				1F48DA78222E167700639F26 /* KVoid.swift in Sources */,
 				1F48DA79222E167700639F26 /* Function.swift in Sources */,
 				1F48DA7A222E167700639F26 /* Closure.swift in Sources */,
-				1F48DA7B222E167700639F26 /* List.swift in Sources */,
 				1F48DA7C222E167700639F26 /* Statements.swift in Sources */,
 				1F48DA7D222E167700639F26 /* Final.swift in Sources */,
 				1F48DA7E222E167700639F26 /* Pair.swift in Sources */,
@@ -1595,7 +1594,6 @@
 				1F48DA24222E0EB800639F26 /* KVoid.swift in Sources */,
 				1F48DA25222E0EB800639F26 /* Function.swift in Sources */,
 				1F48DA26222E0EB800639F26 /* Closure.swift in Sources */,
-				1F48DA27222E0EB800639F26 /* List.swift in Sources */,
 				1F48DA28222E0EB800639F26 /* Statements.swift in Sources */,
 				1F48DA29222E0EB800639F26 /* Final.swift in Sources */,
 				1F48DA2A222E0EB800639F26 /* Pair.swift in Sources */,

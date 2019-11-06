@@ -12,7 +12,7 @@ extension Exports {
     static let strings: [Operation] = [
         // Splitting a string
         .binary(.split, String.self, String.self) {
-            List($0.components(separatedBy: $1)
+            Vector($0.components(separatedBy: $1)
                 .map { String($0) }
             )
         },
@@ -36,7 +36,7 @@ extension Exports {
             try Assert.index(s.count, n)
             return "\(s[n])"
         },
-        .binary(.get, String.self, List.self) {
+        .binary(.get, String.self, Vector.self) {
             (str, idxList) in
             let indices = try Assert.specialize(list: idxList, as: Int.self)
             guard indices.count == 2 else {
@@ -68,7 +68,7 @@ extension Exports {
             let matches = reg.matches(in: str, range: range).map {
                 String(String(str[Range($0.range, in: str)!]))
             }
-            return List(matches)
+            return Vector(matches)
         },
         
         // Utilities

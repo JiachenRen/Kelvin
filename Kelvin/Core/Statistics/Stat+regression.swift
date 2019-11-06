@@ -68,7 +68,7 @@ public extension Stat {
     ) throws -> (eqn: Equation, coefs: [Float80], cod: Float80, resid: [Float80]) {
         
         guard datasetX.count == datasetY.count else {
-            throw ExecutionError.dimensionMismatch(List(datasetX), List(datasetY))
+            throw ExecutionError.dimensionMismatch(Vector(datasetX), Vector(datasetY))
         }
         
         let sum_x_exp: [Float80] = (0...degrees * 2).map {k in

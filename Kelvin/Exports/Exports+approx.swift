@@ -14,7 +14,7 @@ extension Exports {
             try Approximator.guessFraction(exactly: $0)
         },
         .binary(.approximateFraction, Float80.self, Int.self) {
-            try List(Approximator.guessFraction($0, accurateTo: $1))
+            try Vector(Approximator.guessFraction($0, accurateTo: $1))
         }
     ]
 }

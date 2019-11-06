@@ -174,7 +174,7 @@ public struct Syntax {
         .init(for: .nand, associativity: .infix, precedence: .nand, operator: .init("!&", isPreferred: false)),
         .init(for: .nor, associativity: .infix, precedence: .nor, operator: .init("!|", isPreferred: false)),
         
-        // List
+        // Vector
         .init(for: .get, associativity: .infix, precedence: .subscript, operator: .init("::", padding: .none)), // Preserve arguments?
         .init(for: .set, associativity: .prefix, precedence: .prefixCommand),
         .init(for: .count, associativity: .prefix),

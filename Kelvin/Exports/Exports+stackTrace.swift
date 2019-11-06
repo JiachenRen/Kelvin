@@ -30,7 +30,7 @@ extension StackTrace {
             Program.shared.io?.println(String("stack trace \(enabled)"))
             return KVoid()
         },
-        .unary(.setStackTraceUntracked, List.self) {
+        .unary(.setStackTraceUntracked, ListProtocol.self) {
             let untracked = try Assert.specialize(list: $0, as: String.self).filter {
                 let isDefined = Operation.registered.keys.contains($0)
                 if (!isDefined) {

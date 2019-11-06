@@ -4,8 +4,8 @@ println "you " & "are " & "a " & "genius!"
 println (random()...10 ~ $0 & $1)
 
 # Iterating a stirng
-"123456" as @list | $0
-(("123456" !! @list | $0 ~ $0 & $1) === "123456")
+"123456" as @vector | $0
+(("123456" !! @vector | $0 ~ $0 & $1) === "123456")
 
 # Replace substring in string
 replace("I am a pig", "pig", "genius") === "I am a genius"

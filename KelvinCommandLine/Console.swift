@@ -23,7 +23,7 @@ public class Console: IOProtocol {
     /// The first element is the path to current working directory.
     private var out: [Node] = [] {
         didSet {
-            Variable.define("out", List(out))
+            Variable.define("out", Vector(out))
         }
     }
     

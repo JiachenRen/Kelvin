@@ -24,7 +24,7 @@ println l1
 
 def fibonacci(x) = (
     (x == 0 || x == 1 || x == 2) ? (1...x) : (
-        q := {1, 1};
+        q := [1, 1];
         repeat(
             q := (q ++ q[count q - 2] + q[count q - 1]),
             x - 2
@@ -33,4 +33,4 @@ def fibonacci(x) = (
     q
 )
 
-fibonacci(11) === {1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89}
+fibonacci(11) === [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]

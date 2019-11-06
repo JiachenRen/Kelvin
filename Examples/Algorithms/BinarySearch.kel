@@ -29,6 +29,6 @@ def bin_search(arr, search) {
     return "not found";
 }
 
-def l1 = {1, 2, 3, 5, 7, 8, 9, 10}
+def l1 = [1, 2, 3, 5, 7, 8, 9, 10]
 println(bin_search(l1, 8.5)) === "not found"
 bin_search(l1, 9) === 6

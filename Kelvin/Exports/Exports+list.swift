@@ -10,28 +10,28 @@ import Foundation
 
 extension Exports {
     static let list: [Operation] = [
-        .binary(.add, List.self, List.self) {
+        .binary(.add, Vector.self, Vector.self) {
             try $0.joined(with: $1, by: .add)
         },
-        .binary(.minus, List.self, List.self) {
+        .binary(.minus, Vector.self, Vector.self) {
             try $0.joined(with: $1, by: .minus)
         },
-        .binary(.mult, List.self, List.self) {
+        .binary(.mult, Vector.self, Vector.self) {
             try $0.joined(with: $1, by: .mult)
         },
-        .binary(.div, List.self, List.self) {
+        .binary(.div, Vector.self, Vector.self) {
             try $0.joined(with: $1, by: .div)
         },
-        .binary(.power, List.self, List.self) {
+        .binary(.power, Vector.self, Vector.self) {
             try $0.joined(with: $1, by: .power)
         },
-        .binary(.mod, List.self, List.self) {
+        .binary(.mod, Vector.self, Vector.self) {
             try $0.joined(with: $1, by: .mod)
         },
-        .init(.list, [.init(.node, multiplicity: .any)]) {
-            List($0)
+        .init(.vector, [.init(.node, multiplicity: .any)]) {
+            Vector($0)
         },
-        .binary(.get, List.self, Node.self) {(list, n) in
+        .binary(.get, Vector.self, Node.self) {(list, n) in
             let values = list.elements.filter {
                 if let key = ($0 as? Pair)?.lhs {
                     return key === n
@@ -40,13 +40,13 @@ extension Exports {
             }.map {
                 ($0 as! Pair).rhs
             }
-            return values.count == 1 ? values[0] : List(values)
+            return values.count == 1 ? values[0] : Vector(values)
         },
-        .binary(.zip, List.self, List.self) {
+        .binary(.zip, Vector.self, Vector.self) {
             try $0.joined(with: $1)
         },
-        .binary(.append, List.self, List.self) {
-            List([$0.elements, $1.elements].flatMap { $0 })
+        .binary(.append, Vector.self, Vector.self) {
+            Vector([$0.elements, $1.elements].flatMap { $0 })
         },
     ]
 }

@@ -80,7 +80,7 @@ public struct Parameter: Equatable, CustomStringConvertible {
     }
     
     static let string: Parameter = .init(.string)
-    static let list: Parameter = .init(.list)
+    static let kSet: Parameter = .init(.kSet)
     static let float80: Parameter = .init(.float80)
     static let int: Parameter = .init(.int)
     static let bigInt: Parameter = .init(.bigInt)

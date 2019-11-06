@@ -26,7 +26,7 @@ public extension Calculus {
         variables: [Variable],
         at point: Vector) throws -> Equation {
         guard variables.count == point.count else {
-            let msg = "The function with arguments \(List(variables).stringified) cannot be evaluated with the given point \(point.stringified)"
+            let msg = "The function with arguments \(Vector(variables).stringified) cannot be evaluated with the given point \(point.stringified)"
             throw ExecutionError.general(errMsg: msg)
         }
         
@@ -35,7 +35,7 @@ public extension Calculus {
             Equation(lhs: $0, rhs: $1)
         }
         let components = try grad.elements.map {
-            try Function(.evaluateAt, [$0, List(defs)])
+            try Function(.evaluateAt, [$0, Vector(defs)])
                 .simplify()
         }
         

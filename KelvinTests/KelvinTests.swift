@@ -37,7 +37,7 @@ class KelvinTests: XCTestCase {
     
     func testCopy() {
         let fun = Function(.add, [1, 2])
-        let list = List([1, 2])
+        let list = Vector([1, 2])
         let vec = Vector([1, 2])
         let pair = Pair(1, 2)
         let eq = Equation(lhs: 1, rhs: 2)

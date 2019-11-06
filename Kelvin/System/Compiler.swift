@@ -47,12 +47,14 @@ public class Compiler {
 
     /// Flags are unique unicode codes that are only understood by the compiler.
     private class Flag {
-
         /// Denotes a reference to a node.
         static let node = Tokenizer.next()
 
         /// Denotes a reference to an operator.
         static let `operator` = Tokenizer.next()
+        
+        /// Denotes a set
+        static let set = Tokenizer.next()
     }
 
     /// Used to restore escape characters to their original form
@@ -87,9 +89,9 @@ public class Compiler {
         try validate(expr)
         applyTrailingClosureSyntax(&expr)
         
-        // Format lists
+        // Format sets
         while expr.contains("{") {
-            expr = replace(expr, "{", "}", "list(", ")")
+            expr = replace(expr, "{", "}", "\(Flag.set)(", ")")
         }
 
         // Sort keywords by compilation precedence
@@ -412,9 +414,9 @@ public class Compiler {
             return false
         }
 
-        // Restore list() to {}
-        parent = parent.replacing(by: { List(args($0)) }) {
-            name($0) == .list
+        // Restore sets
+        parent = parent.replacing(by: { KSet(args($0)) }) {
+            name($0) == String(Flag.set)
         }
         
         // Restore pair() to (:)
@@ -453,11 +455,11 @@ public class Compiler {
         // Restore else {...}
         parent = parent.replacing(by: {
             let fun = $0 as! Function
-            fun[1] = Closure(fun[1] as! List)!
+            fun[1] = Closure(fun[1] as! Vector)!
             return fun
         }) {
             if let fun = $0 as? Function, fun.name == .else {
-                if let list = fun.elements.last as? List {
+                if let list = fun.elements.last as? Vector {
                     if Closure(list) != nil {
                         return true
                     }
@@ -469,7 +471,7 @@ public class Compiler {
         // Infer matrices
         parent = try parent.replacing(by: {
             let vec = $0 as! Vector
-            var isMatrix = true
+            var isMatrix = vec.elements.count > 0
             let vectors = vec.elements.map {(v) -> Vector? in
                 if let vec = v as? Vector {
                     return vec
@@ -479,11 +481,11 @@ public class Compiler {
             }
             
             if isMatrix {
-                return try Matrix(vectors.compactMap {$0})
+                return try Matrix(vectors.compactMap { $0 })
             }
             return vec
         }) {
-            $0 is Vector && $0.contains(where: {$0 is Vector}, depth: 1)
+            $0 is Vector && $0.contains(where: { $0 is Vector }, depth: 1)
         }
         
         // Define prefix, postfix, infix, and auto syntax.
@@ -639,8 +641,8 @@ public class Compiler {
                     
                     // Recursively resolve the arguments of the function.
                     let nested = try resolve(String(expr[ir[0]...ir[1]]), &dict, binOps)
-                    if let list = nested as? List {
-                        node = Function(name, list.elements)
+                    if let vec = nested as? Vector {
+                        node = Function(name, vec.elements)
                     } else {
                         node = Function(name, [nested])
                     }
@@ -663,8 +665,13 @@ public class Compiler {
             // Find the range of the innermost pairing of square brackets.
             let r = innermost(expr, "[", "]")
             
+            // Empty square brackets [] denote an empty vector.
             if expr.index(after: r.lowerBound) == r.upperBound {
-                throw CompilerError.syntax(errMsg: "cannot subscript with empty square brackets []")
+                if indexOfPrefix(before: r.lowerBound, in: expr) != nil {
+                    throw CompilerError.syntax(errMsg: "cannot subscript with empty square brackets []")
+                }
+                update(Vector([]), r, nil)
+                continue
             }
             
             // Find the range of string inside the brackets.
@@ -684,12 +691,12 @@ public class Compiler {
                 // Subscript
                 let operandStr = String(expr[subscriptIdx..<r.lowerBound])
                 let operand = try resolve(operandStr, &dict, binOps)
-                node = Function("get", [operand, sub])
+                node = Function(.get, [operand, sub])
             } else {
                 
                 // Vector
-                if let list = sub as? List {
-                    node = Vector(list.elements)
+                if let vec = sub as? Vector {
+                    node = Vector(vec.elements)
                 } else {
                     node = Vector([sub])
                 }
@@ -712,7 +719,7 @@ public class Compiler {
                     .map {
                         try resolve(String($0), &dict, binOps)
                     }
-            return List(nodes)
+            return Vector(nodes)
         } else {
             
             // The base case of the recursion tree where there are no more

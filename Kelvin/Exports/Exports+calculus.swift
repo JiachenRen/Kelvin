@@ -48,16 +48,16 @@ extension Calculus {
             Scope.releaseRestrictions()
             return r
         },
-        .binary(.gradient, [.node, .list]) {
-            let vars = try Assert.specialize(list: $1 as! List, as: Variable.self)
+        .binary(.gradient, [.node, .vector]) {
+            let vars = try Assert.specialize(list: $1 as! Vector, as: Variable.self)
             Scope.withholdAccess(to: vars)
             let fun = try Assert.cast($0.simplify(), to: Function.self)
             let grad = gradient(of: fun, independentVars: vars)
             Scope.releaseRestrictions()
             return grad
         },
-        .ternary(.directionalDifferentiation, [.function, .list, .node]) {
-            let vars = try Assert.specialize(list: $1 as! List, as: Variable.self)
+        .ternary(.directionalDifferentiation, [.function, .vector, .node]) {
+            let vars = try Assert.specialize(list: $1 as! Vector, as: Variable.self)
             let dir = try Assert.cast($2.simplify(), to: Vector.self)
             Scope.withholdAccess(to: vars)
             let fun = try Assert.cast($0.simplify(), to: Function.self)
@@ -69,8 +69,8 @@ extension Calculus {
             Scope.releaseRestrictions()
             return grad
         },
-        .ternary(.tangent, [.function, .list, .node]) {
-            let vars = try Assert.specialize(list: $1 as! List, as: Variable.self)
+        .ternary(.tangent, [.function, .vector, .node]) {
+            let vars = try Assert.specialize(list: $1 as! Vector, as: Variable.self)
             let vec = try Assert.cast($2.simplify(), to: Vector.self)
             Scope.withholdAccess(to: vars)
             let fun = try Assert.cast($0.simplify(), to: Function.self)

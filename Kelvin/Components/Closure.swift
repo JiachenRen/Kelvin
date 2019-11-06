@@ -18,7 +18,7 @@ public class Closure: UnaryNode, NaN {
         self.capturesReturn = capturesReturn
     }
     
-    convenience init?(_ list: List) {
+    convenience init?(_ list: Vector) {
         if list.count == 1 {
             self.init(list[0])
         } else {

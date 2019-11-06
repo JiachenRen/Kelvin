@@ -76,13 +76,13 @@ extension Exports {
             (dim, template) in
             Function(.createMatrix, [dim, dim, template])
         },
-        .ternary(.createMatrix, List.self, Int.self, Int.self) {
+        .ternary(.createMatrix, Vector.self, Int.self, Int.self) {
             try Matrix($0, rows: $1, cols: $2)
         },
-        .binary(.createMatrix, List.self, Int.self) {
+        .binary(.createMatrix, Vector.self, Int.self) {
             try Matrix($0, rows: $1, cols: $0.count / $1)
         },
-        .unary(.createMatrix, List.self) {
+        .unary(.createMatrix, Vector.self) {
             let dim = Int(sqrt(Double($0.count)))
             return try Matrix($0, rows: dim, cols: dim)
         },

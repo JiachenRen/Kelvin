@@ -43,9 +43,9 @@ extension Exports {
         .binary(.angleBetween, Vector.self, Vector.self) {
             try Vector.angleBetween($0, $1)
         },
-        .unary(.orthogonalBasis, List.self) {
+        .unary(.orthogonalBasis, Vector.self) {
             let basis = try Assert.specialize(list: $0, as: Vector.self)
-            return try List(Vector.orthogonalBasis(of: basis))
+            return try Vector(Vector.orthogonalBasis(of: basis))
         },
         .binary(.project, Vector.self, Vector.self) {
             try $0.project(onto: $1)

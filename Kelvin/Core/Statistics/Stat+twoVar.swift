@@ -24,7 +24,7 @@ public extension Stat {
     ) throws -> Float80 {
         
         if datasetX.count != datasetY.count {
-            throw ExecutionError.dimensionMismatch(List(datasetX), List(datasetY))
+            throw ExecutionError.dimensionMismatch(Vector(datasetX), Vector(datasetY))
         }
         
         let n = Float80(datasetX.count)
@@ -89,7 +89,7 @@ public extension Stat {
     ) throws -> Float80 {
         
         if datasetX.count != datasetY.count {
-            throw ExecutionError.dimensionMismatch(List(datasetX), List(datasetY))
+            throw ExecutionError.dimensionMismatch(Vector(datasetX), Vector(datasetY))
         }
         
         return zip(datasetX, datasetY).reduce(0) {

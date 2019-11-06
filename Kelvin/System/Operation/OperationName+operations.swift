@@ -91,9 +91,7 @@ public extension OperationName {
     static let linReg = "linReg"
     static let polyReg = "polyReg"
     
-    // MARK: - List & Pair
-    
-    static let list = "list"
+    // MARK: - List Protocol
     static let pair = "to"
     static let get = "get"
     static let set = "set"
@@ -130,7 +128,7 @@ public extension OperationName {
     static let rRoots = "rRoots" // Find rational roots of polynomial
     
     // MARK: - Vector
-    
+    static let vector = "vec"
     static let dotProduct = "dotP"
     static let crossProduct = "crossP"
     static let unitVector = "unitVec"

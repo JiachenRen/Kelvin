@@ -8,5 +8,5 @@ def contains(list, a) {
     return false
 }
 
-assert contains({1, 2, 3}, 2)
-assert !contains({1, 2, 3}, x)
+assert contains([1, 2, 3], 2)
+assert !contains([1, 2, 3], x)

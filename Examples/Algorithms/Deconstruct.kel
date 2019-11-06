@@ -1,9 +1,9 @@
 def deconstruct(n) {
     if (n is @function) {
-        return deconstruct(n as @list)
+        return deconstruct(n as @vector)
     };
 
-    if (n is @list) {
+    if (n is @vector) {
         return map(n) {
             deconstruct($0)
         }

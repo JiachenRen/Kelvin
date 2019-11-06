@@ -40,6 +40,26 @@ public class Vector: Iterable {
         return Vector(elements)
     }
     
+    /// Combine this vector with another that has the same dimension by performing
+    /// a binary operation on matching pairs of elements.
+    ///
+    /// - Note: The two vectors must have the same length!
+    /// - Parameters:
+    ///    - vev: The vector to be joined with. Each individual elements are used as `rhs` of bin operation.
+    ///    - operation: A binary operation.
+    /// - Returns: A new list resulting from `self ⊗ vec`.
+    func joined(with vec: Vector, by bin: String? = nil) throws -> Vector {
+        if count != vec.count {
+            throw ExecutionError.dimensionMismatch(self, vec)
+        }
+        return Vector(elements.enumerated().map {
+            if let b = bin {
+                return Function(b, [$0.element, vec[$0.offset]])
+            }
+            return Vector([$0.element, vec[$0.offset]])
+        })
+    }
+    
     /// Calculate the dot product of this vector with the target vector.
     /// `u1 = <a1, b1, c1, ...n1>`,
     /// `u2 = <a2, b2, c2, ...n2>`,

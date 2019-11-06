@@ -251,7 +251,7 @@ public class Core {
         .unary(.factorize, Integer.self) {
             (n: Integer) throws -> Node? in
             try Assert.positive(n)
-            return List(n.bigInt.primeFactors().map {
+            return Vector(n.bigInt.primeFactors().map {
                 [BigInt](repeating: $0.factor, count: Int($0.multiplicity))
             }.flatMap { $0 })
         },
@@ -259,13 +259,13 @@ public class Core {
             (n: Integer) throws -> Node? in
             try Assert.positive(n)
             let primeFactors = n.bigInt.primeFactors()
-            return List([
-                List(primeFactors.map { $0.factor }),
-                List(primeFactors.map { $0.multiplicity })
+            return Vector([
+                Vector(primeFactors.map { $0.factor }),
+                Vector(primeFactors.map { $0.multiplicity })
             ])
         },
         .unary(.factors, Integer.self) {
-            List($0.bigInt.factors())
+            Vector($0.bigInt.factors())
         },
         .unary(.isPrime, Integer.self) {
             $0.bigInt.isPrime()
@@ -313,7 +313,7 @@ public class Core {
         .binary(.repeat, [.node, .node]) {(lhs, rhs) in
             let n = try Assert.cast(rhs.simplify(), to: Int.self)
             var elements = [Node](repeating: lhs, count: n)
-            return List(elements)
+            return Vector(elements)
         },
         .init(.copy, [.node, .int]) {
             Function(.repeat, $0)
@@ -321,14 +321,14 @@ public class Core {
         
         // Manage variable/function definitions
         .noArg(.listVariables) {
-            List(Variable.definitions.keys.compactMap { Variable($0) }).finalize()
+            Vector(Variable.definitions.keys.compactMap { Variable($0) }).finalize()
         },
         .noArg(.clearVariables) {
             Variable.restoreDefault()
             return KVoid()
         },
         .noArg(.listFunctions) {
-            List(Operation.userDefined.map {String($0.description)})
+            Vector(Operation.userDefined.map {String($0.description)})
         },
         .noArg(.clearFunctions) {
             Operation.restoreDefault()
@@ -580,11 +580,11 @@ public class Core {
             try evaluate($0, using: $1)
         },
         // a + b + c << {a = 3, c = 2}
-        .binary(.evaluateAt, Node.self, List.self) {
+        .binary(.evaluateAt, Node.self, ListProtocol.self) {
             try evaluate($0, using: Assert.specialize(list: $1, as: Equation.self))
         },
-        // f(x, y) = x ^ 2 + y; f <<< {x, y}
-        .binary(.invoke, Variable.self, List.self) { (v, list) in
+        // f(x, y) = x ^ 2 + y; f <<< [x, y]
+        .binary(.invoke, Variable.self, Vector.self) { (v, list) in
             Function(v.name, list.elements)
         },
         

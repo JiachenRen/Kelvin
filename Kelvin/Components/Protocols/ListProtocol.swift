@@ -76,32 +76,6 @@ public extension ListProtocol {
         elements.contains(where: predicament)
     }
     
-    /// Sorts the list by using the provided comparator.
-    /// - Parameter comparator: A binary function that compares two nodes.
-    func sort(by comparator: (Node, Node) throws -> Bool) rethrows {
-        try elements.sort(by: comparator)
-    }
-    
-    /// - Parameter comparator: A binary function that compares two nodes.
-    /// - Returns: A new list containing the original elements in sorted order.
-    func sorted(by comparator: (Node, Node) throws -> Bool) rethrows -> List {
-        List(try elements.sorted(by: comparator))
-    }
-    
-    /// Order elements in the list according to their String representations.
-    func order() {
-        sort {(e1, e2) in
-            e1.stringified < e2.stringified
-        }
-    }
-    
-    /// - Returns: A new list w/ elements sorted in natural order.
-    func ordered() -> List {
-        sorted {(e1, e2) in
-            e1.stringified < e2.stringified
-        }
-    }
-    
     /// Maps the elements of this list into `[T]`.
     func map<T>(by unary: (Node) throws -> T) rethrows -> [T] {
         try elements.map(unary)
@@ -156,7 +130,20 @@ public extension ListProtocol {
     
     /// Checks if the two lists contain the same elements. Order does not matter
     func looselyEquals(_ other: ListProtocol) -> Bool {
-        ordered().equals(other.ordered())
+        Vector(elements.ordered()) === Vector(other.elements.ordered())
+    }
+    
+
+    /// Convert every element in the list into a double.
+    /// An error is thrown if not all the elements in the list is a double.
+    func toFloat80s() throws -> [Float80] {
+        return try elements.map {
+            if let d = $0.evaluated?.float80 {
+                return d
+            }
+            let msg = "conversion failed - every element must be a number"
+            throw ExecutionError.general(errMsg: msg)
+        }
     }
     
     /// Simplify each element in the list.
@@ -180,6 +167,22 @@ public extension ListProtocol {
         }
         set(newValue) {
             elements[idx] = newValue
+        }
+    }
+}
+
+public extension Array where Element == Node {
+    /// Order elements in the list according to their String representations.
+    mutating func order() {
+        sort {
+            $0.stringified < $1.stringified
+        }
+    }
+    
+    /// - Returns: A new list w/ elements sorted in natural order.
+    func ordered() -> [Element] {
+        sorted {(e1, e2) in
+            e1.stringified < e2.stringified
         }
     }
 }

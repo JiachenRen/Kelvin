@@ -1,15 +1,15 @@
-def dict = {
+def dict = [
     1,
     2,
     3,
     a,
     b,
-    "what": ("is": {"this", shit^2}),
+    "what": ("is": ["this", shit^2]),
     d: e,
     d: q,
-    c: {a, b},
-    m: {m, o: {r, p, g}}
-}
+    c: [a, b],
+    m: [m, o: [r, p, g]]
+]
 
 dict[d]
 dict[c][0]

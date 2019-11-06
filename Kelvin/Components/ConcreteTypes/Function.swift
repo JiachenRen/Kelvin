@@ -20,7 +20,7 @@ public class Function: ListProtocol, NaN {
         self.isCommutative = name[.commutative]
         self.elements = args
         if isCommutative {
-            order()
+            elements.order()
         }
         flatten()
     }

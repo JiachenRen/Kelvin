@@ -56,16 +56,16 @@ extension Probability {
             Probability.nPr($0.float80, $1.float80)
         },
         .binary(.npr, Iterable.self, Int.self) {
-            List(Probability.permutations(of: $0.elements, $1).map { List($0) })
+            Vector(Probability.permutations(of: $0.elements, $1).map { Vector($0) })
         },
         .binary(.ncr, Int.self, Int.self) {
             Probability.nCr($0.float80, $1.float80)
         },
         .binary(.ncr, Iterable.self, Int.self) {
-            List(Probability.combinations(of: $0.elements, $1).map { List($0) })
+            Vector(Probability.combinations(of: $0.elements, $1).map { Vector($0) })
         },
         .unary(.powerset, Iterable.self) { iterable in
-            List(Probability.powerset(of: iterable.elements).map { List($0) })
+            Vector(Probability.powerset(of: iterable.elements).map { Vector($0) })
         },
 
         // Factorial

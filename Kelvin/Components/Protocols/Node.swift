@@ -25,9 +25,9 @@ public protocol Node {
 
     /// The complexity of the node.
     /// Variables have a complexity of 2, constants have a complexity of 1;
-    /// the complexity of List is the sum of the complexity of all of
+    /// the complexity of Vector is the sum of the complexity of all of
     /// its elements + 1. The complexity of functions are computed as
-    /// the complexity of the List of arguments + 1. 
+    /// the complexity of the Vector of arguments + 1. 
     var complexity: Int { get }
 
     /// Simplify the node.

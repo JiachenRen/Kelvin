@@ -55,10 +55,10 @@ extension FileSystem {
             return KVoid()
         },
         .noArg(.listPaths) {
-            return try List(shared.list())
+            return try Vector(shared.list())
         },
         .unary(.listPaths, String.self) {
-            return try List(shared.list($0))
+            return try Vector(shared.list($0))
         },
     ]
 }

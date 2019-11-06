@@ -106,7 +106,7 @@ extension FlowControl {
         // Loops
         .binary(.for, Pair.self, Closure.self) {(pair, closure) in
             let v = try Assert.cast(pair.lhs, to: Variable.self)
-            let list = try Assert.cast(pair.rhs.simplify(), to: List.self)
+            let list = try Assert.cast(pair.rhs.simplify(), to: ListProtocol.self)
             loop: for e in list.elements {
                 let def = Variable.definitions[v.name]
                 Variable.define(v.name, e)
@@ -154,7 +154,7 @@ extension FlowControl {
                 elements.append(lb)
                 lb += step
             }
-            return List(elements)
+            return Vector(elements)
         }
     ]
 }
