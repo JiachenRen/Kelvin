@@ -1078,6 +1078,12 @@ rref randMat(3) === idMat(3)
 set "rounding" to "exact"
 factorizeQR(mat({1, 0, 1, 0, 1, 1, 1, 1}, 4)) as @string === "[[1/2, -1/2], [1/2, -1/2], [1/2, 1/2], [1/2, 1/2]] ** [[2, 1], [0, 1]]"
 set "rounding" to "approximate"
+
+# Find distinct rational eigen values
+rEigenVals(mat({2, 4, 3, -4, -6, -3, 3, 3, 1})) === {1, -2}
+
+# Find the least squares solution to Ax = b
+leastSq(mat({1, -6, 1, -2, 1, 1, 1, 7}, 4), [-1, 2, 1, 6]) == [2, 0.5]
 ```
 ### [LinearAlgebra/Vector](/Examples/LinearAlgebra/Vector.kel)
 ```ruby

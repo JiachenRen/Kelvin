@@ -110,6 +110,12 @@ extension Exports {
         .unary(.QRFactorization, Matrix.self) {
             let (Q, R) = try $0.factorizeQR()
             return Final(Q ** R)
+        },
+        .unary(.rationalEigenValues, Matrix.self) {
+            try List($0.rationalEigenValues())
+        },
+        .binary(.leastSquares, Matrix.self, Vector.self) {
+            try $0.leastSquares($1)
         }
     ]
 }

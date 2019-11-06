@@ -27,6 +27,10 @@ public class Variable: LeafNode, NaN {
         }
         self.name = name
     }
+    
+    internal init() {
+        self.name = "\(Tokenizer.next())"
+    }
 
     /// Clear all variable definitions and reload all constants.
     public static func restoreDefault() {

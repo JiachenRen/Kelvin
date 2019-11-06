@@ -156,6 +156,8 @@ public extension OperationName {
     static let inverse = "inv"
     static let characteristicPolynomial = "charPoly"
     static let QRFactorization = "factorizeQR"
+    static let rationalEigenValues = "rEigenVals"
+    static let leastSquares = "leastSq"
     
     // MARK: - Probability
     

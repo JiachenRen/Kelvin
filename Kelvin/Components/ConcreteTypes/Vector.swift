@@ -26,6 +26,10 @@ public class Vector: Iterable {
         self.init(list.elements)
     }
 
+    public convenience init(_ mat: Matrix) throws {
+        try Assert.equals(mat.dim.cols, 1)
+        self.init(mat.rows.compactMap { $0[0] })
+    }
     /// Perform an operation with another vecto;. e.g. `[a b] + [c d] = [a+c b+d]`
     /// - Warning: Do not use `*` and `/` as it would cause confusion with the definition of dot product!
     public func perform(_ operation: Binary, with vec: Vector) throws -> Vector {

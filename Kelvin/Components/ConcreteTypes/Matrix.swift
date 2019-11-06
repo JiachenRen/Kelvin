@@ -103,6 +103,12 @@ public final class Matrix: Iterable {
         self.rows = rows
     }
     
+    /// Initializes the matrix using the given vector as its first column.
+    private init(_ vec: Vector) {
+        self.dim = (rows: vec.count, cols: 1)
+        self.rows = vec.map { Row([$0]) }
+    }
+    
     // MARK: - Basic Operations
     
     /// - Returns: True if the matrix is singular (non-invertible)
@@ -470,19 +476,6 @@ public final class Matrix: Iterable {
             .simplify() as! Matrix
     }
     
-    /// Computes the characteristic polynomial of this matrix.
-    /// Characteristic polynomial of matrix `A` has the form `det(A - I_x)`
-    /// - Returns: The characteristic polynomial of this matrix.
-    public func characteristicPolynomial(_ v: Variable) throws -> Node {
-        try Assert.squareMatrix(self)
-        let I_x = try Matrix.identityMatrix(self.dim.rows)
-            .transform(by: {$0 * v})
-        return try self.perform(-, with: I_x)
-            // Here we use cofactor expansion because it yields simpler algebraic forms for matrices of lower dimensions.
-            .determinant(using: .cofactorExpansion)
-            .simplify()
-    }
-    
     /// Factorizes the matrix into the product of an orthonormal matrix `Q` and an upper triangular matrix `R`.
     /// - Warning: Ensure that the columns of the matrix are linearly independent before proceeding.
     /// - Returns: Matrices `Q`and `R`
@@ -495,6 +488,35 @@ public final class Matrix: Iterable {
             return try self.cols[c].dot(with: Q.cols[r])
         }
         return (Q, R)
+    }
+    
+    /// Finds the least squares solution of `Ax = b`.
+    /// The formula `x = inv(AT ** A) ** (AT ** b)` is used.
+    /// - Precondition: The matrix has linearly independent columns.
+    public func leastSquares(_ b: Vector) throws -> Vector {
+        let A = self
+        let AT = self.transposed()
+        return try Vector(AT.mult(A).inverse().mult(AT.mult(Matrix(b))))
+    }
+    
+    /// Finds the distinct rational eigen values of this matrix.
+    public func rationalEigenValues() throws -> [Node] {
+        let v = Variable()
+        let chEqn = try Algebra.expand(self.characteristicPolynomial(v))
+        return try Algebra.findRRoots(of: chEqn, v)
+    }
+    
+    /// Computes the characteristic polynomial of this matrix.
+    /// Characteristic polynomial of matrix `A` has the form `det(A - I_x)`
+    /// - Returns: The characteristic polynomial of this matrix.
+    public func characteristicPolynomial(_ v: Variable) throws -> Node {
+        try Assert.squareMatrix(self)
+        let I_x = try Matrix.identityMatrix(self.dim.rows)
+            .transform(by: {$0 * v})
+        return try self.perform(-, with: I_x)
+            // Here we use cofactor expansion because it yields simpler algebraic forms for matrices of lower dimensions.
+            .determinant(using: .cofactorExpansion)
+            .simplify()
     }
     
     /// Creates an identity matrix of the specified dimension

@@ -29,7 +29,13 @@ public struct Mode {
             let d = Double(round(1E10 * val) / 1E10)
             let absD = abs(d)
             if absD > 1E15 || absD < 1E-4 {
-                return formatter.string(for: d)!
+                let formatted = formatter.string(for: d)!
+                switch formatted {
+                case "-0*10^0", "0*10^0":
+                    return "0"
+                default:
+                    return formatted
+                }
             }
             return d.description
         }

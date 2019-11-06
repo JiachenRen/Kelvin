@@ -356,6 +356,9 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - Inverse
   - Adjoint
   - Characteristic polynomial
+  - QR factorization
+  - Distinct rational eigen values
+  - Least squares solution
   - [ ] LU decomposition
   - [ ] Eigen values/vectors
 
