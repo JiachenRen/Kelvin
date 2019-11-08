@@ -178,6 +178,7 @@ public struct Syntax {
             .init(for: .get, associativity: .infix, precedence: .subscript, operator: .init("::", padding: .none)),
             .init(for: .set, associativity: .prefix, precedence: .prefixCommand),
             .init(for: .insert, associativity: .prefix, precedence: .prefixCommand),
+            .init(for: .swap, associativity: .prefix, precedence: .prefixCommand),
             .init(for: .remove, associativity: .infix),
             .init(for: .removeAll, associativity: .infix),
             .init(for: .count, associativity: .prefix),

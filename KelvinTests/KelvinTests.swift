@@ -55,6 +55,14 @@ class KelvinTests: XCTestCase {
         assert(Function(.add, [Function(.add, [1, 2]), 3]) === Function(.add, [1, 2, 3]))
     }
     
+    func testIncompleteStatement() {
+        do {
+            let _ = try Compiler.shared.compile("{1,2,3").simplify();
+        } catch let e {
+            print((e as! CompilerError).localizedDescription)
+        }
+    }
+    
     func testTernaryConditional() {
         let _ = try? Compiler.shared.compile("set 1 of {1,2,3} to 4").simplify()
     }

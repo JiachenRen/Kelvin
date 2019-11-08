@@ -47,6 +47,13 @@ public class Pair: Iterable, BinaryNode {
                 try pair.rhs ~> String.self
                 return Function(.set, pair.elements)
             },
+        ],
+        .swap: [
+            [.of]: { pair in
+                try pair.lhs ~> List.self
+                try pair.rhs ~> ListProtocol.self
+                return Function(.swap, pair.elements)
+            }
         ]
     ]
     

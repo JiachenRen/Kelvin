@@ -855,6 +855,9 @@ l === [1, 2, x, 3, 5]
 # Set element at index
 l := (set 3 of l to q^2)
 l === [1, 2, x, q^2, 5]
+
+# Swap indices i and j of list
+(swap {0, 1} of {a, b, c}) === {b, a, c}
 ```
 ### [Core/Multiline](/Examples/Core/Multiline.kel)
 ```ruby

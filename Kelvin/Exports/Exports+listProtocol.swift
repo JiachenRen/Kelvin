@@ -104,5 +104,15 @@ extension Exports {
             list.elements.insert(e, at: i)
             return list
         },
+        .binary(.swap, List.self, ListProtocol.self) {
+            let indices = try Assert.specialize(list: $0, as: Int.self)
+            try Assert.equals(indices.count, 2, message: "expected 2 indices, but found 3")
+            let i = indices[0]
+            let j = indices[1]
+            try Assert.index(indices.count, i)
+            try Assert.index(indices.count, j)
+            $1.elements.swapAt(i, j)
+            return $1
+        }
     ]
 }

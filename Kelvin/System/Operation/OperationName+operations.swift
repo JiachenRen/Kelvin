@@ -110,6 +110,7 @@ public extension OperationName {
     static let reverse = "reverse"
     static let flatten = "flatten"
     static let insert = "insert"
+    static let swap = "swap"
     
     // MARK: - Calculus
     
