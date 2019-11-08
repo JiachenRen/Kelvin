@@ -97,4 +97,4 @@ set "rounding" to "approximate"
 rEigenVals(mat({2, 4, 3, -4, -6, -3, 3, 3, 1})) === {1, -2}
 
 # Find the least squares solution to Ax = b
-leastSq(mat({1, -6, 1, -2, 1, 1, 1, 7}, 4), [-1, 2, 1, 6]) == [2, 0.5]
+leastSquares(mat({1, -6, 1, -2, 1, 1, 1, 7}, 4), [-1, 2, 1, 6]) == [2, 0.5]

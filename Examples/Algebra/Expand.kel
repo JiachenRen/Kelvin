@@ -1,5 +1,6 @@
-expand((a + b)(a - b)) === a ^ 2 - b ^ 2
+(eval expand((a + b)(a - b))) === a ^ 2 - b ^ 2
 expand((a - b) ^ 3) === a ^ 3 + 3 * a * b ^ 2 - 3 * a ^ 2 * b - b ^ 3
-expand(3 ^ (b - 3)) === 3 ^ -3 * 3 ^ b
-expand((a + b) ^ (4 + a)) === (a + b) ^ a * 4 * a * b ^ 3 + (a + b) ^ a * 4 * a ^ 3 * b + (a + b) ^ a * 6 * a ^ 2 * b ^ 2 + (a + b) ^ a * a ^ 4 + (a + b) ^ a * b ^ 4
-expand((a + b) ^ (-5 * a + 4)) === (a + b) ^ (-5 * a) * 4 * a * b ^ 3 + (a + b) ^ (-5 * a) * 4 * a ^ 3 * b + (a + b) ^ (-5 * a) * 6 * a ^ 2 * b ^ 2 + (a + b) ^ (-5 * a) * a ^ 4 + (a + b) ^ (-5 * a) * b ^ 4
+(eval expand(3 ^ (b - 3))) === 3 ^ -3 * 3 ^ b
+expand((a + b) ^ (4 + a)) as @string === "(a * b) ^ 2 * 6 * (a + b) ^ a + (a + b) ^ a * 4 * a * b ^ 3 + (a + b) ^ a * 4 * a ^ 3 * b + (a + b) ^ a * a ^ 4 + (a + b) ^ a * b ^ 4"
+(eval expand((a + b) ^ (-5 * a + 4))) as @string === "(a * b) ^ 2 * (a + b) ^ (-5 * a) * 6 + (a + b) ^ (-5 * a) * 4 * a * b ^ 3 + (a + b) ^ (-5 * a) * 4 * a ^ 3 * b + (a + b) ^ (-5 * a) * a ^ 4 + (a + b) ^ (-5 * a) * b ^ 4"
+expand((a-b)^10) as @string === "(a * b) ^ 5 * -252 + -10 * a * b ^ 9 + -10 * a ^ 9 * b + -120 * a ^ 3 * b ^ 7 + -120 * a ^ 7 * b ^ 3 + 210 * a ^ 4 * b ^ 6 + 210 * a ^ 6 * b ^ 4 + 45 * a ^ 2 * b ^ 8 + 45 * a ^ 8 * b ^ 2 + a ^ 10 + b ^ 10"

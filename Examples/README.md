@@ -167,11 +167,12 @@ test(f1, f2, 10) === (true...10)
 ```
 ### [Algebra/Expand](/Examples/Algebra/Expand.kel)
 ```ruby
-expand((a + b)(a - b)) === a ^ 2 - b ^ 2
+(eval expand((a + b)(a - b))) === a ^ 2 - b ^ 2
 expand((a - b) ^ 3) === a ^ 3 + 3 * a * b ^ 2 - 3 * a ^ 2 * b - b ^ 3
-expand(3 ^ (b - 3)) === 3 ^ -3 * 3 ^ b
-expand((a + b) ^ (4 + a)) === (a + b) ^ a * 4 * a * b ^ 3 + (a + b) ^ a * 4 * a ^ 3 * b + (a + b) ^ a * 6 * a ^ 2 * b ^ 2 + (a + b) ^ a * a ^ 4 + (a + b) ^ a * b ^ 4
-expand((a + b) ^ (-5 * a + 4)) === (a + b) ^ (-5 * a) * 4 * a * b ^ 3 + (a + b) ^ (-5 * a) * 4 * a ^ 3 * b + (a + b) ^ (-5 * a) * 6 * a ^ 2 * b ^ 2 + (a + b) ^ (-5 * a) * a ^ 4 + (a + b) ^ (-5 * a) * b ^ 4
+(eval expand(3 ^ (b - 3))) === 3 ^ -3 * 3 ^ b
+expand((a + b) ^ (4 + a)) as @string === "(a * b) ^ 2 * 6 * (a + b) ^ a + (a + b) ^ a * 4 * a * b ^ 3 + (a + b) ^ a * 4 * a ^ 3 * b + (a + b) ^ a * a ^ 4 + (a + b) ^ a * b ^ 4"
+(eval expand((a + b) ^ (-5 * a + 4))) as @string === "(a * b) ^ 2 * (a + b) ^ (-5 * a) * 6 + (a + b) ^ (-5 * a) * 4 * a * b ^ 3 + (a + b) ^ (-5 * a) * 4 * a ^ 3 * b + (a + b) ^ (-5 * a) * a ^ 4 + (a + b) ^ (-5 * a) * b ^ 4"
+expand((a-b)^10) as @string === "(a * b) ^ 5 * -252 + -10 * a * b ^ 9 + -10 * a ^ 9 * b + -120 * a ^ 3 * b ^ 7 + -120 * a ^ 7 * b ^ 3 + 210 * a ^ 4 * b ^ 6 + 210 * a ^ 6 * b ^ 4 + 45 * a ^ 2 * b ^ 8 + 45 * a ^ 8 * b ^ 2 + a ^ 10 + b ^ 10"
 ```
 ### [Algebra/Factor](/Examples/Algebra/Factor.kel)
 ```ruby
@@ -260,6 +261,32 @@ def contains(list, a) {
 
 assert contains({1, 2, 3}, 2)
 assert !contains({1, 2, 3}, x)
+```
+### [Algorithms/CountOnes](/Examples/Algorithms/CountOnes.kel)
+```ruby
+def countOnes(arr) {
+    left := 1;
+    right := count(arr) + 1;
+    mid := int((left + right) / 2);
+    while (left != right) {
+        if (arr[mid - 1] == 1) {
+            right := mid
+        } else {
+            left := mid + 1
+        };
+        mid := int((left + right) / 2);
+    };
+    return count(arr) - left + 1;
+}
+
+countOnes({0}) === 0
+countOnes({1}) === 1
+countOnes({0,1}) === 1
+countOnes({0,0,0,1}) === 1
+countOnes({0,1,1,1}) === 3
+countOnes({0,0,0,1,1,1,1}) === 4
+countOnes({0,0,0,0}) === 0
+countOnes({1,1,1,1}) === 4
 ```
 ### [Algorithms/Deconstruct](/Examples/Algorithms/Deconstruct.kel)
 ```ruby
@@ -1099,7 +1126,7 @@ set "rounding" to "approximate"
 rEigenVals(mat({2, 4, 3, -4, -6, -3, 3, 3, 1})) === {1, -2}
 
 # Find the least squares solution to Ax = b
-leastSq(mat({1, -6, 1, -2, 1, 1, 1, 7}, 4), [-1, 2, 1, 6]) == [2, 0.5]
+leastSquares(mat({1, -6, 1, -2, 1, 1, 1, 7}, 4), [-1, 2, 1, 6]) == [2, 0.5]
 ```
 ### [LinearAlgebra/Vector](/Examples/LinearAlgebra/Vector.kel)
 ```ruby
@@ -1469,7 +1496,7 @@ round(regEq(3) - (3.00909 + 0.654545 * 3), 3) === 0
 ```ruby
 # Run all Kelvin scripts and tests and do a pansystemic performance analysis.
 
-# Replace with your absolute directory to Examples
+# Replace with your directory to Examples
 def examples_dir = "/tmp/Examples/"
 
 def start_time = time()
@@ -1529,7 +1556,8 @@ def alg_files = {
     "FlatMap.kel",
     "Deconstruct.kel",
     "Contains.kel",
-    "Recursion.kel"
+    "Recursion.kel",
+    "CountOnes.kel"
 }
 
 map(alg_files) {

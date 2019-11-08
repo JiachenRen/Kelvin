@@ -220,6 +220,7 @@
 		1F7DBB4223523CC200904DA8 /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7DBB4023523AB400904DA8 /* Integer.swift */; };
 		1F8244D6233AF32800F32C21 /* RunShell.kel in Resources */ = {isa = PBXBuildFile; fileRef = 1F8244D5233AF32800F32C21 /* RunShell.kel */; };
 		1F8C8C88233960C0007FCD4F /* BooleanLogic.kel in Resources */ = {isa = PBXBuildFile; fileRef = 1F8C8C87233960C0007FCD4F /* BooleanLogic.kel */; };
+		1F8D36222375ADBF002150F2 /* CountOnes.kel in Resources */ = {isa = PBXBuildFile; fileRef = 1F8D36212375ADBE002150F2 /* CountOnes.kel */; };
 		1F966CBF23480659003E9E57 /* ListProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F966CBD2348060D003E9E57 /* ListProtocol.swift */; };
 		1F9790DA234BDC6900D07525 /* Typealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9790D3234BDBC500D07525 /* Typealiases.swift */; };
 		1F9790DB234BDC6900D07525 /* Overloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9790D5234BDC0600D07525 /* Overloads.swift */; };
@@ -459,6 +460,7 @@
 		1F7DBB4023523AB400904DA8 /* Integer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Integer.swift; sourceTree = "<group>"; };
 		1F8244D5233AF32800F32C21 /* RunShell.kel */ = {isa = PBXFileReference; lastKnownFileType = text; path = RunShell.kel; sourceTree = "<group>"; };
 		1F8C8C87233960C0007FCD4F /* BooleanLogic.kel */ = {isa = PBXFileReference; lastKnownFileType = text; path = BooleanLogic.kel; sourceTree = "<group>"; };
+		1F8D36212375ADBE002150F2 /* CountOnes.kel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CountOnes.kel; sourceTree = "<group>"; };
 		1F8DF72F22050B5B006351B0 /* IOProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOProtocol.swift; sourceTree = "<group>"; };
 		1F8DF73322050CD3006351B0 /* Console.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Console.swift; sourceTree = "<group>"; };
 		1F8DF76F22075A32006351B0 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
@@ -787,6 +789,7 @@
 		1F3E309A232C37A9002971F9 /* Algorithms */ = {
 			isa = PBXGroup;
 			children = (
+				1F8D36212375ADBE002150F2 /* CountOnes.kel */,
 				1F3E309B232C37A9002971F9 /* Deconstruct.kel */,
 				1F3E309C232C37A9002971F9 /* BinarySearch.kel */,
 				1F3E309D232C37A9002971F9 /* FlatMap.kel */,
@@ -1343,6 +1346,7 @@
 				1F3E30AE232C37AA002971F9 /* Regression.kel in Resources */,
 				1F3E30BB232C37AA002971F9 /* Conditionals.kel in Resources */,
 				1FB2D0DF2344464C008709AE /* Expand.kel in Resources */,
+				1F8D36222375ADBF002150F2 /* CountOnes.kel in Resources */,
 				1FFD8CAD218F50870004ECEB /* Main.storyboard in Resources */,
 				1F010C6D23622F76003B6497 /* kelvin_vscode_3.png in Resources */,
 				1F3E30B0232C37AA002971F9 /* Integration.kel in Resources */,
@@ -1693,7 +1697,7 @@
 		1F48D9B4222E0D8100639F26 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1728,7 +1732,7 @@
 		1F48D9B5222E0D8100639F26 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1985,11 +1989,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = KelvinMacOS/Kelvin.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
@@ -2014,11 +2018,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = KelvinMacOS/Kelvin.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",

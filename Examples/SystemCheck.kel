@@ -1,6 +1,6 @@
 # Run all Kelvin scripts and tests and do a pansystemic performance analysis.
 
-# Replace with your absolute directory to Examples
+# Replace with your directory to Examples
 def examples_dir = "/tmp/Examples/"
 
 def start_time = time()
@@ -60,7 +60,8 @@ def alg_files = {
     "FlatMap.kel",
     "Deconstruct.kel",
     "Contains.kel",
-    "Recursion.kel"
+    "Recursion.kel",
+    "CountOnes.kel"
 }
 
 map(alg_files) {

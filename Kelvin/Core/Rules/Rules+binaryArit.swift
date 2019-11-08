@@ -98,8 +98,9 @@ extension Rules {
             }
             return nil
         },
-        .binary(.mult, Node.self, Int.self) {(lhs, rhs) in
-            switch rhs {
+        .binary(.mult, Node.self, Integer.self) {(lhs, rhs) in
+            let i = rhs.bigInt
+            switch i {
             case 0:
                 return 0
             case 1:

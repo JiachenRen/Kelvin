@@ -19,6 +19,7 @@ extension Int: Integer {
     
     /// - Returns: The factorial of this integer
     public func factorial() -> BigInt {
+        if self == 0 { return 1 }
         return (1...self).map { BigInt($0) }.reduce(BigInt(1), *)
     }
 }

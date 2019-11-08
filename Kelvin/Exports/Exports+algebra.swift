@@ -15,7 +15,7 @@ extension Exports {
 extension Algebra {
     static let exports: [Operation] = [
         .unary(.factor, [.node]) { try factor($0) },
-        .unary(.expand, [.node]) { expand($0) },
+        .unary(.expand, [.node]) { Final(expand($0)) },
         .binary(.rRoots, Node.self, Variable.self) {
             try List(findRRoots(of: $0, $1))
         },

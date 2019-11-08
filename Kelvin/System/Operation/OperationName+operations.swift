@@ -159,7 +159,7 @@ public extension OperationName {
     static let characteristicPolynomial = "charPoly"
     static let QRFactorization = "factorizeQR"
     static let rationalEigenValues = "rEigenVals"
-    static let leastSquares = "leastSq"
+    static let leastSquares = "leastSquares"
     static let augment = "aug"
     
     // MARK: - Probability

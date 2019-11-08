@@ -197,7 +197,14 @@ public class Compiler {
                 let statement = Program.Statement(line: i + 1, node: node)
                 statements.append(statement)
             } catch let e as CompilerError {
-                throw CompilerError.on(line: i + 1, e)
+                // Ignore empty errors
+                switch e {
+                case .emptyString:
+                    // Do nothing
+                    break
+                default:
+                    throw CompilerError.on(line: i + 1, e)
+                }
             }
         }
         
@@ -1111,7 +1118,7 @@ public class Compiler {
         }
 
         if expr == "" {
-            throw CompilerError.illegalArgument(errMsg: "Give me some juice!")
+            throw CompilerError.emptyString
         } else if count(expr, char: "\"") % 2 != 0 {
             throw CompilerError.syntax(errMsg: "\" mismatch in \"\(expr)\"")
         }

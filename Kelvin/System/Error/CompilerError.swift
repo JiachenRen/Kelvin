@@ -18,6 +18,7 @@ indirect public enum CompilerError: KelvinError {
     case on(line: Int, _ err: CompilerError)
     case cancelled
     case duplicateKeyword(_ name: String)
+    case emptyString
     
     public var localizedDescription: String {
         switch self {
@@ -35,6 +36,8 @@ indirect public enum CompilerError: KelvinError {
             return "\(l) is not a valid type literal"
         case .duplicateKeyword(let n):
             return "syntax definition for \(n) already exists; please remove it first or choose another keyword"
+        case .emptyString:
+            return "compiling an empty string"
         }
     }
 }

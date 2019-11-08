@@ -514,7 +514,7 @@ public final class Matrix: Iterable {
     /// Finds the distinct rational eigen values of this matrix.
     public func rationalEigenValues() throws -> [Node] {
         let v = Variable()
-        let chEqn = try Algebra.expand(self.characteristicPolynomial(v))
+        let chEqn = try self.characteristicPolynomial(v)
         return try Algebra.findRRoots(of: chEqn, v)
     }
     

@@ -245,9 +245,10 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 ### Algebra
 - [x] Commutative simplification
 - [x] Preliminary factorization
-- [x] Expand expressions
+- [x] Expand
 - [x] Extract coefficients of polynomial
 - [x] Polynomial rational root finder
+- [x] Multinomial expansion
   - e.g. `rRoots(-4 * x ^ 2 + -43 * x + 3 * x ^ 3 + 84) === {3, -4, 7/3, -4}`
 - [ ] Long division
 - [ ] Complete the square
