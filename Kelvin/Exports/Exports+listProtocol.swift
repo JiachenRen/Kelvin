@@ -82,7 +82,7 @@ extension Exports {
             }
             return list
         },
-        .binary(.remove, List.self, Int.self) {(l, n) in
+        .binary(.remove, ListProtocol.self, Int.self) {(l, n) in
             try l.removing(at: n)
         },
         .binary(.contains, ListProtocol.self, Node.self) {(list, e) in
