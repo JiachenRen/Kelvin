@@ -230,25 +230,27 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 - [x] Unary operations (many, see below)
 
 ### Number
-- [x] Greatest common divisor & least common multiple
-- [x] Prime factors
-- [x] Big (I mean BIG) integers
-- [x] Prime number generation
-- [x] Factorize
-- [x] Round to decimal places
-- [x] Fraction
-  - [x] Enter fraction mode with `setMode("rounding", "exact")`
-- [x] Irrational number simplification
-- [x] Rounding mode
+- Greatest common divisor & least common multiple
+- Prime factors
+- Big (I mean BIG) integers
+- Prime number generation
+- Factorize
+- Factorial
+    - Try `1000!`
+- Round to decimal places
+- Fraction
+  - Enter fraction mode with `setMode("rounding", "exact")`
+- Irrational number simplification
+- Rounding mode
   - Exact vs approximate vs automatic
 
 ### Algebra
-- [x] Commutative simplification
-- [x] Preliminary factorization
-- [x] Expand
-- [x] Extract coefficients of polynomial
-- [x] Polynomial rational root finder
-- [x] Multinomial expansion
+- Commutative simplification
+- Preliminary factorization
+- Expand
+- Extract coefficients of polynomial
+- Polynomial rational root finder
+- Multinomial expansion
   - e.g. `rRoots(-4 * x ^ 2 + -43 * x + 3 * x ^ 3 + 84) === {3, -4, 7/3, -4}`
 - [ ] Long division
 - [ ] Complete the square
@@ -259,7 +261,6 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - [ ] Algebraic solve
 
 ### Calculus
-- [ ] Limit
 - [x] Differentiation
   - Logarithmic differentiation
   - nth derivative
@@ -270,6 +271,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
     - Gradient
     - Derivative/gradient at point/vector
     - Tangent line/plane/surface/hyperplane/etc for multivariate functions
+  - [ ] Limit
   
 - [x] Integration
     - [x] Numerical integration (QAGS - accelerated by Peter Wynn’s epsilon algorithm)
@@ -277,7 +279,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
     - [ ] Riemann sum
 
 ### Statistics
-- [x] One variable statistics
+- One variable statistics
   - Summation
   - Average
   - Sum of difference squared
@@ -285,13 +287,13 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - Std. deviation
   - Five-number summary, IQR
   - Outliers
-- [x] Two variable statistics
+- Two variable statistics
   - Sample/population covariance
   - Correlation
   - Coefficient of determination
   - ∑xy
   - OneVar X/Y
-- [x] Distributions
+- Distributions
   - Normal Cdf (-∞ to x, from lb to ub, from lb to ub with μ and σ)
   - Random normal distribution (randNorm)
   - Normal Pdf
@@ -300,14 +302,14 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - tPdf/tCdf
   - Binomial Cdf/Pdf
   - Geometric Cdf/Pdf
-- [x] Confidence intervals
-    - [x] z interval
-    - [x] t interval
-    - [x] 2 sample z interval
-    - [x] 2 sample t interval
-    - [x] 1 prop z interval
+- Confidence intervals
+    - z interval
+    - t interval
+    - 2 sample z interval
+    - 2 sample t interval
+    - 1 prop z interval
     - [ ] 2 prop z interval
-- [x] Regression
+- Regression
   - [x] Linear (least squares regression)
     - Residuals
   - [ ] Multiple linear regression
@@ -322,15 +324,15 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - [ ] One/two sample/prop z test
 
 ### Probability
-- [x] Permutation/combination
+- Permutation/combination
   - ncr, npr for lists
-- [x] Randomization
+- Randomization
   - `random(lb, ub)`, `random()`, `randomInt(lb, ub)`, `randomMat`, `randomBool`
   - Shuffle list
   - Random element from list
 
 ### Linear Algebra
-- [x] Vector
+- Vector
   - Dot product
   - Cross Product
   - Subscript access
@@ -339,7 +341,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - Orthogonal projection
   - Orthogonal basis using Gram-Schmidt
 
-- [x] Matrix
+- Matrix
   - Conversion to/from list/matrix
   - Determinant O(n^3)
   - Gaussian elimination
@@ -369,6 +371,8 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 - Set at index
     - `set <index> of <list> to <element>`
 - Insert
+- Swap indices `i`, `j`
+    - `swap {i, j} of <list>`
 - Reverse
 - Contains
 - Chained subscript access
@@ -379,14 +383,14 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
 - Count
 
 ### Boolean logic
-- [x] Basic boolean operators
+- Basic/advanced boolean operators
   - And, or, not, xor, nand, and nor
-- [x] Complex boolean logic simplification
+- Complex boolean logic simplification
   - Decarte's Law and distributive properties of `and` and `or`
   - e.g. `!(!(!x && !(!y || x)) || !y)` simplifies to  `(!x && y)`
 
 ### Programs/functions
-- [x] Variables & Functions
+- Variables & Functions
   - **Higher order function** (function as parameter)
     - `invoke(<name of function>, <list of parameters>)`, operator `<<<`
     - function reference prefix operator `*`
@@ -397,12 +401,12 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - Anonymous closure arguments {`$0`, ... , `$1`}
   - **Inout variables** (behaves like the reference operator `&`, but not quite)
   - List/clear all vars/funcs
-- [x] Runtime environment 
+- Runtime environment 
   - `run <file at path>`
   - `import <file at path>`
   - `compile <kelvin script>`
   - `eval <kelvin script>`
-- [x] Flow control
+- Flow control
   - Line break `;`
     - Pipeline `->`
   - Loops
@@ -419,7 +423,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
     - `return`
     - `break`
     - `continue`
-- [x] I/O & File System
+- I/O & File System
   - Read file
   - Write/append to file
   - Automatic rel/abs path mapping
@@ -429,7 +433,7 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - Log
   - Get/set working directory
   - Read line from UI
-- [x] Strings
+- Strings
   - Concatenation
   - Subscript access
   - Cast to list of `@char`
@@ -437,24 +441,26 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - Contains
   - **Support for regex**
     - Matches & replace
-- [x] Pairs
-  - Compilation
+- Pairs
+  - Prepositions for readability
+    - `to`, `from`, `of`, `at`, etc.
   - Subscript access
-- [x] Error handling
+- Error handling
   - `try` blocks, ternary `try` statement
   - `assert <bool>`
   - `throw <any>`
-- [x] Stack Trace
+- Stack Trace
     - Record full call stack history
     - Print stack trace
     - Enable/disable stack trace
     - Untrack specific functions, both native & user defined
-- [x] System
-  - Precise date & time (down to nano seconds)
+- System
+  - Date & time (down to nano seconds)
   - Performance measurement
-  - Full interoperability with **shell script**
-- [x] Scope management
+    - `measure {<block>}`
+  - Full interoperability with `shell`
+- Scope management
   - Lock/unlock variables
   - Save/restore
-- [x] Multi-line function/list/vector compilation
-- [x] **Trailing closure syntax**
+- Multi-line function/list/vector compilation
+- Trailing closure syntax
