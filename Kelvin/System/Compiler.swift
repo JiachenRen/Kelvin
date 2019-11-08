@@ -471,7 +471,7 @@ public class Compiler {
         // Infer matrices
         parent = try parent.replacing(by: {
             let vec = $0 as! Vector
-            var isMatrix = true
+            var isMatrix = vec.elements.count > 0
             let vectors = vec.elements.map {(v) -> Vector? in
                 if let vec = v as? Vector {
                     return vec
@@ -481,11 +481,11 @@ public class Compiler {
             }
             
             if isMatrix {
-                return try Matrix(vectors.compactMap {$0})
+                return try Matrix(vectors.compactMap { $0 })
             }
             return vec
         }) {
-            $0 is Vector && $0.contains(where: {$0 is Vector}, depth: 1)
+            $0 is Vector && $0.contains(where: { $0 is Vector }, depth: 1)
         }
         
         // Define prefix, postfix, infix, and auto syntax.
@@ -665,8 +665,13 @@ public class Compiler {
             // Find the range of the innermost pairing of square brackets.
             let r = innermost(expr, "[", "]")
             
+            // Empty square brackets [] denote an empty vector.
             if expr.index(after: r.lowerBound) == r.upperBound {
-                throw CompilerError.syntax(errMsg: "cannot subscript with empty square brackets []")
+                if indexOfPrefix(before: r.lowerBound, in: expr) != nil {
+                    throw CompilerError.syntax(errMsg: "cannot subscript with empty square brackets []")
+                }
+                update(Vector([]), r, nil)
+                continue
             }
             
             // Find the range of string inside the brackets.
@@ -686,7 +691,7 @@ public class Compiler {
                 // Subscript
                 let operandStr = String(expr[subscriptIdx..<r.lowerBound])
                 let operand = try resolve(operandStr, &dict, binOps)
-                node = Function("get", [operand, sub])
+                node = Function(.get, [operand, sub])
             } else {
                 
                 // Vector

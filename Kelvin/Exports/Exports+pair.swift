@@ -17,7 +17,7 @@ extension Exports {
         },
         Pair.grammar.map { (name, prepMap) in
             Operation.unary(name, Pair.self) { pair in
-                try prepMap[pair.deconstructed()]?(pair)
+                try prepMap[pair.prepositionList()]?(pair)
             }
         }
     ].flatMap { $0 }
