@@ -362,19 +362,20 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - [ ] Eigen values/vectors
 
 ### List math/operations
-- [x] Zip, map, and reduce w/ anonymous closure arguments.
-- [x] Sort and filter
-- [x] Append and remove
-- [x] Set at index
-- [ ] Insert
-- [x] Reverse
-- [x] Contains
-- [x] Chained subscript access
+- Zip, map, and reduce w/ anonymous closure arguments.
+- Sort and filter
+- Append and remove
+- Set at index
+    - `set <index> of <list> to <element>`
+- Insert
+- Reverse
+- Contains
+- Chained subscript access
   - Access by index
   - Access by range
   - Access by `Key : Value`
     - Works exactly like a `JSON` object, but a lot more flexible!
-- [x] Size
+- Count
 
 ### Boolean logic
 - [x] Basic boolean operators

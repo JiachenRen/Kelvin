@@ -42,8 +42,7 @@ public extension ListProtocol {
         try Assert.index(count, idx1)
         try Assert.index(count, idx2)
         try Assert.range(idx1, idx2)
-        return Array(elements.suffix(from: idx1)
-            .prefix(upTo: idx2 - idx1 + 1))
+        return Array(elements[idx1...idx2])
     }
     
     /// Perform an action on each node in the tree.

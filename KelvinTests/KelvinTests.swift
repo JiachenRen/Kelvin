@@ -55,6 +55,10 @@ class KelvinTests: XCTestCase {
         assert(Function(.add, [Function(.add, [1, 2]), 3]) === Function(.add, [1, 2, 3]))
     }
     
+    func testTernaryConditional() {
+        let _ = try? Compiler.shared.compile("set 1 of {1,2,3} to 4").simplify()
+    }
+    
     func testKTypeResolve() {
         let fun: Node = Function("sdfdsf", [])
         assert(KType.resolve(fun) == .function)

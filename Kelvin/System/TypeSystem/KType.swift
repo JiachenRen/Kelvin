@@ -148,19 +148,19 @@ public enum KType: String, CustomStringConvertible {
             if let vec = node as? Vector {
                 return try Matrix(vec)
             }
-            let list = try Assert.cast(node, to: Iterable.self)
+            let list = try node ~> Iterable.self
             return try Matrix(list)
         case .string:
             return String(node.stringified)
         case .variable:
-            let s = try Assert.cast(node, to: String.self)
+            let s = try node ~> String.self
             guard let v = Variable(s) else {
                 let msg = "illegal variable name \(s)"
                 throw ExecutionError.general(errMsg: msg)
             }
             return v
         case .number:
-            let s = try Assert.cast(node, to: String.self)
+            let s = try node ~> String.self
             if let n = Float80(s) {
                 return n
             }

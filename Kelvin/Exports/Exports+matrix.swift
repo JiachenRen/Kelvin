@@ -10,7 +10,8 @@ import Foundation
 
 extension Exports {
     static let matrix: [Operation] = [
-        .binary(.add, Matrix.self, Matrix.self) { (m1: Matrix, m2: Matrix) throws -> Node in
+        .binary(.add, Matrix.self, Matrix.self) {
+            (m1: Matrix, m2: Matrix) throws -> Node in
             try m1.perform({a, b in a + b}, with: m2)
         },
         .binary(.add, Matrix.self, Node.self) { (lhs, rhs) in
@@ -29,18 +30,18 @@ extension Exports {
             lhs.transform { $0 / rhs }
         },
         .binary(.transform, [.node, .node]) {(a, b) in
-            let mat = try Assert.cast(a.simplify(), to: Matrix.self)
+            let mat = try a.simplify() ~> Matrix.self
             return mat.transform {(cell: Matrix.Cell) -> Node in
                 b.replacingAnonymousArgs(with: [cell.node, cell.row, cell.col])
             }
         },
         .unary(.cofactor, Matrix.self) {
-            try Assert.cast($0, to: Matrix.self).cofactorMatrix()
+            try ($0 ~> Matrix.self).cofactorMatrix()
         },
         .ternary(.cofactor, [.matrix, .int, .int]) {
-            let r = try Assert.cast($1, to: Int.self)
-            let c = try Assert.cast($2, to: Int.self)
-            return try Assert.cast($0, to: Matrix.self)
+            let r = try $1 ~> Int.self
+            let c = try $2 ~> Int.self
+            return try ($0 ~> Matrix.self)
                 .cofactor(row: r, col: c)
         },
         .binary(.matrixMultiplication, Matrix.self, Matrix.self) {
@@ -66,8 +67,8 @@ extension Exports {
         // Create matrix of dimension r * c with initializer
         .ternary(.createMatrix, Node.self, Node.self, Node.self) {
             (r, c, template) in
-            let rows = try Assert.cast(r.simplify(), to: Int.self)
-            let cols = try Assert.cast(c.simplify(), to: Int.self)
+            let rows = try r.simplify() ~> Int.self
+            let cols = try c.simplify() ~> Int.self
             return try Matrix(rows: rows, cols: cols) {
                 template.replacingAnonymousArgs(with: [$0, $1])
             }

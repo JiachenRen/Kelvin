@@ -25,10 +25,10 @@ public extension Operation {
         let parType4: Parameter = .init(type4)
         return .quaternary(name, [parType1, parType2, parType3, parType4]) {
             try quaternary(
-                Assert.cast($0, to: T1.self),
-                Assert.cast($1, to: T2.self),
-                Assert.cast($2, to: T3.self),
-                Assert.cast($3, to: T4.self)
+                $0 ~> T1.self,
+                $1 ~> T2.self,
+                $2 ~> T3.self,
+                $3 ~> T4.self
             )
         }
     }
@@ -57,9 +57,9 @@ public extension Operation {
         let parType3: Parameter = .init(type3)
         return .ternary(name, [parType1, parType2, parType3]) {
             try ternary(
-                Assert.cast($0, to: T1.self),
-                Assert.cast($1, to: T2.self),
-                Assert.cast($2, to: T3.self)
+                $0 ~> T1.self,
+                $1 ~> T2.self,
+                $2 ~> T3.self
             )
         }
     }
@@ -85,7 +85,7 @@ public extension Operation {
         let parType1: Parameter = .init(type1)
         let parType2: Parameter = .init(type2)
         return .binary(name, [parType1, parType2]) {
-            try binary(Assert.cast($0, to: T1.self), Assert.cast($1, to: T2.self))
+            try binary($0 ~> T1.self, $1 ~> T2.self)
         }
     }
     
@@ -108,7 +108,7 @@ public extension Operation {
     ) -> Operation {
         let parType: Parameter = .init(type)
         return .unary(name, [parType]) {
-            try unary(Assert.cast($0, to: T.self))
+            try unary($0 ~> T.self)
         }
     }
     

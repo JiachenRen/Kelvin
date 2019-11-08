@@ -94,7 +94,6 @@ public extension OperationName {
     // MARK: - List & Pair
     
     static let list = "list"
-    static let pair = "to"
     static let get = "get"
     static let set = "set"
     static let map = "map"
@@ -105,10 +104,12 @@ public extension OperationName {
     static let sort = "sort"
     static let zip = "zip"
     static let shuffle = "shuffle"
-    static let remove = "rm"
+    static let remove = "remove"
+    static let removeAll = "removeAll"
     static let contains = "contains"
     static let reverse = "reverse"
     static let flatten = "flatten"
+    static let insert = "insert"
     
     // MARK: - Calculus
     
@@ -240,7 +241,7 @@ public extension OperationName {
     
     // MARK: - IO
     
-    static let evaluateAt = "at"
+    static let evaluateAt = "evalAt"
     static let print = "print"
     static let println = "println"
     static let printMat = "printMat"
@@ -301,6 +302,7 @@ public extension OperationName {
     static let uppercased = "uppercased"
     
     // MARK: - Syntax
+    
     static let `prefix` = "prefix"
     static let `infix` = "infix"
     static let `postfix` = "postfix"

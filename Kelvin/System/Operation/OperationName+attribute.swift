@@ -60,7 +60,7 @@ public extension OperationName {
         .pipe: [.preservesArguments, .forwardCommutative],
         .evaluateAt: [.preservesArguments],
         .map: [.preservesArguments],
-        .remove: [.preservesArguments],
+        .removeAll: [.preservesArguments],
         .sort: [.preservesArguments],
         .reduce: [.preservesArguments],
         .filter: [.preservesArguments],
@@ -81,7 +81,6 @@ public extension OperationName {
         .minus: [.forwardCommutative],
 //        .power: [.forwardCommutative],
         .ternaryConditional: [.preservesArguments],
-        .set: [.preservesFirstArgument]
     ]
     
     /// Use subscript syntax to check if the operation contains the specified attribute.

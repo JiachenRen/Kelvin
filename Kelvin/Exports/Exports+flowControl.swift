@@ -92,7 +92,7 @@ extension FlowControl {
             }
         },
         .unary(.assert, Node.self) {
-            let predicate = try Assert.cast($0, to: Bool.self)
+            let predicate = try $0 ~> Bool.self
             if !predicate {
                 throw ExecutionError.general(errMsg: "assertion failed")
             }
@@ -105,8 +105,8 @@ extension FlowControl {
         
         // Loops
         .binary(.for, Pair.self, Closure.self) {(pair, closure) in
-            let v = try Assert.cast(pair.lhs, to: Variable.self)
-            let list = try Assert.cast(pair.rhs.simplify(), to: List.self)
+            let v = try pair.lhs ~> Variable.self
+            let list = try pair.rhs.simplify() ~> List.self
             loop: for e in list.elements {
                 let def = Variable.definitions[v.name]
                 Variable.define(v.name, e)
@@ -128,7 +128,7 @@ extension FlowControl {
         },
         .binary(.while, Node.self, Closure.self) {(predicate, closure) in
             loop: while true {
-                if !(try Assert.cast(predicate.simplify(), to: Bool.self)) {
+                if !(try predicate.simplify() ~> Bool.self) {
                     break
                 }
                 

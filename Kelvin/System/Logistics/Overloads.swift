@@ -32,6 +32,13 @@ public func *(_ lhs: Node, _ rhs: Node) -> Node {
     return Function(.mult, [lhs, rhs])
 }
 
+infix operator ~>
+
+@discardableResult
+public func ~><T>(_ lhs: Node?, _ rhs: T.Type) throws -> T {
+    return try Assert.cast(lhs, to: rhs)
+}
+
 infix operator **
 
 public func **(_ lhs: Node, _ rhs: Node) -> Node {

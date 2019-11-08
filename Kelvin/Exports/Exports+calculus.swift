@@ -39,7 +39,7 @@ extension Calculus {
             let dv = $1 as! Variable
             let iv = $2 as! Variable
             Scope.withholdAccess(to: dv, iv)
-            let eq = try Assert.cast($0.simplify(), to: Equation.self)
+            let eq = try $0.simplify() ~> Equation.self
             let r = try implicitDifferentiation(
                 eq,
                 dependentVar: dv,
@@ -51,16 +51,16 @@ extension Calculus {
         .binary(.gradient, [.node, .list]) {
             let vars = try Assert.specialize(list: $1 as! List, as: Variable.self)
             Scope.withholdAccess(to: vars)
-            let fun = try Assert.cast($0.simplify(), to: Function.self)
+            let fun = try $0.simplify() ~> Function.self
             let grad = gradient(of: fun, independentVars: vars)
             Scope.releaseRestrictions()
             return grad
         },
         .ternary(.directionalDifferentiation, [.function, .list, .node]) {
             let vars = try Assert.specialize(list: $1 as! List, as: Variable.self)
-            let dir = try Assert.cast($2.simplify(), to: Vector.self)
+            let dir = try $2.simplify() ~> Vector.self
             Scope.withholdAccess(to: vars)
-            let fun = try Assert.cast($0.simplify(), to: Function.self)
+            let fun = try $0.simplify() ~> Function.self
             let grad = try directionalDifferentiation(
                 of: fun,
                 direction: dir,
@@ -71,9 +71,9 @@ extension Calculus {
         },
         .ternary(.tangent, [.function, .list, .node]) {
             let vars = try Assert.specialize(list: $1 as! List, as: Variable.self)
-            let vec = try Assert.cast($2.simplify(), to: Vector.self)
+            let vec = try $2.simplify() ~> Vector.self
             Scope.withholdAccess(to: vars)
-            let fun = try Assert.cast($0.simplify(), to: Function.self)
+            let fun = try $0.simplify() ~> Function.self
             let tan = try tangent(
                 of: fun,
                 variables: vars,

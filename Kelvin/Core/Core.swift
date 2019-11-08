@@ -167,7 +167,7 @@ public class Core {
     ///     - definition: An equation whose LHS is a `Variable` and whose RHS is its definition.
     /// - Returns: Simplified `node` using the provided definition.
     public static func evaluate(_ node: Node, using definition: Equation) throws -> Node? {
-        let v = try Assert.cast(definition.lhs, to: Variable.self)
+        let v = try definition.lhs ~> Variable.self
         Scope.save()
         defer {
             Scope.restore()
@@ -195,7 +195,7 @@ public class Core {
             Scope.restore()
         }
         try defns.forEach {
-            let v = try Assert.cast($0.lhs, to: Variable.self)
+            let v = try $0.lhs ~> Variable.self
             Variable.define(v.name, $0.rhs)
         }
         let simplified = try node.simplify()
@@ -311,7 +311,7 @@ public class Core {
             return Float80(date - t)
         },
         .binary(.repeat, [.node, .node]) {(lhs, rhs) in
-            let n = try Assert.cast(rhs.simplify(), to: Int.self)
+            let n = try rhs.simplify() ~> Int.self
             var elements = [Node](repeating: lhs, count: n)
             return List(elements)
         },
@@ -523,7 +523,7 @@ public class Core {
         },
         // def [prefix, postfix, infix, auto] f(x) { return x + g(x) }
         .unary(.define, Function.self) { fun in
-            var closure = try Assert.cast(fun.elements.last, to: Closure.self)
+            var closure = try fun.elements.last ~> Closure.self
             fun.elements.removeLast()
             closure.capturesReturn = true
             try fun.implement(using: closure)
@@ -619,10 +619,9 @@ public class Core {
             KType.resolve(n) == type
         },
         
-        // Set mode
-        .unary(.set, Pair.self) { pair in
-            let category = try Assert.cast(pair.lhs, to: String.self)
-            let option = try Assert.cast(pair.rhs, to: String.self)
+        // Mode
+        .binary(.set, String.self, String.self) {
+            (category, option) in
             switch category {
             case "rounding":
                 guard let r = Mode.Rounding(rawValue: option) else {

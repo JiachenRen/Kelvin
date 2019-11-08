@@ -825,11 +825,11 @@ def l5 = (l1 >? $0 > $1)
 n := (l2 ~ $0 + $1 ^ 2)
 
 # Remove
-l1 := (l1 rm 3)
+l1 := (l1 remove 3)
 
 # Subscript by range
 l6 := l1[1,3]
-l6 === {2, 3}
+l6 === {2, 3, 5}
 
 # Reverse
 print(l1)
@@ -839,9 +839,22 @@ reverse(l1) === {5, 3, 2, 1}
 reverse("I am a pig" as @list) ~ $0 & $1
 
 # Mutating a list at index
-my_list := {2, 3, 7, 9}
-set(my_list, 3, "pig")
-my_list === {2, 3, 7, "pig"}
+(set 3 of {2, 3, 7, 9} to "pig") === {2, 3, 7, "pig"}
+
+# Removing element at index
+({1, 2, 3, 4} remove 2) === {1, 2, 4}
+
+# Removing all matching elements
+removeAll({a, x, 3, 4}) {$0 is @variable} === {3, 4}
+
+# Insertion
+l := [1, 2, 3, 5]
+l := (insert x at 2 of l)
+l === [1, 2, x, 3, 5]
+
+# Set element at index
+l := (set 3 of l to q^2)
+l === [1, 2, x, q^2, 5]
 ```
 ### [Core/Multiline](/Examples/Core/Multiline.kel)
 ```ruby
@@ -1656,7 +1669,7 @@ def l5 = (l1 >? $0 > $1)
 n := (l2 ~ $0 + $1 ^ 2)
 
 # Remove
-l1 := (l1 rm 3)
+l1 := (l1 remove 3)
 
 # Subscript by range
 l6 := l1[1, 2]
@@ -1667,7 +1680,7 @@ l3 === {1, 3, 5, 7, 9, 11, 13, 15, 17, 19}
 l4 === {2, 4}
 l5 === {5, 4, 3, 2, 1}
 n === 385
-l6 === {2}
+l6 === {2, 3}
 
 # Test string concatenation
 "asdf" & "sdfsdf"[1] === "asdfd"

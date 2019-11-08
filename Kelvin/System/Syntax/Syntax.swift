@@ -124,133 +124,145 @@ public struct Syntax {
     }
 
     /// Default syntax definitions
-    private static let definitions: [Keyword] = [
-        
-        // Arithmetic
-        .init(for: .add, associativity: .infix, precedence: .translating, operator: .init("+")),
-        .init(for: .minus, associativity: .infix, precedence: .translating, operator: .init("-")),
-        .init(for: .negate, associativity: .prefix, operator: .init("-", padding: .none)),
-        .init(for: .mult, associativity: .infix, precedence: .scaling, operator: .init("*")),
-        .init(for: .div, associativity: .infix, precedence: .scaling, operator: .init("/")),
-        .init(for: .mod, associativity: .infix, precedence: .scaling, operator: .init("%", isPreferred: false)),
-        .init(for: .power, associativity: .infix, precedence: .exponent, operator: .init("^")),
-        .init(for: .sqrt, associativity: .prefix, operator: .init("√", padding: .none)),
-        
-        // Assignment
-        .init(for: .increment, associativity: .postfix, operator: .init("++", padding: .rightSide)),
-        .init(for: .decrement, associativity: .postfix, operator: .init("--", padding: .rightSide)),
-        .init(for: .addAssign, associativity: .infix, precedence: .assignment, operator: .init("+=")),
-        .init(for: .minusAssign, associativity: .infix, precedence: .assignment, operator: .init("-=")),
-        .init(for: .multAssign, associativity: .infix, precedence: .assignment, operator: .init("*=")),
-        .init(for: .divAssign, associativity: .infix, precedence: .assignment, operator: .init("/=")),
-        .init(for: .concatAssign, associativity: .infix, precedence: .assignment, operator: .init("&=")),
-        .init(for: .assign, associativity: .infix, precedence: .assignment, operator: .init(":=", padding: .bothSides)),
-        .init(for: .define, associativity: .prefix, precedence: .assignment),
-        .init(for: .del, associativity: .prefix),
-        
-        // Number
-        .init(for: .degrees, associativity: .postfix, operator: .init("°", padding: .none)),
-        .init(for: .factorial, associativity: .postfix, operator: .init("!", padding: .none)),
-        .init(for: .percent, associativity: .postfix, operator: .init("%", padding: .none)),
-        .init(for: .round, associativity: .prefix),
-        .init(for: .int, associativity: .prefix),
-        .init(for: .npr, associativity: .infix, precedence: .binary),
-        .init(for: .ncr, associativity: .infix, precedence: .binary),
-        
-        // Relational
-        .init(for: .equates, associativity: .infix, precedence: .equation, operator: .init("=")),
-        .init(for: .lessThan, associativity: .infix, precedence: .relational, operator: .init("<")),
-        .init(for: .greaterThan, associativity: .infix, precedence: .relational, operator: .init(">")),
-        .init(for: .greaterThanOrEquals, associativity: .infix, precedence: .relational, operator: .init(">=")),
-        .init(for: .lessThanOrEquals, associativity: .infix, precedence: .relational, operator: .init("<=")),
-        .init(for: .equals, associativity: .infix, precedence: .equality, operator: .init("==")),
-        .init(for: .notEquals, associativity: .infix, precedence: .equality, operator: .init("!=")),
-        
-        // Boolean logic
-        .init(for: .and, associativity: .infix, precedence: .and, operator: .init("&&")),
-        .init(for: .or, associativity: .infix, precedence: .or, operator: .init("||")),
-        .init(for: .xor, associativity: .infix, precedence: .xor, operator: .init("^^", isPreferred: false)),
-        .init(for: .not, associativity: .prefix, operator: .init("!", padding: .none)),
-        .init(for: .nand, associativity: .infix, precedence: .nand, operator: .init("!&", isPreferred: false)),
-        .init(for: .nor, associativity: .infix, precedence: .nor, operator: .init("!|", isPreferred: false)),
-        
-        // List
-        .init(for: .get, associativity: .infix, precedence: .subscript, operator: .init("::", padding: .none)), // Preserve arguments?
-        .init(for: .set, associativity: .prefix, precedence: .prefixCommand),
-        .init(for: .count, associativity: .prefix),
-        .init(for: .shuffle, associativity: .prefix),
-        .init(for: .map, associativity: .infix, operator: .init("|")),
-        .init(for: .reduce, associativity: .infix, operator: .init("~")),
-        .init(for: .filter, associativity: .infix, operator: .init("|?")),
-        .init(for: .zip, associativity: .infix),
-        .init(for: .append, associativity: .infix, precedence: .concat, operator: .init("++")),
-        .init(for: .sort, associativity: .infix, operator: .init(">?")),
-        .init(for: .remove, associativity: .infix),
-        .init(for: .contains, associativity: .infix),
-        
-        // Developer utility
-        .init(for: .pipe, associativity: .infix, operator: .init("->")),
-        .init(for: .evaluateAt, associativity: .infix, operator: .init("<<")),
-        .init(for: .repeat, associativity: .infix, precedence: .repeat, operator: .init("...", padding: .none)),
-        .init(for: .copy, associativity: .infix, precedence: .repeat),
-        .init(for: .complexity, associativity: .prefix),
-        .init(for: .eval, associativity: .prefix),
-        .init(for: .print, associativity: .prefix, precedence: .prefixCommand),
-        .init(for: .println, associativity: .prefix, precedence: .prefixCommand),
-        .init(for: .printMat, associativity: .prefix, precedence: .prefixCommand),
-        .init(for: .compile, associativity: .prefix),
-        .init(for: .delay, associativity: .prefix),
-        .init(for: .run, associativity: .prefix, precedence: .prefixCommand),
-        .init(for: .import, associativity: .prefix, precedence: .prefixCommand),
-        .init(for: .invoke, associativity: .infix, precedence: .invocation, operator: .init("<<<")),
-        .init(for: .functionRef, associativity: .prefix, precedence: .prefixCommand, operator: .init("*", padding: .none)),
-        .init(for: .runShell, associativity: .prefix, precedence: .prefixCommand),
-        
-        // Transfer, flow control, and error handling
-        .init(for: .return, associativity: .prefix, precedence: .prefixCommand),
-        .init(for: .ternaryConditional, associativity: .infix, precedence: .conditional, operator: .init("?")),
-        .init(for: .assert, associativity: .prefix, precedence: .prefixCommand),
-        .init(for: .assertEquals, associativity: .infix, operator: .init("===")),
-        .init(for: .try, associativity: .prefix, precedence: .prefixCommand),
-        .init(for: .throw, associativity: .prefix, precedence: .prefixCommand),
-        .init(for: .else, associativity: .infix, precedence: .binding),
-        .init(for: .inout, associativity: .prefix, precedence: .prefixA, operator: .init("&", padding: .none)),
-        
-        // Calculus
-        .init(for: .derivative, associativity: .infix, precedence: .binary, operator: .init("'", padding: .none)),
-        .init(for: .gradient, associativity: .infix, precedence: .binary, operator: .init("∇")),
-        
-        // Type casting
-        .init(for: .as, associativity: .infix, precedence: .binary, operator: .init("!!", isPreferred: false)),
-        .init(for: .is, associativity: .infix, precedence: .binary, operator: .init("??", isPreferred: false)),
-        
-        // Matrix & vector
-        .init(for: .determinant, associativity: .prefix),
-        .init(for: .inverse, associativity: .prefix),
-        .init(for: .ref, associativity: .prefix),
-        .init(for: .rref, associativity: .prefix),
-        .init(for: .dotProduct, associativity: .infix, precedence: .scaling, operator: .init("•")),
-        .init(for: .crossProduct, associativity: .infix, precedence: .scaling, operator: .init("×")),
-        .init(for: .matrixMultiplication, associativity: .infix, precedence: .scaling, operator: .init("**")),
-        .init(for: .transpose, associativity: .prefix, operator: .init("¡", padding: .none, isPreferred: false)),
-        .init(for: .project, associativity: .infix, precedence: .binary),
-        .init(for: .augment, associativity: .infix, precedence: .concat),
-        
-        // Others
-        .init(for: .pair, associativity: .infix, precedence: .pair, operator: .init(":")),
-        .init(for: .concat, associativity: .infix, precedence: .concat, operator: .init("&")),
-        
-        // Syntax
-        .init(for: .auto, associativity: .prefix),
-        .init(for: .prefix, associativity: .prefix),
-        .init(for: .infix, associativity: .prefix),
-        .init(for: .postfix, associativity: .prefix),
-        
-        // File system
-        .init(for: .setWorkingDirectory, associativity: .prefix),
-        .init(for: .createFile, associativity: .prefix),
-        .init(for: .readFile, associativity: .prefix),
-        .init(for: .createDirectory, associativity: .prefix),
-        .init(for: .isDirectory, associativity: .prefix),
-    ]
+    private static let definitions: [Keyword] = {
+        var keywords: [Keyword] = [
+            // Arithmetic
+            .init(for: .add, associativity: .infix, precedence: .translating, operator: .init("+")),
+            .init(for: .minus, associativity: .infix, precedence: .translating, operator: .init("-")),
+            .init(for: .negate, associativity: .prefix, operator: .init("-", padding: .none)),
+            .init(for: .mult, associativity: .infix, precedence: .scaling, operator: .init("*")),
+            .init(for: .div, associativity: .infix, precedence: .scaling, operator: .init("/")),
+            .init(for: .mod, associativity: .infix, precedence: .scaling, operator: .init("%", isPreferred: false)),
+            .init(for: .power, associativity: .infix, precedence: .exponent, operator: .init("^")),
+            .init(for: .sqrt, associativity: .prefix, operator: .init("√", padding: .none)),
+            
+            // Assignment
+            .init(for: .increment, associativity: .postfix, operator: .init("++", padding: .rightSide)),
+            .init(for: .decrement, associativity: .postfix, operator: .init("--", padding: .rightSide)),
+            .init(for: .addAssign, associativity: .infix, precedence: .assignment, operator: .init("+=")),
+            .init(for: .minusAssign, associativity: .infix, precedence: .assignment, operator: .init("-=")),
+            .init(for: .multAssign, associativity: .infix, precedence: .assignment, operator: .init("*=")),
+            .init(for: .divAssign, associativity: .infix, precedence: .assignment, operator: .init("/=")),
+            .init(for: .concatAssign, associativity: .infix, precedence: .assignment, operator: .init("&=")),
+            .init(for: .assign, associativity: .infix, precedence: .assignment, operator: .init(":=", padding: .bothSides)),
+            .init(for: .define, associativity: .prefix, precedence: .assignment),
+            .init(for: .del, associativity: .prefix),
+            
+            // Number
+            .init(for: .degrees, associativity: .postfix, operator: .init("°", padding: .none)),
+            .init(for: .factorial, associativity: .postfix, operator: .init("!", padding: .none)),
+            .init(for: .percent, associativity: .postfix, operator: .init("%", padding: .none)),
+            .init(for: .round, associativity: .prefix),
+            .init(for: .int, associativity: .prefix),
+            .init(for: .npr, associativity: .infix, precedence: .binary),
+            .init(for: .ncr, associativity: .infix, precedence: .binary),
+            
+            // Relational
+            .init(for: .equates, associativity: .infix, precedence: .equation, operator: .init("=")),
+            .init(for: .lessThan, associativity: .infix, precedence: .relational, operator: .init("<")),
+            .init(for: .greaterThan, associativity: .infix, precedence: .relational, operator: .init(">")),
+            .init(for: .greaterThanOrEquals, associativity: .infix, precedence: .relational, operator: .init(">=")),
+            .init(for: .lessThanOrEquals, associativity: .infix, precedence: .relational, operator: .init("<=")),
+            .init(for: .equals, associativity: .infix, precedence: .equality, operator: .init("==")),
+            .init(for: .notEquals, associativity: .infix, precedence: .equality, operator: .init("!=")),
+            
+            // Boolean logic
+            .init(for: .and, associativity: .infix, precedence: .and, operator: .init("&&")),
+            .init(for: .or, associativity: .infix, precedence: .or, operator: .init("||")),
+            .init(for: .xor, associativity: .infix, precedence: .xor, operator: .init("^^", isPreferred: false)),
+            .init(for: .not, associativity: .prefix, operator: .init("!", padding: .none)),
+            .init(for: .nand, associativity: .infix, precedence: .nand, operator: .init("!&", isPreferred: false)),
+            .init(for: .nor, associativity: .infix, precedence: .nor, operator: .init("!|", isPreferred: false)),
+            
+            // List
+            .init(for: .get, associativity: .infix, precedence: .subscript, operator: .init("::", padding: .none)),
+            .init(for: .set, associativity: .prefix, precedence: .prefixCommand),
+            .init(for: .insert, associativity: .prefix, precedence: .prefixCommand),
+            .init(for: .remove, associativity: .infix),
+            .init(for: .removeAll, associativity: .infix),
+            .init(for: .count, associativity: .prefix),
+            .init(for: .shuffle, associativity: .prefix),
+            .init(for: .map, associativity: .infix, operator: .init("|")),
+            .init(for: .reduce, associativity: .infix, operator: .init("~")),
+            .init(for: .filter, associativity: .infix, operator: .init("|?")),
+            .init(for: .zip, associativity: .infix),
+            .init(for: .append, associativity: .infix, precedence: .concat, operator: .init("++")),
+            .init(for: .sort, associativity: .infix, operator: .init(">?")),
+            .init(for: .contains, associativity: .infix),
+            
+            // Developer utility
+            .init(for: .pipe, associativity: .infix, operator: .init("->")),
+            .init(for: .evaluateAt, associativity: .infix, operator: .init("<<")),
+            .init(for: .repeat, associativity: .infix, precedence: .repeat, operator: .init("...", padding: .none)),
+            .init(for: .copy, associativity: .infix, precedence: .repeat),
+            .init(for: .complexity, associativity: .prefix),
+            .init(for: .eval, associativity: .prefix),
+            .init(for: .print, associativity: .prefix, precedence: .prefixCommand),
+            .init(for: .println, associativity: .prefix, precedence: .prefixCommand),
+            .init(for: .printMat, associativity: .prefix, precedence: .prefixCommand),
+            .init(for: .compile, associativity: .prefix),
+            .init(for: .delay, associativity: .prefix),
+            .init(for: .run, associativity: .prefix, precedence: .prefixCommand),
+            .init(for: .import, associativity: .prefix, precedence: .prefixCommand),
+            .init(for: .invoke, associativity: .infix, precedence: .invocation, operator: .init("<<<")),
+            .init(for: .functionRef, associativity: .prefix, precedence: .prefixCommand, operator: .init("*", padding: .none)),
+            .init(for: .runShell, associativity: .prefix, precedence: .prefixCommand),
+            
+            // Transfer, flow control, and error handling
+            .init(for: .return, associativity: .prefix, precedence: .prefixCommand),
+            .init(for: .ternaryConditional, associativity: .infix, precedence: .conditional, operator: .init("?")),
+            .init(for: .assert, associativity: .prefix, precedence: .prefixCommand),
+            .init(for: .assertEquals, associativity: .infix, operator: .init("===")),
+            .init(for: .try, associativity: .prefix, precedence: .prefixCommand),
+            .init(for: .throw, associativity: .prefix, precedence: .prefixCommand),
+            .init(for: .else, associativity: .infix, precedence: .binding),
+            .init(for: .inout, associativity: .prefix, precedence: .prefixA, operator: .init("&", padding: .none)),
+            
+            // Calculus
+            .init(for: .derivative, associativity: .infix, precedence: .binary, operator: .init("'", padding: .none)),
+            .init(for: .gradient, associativity: .infix, precedence: .binary, operator: .init("∇")),
+            
+            // Type casting
+            .init(for: .as, associativity: .infix, precedence: .binary, operator: .init("!!", isPreferred: false)),
+            .init(for: .is, associativity: .infix, precedence: .binary, operator: .init("??", isPreferred: false)),
+            
+            // Matrix & vector
+            .init(for: .determinant, associativity: .prefix),
+            .init(for: .inverse, associativity: .prefix),
+            .init(for: .ref, associativity: .prefix),
+            .init(for: .rref, associativity: .prefix),
+            .init(for: .dotProduct, associativity: .infix, precedence: .scaling, operator: .init("•")),
+            .init(for: .crossProduct, associativity: .infix, precedence: .scaling, operator: .init("×")),
+            .init(for: .matrixMultiplication, associativity: .infix, precedence: .scaling, operator: .init("**")),
+            .init(for: .transpose, associativity: .prefix, operator: .init("¡", padding: .none, isPreferred: false)),
+            .init(for: .project, associativity: .infix, precedence: .binary),
+            .init(for: .augment, associativity: .infix, precedence: .concat),
+            
+            // Others
+            .init(for: .concat, associativity: .infix, precedence: .concat, operator: .init("&")),
+            
+            // Syntax
+            .init(for: .auto, associativity: .prefix),
+            .init(for: .prefix, associativity: .prefix),
+            .init(for: .infix, associativity: .prefix),
+            .init(for: .postfix, associativity: .prefix),
+            
+            // File system
+            .init(for: .setWorkingDirectory, associativity: .prefix),
+            .init(for: .createFile, associativity: .prefix),
+            .init(for: .readFile, associativity: .prefix),
+            .init(for: .createDirectory, associativity: .prefix),
+            .init(for: .isDirectory, associativity: .prefix),
+        ]
+        var prepositions = Pair.Preposition.allCases
+        prepositions.removeAll(where: { $0 == .colon })
+        let colon = Pair.Preposition.colon
+        keywords.append(Keyword(for: colon.rawValue, associativity: .infix, precedence: .pair, operator: .init(":")))
+        keywords.append(
+            contentsOf: prepositions.map {
+                Keyword(for: $0.rawValue, associativity: .infix, precedence: .pair)
+            }
+        )
+        return keywords
+    }()
 }

@@ -10,6 +10,7 @@
 		1F010C6B23622F76003B6497 /* kelvin_vscode_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F010C6823622F75003B6497 /* kelvin_vscode_1.png */; };
 		1F010C6C23622F76003B6497 /* kelvin_vscode_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F010C6923622F75003B6497 /* kelvin_vscode_2.png */; };
 		1F010C6D23622F76003B6497 /* kelvin_vscode_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F010C6A23622F76003B6497 /* kelvin_vscode_3.png */; };
+		1F05251D2374D8310054547F /* Exports+pair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F05251B2374D7CF0054547F /* Exports+pair.swift */; };
 		1F065EE72350F7B7002321E3 /* Fraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F065EE52350F77D002321E3 /* Fraction.swift */; };
 		1F065EEC23510553002321E3 /* BigInt+Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F065EEA2351052A002321E3 /* BigInt+Integer.swift */; };
 		1F0AA88E2353C557006D7523 /* Kelvin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F48D9AA222E0D8100639F26 /* Kelvin.framework */; };
@@ -85,7 +86,6 @@
 		1F48DA17222E0EB800639F26 /* Exports+matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90EC21FA27E700432B17 /* Exports+matrix.swift */; };
 		1F48DA19222E0EB800639F26 /* Probability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936CD21F4E36300E707BD /* Probability.swift */; };
 		1F48DA1A222E0EB800639F26 /* Probability+Gamma.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F985D4E221C3F8200EFC404 /* Probability+Gamma.swift */; };
-		1F48DA1C222E0EB800639F26 /* Exports+pair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936D621F4E80A00E707BD /* Exports+pair.swift */; };
 		1F48DA1E222E0EB800639F26 /* Equation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974C421E633FD006D6DC2 /* Equation.swift */; };
 		1F48DA1F222E0EB800639F26 /* Bool+Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F721F5189500E707BD /* Bool+Node.swift */; };
 		1F48DA20222E0EB800639F26 /* KType+Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F322824222C76E0004417CB /* KType+Node.swift */; };
@@ -144,7 +144,6 @@
 		1F48DA6B222E167700639F26 /* Exports+matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A90EC21FA27E700432B17 /* Exports+matrix.swift */; };
 		1F48DA6D222E167700639F26 /* Probability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936CD21F4E36300E707BD /* Probability.swift */; };
 		1F48DA6E222E167700639F26 /* Probability+Gamma.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F985D4E221C3F8200EFC404 /* Probability+Gamma.swift */; };
-		1F48DA70222E167700639F26 /* Exports+pair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936D621F4E80A00E707BD /* Exports+pair.swift */; };
 		1F48DA72222E167700639F26 /* Equation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3974C421E633FD006D6DC2 /* Equation.swift */; };
 		1F48DA73222E167700639F26 /* Bool+Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0936F721F5189500E707BD /* Bool+Node.swift */; };
 		1F48DA74222E167700639F26 /* KType+Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F322824222C76E0004417CB /* KType+Node.swift */; };
@@ -352,6 +351,7 @@
 		1F010C6823622F75003B6497 /* kelvin_vscode_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kelvin_vscode_1.png; sourceTree = "<group>"; };
 		1F010C6923622F75003B6497 /* kelvin_vscode_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kelvin_vscode_2.png; sourceTree = "<group>"; };
 		1F010C6A23622F76003B6497 /* kelvin_vscode_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kelvin_vscode_3.png; sourceTree = "<group>"; };
+		1F05251B2374D7CF0054547F /* Exports+pair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Exports+pair.swift"; sourceTree = "<group>"; };
 		1F065EE52350F77D002321E3 /* Fraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fraction.swift; sourceTree = "<group>"; };
 		1F065EE823510022002321E3 /* BigInt.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BigInt.framework; path = Carthage/Build/Mac/BigInt.framework; sourceTree = "<group>"; };
 		1F065EEA2351052A002321E3 /* BigInt+Integer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BigInt+Integer.swift"; sourceTree = "<group>"; };
@@ -359,7 +359,6 @@
 		1F0936C221F3C13100E707BD /* Stat+oneVar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stat+oneVar.swift"; sourceTree = "<group>"; };
 		1F0936CA21F4E2A300E707BD /* Rules+unaryArit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rules+unaryArit.swift"; sourceTree = "<group>"; };
 		1F0936CD21F4E36300E707BD /* Probability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Probability.swift; sourceTree = "<group>"; };
-		1F0936D621F4E80A00E707BD /* Exports+pair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Exports+pair.swift"; sourceTree = "<group>"; };
 		1F0936DC21F4EADE00E707BD /* Algebra+expand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Algebra+expand.swift"; sourceTree = "<group>"; };
 		1F0936F321F5184400E707BD /* Float80+Number.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Float80+Number.swift"; sourceTree = "<group>"; };
 		1F0936F521F5186200E707BD /* Int+Integer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Integer.swift"; sourceTree = "<group>"; };
@@ -877,7 +876,6 @@
 		1FA51BBA234ACADF00B3D06B /* Exports */ = {
 			isa = PBXGroup;
 			children = (
-				1F0936D621F4E80A00E707BD /* Exports+pair.swift */,
 				1FEC417A235E6751006A0E76 /* Exports+approx.swift */,
 				1F570B5521FF6F670006E342 /* Exports+stats.swift */,
 				1FB2D03F234395E7008709AE /* Exports+algebra.swift */,
@@ -894,6 +892,7 @@
 				1F539723234AD8E000B9C66E /* Exports+stackTrace.swift */,
 				1F539725234AD8EE00B9C66E /* Exports+fileSystem.swift */,
 				1F539727234AD91400B9C66E /* Exports+flowControl.swift */,
+				1F05251B2374D7CF0054547F /* Exports+pair.swift */,
 				1FB70A272342AE4800C12343 /* Exports.swift */,
 			);
 			path = Exports;
@@ -1432,6 +1431,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F05251D2374D8310054547F /* Exports+pair.swift in Sources */,
 				1FEC417C235E678D006A0E76 /* Exports+approx.swift in Sources */,
 				1FEC4179235E5E94006A0E76 /* Approximator.swift in Sources */,
 				1FCB0337235E201C00130834 /* Exports+listProtocol.swift in Sources */,
@@ -1492,7 +1492,6 @@
 				1F48DA6B222E167700639F26 /* Exports+matrix.swift in Sources */,
 				1F48DA6D222E167700639F26 /* Probability.swift in Sources */,
 				1F48DA6E222E167700639F26 /* Probability+Gamma.swift in Sources */,
-				1F48DA70222E167700639F26 /* Exports+pair.swift in Sources */,
 				1F48DA72222E167700639F26 /* Equation.swift in Sources */,
 				1F48DA73222E167700639F26 /* Bool+Node.swift in Sources */,
 				1F48DA74222E167700639F26 /* KType+Node.swift in Sources */,
@@ -1585,7 +1584,6 @@
 				1F48DA17222E0EB800639F26 /* Exports+matrix.swift in Sources */,
 				1F48DA19222E0EB800639F26 /* Probability.swift in Sources */,
 				1F48DA1A222E0EB800639F26 /* Probability+Gamma.swift in Sources */,
-				1F48DA1C222E0EB800639F26 /* Exports+pair.swift in Sources */,
 				1F48DA1E222E0EB800639F26 /* Equation.swift in Sources */,
 				1F48DA1F222E0EB800639F26 /* Bool+Node.swift in Sources */,
 				1F48DA20222E0EB800639F26 /* KType+Node.swift in Sources */,
@@ -1987,7 +1985,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = KelvinMacOS/Kelvin.entitlements;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 2;
@@ -2016,7 +2014,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = KelvinMacOS/Kelvin.entitlements;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 2;

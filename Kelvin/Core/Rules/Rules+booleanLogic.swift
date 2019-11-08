@@ -67,7 +67,7 @@ extension Rules {
             return nil
         },
         .unary(.not, [.function]) {
-            let fun = try Assert.cast($0, to: Function.self)
+            let fun = try $0 ~> Function.self
             // Apply De Morgan's laws
             switch fun.name {
             case .or:
@@ -85,7 +85,7 @@ extension Rules {
         },
         .binary(.and, [.node, .function]) {
             (node, fun) in
-            let fun = try Assert.cast(fun, to: Function.self)
+            let fun = try fun ~> Function.self
             switch fun.name {
             case .or where fun.contains(where: {$0 === node}, depth: 1) :
                 // Base case, a and (a or b) is a
@@ -136,7 +136,7 @@ extension Rules {
         },
         .binary(.or, [.node, .function]) {
             (node, fun) in
-            let fun = try Assert.cast(fun, to: Function.self)
+            let fun = try fun ~> Function.self
             switch fun.name {
                 // - Todo: !a or (a and b), a or (!a and b)
             case .and where fun.contains(where: {$0 === node}, depth: 1):

@@ -128,7 +128,7 @@ public class Assert {
     public func specialize<T: Node>(mat: Matrix, as type: T.Type) throws -> [[T]] {
         return try mat.rows.map {row in
             try row.map { e in
-                try Assert.cast(e, to: T.self)
+                try e ~> T.self
             }
         }
     }

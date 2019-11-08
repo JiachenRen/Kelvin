@@ -67,6 +67,11 @@ public class Compiler {
     
     /// Cache compiled expressions to allow incremental compilation (way faster)
     private var compiledExpressions = [String: Node]()
+    
+    /// Prepositions
+    private let prepositions = Pair.Preposition.allCases.reduce(into: [:]) {
+        $0[$1.rawValue] = $1
+    }
 
     /// Compiles a single line expression.
     ///
@@ -417,17 +422,6 @@ public class Compiler {
             name($0) == .list
         }
         
-        // Restore pair() to (:)
-        parent = try parent.replacing(by: {
-            let elements = args($0)
-            if elements.count != 2 {
-                throw CompilerError.syntax(errMsg: "expected expr. on both sides of 'x'")
-            }
-            return Pair(elements[0], elements[1])
-        }) {
-            name($0) == .pair
-        }
-        
         // Restore closures
         parent = parent.replacing(by: {
             let a = args($0)
@@ -448,6 +442,14 @@ public class Compiler {
             return Equation(lhs: args($0)[0], rhs: args($0)[1])
         }) {
             name($0) == .equates
+        }
+        
+        // Prepositions
+        parent = parent.replacing(by: {
+            let prep = Pair.Preposition(rawValue: name($0)!)!
+            return Pair(args($0)[0], args($0)[1], preposition: prep)
+        }) {
+            prepositions[name($0) ?? ""] != nil && args($0).count == 2
         }
         
         // Restore else {...}
@@ -494,7 +496,7 @@ public class Compiler {
                 guard let arg = assocFun.elements.first else {
                     throw CompilerError.illegalArgument(errMsg: "expected function, but found nothing");
                 }
-                let fun = try Assert.cast(arg, to: Function.self)
+                let fun = try arg ~> Function.self
                 let name = fun.name
                 try Assert.newKeyword(name)
                 switch assoc {

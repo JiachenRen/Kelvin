@@ -21,7 +21,6 @@ public class Operation: Equatable, Hashable {
         Exports.list,
         Exports.listProtocol,
         Exports.matrix,
-        Exports.pair,
         Exports.approx,
         Exports.probability,
         Exports.rules,
@@ -32,7 +31,8 @@ public class Operation: Equatable, Hashable {
         Exports.iterable,
         Exports.fileSystem,
         Exports.flowControl,
-        Exports.stackTrace
+        Exports.stackTrace,
+        Exports.pair
     ].flatMap {
         $0
     }
