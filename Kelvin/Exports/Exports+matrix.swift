@@ -123,6 +123,12 @@ extension Exports {
         },
         .binary(.augment, Matrix.self, Matrix.self) {
             try $0.augment($1)
+        },
+        .unary(.singularValues, Matrix.self) {
+            try List($0.singularValues())
+        },
+        .ternary(.setColumn, Int.self, Matrix.self, Vector.self) {
+            try $1.setColumn($0, $2)
         }
     ]
 }

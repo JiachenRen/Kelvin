@@ -109,8 +109,8 @@ extension Exports {
             try Assert.equals(indices.count, 2, message: "expected 2 indices, but found 3")
             let i = indices[0]
             let j = indices[1]
-            try Assert.index(indices.count, i)
-            try Assert.index(indices.count, j)
+            try Assert.index($1.count, i)
+            try Assert.index($1.count, j)
             $1.elements.swapAt(i, j)
             return $1
         }

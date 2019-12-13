@@ -161,6 +161,9 @@ public extension OperationName {
     static let rationalEigenValues = "rEigenVals"
     static let leastSquares = "leastSquares"
     static let augment = "aug"
+    static let singularValues = "singularVals"
+    static let swapColumns = "swapCols"
+    static let setColumn = "setCol"
     
     // MARK: - Probability
     

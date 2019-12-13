@@ -531,6 +531,14 @@ public final class Matrix: Iterable {
             .simplify()
     }
     
+    /// Finds the singular values of this matrix.
+    /// SIngular values of a matrix `A` are square roots of eigenvalues of `trans(A) ** A`.
+    /// - Warning: Incomplete implementation. Currently only finds rational singular values.
+    /// - Returns: An array of singular values
+    public func singularValues() throws -> [Node] {
+        return try self.transposed().mult(self).rationalEigenValues().map { √$0 }
+    }
+    
     /// Creates an identity matrix of the specified dimension
     /// The identity matrix, `I2` for example, is
     /// `[[1, 0], [0, 1]]`; The identity matrix `I3` is

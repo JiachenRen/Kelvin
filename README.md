@@ -361,6 +361,8 @@ Please refer to [Examples](Examples) for detailed documentation/examples over al
   - Distinct rational eigen values
   - Least squares solution
   - Augmentation
+  - [ ] Diagonalization (Real/Complex)
+  - [ ] Orthogonal diagonalization
   - [ ] LU decomposition
   - [ ] Eigen values/vectors
 

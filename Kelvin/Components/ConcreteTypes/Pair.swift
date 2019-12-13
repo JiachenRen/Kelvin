@@ -48,6 +48,15 @@ public class Pair: Iterable, BinaryNode {
                 return Function(.set, pair.elements)
             },
         ],
+        .setColumn: [
+            [.of, .to]: { pair in
+                try applyAsArgs(.setColumn, pair) { args in
+                    let i = try args[0] ~> Int.self
+                    let mat = try args[1] ~> Matrix.self
+                    let vec = try args[2] ~> Vector.self
+                }
+            },
+        ],
         .swap: [
             [.of]: { pair in
                 try pair.lhs ~> List.self

@@ -9,7 +9,7 @@
 import Foundation
 import BigInt
 
-public final class Fraction: Exact {
+public final class Fraction: Exact, Codable {
     public var fraction: Fraction { self }
     /// Tolerance used when converting floating point to fraction.
     public static var defaultTolerance: Float80 = 5E-7

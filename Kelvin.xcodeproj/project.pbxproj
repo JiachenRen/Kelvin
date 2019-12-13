@@ -268,6 +268,9 @@
 		1FE487FE220E9028005361AC /* ruby_dracula_theme.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FE487FC220E9028005361AC /* ruby_dracula_theme.png */; };
 		1FEC4179235E5E94006A0E76 /* Approximator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FEC4177235E5C1D006A0E76 /* Approximator.swift */; };
 		1FEC417C235E678D006A0E76 /* Exports+approx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FEC417A235E6751006A0E76 /* Exports+approx.swift */; };
+		1FF1AAE5237DDA700062D6C9 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FF1AAE4237DDA700062D6C9 /* main.swift */; };
+		1FF1AAE9237DDAC40062D6C9 /* Kelvin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F48D9AA222E0D8100639F26 /* Kelvin.framework */; };
+		1FF1AAEA237DDAC40062D6C9 /* Kelvin.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1F48D9AA222E0D8100639F26 /* Kelvin.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1FFD8CAA218F50870004ECEB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FFD8CA9218F50870004ECEB /* Assets.xcassets */; };
 		1FFD8CAD218F50870004ECEB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1FFD8CAB218F50870004ECEB /* Main.storyboard */; };
 /* End PBXBuildFile section */
@@ -300,6 +303,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 1FDEA4B9225914C800D88542;
 			remoteInfo = "Kelvin CLI";
+		};
+		1FF1AAEB237DDAC40062D6C9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1FFD8C97218F50850004ECEB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1F48D9A9222E0D8100639F26;
+			remoteInfo = "Kelvin-macOS";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -344,6 +354,26 @@
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
+		};
+		1FF1AAE0237DDA700062D6C9 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		1FF1AAED237DDAC40062D6C9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				1FF1AAEA237DDAC40062D6C9 /* Kelvin.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -526,6 +556,8 @@
 		1FE487FC220E9028005361AC /* ruby_dracula_theme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ruby_dracula_theme.png; sourceTree = "<group>"; };
 		1FEC4177235E5C1D006A0E76 /* Approximator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Approximator.swift; sourceTree = "<group>"; };
 		1FEC417A235E6751006A0E76 /* Exports+approx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Exports+approx.swift"; sourceTree = "<group>"; };
+		1FF1AAE2237DDA700062D6C9 /* GenerateAssets */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GenerateAssets; sourceTree = BUILT_PRODUCTS_DIR; };
+		1FF1AAE4237DDA700062D6C9 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		1FFD8C9F218F50850004ECEB /* Kelvin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kelvin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FFD8CA2218F50850004ECEB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1FFD8CA7218F50850004ECEB /* Kelvin.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Kelvin.xcdatamodel; sourceTree = "<group>"; };
@@ -563,6 +595,14 @@
 			files = (
 				1FB0F175232AC07800281559 /* libedit.tbd in Frameworks */,
 				1F0AA88E2353C557006D7523 /* Kelvin.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1FF1AADF237DDA700062D6C9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1FF1AAE9237DDAC40062D6C9 /* Kelvin.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1030,6 +1070,14 @@
 			path = Approximation;
 			sourceTree = "<group>";
 		};
+		1FF1AAE3237DDA700062D6C9 /* GenerateAssets */ = {
+			isa = PBXGroup;
+			children = (
+				1FF1AAE4237DDA700062D6C9 /* main.swift */,
+			);
+			path = GenerateAssets;
+			sourceTree = "<group>";
+		};
 		1FFD8C96218F50850004ECEB = {
 			isa = PBXGroup;
 			children = (
@@ -1040,6 +1088,7 @@
 				1FFD8CB7218F50870004ECEB /* KelvinTests */,
 				1FFD8CC2218F50870004ECEB /* KelvinUITests */,
 				1F2E82BC219757FC005C3353 /* KelvinCommandLine */,
+				1FF1AAE3237DDA700062D6C9 /* GenerateAssets */,
 				1FFD8CA0218F50850004ECEB /* Products */,
 				1F6D0A02220D18CE00807377 /* Frameworks */,
 			);
@@ -1053,6 +1102,7 @@
 				1F48D9AA222E0D8100639F26 /* Kelvin.framework */,
 				1F48D9FD222E0E6600639F26 /* Kelvin.framework */,
 				1FDEA4BA225914C800D88542 /* Kelvin CLI */,
+				1FF1AAE2237DDA700062D6C9 /* GenerateAssets */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1190,6 +1240,25 @@
 			productReference = 1FDEA4BA225914C800D88542 /* Kelvin CLI */;
 			productType = "com.apple.product-type.tool";
 		};
+		1FF1AAE1237DDA700062D6C9 /* GenerateAssets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1FF1AAE6237DDA700062D6C9 /* Build configuration list for PBXNativeTarget "GenerateAssets" */;
+			buildPhases = (
+				1FF1AADE237DDA700062D6C9 /* Sources */,
+				1FF1AADF237DDA700062D6C9 /* Frameworks */,
+				1FF1AAE0237DDA700062D6C9 /* CopyFiles */,
+				1FF1AAED237DDAC40062D6C9 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1FF1AAEC237DDAC40062D6C9 /* PBXTargetDependency */,
+			);
+			name = GenerateAssets;
+			productName = GenerateAssets;
+			productReference = 1FF1AAE2237DDA700062D6C9 /* GenerateAssets */;
+			productType = "com.apple.product-type.tool";
+		};
 		1FFD8C9E218F50850004ECEB /* Kelvin */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1FFD8CC8218F50870004ECEB /* Build configuration list for PBXNativeTarget "Kelvin" */;
@@ -1236,7 +1305,7 @@
 		1FFD8C97218F50850004ECEB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1020;
+				LastSwiftUpdateCheck = 1120;
 				LastUpgradeCheck = 1120;
 				ORGANIZATIONNAME = "Jiachen Ren";
 				TargetAttributes = {
@@ -1250,6 +1319,9 @@
 					};
 					1FDEA4B9225914C800D88542 = {
 						CreatedOnToolsVersion = 10.2;
+					};
+					1FF1AAE1237DDA700062D6C9 = {
+						CreatedOnToolsVersion = 11.2;
 					};
 					1FFD8C9E218F50850004ECEB = {
 						CreatedOnToolsVersion = 10.1;
@@ -1278,6 +1350,7 @@
 				1F48D9A9222E0D8100639F26 /* Kelvin-macOS */,
 				1F48D9FC222E0E6600639F26 /* Kelvin-iOS */,
 				1FDEA4B9225914C800D88542 /* Kelvin CLI */,
+				1FF1AAE1237DDA700062D6C9 /* GenerateAssets */,
 			);
 		};
 /* End PBXProject section */
@@ -1633,6 +1706,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1FF1AADE237DDA700062D6C9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1FF1AAE5237DDA700062D6C9 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1FFD8C9B218F50850004ECEB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1679,6 +1760,11 @@
 			isa = PBXTargetDependency;
 			target = 1FDEA4B9225914C800D88542 /* Kelvin CLI */;
 			targetProxy = 1F41D29123580F5F00204FDE /* PBXContainerItemProxy */;
+		};
+		1FF1AAEC237DDAC40062D6C9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1F48D9A9222E0D8100639F26 /* Kelvin-macOS */;
+			targetProxy = 1FF1AAEB237DDAC40062D6C9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1862,6 +1948,30 @@
 				"OTHER_LDFLAGS[arch=*]" = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "KelvinCommandLine/KelvinCLI-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		1FF1AAE7237DDA700062D6C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		1FF1AAE8237DDA700062D6C9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -2113,6 +2223,15 @@
 			buildConfigurations = (
 				1FDEA4BF225914C800D88542 /* Debug */,
 				1FDEA4C0225914C800D88542 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1FF1AAE6237DDA700062D6C9 /* Build configuration list for PBXNativeTarget "GenerateAssets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1FF1AAE7237DDA700062D6C9 /* Debug */,
+				1FF1AAE8237DDA700062D6C9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
