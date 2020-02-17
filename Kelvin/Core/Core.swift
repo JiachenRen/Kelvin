@@ -280,7 +280,33 @@ public class Core {
             _round($0.float80, toDecimalPlaces: $1)
         },
         
+        // Bitwise operations
+        .binary(.bitwiseAnd, Int.self, Int.self) {
+            $0 & $1
+        },
+        .binary(.bitwiseOr, Int.self, Int.self) {
+            $0 | $1
+        },
+        .binary(.bitwiseXor, Int.self, Int.self) {
+            $0 ^ $1
+        },
+        .unary(.bitwiseInvert, Int.self) {
+            ~$0
+        },
+        .binary(.leftShift, Int.self, Int.self) {
+            $0 << $1
+        },
+        .binary(.rightShift, Int.self, Int.self) {
+            $0 >> $1
+        },
+        
         // System utils
+        .binary(.convertToBase, Int.self, Int.self) {
+            String($0, radix: $1)
+        },
+        .binary(.inBase, String.self, Int.self) {
+            Int($0, radix: $1)
+        },
         .unary(.complexity, [.node]) {
             $0.complexity
         },

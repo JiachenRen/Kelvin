@@ -156,6 +156,8 @@ public struct Syntax {
             .init(for: .int, associativity: .prefix),
             .init(for: .npr, associativity: .infix, precedence: .binary),
             .init(for: .ncr, associativity: .infix, precedence: .binary),
+            .init(for: .convertToBase, associativity: .infix, precedence: .binary),
+            .init(for: .inBase, associativity: .infix, precedence: .binary),
             
             // Relational
             .init(for: .equates, associativity: .infix, precedence: .equation, operator: .init("=")),
@@ -173,6 +175,15 @@ public struct Syntax {
             .init(for: .not, associativity: .prefix, operator: .init("!", padding: .none)),
             .init(for: .nand, associativity: .infix, precedence: .nand, operator: .init("!&", isPreferred: false)),
             .init(for: .nor, associativity: .infix, precedence: .nor, operator: .init("!|", isPreferred: false)),
+            .init(for: .implies, associativity: .infix, precedence: .binary),
+            
+            // Bitwise operations
+            .init(for: .bitwiseAnd, associativity: .infix, precedence: .binary, operator: .init(".&")),
+            .init(for: .bitwiseOr, associativity: .infix, precedence: .binary, operator: .init(".|")),
+            .init(for: .bitwiseXor, associativity: .infix, precedence: .binary, operator: .init(".^")),
+            .init(for: .bitwiseInvert, associativity: .prefix, precedence: .binary, operator: .init(".~")),
+            .init(for: .leftShift, associativity: .infix, precedence: .binary, operator: .init(".<<")),
+            .init(for: .rightShift, associativity: .infix, precedence: .binary, operator: .init(".>>")),
             
             // List
             .init(for: .get, associativity: .infix, precedence: .subscript, operator: .init("::", padding: .none)),

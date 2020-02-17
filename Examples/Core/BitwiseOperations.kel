@@ -1,0 +1,17 @@
+# Bitwise or
+("01010001" inBase 2) .| (1 .<< 2) -> $0 === ("01010101" inBase 2)
+
+# Same as above
+("01010001" inBase 2) bitOr (1 leftShift 2) pipe $0 assertEquals ("01010101" inBase 2)
+
+# Bitwise and
+("01010101" inBase 2) .& ("10101010" inBase 2) === 0
+
+# Bitwise left shift
+1 .<< 3 === 8
+
+# Bitwise right shift
+64 .>> 2 === 16
+
+# Bitwise invert
+bitInv(1) + 1 === -1

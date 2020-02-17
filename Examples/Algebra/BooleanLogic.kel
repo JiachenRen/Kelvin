@@ -67,3 +67,6 @@ test(f1, f2, 10) === (true...10)
 # The ultimate test, from CS 2051 HW
 !(!(!x && !(!y || x)) || !y) === (!x && y)
 (not (not (not x and not (not y or x)) or not y)) === (not x and y)
+
+# From 2110
+not a and not b and not c and not d or a and not b and c and not d or a and not b and not c and not d or not a and not b and c and not d === !b && !d

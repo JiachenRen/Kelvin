@@ -183,6 +183,8 @@ public extension OperationName {
     static let primeFactors = "primeFactors" // Prime factors of an integer
     static let factors = "factors" // All natural factors of an integer
     static let isPrime = "isPrime" // Checks if the integer is a prime
+    static let convertToBase = "toBase" // Converts to base n.
+    static let inBase = "inBase" // Interpret String literal as in base n.
     
     // MARK: - Boolean logic
     
@@ -192,6 +194,15 @@ public extension OperationName {
     static let not = "not"
     static let nor = "nor"
     static let nand = "nand"
+    static let implies = "implies"
+    
+    // MARK: - Bitwise operations
+    static let bitwiseAnd = "bitAnd"
+    static let bitwiseOr = "bitOr"
+    static let bitwiseXor = "bitXor"
+    static let bitwiseInvert = "bitInv"
+    static let leftShift = "leftShift"
+    static let rightShift = "rightShift"
     
     // MARK: - Declaration
     

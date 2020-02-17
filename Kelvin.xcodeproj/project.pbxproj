@@ -1306,7 +1306,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1120;
-				LastUpgradeCheck = 1120;
+				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = "Jiachen Ren";
 				TargetAttributes = {
 					1F48D9A9222E0D8100639F26 = {
@@ -1955,6 +1955,7 @@
 		1FF1AAE7237DDA700062D6C9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1967,6 +1968,7 @@
 		1FF1AAE8237DDA700062D6C9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;
 				ENABLE_HARDENED_RUNTIME = YES;

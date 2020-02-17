@@ -53,6 +53,9 @@ extension Rules {
             }
             return nil
         },
+        .binary(.implies, [.node, .node]) {
+            !!$0 ||| $1
+        },
         .binary(.and, [.node, .node]) {
             if $0 === false {
                 // false and _ is false
